@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-18T00:19:01.359Z",
+  "generatedAt": "2026-11-18T01:53:34.125Z",
   "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9659310",
@@ -549,9 +549,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 198651,
-      "modifiedAt": "2026-11-15T23:10:57.561Z",
-      "sha256": "6f088733f334404ffadf3e22c51e52289f587a5610d1742ae0a7bb3ec92d0791"
+      "bytes": 201626,
+      "modifiedAt": "2026-11-18T01:53:32.309Z",
+      "sha256": "ca46d6f70ef3d9f49fd874b4210360e7f404be87a45f22fb321dbd3e0b65a7a0"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -19005,6 +19005,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19026,6 +19027,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19047,6 +19049,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19068,6 +19071,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19089,6 +19093,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19110,6 +19115,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19131,6 +19137,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19152,6 +19159,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19173,6 +19181,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19194,6 +19203,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19215,6 +19225,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19236,6 +19247,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19257,6 +19269,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19278,6 +19291,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19299,6 +19313,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19320,6 +19335,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19341,6 +19357,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19362,6 +19379,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2019-10-26",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19383,6 +19401,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "damp",
           "weatherConfidence": "official"
         },
@@ -19404,6 +19423,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19425,6 +19445,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19446,6 +19467,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19467,6 +19489,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19488,6 +19511,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19509,6 +19533,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-30",
+          "fieldSize": 14,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19530,6 +19555,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-12",
+          "fieldSize": 26,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19551,6 +19577,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-12",
+          "fieldSize": 25,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19572,6 +19599,7 @@
           "trackName": "Cadwell Park Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-22",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19593,6 +19621,7 @@
           "trackName": "Cadwell Park Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-22",
+          "fieldSize": 13,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19614,6 +19643,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-24",
+          "fieldSize": 30,
           "wetDry": "drying",
           "weatherConfidence": "official"
         },
@@ -19635,6 +19665,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-24",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19656,6 +19687,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-26",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19677,6 +19709,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-26",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19698,6 +19731,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-26",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19719,6 +19753,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2020-07-18",
+          "fieldSize": 34,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19740,6 +19775,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2020-07-18",
+          "fieldSize": 34,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19761,6 +19797,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-10",
+          "fieldSize": 29,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19782,6 +19819,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-10",
+          "fieldSize": 29,
           "wetDry": "drying",
           "weatherConfidence": "official"
         },
@@ -19803,6 +19841,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-31",
+          "fieldSize": 26,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19824,6 +19863,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-31",
+          "fieldSize": 35,
           "wetDry": "damp",
           "weatherConfidence": "official"
         },
@@ -19845,6 +19885,7 @@
           "trackName": "Euromarque Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-09",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19866,6 +19907,7 @@
           "trackName": "Euromarque Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-09",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19887,6 +19929,7 @@
           "trackName": "Euromarque Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-09",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19908,6 +19951,7 @@
           "trackName": "Highlands Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-16",
+          "fieldSize": 17,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19929,6 +19973,7 @@
           "trackName": "Highlands Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-16",
+          "fieldSize": 17,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19950,6 +19995,7 @@
           "trackName": "Highlands Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-16",
+          "fieldSize": 17,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19971,6 +20017,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-04-18",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19992,6 +20039,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-04-18",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20013,6 +20061,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-04-18",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20034,6 +20083,7 @@
           "trackName": "Watkins Glen International",
           "trackType": "road",
           "eventStartDate": "2019-05-10",
+          "fieldSize": 12,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20055,6 +20105,7 @@
           "trackName": "Watkins Glen International",
           "trackType": "road",
           "eventStartDate": "2019-05-10",
+          "fieldSize": 12,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20076,6 +20127,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20097,6 +20149,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20118,6 +20171,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20139,6 +20193,7 @@
           "trackName": "Virginia International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-07-26",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20160,6 +20215,7 @@
           "trackName": "Virginia International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-07-26",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20181,6 +20237,7 @@
           "trackName": "Virginia International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-07-26",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20202,6 +20259,7 @@
           "trackName": "Pittsburgh International Race Complex",
           "trackType": "road",
           "eventStartDate": "2019-08-02",
+          "fieldSize": 13,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20223,6 +20281,7 @@
           "trackName": "Pittsburgh International Race Complex",
           "trackType": "road",
           "eventStartDate": "2019-08-02",
+          "fieldSize": 13,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20244,6 +20303,7 @@
           "trackName": "Pittsburgh International Race Complex",
           "trackType": "road",
           "eventStartDate": "2019-08-02",
+          "fieldSize": 13,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20265,6 +20325,7 @@
           "trackName": "Summit Point Motorsports Park Main Circuit",
           "trackType": "road",
           "eventStartDate": "2019-08-23",
+          "fieldSize": 11,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20286,6 +20347,7 @@
           "trackName": "Summit Point Motorsports Park Main Circuit",
           "trackType": "road",
           "eventStartDate": "2019-08-23",
+          "fieldSize": 11,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20307,6 +20369,7 @@
           "trackName": "Summit Point Motorsports Park Main Circuit",
           "trackType": "road",
           "eventStartDate": "2019-08-23",
+          "fieldSize": 11,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20328,6 +20391,7 @@
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
           "trackType": "road",
           "eventStartDate": "2019-09-13",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20349,6 +20413,7 @@
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
           "trackType": "road",
           "eventStartDate": "2019-09-13",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20370,6 +20435,7 @@
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
           "trackType": "road",
           "eventStartDate": "2019-09-13",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20391,6 +20457,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2021-05-22",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20412,6 +20479,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2021-05-22",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20433,6 +20501,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2021-05-22",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20454,6 +20523,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-06-26",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20475,6 +20545,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-06-26",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20496,6 +20567,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-07-10",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20517,6 +20589,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-07-10",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20538,6 +20611,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-07-10",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20559,6 +20633,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2021-07-24",
+          "fieldSize": 16,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -20580,6 +20655,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2021-07-24",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20601,6 +20677,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2021-07-24",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20622,6 +20699,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-07",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20643,6 +20721,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-07",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20664,6 +20743,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-07",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20685,6 +20765,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-14",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20706,6 +20787,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-14",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20727,6 +20809,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-14",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20748,6 +20831,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2021-09-11",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20769,6 +20853,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2021-09-11",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20790,6 +20875,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2021-09-11",
+          "fieldSize": 17,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -20811,6 +20897,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-10-16",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20832,6 +20919,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-10-16",
+          "fieldSize": 21,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -20853,6 +20941,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-10-16",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20874,6 +20963,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-05-07",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20895,6 +20985,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-05-07",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20916,6 +21007,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-05-07",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20937,6 +21029,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-05-28",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20958,6 +21051,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-05-28",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20979,6 +21073,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2022-06-25",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21000,6 +21095,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2022-06-25",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21021,6 +21117,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-07-30",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21042,6 +21139,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-07-30",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21063,6 +21161,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2022-09-10",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21084,6 +21183,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2022-09-10",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21105,6 +21205,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2022-09-10",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21126,6 +21227,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-10-15",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21147,6 +21249,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-10-15",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21168,6 +21271,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-10-15",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21189,6 +21293,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-05-28",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21210,6 +21315,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2022-07-23",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21231,6 +21337,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2022-07-23",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21252,6 +21359,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2022-07-23",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21273,6 +21381,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2022-04-15",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21294,6 +21403,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2022-04-15",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21315,6 +21425,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2022-04-15",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21336,6 +21447,7 @@
           "trackName": "Daytona International Speedway",
           "trackType": "road",
           "eventStartDate": "2025-01-25",
+          "fieldSize": 61,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -21357,6 +21469,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2024-04-26",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21378,6 +21491,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2024-05-10",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21399,6 +21513,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2024-06-07",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21420,6 +21535,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2024-06-21",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21441,6 +21557,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2024-07-05",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21462,6 +21579,7 @@
           "trackName": "Iowa Speedway",
           "trackType": "oval",
           "eventStartDate": "2024-07-12",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21483,6 +21601,7 @@
           "trackName": "World Wide Technology Raceway",
           "trackType": "oval",
           "eventStartDate": "2024-08-16",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21504,6 +21623,7 @@
           "trackName": "Portland International Raceway",
           "trackType": "road",
           "eventStartDate": "2024-08-23",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21525,6 +21645,7 @@
           "trackName": "The Milwaukee Mile",
           "trackType": "oval",
           "eventStartDate": "2024-08-30",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21546,6 +21667,7 @@
           "trackName": "Nashville Superspeedway",
           "trackType": "oval",
           "eventStartDate": "2024-09-14",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21567,6 +21689,7 @@
           "trackName": "Streets of St. Petersburg",
           "trackType": "street",
           "eventStartDate": "2024-03-08",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21588,6 +21711,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2024-05-10",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21609,6 +21733,7 @@
           "trackName": "Detroit Downtown Street Circuit",
           "trackType": "street",
           "eventStartDate": "2024-05-31",
+          "fieldSize": 21,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -21630,6 +21755,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2024-06-22",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21651,6 +21777,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2025-07-25",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21672,6 +21799,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2025-05-09",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21693,6 +21821,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2025-05-09",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21714,6 +21843,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2025-05-02",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21735,6 +21865,7 @@
           "trackName": "Streets of St. Petersburg",
           "trackType": "street",
           "eventStartDate": "2025-02-28",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21756,6 +21887,7 @@
           "trackName": "Nashville Superspeedway",
           "trackType": "oval",
           "eventStartDate": "2025-08-30",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21777,6 +21909,7 @@
           "trackName": "The Milwaukee Mile",
           "trackType": "oval",
           "eventStartDate": "2025-08-23",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21798,6 +21931,7 @@
           "trackName": "Portland International Raceway",
           "trackType": "road",
           "eventStartDate": "2025-08-08",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21819,6 +21953,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2025-07-26",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21840,6 +21975,7 @@
           "trackName": "Iowa Speedway",
           "trackType": "oval",
           "eventStartDate": "2025-07-11",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21861,6 +21997,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2025-07-04",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21882,6 +22019,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2025-06-20",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21903,6 +22041,7 @@
           "trackName": "World Wide Technology Raceway",
           "trackType": "oval",
           "eventStartDate": "2025-06-14",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21924,6 +22063,7 @@
           "trackName": "Detroit Downtown Street Circuit",
           "trackType": "street",
           "eventStartDate": "2025-05-30",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21945,6 +22085,7 @@
           "trackName": "Detroit Downtown Street Circuit",
           "trackType": "street",
           "eventStartDate": "2026-05-29",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21966,6 +22107,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2026-03-27",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21987,6 +22129,7 @@
           "trackName": "Streets of St. Petersburg",
           "trackType": "street",
           "eventStartDate": "2026-02-27",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22008,6 +22151,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2026-03-28",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22029,6 +22173,7 @@
           "trackName": "Grand Prix of Arlington Street Circuit",
           "trackType": "street",
           "eventStartDate": "2026-03-13",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22050,6 +22195,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2026-06-20",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22071,6 +22217,7 @@
           "trackName": "Nashville Superspeedway",
           "trackType": "oval",
           "eventStartDate": "2026-07-18",
+          "fieldSize": 23,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22092,6 +22239,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2026-05-08",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -22113,6 +22261,7 @@
           "trackName": "The Milwaukee Mile",
           "trackType": "oval",
           "eventStartDate": "2026-08-29",
+          "fieldSize": 23,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22134,6 +22283,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2026-09-05",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22155,6 +22305,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2026-09-04",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22176,6 +22327,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2026-07-04",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -22197,6 +22349,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2026-07-03",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22218,6 +22371,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2026-06-19",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22239,6 +22393,7 @@
           "trackName": "World Wide Technology Raceway",
           "trackType": "oval",
           "eventStartDate": "2026-06-06",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -22260,6 +22415,7 @@
           "trackName": "Portland International Raceway",
           "trackType": "road",
           "eventStartDate": "2026-08-07",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22281,6 +22437,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2026-05-08",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22302,6 +22459,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 28,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22323,6 +22481,7 @@
           "trackName": "Circuit of the Americas",
           "trackType": "road",
           "eventStartDate": "2019-02-08",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22344,6 +22503,7 @@
           "trackName": "Circuit of the Americas",
           "trackType": "road",
           "eventStartDate": "2019-02-08",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22365,6 +22525,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-03-15",
+          "fieldSize": 32,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22386,6 +22547,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-03-15",
+          "fieldSize": 32,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22407,6 +22569,7 @@
           "trackName": "Sebring International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-01-11",
+          "fieldSize": 26,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22428,6 +22591,7 @@
           "trackName": "Sebring International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-01-11",
+          "fieldSize": 26,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22449,6 +22613,7 @@
           "trackName": "Lucas Oil Indianapolis Raceway Park",
           "trackType": "oval",
           "eventStartDate": "2024-05-23",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         }
@@ -22472,6 +22637,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22493,6 +22659,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22514,6 +22681,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22535,6 +22703,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22556,6 +22725,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22577,6 +22747,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22598,6 +22769,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22619,6 +22791,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22640,6 +22813,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22661,6 +22835,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22682,6 +22857,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22703,6 +22879,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22724,6 +22901,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22745,6 +22923,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22766,6 +22945,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22787,6 +22967,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22808,6 +22989,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22829,6 +23011,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2019-10-26",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22850,6 +23033,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "damp",
           "weatherConfidence": "official"
         },
@@ -22871,6 +23055,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -22892,6 +23077,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22913,6 +23099,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22934,6 +23121,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22955,6 +23143,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22976,8 +23165,147 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-30",
+          "fieldSize": 14,
           "wetDry": "dry",
           "weatherConfidence": "official"
+        }
+      ],
+      "unclassifiedRaces": [
+        {
+          "sessionId": "session_frp_f1600_2019_r2_06_race_3",
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seasonYear": 2019,
+          "eventName": "FRP F1600 2019 Round 2 - Watkins Glen International",
+          "raceLabel": "2019 FRP F1600 2019 Round 2 - Watkins Glen International",
+          "trackName": "Watkins Glen International",
+          "trackType": "road",
+          "eventStartDate": "2019-05-10",
+          "raceNumber": 3,
+          "startPosition": null,
+          "fieldSize": 12,
+          "lapsCompleted": 0,
+          "status": "dns",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_formula_ford_2019_festival_race_13_semi_final_1_sponsored_by_avon_tyres",
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seasonYear": 2019,
+          "eventName": "BRSCC Formula Ford Festival 2019",
+          "raceLabel": "2019 BRSCC Formula Ford Festival 2019",
+          "trackName": "Brands Hatch Circuit",
+          "trackType": "road",
+          "eventStartDate": "2019-10-26",
+          "raceNumber": 13,
+          "startPosition": 19,
+          "fieldSize": 30,
+          "lapsCompleted": 8,
+          "status": "dnf",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_formula_ford_2020_champion_brands_203851_race_16",
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seasonYear": 2020,
+          "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+          "raceLabel": "2020 Champion of Brands 2020 - Brands Hatch Indy, September 20",
+          "trackName": "Brands Hatch Circuit",
+          "trackType": "road",
+          "eventStartDate": "2020-09-20",
+          "raceNumber": 16,
+          "startPosition": 2,
+          "fieldSize": 20,
+          "lapsCompleted": 3,
+          "status": "dnf",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_formula_ford_2020_champion_brands_203851_race_20",
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seasonYear": 2020,
+          "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+          "raceLabel": "2020 Champion of Brands 2020 - Brands Hatch Indy, September 20",
+          "trackName": "Brands Hatch Circuit",
+          "trackType": "road",
+          "eventStartDate": "2020-09-20",
+          "raceNumber": 20,
+          "startPosition": 20,
+          "fieldSize": 19,
+          "lapsCompleted": 0,
+          "status": "dnf",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_gb3_2021_212505_race_3_result",
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seasonYear": 2021,
+          "eventName": "GB3 2021 Round 2 - Silverstone",
+          "raceLabel": "2021 GB3 2021 Round 2 - Silverstone",
+          "trackName": "Silverstone Circuit",
+          "trackType": "road",
+          "eventStartDate": "2021-06-26",
+          "raceNumber": 3,
+          "startPosition": 5,
+          "fieldSize": 16,
+          "lapsCompleted": null,
+          "status": "dsq",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_gb3_2022_1305",
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seasonYear": 2022,
+          "eventName": "GB3 2022 Round 4 - Snetterton",
+          "raceLabel": "2022 GB3 2022 Round 4 - Snetterton",
+          "trackName": "Snetterton Circuit",
+          "trackType": "road",
+          "eventStartDate": "2022-06-25",
+          "raceNumber": 12,
+          "startPosition": null,
+          "fieldSize": 22,
+          "lapsCompleted": 0,
+          "status": "dsq",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_gb3_2022_1376",
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seasonYear": 2022,
+          "eventName": "GB3 2022 Round 6 - Silverstone",
+          "raceLabel": "2022 GB3 2022 Round 6 - Silverstone",
+          "trackName": "Silverstone Circuit",
+          "trackType": "road",
+          "eventStartDate": "2022-07-30",
+          "raceNumber": 17,
+          "startPosition": null,
+          "fieldSize": 23,
+          "lapsCompleted": 7,
+          "status": "dnf",
+          "sourceState": "canonical_result_no_classified_finish"
+        },
+        {
+          "sessionId": "session_euroformula_2023_06-monza-race-2",
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seasonYear": 2023,
+          "eventName": "Euroformula Open 2023 Round 6 - Monza",
+          "raceLabel": "2023 Euroformula Open 2023 Round 6 - Monza",
+          "trackName": "Autodromo Nazionale Monza",
+          "trackType": "road",
+          "eventStartDate": "2023-09-23",
+          "raceNumber": 2,
+          "startPosition": 7,
+          "fieldSize": 7,
+          "lapsCompleted": 9,
+          "status": "dnf",
+          "sourceState": "canonical_result_no_classified_finish"
         }
       ],
       "moments": [
