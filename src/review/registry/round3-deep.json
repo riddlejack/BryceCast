@@ -37,7 +37,7 @@
       "title": "The rivals' tyres, cleaner: a race slick (rubber, wheel, hub)",
       "switch": "rvtyre",
       "values": [
-        { "value": null, "label": "slick (default): black rubber, a gold wheel for Bryce and silver for the rival, a hub, one white sidewall mark that shows the roll" },
+        { "value": null, "label": "slick (default): black rubber, a gold wheel for Bryce and silver for the rival, a hub, two white sidewall marks (top and bottom) that show the roll" },
         { "value": "spoked", "label": "the same with five straight spokes (at actual size they read as stars)" },
         { "value": "old", "label": "round 2's tyre (tread ring, gold stripe, tapered spokes)" }
       ],
