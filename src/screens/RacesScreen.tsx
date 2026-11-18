@@ -13,7 +13,8 @@ import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import { DataFreshness } from '../app/dataFreshness';
 import { chapterTint } from './careerExplorer';
-import { useArchiveRaces, type ArchiveRace } from './careerRaceList';
+import { fieldSizeFor, useArchiveRaces, type ArchiveRace } from './careerRaceList';
+import { beatLine, placeLine } from '../app/raceFacts';
 import { RaceStillCard, RowPicture } from './racesPeek';
 import { AlsoInYear, EarlierSeason } from './racesEarlier';
 import './race.css';
@@ -46,6 +47,7 @@ const MiniTrack = ({ trackName, sessionId = null, muted = false }: { trackName: 
 const SpineCard = ({ row, x, y, width, tap }: { row: UiSeasonIndexRow; x: number; y: number; width: number; tap: ReturnType<typeof useTapPreview> }) => {
   const clean = row.officialStatus === 'running';
   const day = row.raceDate ?? row.eventStartDate;
+  const field = fieldSizeFor(row.sessionId);
   return (
     <RaceStillCard
       venue={{ sessionId: row.sessionId, trackName: row.trackName }}
@@ -56,18 +58,17 @@ const SpineCard = ({ row, x, y, width, tap }: { row: UiSeasonIndexRow; x: number
       swatch={chapterTint('INDY NXT')}
       meta={[`INDY NXT · Round ${row.roundIndex ?? '—'}`, day ? formatDate(day, { month: 'short', day: 'numeric' }) : null].filter(Boolean).join(' · ')}
       title={archiveLabel(row.raceLabel)}
-      nums={[
-        row.startPosition !== null && row.finishPosition !== null && row.startPosition !== row.finishPosition
-          ? `P${row.startPosition} → P${row.finishPosition}`
-          : row.finishPosition !== null
-            ? `Finished P${row.finishPosition}`
-            : null,
-        row.points !== null ? `${row.points} pts` : null,
-        row.standingRank !== null ? `P${row.standingRank} in points` : null
-      ]
-        .filter(Boolean)
-        .join(' · ')}
-      note={!clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null}
+      nums={[placeLine(row.finishPosition, field), beatLine(row.finishPosition, field)].filter(Boolean).join(' · ') || null}
+      note={
+        [
+          row.startPosition !== null && row.finishPosition !== null && row.startPosition !== row.finishPosition ? `started P${row.startPosition}` : null,
+          row.points !== null ? `${row.points} pts` : null,
+          row.standingRank !== null ? `P${row.standingRank} in points` : null,
+          !clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null
+        ]
+          .filter(Boolean)
+          .join(' · ') || null
+      }
       action="open the race page"
       tap={tap}
     />
@@ -130,6 +131,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   });
 
   const clearHover = () => setHovered(null);
+  const indy = chapterTint('INDY NXT');
 
   const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
@@ -225,22 +227,28 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
             />
           ) : null}
 
-          <polyline points={finishLine} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinejoin="round" />
+          {/* QoL 2 (proxy review 1): the season line in INDY NXT's own gold, so
+              gold means one thing site-wide; a top 5 is ringed, as a win is
+              on the earlier seasons. */}
+          <polyline points={finishLine} fill="none" stroke={indy} strokeWidth={2} strokeLinejoin="round" />
           {ordered.map((row, index) => {
             const clean = row.officialStatus === 'running';
             const topFive = clean && row.finishPosition !== null && row.finishPosition <= 5;
             const pointY = yFinish(row.finishPosition ?? worstFinish);
+            const dotR = hovered === index ? 6 : 4.8;
             return (
-              <circle
-                key={row.sessionId}
-                cx={x(index)}
-                cy={pointY}
-                r={hovered === index ? 6 : 4.8}
-                fill={clean ? (topFive ? 'var(--bryce)' : 'var(--ink-primary)') : 'var(--surface-1)'}
-                stroke={clean ? (topFive ? 'var(--bryce)' : 'var(--ink-primary)') : 'var(--ink-muted)'}
-                strokeWidth={1.6}
-                style={{ transition: 'r 120ms ease' }}
-              />
+              <g key={row.sessionId}>
+                {topFive ? <circle cx={x(index)} cy={pointY} r={dotR + 3.4} fill="none" stroke="var(--ink-primary)" strokeWidth={1.6} /> : null}
+                <circle
+                  cx={x(index)}
+                  cy={pointY}
+                  r={dotR}
+                  fill={clean ? indy : 'var(--surface-1)'}
+                  stroke={clean ? indy : 'var(--ink-muted)'}
+                  strokeWidth={1.6}
+                  style={{ transition: 'r 120ms ease' }}
+                />
+              </g>
             );
           })}
 
@@ -281,7 +289,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
   const gain = row.startPosition !== null && row.finishPosition !== null ? formatGain(row.startPosition - row.finishPosition) : null;
   const shortLabel = archiveLabel(row.raceLabel);
   const clean = row.officialStatus === 'running';
-  /* Gold means the same thing here as on the spine above: a top-5 finish. */
+  /* A ring means the same thing here as on the spine above: a top-5 finish. */
   const topFive = clean && row.finishPosition !== null && row.finishPosition <= 5;
   return (
     <Link to={`/races/${encodeURIComponent(row.sessionId)}`} className="tower__row race-row">
@@ -588,7 +596,7 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
                 between it and the completed rows, so the whole card reads as
                 one timeline — future at the top, past running down. */}
             <p className="caption caption--secondary races-index__legend">
-              Gold marks a top-5 finish · ○ a day that ended early · the quiet line is his championship position · <PointerOpen what="any round" />
+              A ring marks a top-5 finish · a hollow dot a day that ended early · the quiet line is his championship position · <PointerOpen what="any round" />
             </p>
             <SeasonSpine rows={rows} />
             {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}

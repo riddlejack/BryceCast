@@ -33,7 +33,8 @@ export interface SheetRace {
   order: number;
   team: string | null;
   points: number | null;
-  /** Classified cars, read back from the finishing percentile; null where it can't be (a win). */
+  /** Classified cars: the conversion table's field size, else read back from
+   *  the finishing percentile; null where neither gives it. */
   field: number | null;
 }
 
@@ -61,6 +62,22 @@ const programmeOrder = (sessionId: string, inRound: number | null | undefined): 
   return (programme ? Number(programme[1]) : inRound ?? 0) + stageRank(sessionId) * 1000;
 };
 
+/** The day a race's own record names: a session called "…_saturday_race" at a
+ *  meeting that opens on Friday ran on that Saturday (the SCCA Super Tour's
+ *  weekends). Null where the record names no day. */
+const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+export const namedDay = (sessionId: string, meetingDay: string | null | undefined): string | null => {
+  if (!meetingDay || !/^\d{4}-\d{2}-\d{2}/.test(meetingDay)) return null;
+  const id = sessionId.toLowerCase();
+  const want = WEEKDAYS.findIndex((name) => new RegExp(`(^|_)${name}(_|$)`).test(id));
+  if (want < 0) return null;
+  const start = new Date(`${meetingDay.slice(0, 10)}T00:00:00Z`);
+  const ahead = (want - start.getUTCDay() + 7) % 7;
+  if (ahead > 3) return null;
+  start.setUTCDate(start.getUTCDate() + ahead);
+  return start.toISOString().slice(0, 10);
+};
+
 let campaignCache: { inRound: Map<string, number>; day: Map<string, string> } | null = null;
 const campaignIndex = () => {
   if (campaignCache) return campaignCache;
@@ -80,6 +97,8 @@ const campaignIndex = () => {
   campaignCache = { inRound, day };
   return campaignCache;
 };
+
+const wholeOrNull = (value: number | null): number | null => (value !== null && value > 0 ? Math.round(value) : null);
 
 /** Every classified career race (INDY NXT included), chronological. */
 export const useSheetRaces = (): SheetRace[] => {
@@ -105,12 +124,12 @@ export const useSheetRaces = (): SheetRace[] => {
           seriesId: asString(source.seriesId) ?? '',
           title: name.title,
           round: name.round,
-          raceDay: day.get(row.sessionId) ?? null,
+          raceDay: day.get(row.sessionId) ?? namedDay(row.sessionId, row.date),
           meetingDay: row.date,
           order: programmeOrder(row.sessionId, inRound.get(row.sessionId)),
           team: asString(source.teamName),
           points: asNumber(source.points),
-          field: fieldFromPercentile(row.finish, row.percentile)
+          field: wholeOrNull(asNumber(source.fieldSize)) ?? fieldFromPercentile(row.finish, row.percentile)
         };
       })
       .sort((a, b) => (a.raceDay ?? a.meetingDay).localeCompare(b.raceDay ?? b.meetingDay) || a.order - b.order);
@@ -206,7 +225,7 @@ export const useArchiveRaces = (): ArchiveRace[] => {
       .filter((race) => race.seriesName !== 'INDY NXT' && race.eventStartDate)
       .map((race): ArchiveRace => {
         const { title, round } = unclassifiedTitle(race);
-        const raceDay = day.get(race.sessionId) ?? null;
+        const raceDay = day.get(race.sessionId) ?? namedDay(race.sessionId, race.eventStartDate);
         return {
           sessionId: race.sessionId,
           seasonYear: race.seasonYear ?? Number(race.eventStartDate!.slice(0, 4)),
@@ -231,6 +250,22 @@ export const useArchiveRaces = (): ArchiveRace[] => {
       });
     return [...classified, ...unclassified].sort((a, b) => a.day.localeCompare(b.day) || a.order - b.order);
   }, [sheets]);
+};
+
+/** The classified field for any race in the conversion table (INDY NXT
+ *  included), from its field size; null where the table has none. */
+let fieldCache: Map<string, number> | null = null;
+export const fieldSizeFor = (sessionId: string): number | null => {
+  if (!fieldCache) {
+    fieldCache = new Map();
+    for (const entry of uiDataPackage.screens.careerLab.resultConversion ?? []) {
+      const row = entry as Conversion;
+      const id = asString(row.sessionId);
+      const size = asNumber(row.fieldSize);
+      if (id && size !== null) fieldCache.set(id, Math.round(size));
+    }
+  }
+  return fieldCache.get(sessionId) ?? null;
 };
 
 /** The short words for a race that ended without a classified finish. */

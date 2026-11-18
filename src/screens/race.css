@@ -344,3 +344,25 @@
 @media (min-width: 640px) {
   .races-index .races-nopic .tower__row.race-row { grid-template-columns: 58px minmax(0, 1fr) auto auto auto 20px; }
 }
+
+/* Proxy review 1 (Nov 17): the row's still with the lap drawn bold; a venue
+ * with no model shows a quiet stand-in, never an empty hole. */
+.races-index svg.race-row__still--bold { overflow: hidden; }
+.races-index .race-row__standin {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--grey-fill);
+  opacity: 0.6;
+}
+@media (min-width: 640px) {
+  .races-index .race-row__date { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.2; }
+}
+.races-index .race-row__weekend { font-size: 12.5px; color: var(--ink-muted); white-space: nowrap; }
+/* A win, and an INDY NXT top 5: a ring, so gold means INDY NXT and nothing else. */
+.races-index .race-row__win,
+.races-index .race-row__top5 { width: 9px; height: 9px; border-radius: 50%; background: none; border: 1.6px solid var(--ink-primary); box-sizing: border-box; }
+.races-index .races-also__series + .races-also__series { margin-top: 14px; }
+.races-index .races-also__sub { display: inline-flex; align-items: center; gap: 7px; margin: 10px 0 0; font-size: 15px; font-weight: 600; color: var(--ink-secondary); }
+.races-index .races-also__sub i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }

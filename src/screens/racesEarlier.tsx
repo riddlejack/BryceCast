@@ -12,6 +12,7 @@ import { RaceStillCard, RowPicture } from './racesPeek';
 import { useStillIndex } from '../app/trackStill';
 import { venuePictureFor } from '../app/venuePeek';
 import { trackOutlineFor } from '../assets/tracks';
+import { beatLine, placeLine } from '../app/raceFacts';
 
 /* ============================================================================
  * The seasons before INDY NXT on the Races page (career round 2, Nov 17 2026).
@@ -31,17 +32,28 @@ export const yearsOpen = (): boolean => switchValue('racesyears') === 'open';
 
 const ordinalPos = (finish: number | null, status: string) => (finish !== null ? `P${finish}` : statusShort(status));
 
+/* One finish grammar site-wide (raceFacts): "P8 of 23 · ahead of 15 of the
+ * other 22", the place alone where the field isn't known. */
 const numsFor = (race: ArchiveRace): string => {
   if (race.finish === null) return statusWords(race.status) || 'No classified finish';
-  const run = race.start !== null && race.start !== race.finish ? `P${race.start} → P${race.finish}` : `Finished P${race.finish}`;
-  return [run, race.field !== null ? `of ${race.field}` : null].filter(Boolean).join(' ');
+  return [placeLine(race.finish, race.field), beatLine(race.finish, race.field)].filter(Boolean).join(' · ');
 };
 
 const noteFor = (race: ArchiveRace): string | null => {
   const ended = race.finish !== null && race.status !== 'running' ? statusWords(race.status) : '';
-  return [ended ? `ended early: ${ended.toLowerCase()}` : null, race.wetDry && race.wetDry !== 'dry' ? `${race.wetDry} track` : null]
+  return [
+    race.start !== null && race.finish !== null && race.start !== race.finish ? `started P${race.start}` : null,
+    ended ? `ended early: ${ended.toLowerCase()}` : null,
+    race.wetDry && race.wetDry !== 'dry' ? `${race.wetDry} track` : null
+  ]
     .filter(Boolean)
     .join(' · ') || null;
+};
+
+/** "Feb 9", or "Weekend of Feb 8" where only the meeting's first day is known. */
+export const dayWords = (race: ArchiveRace, year = false): string => {
+  const date = formatDate(race.day, year ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
+  return race.dayIsMeeting ? `Weekend of ${date}` : date;
 };
 
 /* ---------- the year's shape ---------- */
@@ -84,21 +96,18 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
     }
   });
 
-  /* His form through the year, one line per series, broken where the series changes. */
-  const runs: Array<{ tint: string; points: string }> = [];
-  let current: { series: string; pts: string[] } | null = null;
+  /* His form through the year: each series its own line, through that
+   * series' races only, so two series in one year never join up. */
+  const bySeries = new Map<string, string[]>();
   races.forEach((race, index) => {
     if (race.finish === null) return;
-    const point = `${x(index)},${yFinish(race.finish)}`;
-    if (!current || current.series !== race.seriesName) {
-      if (current && current.pts.length > 1) runs.push({ tint: chapterTint(current.series), points: current.pts.join(' ') });
-      current = { series: race.seriesName, pts: [point] };
-    } else current.pts.push(point);
+    const list = bySeries.get(race.seriesName) ?? [];
+    list.push(`${x(index)},${yFinish(race.finish)}`);
+    bySeries.set(race.seriesName, list);
   });
-  if (current && (current as { pts: string[] }).pts.length > 1) {
-    const last = current as { series: string; pts: string[] };
-    runs.push({ tint: chapterTint(last.series), points: last.pts.join(' ') });
-  }
+  const runs = [...bySeries.entries()]
+    .filter(([, pts]) => pts.length > 1)
+    .map(([series, pts]) => ({ tint: chapterTint(series), points: pts.join(' ') }));
 
   const find = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
@@ -180,7 +189,7 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
             const win = race.finish === 1;
             return (
               <g key={race.sessionId} opacity={dim ? 0.45 : 1}>
-                {win ? <circle cx={x(index)} cy={yOf(race)} r={(on ? r + 1.4 : r) + 3.2} fill="none" stroke="var(--bryce)" strokeWidth={2} /> : null}
+                {win ? <circle cx={x(index)} cy={yOf(race)} r={(on ? r + 1.4 : r) + 3.2} fill="none" stroke="var(--ink-primary)" strokeWidth={1.6} /> : null}
                 <circle cx={x(index)} cy={yOf(race)} r={on ? r + 1.4 : r} fill={tint} stroke="var(--surface-0)" strokeWidth={1.2} />
               </g>
             );
@@ -208,7 +217,7 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
           r={r + 2}
           width={width}
           swatch={chapterTint(hoveredRace.seriesName)}
-          meta={`${hoveredRace.seriesShort} · ${formatDate(hoveredRace.day, { month: 'short', day: 'numeric', year: 'numeric' })}`}
+          meta={`${hoveredRace.seriesShort} · ${dayWords(hoveredRace, true)}`}
           title={hoveredRace.title}
           nums={numsFor(hoveredRace)}
           note={noteFor(hoveredRace) ?? hoveredRace.trackName}
@@ -220,6 +229,14 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
 };
 
 /* ---------- one row ---------- */
+
+/* The row's "of 23", read from the place line (raceFacts) so a row and its
+ * card always agree: the figure column carries the "P8". */
+const ofField = (race: ArchiveRace): string => {
+  const line = placeLine(race.finish, race.field);
+  const at = line ? line.indexOf(' of ') : -1;
+  return line && at > 0 ? line.slice(at + 1) : '';
+};
 
 export const ArchiveRow = ({ race }: { race: ArchiveRace }) => {
   const gain = race.start !== null && race.finish !== null ? formatGain(race.start - race.finish) : null;
@@ -241,8 +258,11 @@ export const ArchiveRow = ({ race }: { race: ArchiveRace }) => {
       <span className={`stat__delta ${gain?.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`} style={{ textAlign: 'right' }}>
         {gain ? gain.text : ''}
       </span>
-      <span className="tower__gap tnum race-row__field">{race.field !== null ? `of ${race.field}` : ''}</span>
-      <span className="tower__gap race-row__date">{formatDate(race.day, { month: 'short', day: 'numeric' })}</span>
+      <span className="tower__gap tnum race-row__field">{ofField(race)}</span>
+      <span className="tower__gap race-row__date">
+        {race.dayIsMeeting ? <span className="race-row__weekend">Weekend of</span> : null}
+        {formatDate(race.day, { month: 'short', day: 'numeric' })}
+      </span>
       <ArrowRight size={16} style={{ color: 'var(--ink-muted)' }} aria-hidden />
     </Link>
   );
@@ -282,7 +302,7 @@ export const SeriesKey = ({ races }: { races: ArchiveRace[] }) => (
     {seriesIn(races).map((series) => (
       <span key={series.seriesName} className="races-key__item">
         <i style={{ background: chapterTint(series.seriesName) }} aria-hidden />
-        {series.seriesShort === 'RCFFS' ? 'Right Coast Formula F' : series.seriesShort}
+        {series.seriesShort}
         <span className="races-key__n">{series.count}</span>
       </span>
     ))}
@@ -320,15 +340,15 @@ const archiveSources = (races: ArchiveRace[]) => {
       : []),
     {
       label: 'Field size',
-      note: 'Read back from the finishing percentile, which is (field − finish + 1) ÷ field: the cars classified. It can’t be read back for a win, so a win shows no field.'
+      note: 'The conversion table’s field size: the cars classified. “Ahead of 15 of the other 22” counts the cars that finished behind him, never himself.'
     },
     {
       label: 'Dates',
-      note: 'The race day where the season record gives it; otherwise the meeting’s first day, so every race of a weekend can share one date.'
+      note: 'The race day where the season record gives it, or the day the race’s own record names (the SCCA Super Tour’s Saturday and Sunday races). Otherwise “Weekend of” the meeting’s first day.'
     },
     {
       label: 'Track pictures',
-      note: 'The 3D model of the venue where one has been built; venues not modelled yet show no picture.'
+      note: 'The 3D model of the venue with the lap drawn bold on its centreline; a venue not modelled yet shows a quiet blank tile.'
     }
   ];
 };
@@ -352,7 +372,7 @@ export const EarlierSeason = ({ year, races }: { year: number; races: ArchiveRac
         }
       >
         <p className="caption caption--secondary races-index__legend">
-          <SeriesKey races={races} /> <span className="races-key__how">Each dot a race, by date · gold ring a win · <PointerOpen what="any race" /></span>
+          <SeriesKey races={races} /> <span className="races-key__how">Each dot a race, by date · a ring marks a win · <PointerOpen what="any race" /></span>
         </p>
         <YearSpine races={races} year={year} />
         <button type="button" className="races-fold" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
@@ -373,8 +393,18 @@ export const EarlierSeason = ({ year, races }: { year: number; races: ArchiveRac
 
 /* ---------- the other series in an INDY NXT year ---------- */
 
+/* QoL 3: each series in an INDY NXT year on its own line, newest series first. */
 export const AlsoInYear = ({ year, races }: { year: number; races: ArchiveRace[] }) => {
   const pictures = useAnyPicture(races);
+  const groups = useMemo(() => {
+    const map = new Map<string, { seriesName: string; seriesShort: string; races: ArchiveRace[] }>();
+    for (const race of races) {
+      const entry = map.get(race.seriesName) ?? { seriesName: race.seriesName, seriesShort: race.seriesShort, races: [] };
+      entry.races.push(race);
+      map.set(race.seriesName, entry);
+    }
+    return [...map.values()].reverse();
+  }, [races]);
   return (
   <div className="races-also">
     <div className="races-also__head">
@@ -383,11 +413,22 @@ export const AlsoInYear = ({ year, races }: { year: number; races: ArchiveRace[]
       <SourcePill title={`${year}: the other series`} entries={archiveSources(races)} caveats={[]} />
     </div>
     {races.length >= 3 ? <YearSpine races={races} year={year} /> : null}
-    <div className={`tower${pictures ? '' : ' races-nopic'}`} style={{ margin: '4px -12px 0' }}>
-      {[...races].reverse().map((race) => (
-        <ArchiveRow key={race.sessionId} race={race} />
-      ))}
-    </div>
+    {groups.map((group) => (
+      <div key={group.seriesName} className="races-also__series">
+        {groups.length > 1 ? (
+          <h4 className="races-also__sub">
+            <i style={{ background: chapterTint(group.seriesName) }} aria-hidden />
+            {group.seriesShort}
+            <span className="races-key__n">{group.races.length}</span>
+          </h4>
+        ) : null}
+        <div className={`tower${pictures ? '' : ' races-nopic'}`} style={{ margin: '4px -12px 0' }}>
+          {[...group.races].reverse().map((race) => (
+            <ArchiveRow key={race.sessionId} race={race} />
+          ))}
+        </div>
+      </div>
+    ))}
   </div>
   );
 };
