@@ -36,7 +36,12 @@ import './explorer.css';
  * was. The dots now sit on an even lattice (columns one dot wide, stacked
  * from the row's centre line), every row in a view has the same height, and
  * the header says which way is better. Switch `ddxdots`:
- *   (default) beads — each dot a small bead in its series colour, lit from
+ *   (default) ink — proxy review 3, after Jack's "I don't really like the
+ *             colors": the site's own flat dot in soft ink at rest; a series
+ *             takes its hue only when one of its dots or its name is pointed
+ *             at, or it is followed (as Life in weeks does). Wins gold with an
+ *             amber ring, as on Biggest climbs; a hollow dot ended early.
+ *   beads   — each dot a small bead in its series colour, lit from
  *             the top left, with a paper rim and a soft shadow;
  *   flat      — the same lattice with flat, quieter dots;
  *   old       — round 2's version.
@@ -44,7 +49,7 @@ import './explorer.css';
  * share (under 0.6% at 1440 px); the card always gives the exact finish.
  * ==========================================================================*/
 
-type DotStyle = 'beads' | 'flat';
+type DotStyle = 'ink' | 'beads' | 'flat';
 
 type Grouping = 'all' | 'series' | 'season' | 'track' | 'weather';
 
@@ -259,6 +264,8 @@ const Swarm = ({
   const tap = useTapPreview();
   const coarse = useCoarsePointer();
   const [hovered, setHovered] = useState<string | null>(null);
+  /* ink: the series whose name is under the pointer (Series view). */
+  const [labelSeries, setLabelSeries] = useState<string | null>(null);
   const [tip, setTip] = useState<VenueTip | null>(null);
   const preload = useVenuePreload(() => venuesOf(rows));
 
@@ -294,6 +301,16 @@ const Swarm = ({
     setTip({ x: point.x, y: point.y - layout.r - 2, over: point.y - layout.r - 4, under: point.y + layout.r + 4, ...words, title: deepRaceTitle(row.sessionId, words.title) });
     return best.id;
   };
+
+  /* ink: the one series shown in its hue, if any. A pointed-at dot wins, then a pointed-at name, then the followed series. */
+  const litSeries: string | null =
+    dots !== 'ink'
+      ? null
+      : hovered !== null
+        ? byId.get(hovered)?.seriesId ?? null
+        : labelSeries ?? (focus?.grouping === 'series' ? rows.find((row) => row.seriesShort === focus.key)?.seriesId ?? null : null);
+  const SOFT_INK = 'color-mix(in srgb, var(--ink) 55%, var(--paper))';
+  const FAINT_INK = 'color-mix(in srgb, var(--ink) 24%, var(--paper))';
 
   const rowsCount = layout?.groups.length ?? 1;
   const xOf = (share: number) => (layout ? layout.plotL + share * (layout.plotR - layout.plotL) : 0);
@@ -419,13 +436,22 @@ const Swarm = ({
                     event.stopPropagation();
                     if (!coarse) clear();
                   }}
+                  onMouseEnter={() => {
+                    if (!coarse && grouping === 'series') setLabelSeries(group.rows[0]?.seriesId ?? null);
+                  }}
+                  onMouseLeave={() => setLabelSeries(null)}
                   onKeyDown={onKey}
                   style={{ animationDelay: animate ? '0.35s' : '0s' }}
                 >
                   {layout.narrow ? (
                     <>
                       <rect x={0} y={group.top + 2} width={Math.min(layout.plotR, 260)} height={22} fill="transparent" />
-                      <text x={layout.plotL - layout.r} y={group.top + 17} className="ddx__name">
+                      <text
+                        x={layout.plotL - layout.r}
+                        y={group.top + 17}
+                        className="ddx__name"
+                        style={litSeries !== null && grouping === 'series' && group.rows[0]?.seriesId === litSeries ? { fill: `color-mix(in srgb, ${chapterTint(litSeries)} 78%, var(--ink))` } : undefined}
+                      >
                         {group.name}
                         <tspan className="ddx__count" dx={7}>
                           {countWords}
@@ -437,7 +463,13 @@ const Swarm = ({
                   ) : (
                     <>
                       <rect x={0} y={group.centerY - 20} width={layout.labelW} height={40} fill="transparent" />
-                      <text x={layout.labelW} y={group.centerY - 2} textAnchor="end" className="ddx__name">
+                      <text
+                        x={layout.labelW}
+                        y={group.centerY - 2}
+                        textAnchor="end"
+                        className="ddx__name"
+                        style={litSeries !== null && grouping === 'series' && group.rows[0]?.seriesId === litSeries ? { fill: `color-mix(in srgb, ${chapterTint(litSeries)} 78%, var(--ink))` } : undefined}
+                      >
                         {group.name}
                       </text>
                       <text x={layout.labelW} y={group.centerY + 15} textAnchor="end" className="ddx__count">
@@ -469,17 +501,39 @@ const Swarm = ({
                   cx={0}
                   cy={0}
                   r={isHovered ? layout.r + 2 : layout.r}
-                  style={{ transform: `translate(${point.x}px, ${point.y}px)`, transitionDelay: `${delay}ms, 0ms, 0ms` }}
+                  style={{ transform: `translate(${point.x}px, ${point.y}px)`, transitionDelay: `${delay}ms, 0ms, 0ms, 0ms, 0ms` }}
                   fill={
                     early
                       ? 'var(--paper)'
+                      : dots === 'ink'
+                        ? win
+                          ? 'var(--bryce)'
+                          : litSeries === row.seriesId
+                            ? tint
+                            : litSeries !== null
+                              ? FAINT_INK
+                              : SOFT_INK
                       : dots === 'beads'
                         ? `url(#ddx-bead-${win ? 'win' : row.seriesId})`
                         : win
                           ? 'var(--bryce)'
                           : `color-mix(in srgb, ${tint} 74%, var(--paper))`
                   }
-                  stroke={isHovered ? 'var(--ink)' : win ? 'var(--ink)' : early ? tint : 'var(--paper)'}
+                  stroke={
+                    isHovered
+                      ? 'var(--ink)'
+                      : win
+                        ? 'var(--amber)'
+                        : early
+                          ? dots === 'ink'
+                            ? litSeries === row.seriesId
+                              ? tint
+                              : litSeries !== null
+                                ? FAINT_INK
+                                : SOFT_INK
+                            : tint
+                          : 'var(--paper)'
+                  }
                   strokeWidth={isHovered ? 1.6 : win ? 1 : early ? 1.5 : dots === 'beads' ? 0.9 : 0.8}
                 />
               );
@@ -502,7 +556,7 @@ const Swarm = ({
 export const ExplorerDeepDive = () => {
   const dots = switchValue('ddxdots');
   if (dots === 'old') return <ExplorerDeepDiveOld />;
-  return <ExplorerDeepDiveNew dots={dots === 'flat' ? 'flat' : 'beads'} />;
+  return <ExplorerDeepDiveNew dots={dots === 'flat' ? 'flat' : dots === 'beads' ? 'beads' : 'ink'} />;
 };
 
 const ExplorerDeepDiveNew = ({ dots }: { dots: DotStyle }) => {
@@ -617,6 +671,7 @@ const ExplorerDeepDiveNew = ({ dots }: { dots: DotStyle }) => {
             {coarse
               ? 'tap a dot to read its race, a name to follow it'
               : 'hover a dot to read its race, click to open it · click a name to follow it'}
+            {dots === 'ink' ? (coarse ? ' · a tapped race lights its series' : ' · a series shows its colour when you point at it') : ''}
           </>
         }
       >

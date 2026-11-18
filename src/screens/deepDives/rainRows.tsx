@@ -10,6 +10,7 @@ import { uiDataPackage } from '../../data/uiDataPackage';
 import { DeepDive, DeepTip } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
 import { deepRaceTitle } from './raceTitle';
+import { wetDryCall } from '../../app/wetDry';
 import './rainRows.css';
 
 /* ============================================================================
@@ -27,9 +28,10 @@ import './rainRows.css';
  * Then every series that had a wet race, in career order. Then the series that
  * never saw a wet race, together, so the whole career is still on the chart.
  *
- * How sure each weather call is shows on the dot itself: solid for the series'
- * own condition report, ringed for an observed call, soft for the weather
- * model (reanalysis). A hollow dot ended early, as everywhere on the site.
+ * How sure each weather call is: a dot is solid where the series' report or an
+ * observed call made it, light where only the weather model did (proxy review 3
+ * found a third, ringed tier busy); the card names the source, read through
+ * app/wetDry.ts like every other card. A hollow dot ended early, as everywhere.
  *
  * variant `rows`: a wet lane (in a light rain wash) over a dry lane, per row.
  * variant `bands`: one lane per row; the dry races become his usual range
@@ -59,14 +61,13 @@ const rankOf = (rows: CareerRow[], q: number): number => {
 const isWet = (row: CareerRow) => row.wetDry !== null && row.wetDry !== 'dry';
 const tierOf = (row: CareerRow): Tier =>
   row.wetDrySource === 'series_report' ? 'report' : row.wetDrySource === 'observed' ? 'observed' : row.wetDrySource === 'reanalysis' ? 'modelled' : 'none';
-const TIER_WORDS: Record<Tier, string> = {
-  report: "the series' own report",
-  observed: 'observed',
-  modelled: 'modelled',
-  none: ''
+/** The card's weather words, read through app/wetDry.ts like every other card on the site:
+ *  "damp track (series report)", "dry track (modelled, Open-Meteo)", "wet track (observed, NOAA)". */
+const weatherWords = (row: CareerRow): string | null => {
+  const call = wetDryCall(uiDataPackage.screens.careerLab.raceWeather?.[row.sessionId]);
+  if (call) return `${call.words} (${call.tierWords})`;
+  return row.wetDry === 'dry' ? 'dry track' : row.wetDry === 'wet' ? 'wet track' : row.wetDry ? 'wet for part of the race' : null;
 };
-const conditionWords = (row: CareerRow): string =>
-  row.wetDry === 'dry' ? 'dry track' : row.wetDry === 'wet' ? 'wet track' : row.wetDry === 'mixed' ? 'mixed: wet and drying' : `${row.wetDry} track`;
 
 /* ---------- beeswarm: dots on one line, nudged up and down so none overlap ---------- */
 
@@ -336,7 +337,6 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
   const dryMedian = all.dryMed ?? 0;
 
   const tipOf = (row: CareerRow, at: Placed): VenueTip => {
-    const tier = tierOf(row);
     return {
       x: at.x,
       y: at.y - at.r - 3,
@@ -345,7 +345,7 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
       ...raceTipOf(row, {
         note:
           [
-            `${conditionWords(row)}${tier !== 'none' ? ` (${TIER_WORDS[tier]})` : ''}`,
+            weatherWords(row),
             row.status !== 'running' ? `ended early: ${row.status}` : null
           ]
             .filter(Boolean)
@@ -426,7 +426,7 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
         {
           label: 'Weather for every race',
           path: 'analysis/ui-data-package/ui-data-package.json (screens.careerLab.raceWeather)',
-          note: `Wet or dry for each race: the official series condition report where there is one (${tierCount('series_report')}, a solid dot), else an observed call from the nearest weather station and race reports (${tierCount('observed')}, a ringed dot), else Open-Meteo reanalysis over the race window, modelled (${tierCount('reanalysis')}, a soft dot). ${all.dry.length} dry; ${all.wet.length} wet or mixed. A modelled dry is weak evidence: checked against the official reports, the reanalysis caught ${calibration?.modelCaughtWetOrMixed ?? '?'} of ${calibration?.officialWetOrMixed ?? '?'} wet or damp races.`
+          note: `Wet or dry for each race: the official series condition report where there is one (${tierCount('series_report')}), else an observed call from the nearest weather station and race reports (${tierCount('observed')}), both drawn solid; else Open-Meteo reanalysis over the race window, modelled (${tierCount('reanalysis')}), drawn light. Each race's card names its source. ${all.dry.length} dry; ${all.wet.length} wet or mixed. A modelled dry is weak evidence: checked against the official reports, the reanalysis caught ${calibration?.modelCaughtWetOrMixed ?? '?'} of ${calibration?.officialWetOrMixed ?? '?'} wet or damp races.`
         },
         {
           label: 'Career result conversion · share of the field beaten',
@@ -531,13 +531,11 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
             wet, dry
           </span>
           <span className="rr-key">
-            <svg width="54" height="12" aria-hidden>
+            <svg width="26" height="12" aria-hidden>
               <circle cx="6" cy="6" r="4" className="rr-key__ink" />
-              <circle cx="23" cy="6" r="3.3" className="rr-key__ink" />
-              <circle cx="23" cy="6" r="5.4" className="rr-key__ring" />
-              <circle cx="42" cy="6" r="4" className="rr-key__ink rr-key__soft" />
+              <circle cx="20" cy="6" r="4" className="rr-key__ink rr-key__soft" />
             </svg>
-            weather: series report, observed, modelled
+            weather reported or observed, modelled
           </span>
           <span className="rr-key">
             <svg width="14" height="12" aria-hidden>
@@ -780,7 +778,6 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
                     }}
                   >
                     {isHover ? <circle r={p.r + 4.5} className="rr__hover-ring" /> : null}
-                    {tier === 'observed' ? <circle r={p.r + 2.1} className={`rr__tier-ring rr__tier-ring--${p.wet ? 'wet' : 'dry'}`} /> : null}
                     <circle r={isHover ? p.r + 1 : p.r} className={cls} />
                   </g>
                 );
