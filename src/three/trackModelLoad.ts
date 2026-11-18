@@ -34,8 +34,12 @@ export const loadIndex = () => {
 const loadPacked = async (file: string): Promise<unknown> => {
   if (typeof DecompressionStream === 'undefined') return null;
   const response = await fetch(`${file}.gz`);
-  if (!response.ok || !response.body || /text\/html/.test(response.headers.get('content-type') ?? '')) return null;
-  return new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).json();
+  if (!response.ok || /text\/html/.test(response.headers.get('content-type') ?? '')) return null;
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  // A server that sends the copy with Content-Encoding: gzip (vite preview does) has the browser unpack it already:
+  // what arrives is the JSON itself, so read it rather than fetching the .json a second time.
+  if (bytes[0] !== 0x1f || bytes[1] !== 0x8b) return JSON.parse(new TextDecoder().decode(bytes));
+  return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).json();
 };
 
 const modelPromises = new Map<string, Promise<unknown>>();
