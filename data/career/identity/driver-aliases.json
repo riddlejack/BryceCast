@@ -150,8 +150,13 @@
   "spelling": [
     {
       "id": "driver_michaeol_neylon",
-      "decision": "kept",
-      "reason": "The only source, the Right Coast Formula F 2019 Mid-Ohio results (a DNS row, car 27A), spells it Michaeol; no primary source gives another spelling."
+      "decision": "corrected",
+      "sheetName": "Michaeol Neylon",
+      "displayName": "Michael Neylon",
+      "givenName": "Michael",
+      "familyName": "Neylon",
+      "evidence": "source_rcffs_2019_mid_ohio_race_report",
+      "reason": "The results sheet (RCFFS 2019 Mid-Ohio Race 3, DNS, car 27A, Citation Z10) spells it Michaeol; the series' own report of the same weekend names Michael Neylon and Mike Neylon in his Z10, whose engine failed in Saturday qualifying, the DNS. The record id keeps the sheet's spelling."
     }
   ]
 }

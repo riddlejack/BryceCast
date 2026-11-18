@@ -10,7 +10,8 @@
  *
  * Idempotent: a `from` already folded is skipped. A pair that ever shared a session is
  * refused, since one person can't be two cars in one race. Run it after the importers
- * (career:import:all does). */
+ * (career:import:all does). The table's `spelling` rows correct a sheet's typo where another
+ * primary source of the same race spells the name. */
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -27,7 +28,7 @@ const table = JSON.parse(await readFile(tablePath, 'utf8'));
 
 const drivers = new Map(dataset.drivers.map((row) => [row.id, row]));
 const sessionsOf = (id) => new Set(dataset.results.filter((row) => row.driverId === id).map((row) => row.sessionId));
-const report = { table: 'data/career/identity/driver-aliases.json', foldedThisRun: [], aliases: [], heldApart: table.heldApart ?? [] };
+const report = { table: 'data/career/identity/driver-aliases.json', foldedThisRun: [], aliases: [], spelling: [], heldApart: table.heldApart ?? [] };
 
 for (const alias of table.aliases) {
   const from = drivers.get(alias.from);
@@ -56,6 +57,24 @@ for (const alias of table.aliases) {
   });
   drivers.delete(alias.from);
   report.foldedThisRun.push({ from: alias.from, to: alias.to, results, qualifying });
+}
+
+/* Spelling corrections: a sheet's typo, fixed where another primary source of the same race
+ * spells the name; the record keeps the sheet's spelling as sourceDisplayName. */
+for (const fix of table.spelling ?? []) {
+  if (fix.decision !== 'corrected') continue;
+  const driver = drivers.get(fix.id);
+  if (!driver) throw new Error(`Spelling fix ${fix.id} is not a driver record`);
+  drivers.set(fix.id, {
+    ...driver,
+    displayName: fix.displayName,
+    givenName: fix.givenName ?? driver.givenName,
+    familyName: fix.familyName ?? driver.familyName,
+    sourceDisplayName: driver.sourceDisplayName ?? fix.sheetName ?? driver.displayName,
+    spellingReason: fix.reason,
+    provenanceRefs: Array.from(new Set([...(driver.provenanceRefs ?? []), fix.evidence, evidenceId].filter(Boolean)))
+  });
+  report.spelling.push({ id: fix.id, from: fix.sheetName, to: fix.displayName, evidence: fix.evidence });
 }
 
 dataset.drivers = Array.from(drivers.values()).sort((a, b) => a.id.localeCompare(b.id));
@@ -88,4 +107,4 @@ dataset.sourceEvidence = [...dataset.sourceEvidence.filter((row) => row.id !== e
 
 await writeFile(datasetPath, `${JSON.stringify(dataset, null, 2)}\n`);
 await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
-console.log(JSON.stringify({ foldedThisRun: report.foldedThisRun.length, aliases: report.aliases.length, drivers: dataset.drivers.length }));
+console.log(JSON.stringify({ foldedThisRun: report.foldedThisRun.length, aliases: report.aliases.length, spelling: report.spelling.length, drivers: dataset.drivers.length }));

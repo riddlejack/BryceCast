@@ -1036,7 +1036,7 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
             precipitationMm: numberOrNull(weatherObservation.precipitationMm),
             conditionRaw: weatherObservation.ambientConditionRaw ?? null,
             source: weatherObservation.source ?? null,
-            caveat: 'Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather.'
+            caveat: 'Modelled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather.'
           }
         : null,
       /* The weekend arc: practice → qualifying → start → finish. */
@@ -1964,7 +1964,7 @@ const buildFrocCampaignStory = ({ canonicalDataset, qualiSessionRows, resultConv
     caveats: [
       "Bryce contested two of the championship's five rounds — Rounds 4 and 5 — so this is six races, a guest campaign rather than a full season.",
       'Every FROC finish and start is official; position change is the plain difference between the two, never a pace claim.',
-      'Qualifying is sourced for both rounds he ran; one Round 5 session set a reverse grid and is labeled as such.',
+      'Qualifying is sourced for both rounds he ran; one Round 5 session set a reverse grid and is labelled as such.',
       "The championship's test sessions have no official exact clock time, so they sit outside this view; the six races are the sourced subject."
     ],
     sourceRefs: [
@@ -2577,9 +2577,9 @@ const buildQualifyingLayer = ({ summary, conversionRows, sessionRows }) => {
     caveats: summary.caveats ?? [],
     sourceRefs: [
       sourceRef('qualifyingLayerSummary', 'Validated qualifying-layer coverage, source-family map, and career conversion totals.'),
-      sourceRef('qualifyingLayerBySeriesSeason', 'Per-series/season qualifying and conversion rollup with labeled denominators.'),
+      sourceRef('qualifyingLayerBySeriesSeason', 'Per-series/season qualifying and conversion rollup with labelled denominators.'),
       sourceRef('qualifyingLayerConversion', 'One row per grid-confirmed qualifying-to-flag conversion.'),
-      sourceRef('qualifyingLayerSessions', 'The normalized per-session qualifying inventory with source family and field-size denominator.'),
+      sourceRef('qualifyingLayerSessions', 'The normalised per-session qualifying inventory with source family and field-size denominator.'),
       sourceRef('canonicalDataset', 'Canonical qualifyingResults, qualifying-session results, and race grids.')
     ]
   };
@@ -2826,7 +2826,7 @@ const buildVenueDossier = ({ canonicalDataset, asOfDate }) => {
       sourceType: 'modeled_reanalysis',
       official: false,
       confidence: observation.confidence ?? 'modeled_medium',
-      caveat: 'Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature.'
+      caveat: 'Modelled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature.'
     };
   };
 
@@ -2950,12 +2950,12 @@ const buildVenueDossier = ({ canonicalDataset, asOfDate }) => {
     venues,
     venueCount: venues.length,
     caveats: [
-      'Conditions are modeled near-track weather joined to the race hour (Open-Meteo hourly archive) — never official INDY NXT session weather or track temperature.',
+      'Conditions are modelled near-track weather joined to the race hour (Open-Meteo hourly archive) — never official INDY NXT session weather or track temperature.',
       'Deltas compare each visit to Bryce’s previous INDY NXT race at the same venue; a weather delta is a fact about the day, not a verdict on the drive.',
       'This weekend’s forecast and current conditions come from the runtime weather routes, not this static package.'
     ],
     sourceRefs: [
-      sourceRef('canonicalDataset', 'Official INDY NXT results (grid, finish, field size, status) and per-race modeled weather observations, by venue and year.'),
+      sourceRef('canonicalDataset', 'Official INDY NXT results (grid, finish, field size, status) and per-race modelled weather observations, by venue and year.'),
       sourceRef('trackOutlineIndex', 'OpenStreetMap-traced outlines (ODbL) carry the north offset used to draw the wind bearing on real-geo venues; street circuits omit it.'),
       { key: 'api-weather-upcoming', path: '/api/weather/upcoming', note: 'Runtime NWS current conditions + hourly forecast for the race-week venue (near-track, not official).' }
     ]
@@ -3986,7 +3986,7 @@ const buildPackage = () => {
           caveats: [
             'Every canonical Bryce race row counts. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
             'The physical-session number is a floor: exact observations and F1600 lower bounds stay separate; FROC and private-test gaps remain unknown.',
-            'Travel is a minimum venue-to-venue displacement. The route adjustment is a modeled range; actual travel is blocked pending seasonBase and returnHomeFrequency.'
+            'Travel is a minimum venue-to-venue displacement. The route adjustment is a modelled range; actual travel is blocked pending seasonBase and returnHomeFrequency.'
           ],
           sourceRefs: [
             sourceRef('careerLifeStatsSummary', 'Validated Career Life Stats totals and method labels.'),
@@ -3998,8 +3998,8 @@ const buildPackage = () => {
             sourceRef('careerLifeStatsMileageBreakdowns', 'Visualization-ready mileage dimensions for future UI work.'),
             sourceRef('careerLifeStatsTravelLegs', 'Chronological travel minimum and route-proxy range by leg.'),
             sourceRef('careerLifeStatsTravelModeBreakdown', 'Visualization-ready travel-mode proxy totals.'),
-            sourceRef('careerLifeStatsFuelEstimate', 'Modeled low/base/high fuel estimates by series and chassis.'),
-            sourceRef('careerLifeStatsTireEstimate', 'Modeled low/base/high unique-tire estimates by series and year.'),
+            sourceRef('careerLifeStatsFuelEstimate', 'Modelled low/base/high fuel estimates by series and chassis.'),
+            sourceRef('careerLifeStatsTireEstimate', 'Modelled low/base/high unique-tire estimates by series and year.'),
             sourceRef('careerLifeStatsFigures', 'Career page figures with class and plain how, share of his life, weeks grid and ordered travel legs.'),
             sourceRef('careerLifeStatsDriverVariants', 'Driver records that look like one person entered twice, behind the people range.')
           ]
@@ -4007,7 +4007,7 @@ const buildPackage = () => {
         caveats: [
           'Career analytics must use metric-family parity states; older series do not expose INDY NXT-grade depth.',
           'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.',
-          'Weather joins cover only sessions with a sourced condition report (official series reports or labeled modeled observations); rows without one carry null and are excluded from wet/dry splits.',
+          'Weather joins cover only sessions with a sourced condition report (official series reports or labelled modelled observations); rows without one carry null and are excluded from wet/dry splits.',
           'Head-to-head records cover INDY NXT grids only and count official classified finishes, not lap-by-lap battles.'
         ],
         sourceRefs: [
