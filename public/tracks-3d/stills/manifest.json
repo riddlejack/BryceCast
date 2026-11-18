@@ -7424,22 +7424,22 @@
   "venues": {
    "brands-hatch-indy": {
     "camera": {
-     "azim": 0,
+     "azim": 200,
      "elev": 40,
      "fill": 0.9
     },
     "pose": {
      "target": [
-      -4.153925473125841,
-      12.0705975164758,
-      11.165519643975124
+      -11.228710727113635,
+      -13.586402367142489,
+      -18.245350307761225
      ],
-     "D": 1253.447506215486,
+     "D": 1242.7576949849506,
      "elev": 40,
-     "azim": 0
+     "azim": 200
     },
     "hiddenSamples": 0,
-    "naturalAspect": 2.0152052130525404,
+    "naturalAspect": 2.184417929507937,
     "layout": "Indy",
     "trackIds": [
      "track_brands_hatch_indy"
@@ -7448,22 +7448,22 @@
    },
    "brands-hatch-gp": {
     "camera": {
-     "azim": 0,
+     "azim": 125,
      "elev": 40,
      "fill": 0.9
     },
     "pose": {
      "target": [
-      46.23149636627721,
-      -50.31110732438345,
-      45.76065515408286
+      74.97249532893922,
+      -4.945541619890538,
+      -19.88706537855211
      ],
-     "D": 2085.9660372194103,
+     "D": 1782.0318879811089,
      "elev": 40,
-     "azim": 0
+     "azim": 125
     },
     "hiddenSamples": 0,
-    "naturalAspect": 1.3699704582864802,
+    "naturalAspect": 2.1390131947128452,
     "layout": "Grand Prix",
     "trackIds": [
      "track_brands_hatch_gp"
@@ -7472,22 +7472,22 @@
    },
    "silverstone-national": {
     "camera": {
-     "azim": 0,
+     "azim": 155,
      "elev": 40,
      "fill": 0.9
     },
     "pose": {
      "target": [
-      45.51647916581599,
-      -41.99938479193009,
-      21.368151188711813
+      66.24603684736326,
+      -78.74159768715049,
+      -75.42969584292939
      ],
-     "D": 1601.6724155088039,
+     "D": 1583.7441171019836,
      "elev": 40,
-     "azim": 0
+     "azim": 155
     },
     "hiddenSamples": 0,
-    "naturalAspect": 1.83007186275508,
+    "naturalAspect": 1.9670335855009466,
     "layout": "National",
     "trackIds": [
      "track_silverstone_national"
@@ -7496,22 +7496,22 @@
    },
    "silverstone-international": {
     "camera": {
-     "azim": 0,
+     "azim": 230,
      "elev": 40,
      "fill": 0.9
     },
     "pose": {
      "target": [
-      -40.533557146326345,
-      -66.84495304452962,
-      51.66612473232663
+      -7.885061201445996,
+      -41.66612398859771,
+      -74.84830538938796
      ],
-     "D": 2029.5041067051645,
+     "D": 1792.4561042775968,
      "elev": 40,
-     "azim": 0
+     "azim": 230
     },
     "hiddenSamples": 0,
-    "naturalAspect": 1.4325757460483937,
+    "naturalAspect": 2.0183838973308434,
     "layout": "International",
     "trackIds": [
      "track_silverstone_international"
@@ -7520,27 +7520,124 @@
    },
    "silverstone-gp": {
     "camera": {
-     "azim": 0,
+     "azim": 260,
      "elev": 40,
      "fill": 0.9
     },
     "pose": {
      "target": [
-      -34.64805459751471,
-      -163.18615557539073,
-      -2.725036081380474
+      -61.50185977951121,
+      22.015164163781538,
+      -59.85279534767231
      ],
-     "D": 3335.702324548249,
+     "D": 2758.74368599194,
      "elev": 40,
-     "azim": 0
+     "azim": 260
     },
     "hiddenSamples": 0,
-    "naturalAspect": 1.0524925098822493,
+    "naturalAspect": 2.565137598751295,
     "layout": "Grand Prix",
     "trackIds": [
      "track_silverstone_gp"
     ],
     "call": "Grand Prix: GB3 2021 R2/R6 and 2022 R2 qualifying 1:54.5-2:09.8 fit only the 5.891 km GP; ledger track id track_silverstone_gp. OSM loop: Chapel Curve onto the Hangar Straight (candidate 0), Vale, start/finish on the Hamilton Straight (OSM node 13036050130)."
+   },
+   "oulton-park-international": {
+    "camera": {
+     "azim": 100,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      57.423737538780394,
+      21.033853998227265,
+      5.1097665549129365
+     ],
+     "D": 2513.1224798538183,
+     "elev": 40,
+     "azim": 100
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.8157879750156405,
+    "layout": "International",
+    "trackIds": [
+     "track_oulton_park_international"
+    ],
+    "call": "International (4.332 km) for all three meetings: the BRSCC programme for 18 July 2020 prints \"International Circuit (2.69 miles / 4.33 km)\"; GB3 2021-22 qualifying 1:32.6 / 1:34.4 fit the International (research notes item 8). OSM loop: with Britten's and Hislop's chicanes (both in place well before 2020); OSM's older unchicaned alignment (way 27299256, source Yahoo) and Britten's bypass forbidden."
+   },
+   "snetterton-300": {
+    "camera": {
+     "azim": 355,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -23.13348255917533,
+      -11.902139681275195,
+      26.107152247321515
+     ],
+     "D": 2205.3965378913217,
+     "elev": 40,
+     "azim": 355
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 3.1002426388631514,
+    "layout": "300",
+    "trackIds": [
+     "track_snetterton_300"
+    ],
+    "call": "300 circuit (4.779 km): GB3 2021 and 2022 (qualifying 2:01.0 wet / 1:42.5); research notes item 8."
+   },
+   "donington-park-gp": {
+    "camera": {
+     "azim": 355,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      21.19864700263337,
+      -19.513647215466356,
+      44.55347878193953
+     ],
+     "D": 2315.9089676575204,
+     "elev": 40,
+     "azim": 355
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.964489125201483,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_donington_park_gp"
+    ],
+    "call": "Grand Prix (4.020 km): all four GB3 rounds 2021-22 (qualifying 1:23.9-1:25.7); research notes item 8. Resurfaced for 2023 and new Fogarty Esses kerbs in 2024: surface and kerbs only."
+   },
+   "spa-francorchamps-gp": {
+    "camera": {
+     "azim": 100,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -20.957085197050873,
+      -19.888655763054732,
+      57.22833477992871
+     ],
+     "D": 3508.021266591144,
+     "elev": 40,
+     "azim": 100
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.401816381572145,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_spa_gp",
+     "track_circuit_de_spa_francorchamps"
+    ],
+    "call": "Grand Prix (7.004 km): GB3 2021-22 and Euroformula Open 2023 (qualifying 2:11.7-2:20.4). Run-off works at Raidillon, La Source, Les Combes, Blanchimont and Stavelot between his 2021 and 2022 races; the track line is unchanged (research notes item 11). OSM loop through Speaker's Corner (the car layout), not OSM's 'Moto layout' chicane."
    }
   },
   "generated": "2026-11-17",

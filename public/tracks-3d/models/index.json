@@ -172,8 +172,8 @@
   "brands-hatch-indy": {
    "file": "/tracks-3d/models/brands-hatch-indy.json",
    "kind": "venue",
-   "bytes": 94369,
-   "gzipBytes": 33492,
+   "bytes": 94371,
+   "gzipBytes": 33497,
    "rmsM": 0,
    "worstM": 0,
    "poster": {
@@ -185,8 +185,8 @@
   "brands-hatch-gp": {
    "file": "/tracks-3d/models/brands-hatch-gp.json",
    "kind": "venue",
-   "bytes": 233382,
-   "gzipBytes": 79961,
+   "bytes": 233384,
+   "gzipBytes": 79964,
    "rmsM": 0,
    "worstM": 0,
    "poster": {
@@ -198,8 +198,8 @@
   "silverstone-national": {
    "file": "/tracks-3d/models/silverstone-national.json",
    "kind": "venue",
-   "bytes": 142285,
-   "gzipBytes": 44981,
+   "bytes": 142287,
+   "gzipBytes": 44984,
    "rmsM": 0,
    "worstM": 0,
    "poster": {
@@ -211,8 +211,8 @@
   "silverstone-international": {
    "file": "/tracks-3d/models/silverstone-international.json",
    "kind": "venue",
-   "bytes": 174502,
-   "gzipBytes": 55339,
+   "bytes": 174504,
+   "gzipBytes": 55343,
    "rmsM": 0,
    "worstM": 0,
    "poster": {
@@ -224,14 +224,66 @@
   "silverstone-gp": {
    "file": "/tracks-3d/models/silverstone-gp.json",
    "kind": "venue",
-   "bytes": 311723,
-   "gzipBytes": 96085,
+   "bytes": 311725,
+   "gzipBytes": 96088,
    "rmsM": 0,
    "worstM": 0,
    "poster": {
     "1200": "/tracks-3d/stills/silverstone-gp-plain.webp"
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "oulton-park-international": {
+   "file": "/tracks-3d/models/oulton-park-international.json",
+   "kind": "venue",
+   "bytes": 224159,
+   "gzipBytes": 74295,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/oulton-park-international-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "snetterton-300": {
+   "file": "/tracks-3d/models/snetterton-300.json",
+   "kind": "venue",
+   "bytes": 129675,
+   "gzipBytes": 39242,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/snetterton-300-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "donington-park-gp": {
+   "file": "/tracks-3d/models/donington-park-gp.json",
+   "kind": "venue",
+   "bytes": 168966,
+   "gzipBytes": 56299,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/donington-park-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "spa-francorchamps-gp": {
+   "file": "/tracks-3d/models/spa-francorchamps-gp.json",
+   "kind": "venue",
+   "bytes": 586464,
+   "gzipBytes": 210416,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/spa-francorchamps-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
   }
  },
