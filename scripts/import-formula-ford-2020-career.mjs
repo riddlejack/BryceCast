@@ -879,6 +879,22 @@ const parseGridEntries = (page) => {
   return entries.sort((a, b) => a.position - b.position);
 };
 
+/** Sessions that were stopped and restarted: a RESTART GRID page, or a classification noting cars
+ *  that "did not participate in restarted race" or "took the first start". Their original grid is the start. */
+const parseRestartedSessions = (source, text) => {
+  const restarted = new Set();
+  for (const page of text.split('\f')) {
+    const lines = page.split('\n').map((line) => line.trim());
+    const restartTitle = lines.find((line) => /\s+-\s+RESTART\s+GRID\b/i.test(line));
+    const noted = /did not participate in restarted race|took the first start/i.test(page) ? lines.find((line) => /\s+-\s+CLASSIFICATION\b/i.test(line)) : null;
+    const title = restartTitle ?? noted;
+    if (!title) continue;
+    const sessionName = title.replace(/\s+-\s+(?:RESTART\s+GRID|CLASSIFICATION)\b.*$/i, '').trim();
+    restarted.add(`${source.year}:${source.id}:${source.gridSessionAliases?.[slug(sessionName)] ?? slug(sessionName)}`);
+  }
+  return restarted;
+};
+
 const parseGridPages = (source, text) => {
   const pages = text.split('\f');
   const grids = [];
@@ -1146,6 +1162,8 @@ const main = async () => {
     rawArtifacts: [],
     crossChecks: [],
     gridRowsUnmatched: [],
+    startPositionsRankedAmongStarters: [],
+    restartedSessionsKeptGridSlot: [],
     gridRowsMatchedByDriverName: [],
     gridStartHoldouts: [],
     gaps: []
@@ -1219,8 +1237,10 @@ const main = async () => {
   const extractedGridPages = [];
   const extractedPenaltyNotes = [];
   const extractedLapAnalyses = [];
+  const restartedSessions = new Set();
   for (const source of sources) {
     const text = await readFile(source.textPath, 'utf8');
+    for (const key of parseRestartedSessions(source, text)) restartedSessions.add(key);
     const parsed = parseClassificationPages(source, text);
     extractedSessions.push(...parsed);
     extractedGridPages.push(...parseGridPages(source, text));
@@ -1613,6 +1633,25 @@ const main = async () => {
           provenanceRefs: Array.from(new Set([...(result?.provenanceRefs ?? []), gridEvidenceId]))
         });
         report.gridRowsImported += 1;
+      }
+
+      /* The grid page prints every entry's slot, including cars that never took the start
+       * (the 2019 Festival Last Chance Race gridded 30 and started 21). The slot stays as
+       * gridPosition; startPosition is the car's place among the cars that started, which is
+       * what "started P16, finished P11" means. A car the classification lists as DNS has no start.
+       * A restarted race keeps the grid slot: cars missing from its classification did start. */
+      const restarted = restartedSessions.has(`${source.year}:${source.id}:${parsedSession.sessionSlug}`);
+      if (restarted) report.restartedSessionsKeptGridSlot.push(sessionId);
+      const started = restarted ? [] : [...results.values()]
+        .filter((row) => row.sessionId === sessionId && row.gridPosition != null)
+        .sort((a, b) => a.gridPosition - b.gridPosition);
+      let place = 0;
+      for (const row of started) {
+        const startPosition = row.status === 'dns' ? null : ++place;
+        if (startPosition !== row.startPosition) {
+          if (startPosition !== row.gridPosition) report.startPositionsRankedAmongStarters.push({ resultId: row.id, gridPosition: row.gridPosition, startPosition });
+          upsert(results, { ...row, startPosition });
+        }
       }
     }
 

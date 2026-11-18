@@ -25,7 +25,7 @@ type Row = Record<string, unknown>;
 
 const sourceKinds: Array<{ name: string; detail: string }> = [
   { name: 'Official', detail: 'Series timing, results, lap charts and section reports, and the wet or dry call where a series prints one: almost every number on the site.' },
-  { name: 'Modeled', detail: 'Labeled estimates where no official feed exists: weather for every race from the Open-Meteo reanalysis, checked against NOAA weather stations and race reports where those settle wet or dry; and the untimed stretch of a lap (lap time minus the timed sections).' },
+  { name: 'Modelled', detail: 'Labelled estimates where no official feed exists: weather for every race from the Open-Meteo reanalysis, checked against NOAA weather stations and race reports where those settle wet or dry; and the untimed stretch of a lap (lap time minus the timed sections).' },
   { name: 'Permissioned third-party', detail: 'Shared with permission and named where used: RaceTools track shapes for street circuits, Timing71 timing for 2026 replays.' }
 ];
 
@@ -44,7 +44,7 @@ const FAMILY: Record<string, { name: string; note: string }> = {
   incidents: { name: 'Incidents', note: 'From the official reports.' },
   penalties: { name: 'Penalties', note: 'Official penalties and decisions.' },
   racecraft_events: { name: 'Places gained', note: 'The series’ own most-improved awards. No pass is guessed.' },
-  pit_stop_counts: { name: 'Pit stops', note: 'How many each car made; nothing on tires or service.' },
+  pit_stop_counts: { name: 'Pit stops', note: 'How many each car made; nothing on tyres or service.' },
   weather_observations: { name: 'Weather', note: 'Modelled, from the Open-Meteo reanalysis, for each session with a known start time.' },
   future_schedule: { name: 'Schedule', note: 'Sessions still to come.' }
 };
@@ -67,7 +67,7 @@ const familyRows = (audit: Array<Record<string, string>>) =>
         id,
         name: plain?.name ?? id.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase()),
         note: plain?.note ?? conclusion,
-        modeled: /modeled/i.test(conclusion),
+        modeled: /modell?ed/i.test(conclusion),
         records: asNumber(row.sourceRows)
       };
     })
@@ -81,7 +81,7 @@ const FamilyLine = ({ family }: { family: Family }) => (
     <span className="dfam__words">
       <span className="dfam__name">
         {family.name}
-        {family.modeled ? <span className="dfam__tag">modeled</span> : null}
+        {family.modeled ? <span className="dfam__tag">modelled</span> : null}
       </span>
       <span className="dfam__note">{family.note}</span>
     </span>
@@ -187,7 +187,7 @@ const WONT_SHOW: Array<{ head: string; why: string }> = [
   { head: 'In-car video or team radio', why: 'Not available to this project.' },
   { head: 'Win or finish predictions', why: 'History is shown as ranges and paths, never as a forecast.' },
   { head: 'Weather measured at the track', why: 'No series publishes it. Race weather is the Open-Meteo reanalysis, labelled modelled; a series’ own wet or dry call, or a weather station and race reports, overrule it.' },
-  { head: 'Pit, tire or fuel strategy calls', why: 'The official feeds don’t carry them. The Career page’s fuel figure is a modelled range, and says how.' }
+  { head: 'Pit, tyre or fuel strategy calls', why: 'The official feeds don’t carry them. The Career page’s fuel figure is a modelled range, and says how.' }
 ];
 
 export const DataScreen = () => {

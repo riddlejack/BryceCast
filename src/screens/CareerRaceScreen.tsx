@@ -977,7 +977,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
                   {
                     label: 'Per-session condition report',
                     path: 'analysis/context-event-narrative-layer/output/weather_condition_context.csv',
-                    note: 'Official series weather lines plus labeled modeled observations, joined by session.'
+                    note: 'Official series weather lines plus labelled modelled observations, joined by session.'
                   }
                 ]
               : []),

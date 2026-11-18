@@ -1066,6 +1066,7 @@ const assertNationalFf1600BryceResult = ({
   resultId,
   finishPosition,
   startPosition,
+  gridPosition = startPosition,
   bestLapTime,
   sourceId,
   gridSourceId,
@@ -1077,7 +1078,7 @@ const assertNationalFf1600BryceResult = ({
   assert.equal(result?.bestLapTime, bestLapTime, `${label} must preserve official best lap`);
   assert.ok((result?.provenanceRefs ?? []).includes(sourceId), `${label} must cite official classification source evidence`);
   if (startPosition !== null) {
-    assert.equal(result?.gridPosition, startPosition, `${label} must import official grid position`);
+    assert.equal(result?.gridPosition, gridPosition, `${label} must import official grid position`);
     assert.equal(result?.startPosition, startPosition, `${label} must import official start position`);
     assert.ok((result?.provenanceRefs ?? []).includes(gridSourceId), `${label} must cite official grid source evidence`);
   }
@@ -1204,7 +1205,9 @@ assertNationalFf1600BryceResult({
 assertNationalFf1600BryceResult({
   resultId: 'result_formula_ford_2020_champion_brands_race_5_123_driver_bryce_aron',
   finishPosition: 3,
-  startPosition: 5,
+  /* Grid slot 5; car 41 in slot 4 never took the start (absent from the classification), so he started fourth. */
+  gridPosition: 5,
+  startPosition: 4,
   bestLapTime: '50.949',
   sourceId: 'source_formula_ford_2020_champion_brands_race_5_classification',
   gridSourceId: 'source_formula_ford_2020_champion_brands_race_5_grid',
@@ -2632,3 +2635,14 @@ console.log(JSON.stringify({
     euroformula_2023_bryce_race_results_with_grid: euroformulaBryceRaceResults.filter((row) => row.gridPosition !== null && row.startPosition !== null).length
   }
 }, null, 2));
+
+/* 2019 Formula Ford Festival Last Chance Race (proxy review 3): the amended grid prints 30 slots
+ * but 21 cars took the start. Bryce's slot was 25; 15 starters were gridded ahead of him. */
+{
+  const lcr = dataset.results.find((row) => row.id === 'result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_18_driver_bryce_aron');
+  assert.equal(lcr?.gridPosition, 25, '2019 Festival Last Chance Race keeps the official grid slot');
+  assert.equal(lcr?.startPosition, 16, '2019 Festival Last Chance Race start is his place among the 21 starters');
+  assert.equal(lcr?.finishPosition, 11, '2019 Festival Last Chance Race finish');
+  const wht = dataset.results.find((row) => row.id === 'result_formula_ford_2020_wht_grand_final_21_driver_bryce_aron');
+  assert.equal(wht?.startPosition, wht?.gridPosition, 'A restarted race (WHT Grand Final) keeps the original grid slot as the start');
+}

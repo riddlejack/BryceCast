@@ -97,7 +97,7 @@ const FormulaFordSourcePill = ({ pack }: { pack: FormulaFordLapShapePack }) => (
       }
     ]}
     caveats={[
-      'The imported laps are Bryce-only labeled blocks, so they support his own rhythm, never a comparison against opponents.',
+      'The imported laps are Bryce-only labelled blocks, so they support his own rhythm, never a comparison against opponents.',
       'The comparable read is the within-session gap to his own best; absolute lap times aren’t compared across conditions because the conditions fall at different circuits.',
       'Damp and drying windows are small (one and two races), so they are shown with lap-count badges, not broad conclusions.',
       'Continuation lap pages remain held out; there are no section, sector, or field-relative pace rows for Formula Ford.'

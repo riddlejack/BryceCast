@@ -288,11 +288,32 @@ def build_career_figures(
         return session.get("actualStart") or session.get("scheduledStart") or events[session["eventId"]]["eventStartDate"]
 
     def display_name(raw: str) -> str:
+        """The timing sheets print surnames in capitals ("Kevan McLURG", "David MCARTHUR",
+        "Daniel MacKINTOSH"). Cased for reading: Mc always takes a capital after it
+        ("McLurg", "McArthur"); Mac does only where the sheet itself splits it ("MacKintosh"),
+        since an all-capital MACKLIN or MACPHERSON can't say which it is; Roman numerals and
+        initials stay as they are written ("John Robinson II", "JM Correa")."""
+        roman = re.compile(r"^(?:II|III|IV|VI{0,3}|IX|X)[.,]?$")
+
+        def cap(run: str) -> str:
+            return run[:1].upper() + run[1:].lower()
+
         def word(token: str) -> str:
-            if len(token) > 1 and token.isupper():
-                return re.sub(r"[A-Z]+", lambda m: m.group(0).capitalize(), token)
-            return token
-        return " ".join(word(token) for token in raw.split())
+            if roman.match(token):
+                return token
+            if not re.search(r"[A-Z]{2,}", token):
+                return token
+            mc = re.match(r"^(\(?)(Mc|MC)([A-Za-z].*)$", token)
+            if mc:
+                return mc.group(1) + "Mc" + re.sub(r"[A-Za-z]+", lambda m: cap(m.group(0)), mc.group(3))
+            mac = re.match(r"^(\(?)Mac([A-Z].*)$", token)
+            if mac:
+                return mac.group(1) + "Mac" + re.sub(r"[A-Za-z]+", lambda m: cap(m.group(0)), mac.group(2))
+            return re.sub(r"[A-Za-z]+", lambda m: cap(m.group(0)), token)
+
+        tokens = raw.split()
+        # A given name in capitals of up to three letters is initials ("JM Correa", "PJ Hyett").
+        return " ".join(token if i == 0 and len(tokens) > 1 and re.fullmatch(r"[A-Z]{2,3}", token) else word(token) for i, token in enumerate(tokens))
 
     variant_kind = {row["driverId"]: row["kind"] for row in variant_rows}
     first_met: dict[str, str] = {}

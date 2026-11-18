@@ -1420,7 +1420,7 @@ const VenueDossierModule = ({
           title="This place, other years"
           entries={[
             { label: 'Official INDY NXT results by venue and year', path: 'data/career/career.dataset.json', note: 'Grid, finish, gain, field size, and official status for every past visit.' },
-            { label: 'Near-track weather (modeled)', path: 'data/career/career.dataset.json', note: 'Open-Meteo hourly archive joined to the race hour. Not official series weather or track temperature.' }
+            { label: 'Race weather (modelled)', path: 'data/career/career.dataset.json', note: 'Open-Meteo hourly archive joined to the race hour. Not official series weather or track temperature.' }
           ]}
           caveats={getVenueDossier().caveats}
         />

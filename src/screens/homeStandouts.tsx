@@ -10,6 +10,7 @@ import type { SeasonReview } from '../data/seasonPhase';
 import type { ResolvedHeatSection } from '../data/sectionObservations';
 import type { TrackModelSection } from '../three/TrackModel3D';
 import { raceStillSectionsFor, useVenueSectionData } from './sectionIntelligence';
+import { labelledRaceTitle } from './careerRaceNames';
 
 /* ============================================================
  * The landing's standout races (site refresh, Nov 14 2026).
@@ -35,13 +36,9 @@ import { raceStillSectionsFor, useVenueSectionData } from './sectionIntelligence
  * default (the repo's no-GPS boundary).
  * ============================================================ */
 
-/** "2026 Grand Prix of Monterey Race 2 R2" → "Grand Prix of Monterey, Race 2". */
-export const shortRaceName = (raceLabel: string): string =>
-  raceLabel
-    .replace(/^\d{4}\s+/, '')
-    .replace(/^INDY NXT by Firestone at (the )?/i, '')
-    .replace(/\s+R\d$/, '')
-    .replace(/\s+(Race \d)$/, ', $1');
+/** "2026 Grand Prix of Monterey Race 2 R2" → "Grand Prix of Monterey · Race 2": the site's one race name (careerRaceNames). */
+export const shortRaceName = (row: Pick<UiSeasonIndexRow, 'raceLabel' | 'sessionId' | 'trackName'>): string =>
+  labelledRaceTitle({ raceLabel: row.raceLabel, sessionId: row.sessionId, trackName: row.trackName });
 
 export interface StandoutPick {
   row: UiSeasonIndexRow;
@@ -326,7 +323,7 @@ export const Standouts = ({ review, complete, heroSessionId }: { review: SeasonR
       <div className="home-races">
         {picks.map(({ row, label }) => {
           const date = row.raceDate ?? row.eventStartDate;
-          const name = shortRaceName(row.raceLabel);
+          const name = shortRaceName(row);
           return (
             <div key={row.sessionId} className="home-race">
               <StandoutArt trackName={row.trackName} sessionId={row.sessionId} raceName={name} />

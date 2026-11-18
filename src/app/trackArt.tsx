@@ -857,7 +857,7 @@ export const TrackArt = ({
           <div
             className="track-wind"
             style={{ left: artInset }}
-            title={`Near-track wind${wind.frame ? ` (${wind.frame})` : ''} ${wind.label} (modeled, not official)`}
+            title={`Near-track wind${wind.frame ? ` (${wind.frame})` : ''} ${wind.label} (modelled, not official)`}
             aria-label={`Near-track wind${wind.frame ? ` ${wind.frame}` : ''} ${wind.label}`}
           >
             {wind.frame ? <span className="track-wind__frame">{wind.frame}</span> : null}

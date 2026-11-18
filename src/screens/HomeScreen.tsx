@@ -59,7 +59,7 @@ const HomeHero = ({ review }: { review: SeasonReview | null }) => {
   const isSeasonBest =
     review?.standouts.some((standout) => standout.row.sessionId === HERO_STILL.sessionId && standout.label === 'Season best') ??
     false;
-  const raceName = row ? `${row.seasonYear ?? ''} ${shortRaceName(row.raceLabel)}`.trim() : null;
+  const raceName = row ? `${row.seasonYear ?? ''} ${shortRaceName(row)}`.trim() : null;
   const heroSpec: HeroStillSpec = {
     ...HERO_STILL,
     alt: `A 3D model of WeatherTech Raceway Laguna Seca with the track shaded section by section by Bryce’s pace${raceName ? ` in the ${raceName}` : ''}.`
@@ -226,7 +226,7 @@ const LastTimeOut = ({
   return (
     <section className="home-line home-last" aria-label="Last time out">
       <Link to={racePath} className="home-line__head">
-        Last time out · <span className="home-last__race">{shortRaceName(row.raceLabel)}</span>
+        Last time out · <span className="home-last__race">{shortRaceName(row)}</span>
       </Link>
       <Link to={racePath} className="home-line__lead home-last__result">
         <span className="home-line__big">{finish !== null ? `P${finish}` : '—'}</span>

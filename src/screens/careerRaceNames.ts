@@ -12,8 +12,9 @@
  * its round in the season campaign. INDY NXT event names already carry
  * "Race N" where a weekend ran two ("Grand Prix of Monterey Race 1"), so that
  * becomes the race, said once: "Grand Prix of Monterey · Race 1". A race that
- * was the only one of its round in the season campaign is the plain event:
- * "Music City Grand Prix". The functions are pure apart from that one
+ * was the only one of its meeting (same event, same season, counted from the
+ * package's race list, never from a championship round, since INDY NXT gives
+ * every race its own round) is the plain event: "Music City Grand Prix". The functions are pure apart from that one
  * lookup in the package, so every row can be checked in one pass. */
 
 import { uiDataPackage } from '../data/uiDataPackage';
@@ -31,7 +32,10 @@ const shortPlaces: Record<string, string> = {
   'brands hatch circuit': 'Brands Hatch',
   'silverstone circuit': 'Silverstone',
   'snetterton circuit': 'Snetterton',
-  'lucas oil indianapolis raceway park': 'Indianapolis Raceway Park'
+  'lucas oil indianapolis raceway park': 'Indianapolis Raceway Park',
+  /* The sources spell it without the tilde; the town is Portimão. */
+  portimao: 'Portimão',
+  'autodromo internacional do algarve': 'Portimão'
 };
 
 const shortPlace = (name: string): string => shortPlaces[name.trim().toLowerCase()] ?? name.trim();
@@ -42,8 +46,8 @@ export interface RaceNameInput {
   trackName: string;
   /** The race's place within its round (1-based), where the session id carries no number. */
   raceInRound?: number | null;
-  /** How many races its round held. Read from the season campaigns when not given;
-   *  a round of one race is the plain event. */
+  /** How many races its meeting held, for a race the package doesn't list. A race it lists is
+   *  counted from its meeting (same event, same season); a meeting of one race is the plain event. */
   racesInRound?: number | null;
 }
 
@@ -58,21 +62,50 @@ export interface RaceName {
   title: string;
 }
 
-/** How many races each session's round held, from the season campaigns (built once). */
-let roundSizes: Map<string, number> | null = null;
-const racesInRoundOf = (sessionId: string): number | null => {
-  if (!roundSizes) {
-    roundSizes = new Map();
-    for (const campaign of uiDataPackage.screens.careerLab.seasonCampaigns?.campaigns ?? []) {
-      const byRound = new Map<number, string[]>();
-      for (const race of campaign.races) {
-        if (race.roundIndex == null) continue;
-        byRound.set(race.roundIndex, [...(byRound.get(race.roundIndex) ?? []), race.sessionId]);
-      }
-      for (const ids of byRound.values()) for (const id of ids) roundSizes.set(id, ids.length);
+/** The meeting a race belonged to: its season and its event, said the way raceName says it
+ *  (no organiser's note, no series sponsor, no "Race N"). INDY NXT numbers every race as its own
+ *  round, so a round is not a meeting; the event and season are. */
+const meetingKey = (seasonYear: unknown, eventName: string): string =>
+  `${seasonYear ?? ''}|${eventName
+    .trim()
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .replace(/^INDY NXT by Firestone at (the )?/i, '')
+    .replace(/[,\s]+Race\s+\d+$/i, '')
+    .trim()
+    .toLowerCase()}`;
+
+interface Meeting {
+  /** How many of his races the meeting held. */
+  size: number;
+  /** This race's place in it (1-based), in the order they ran. */
+  place: number;
+}
+
+/** Every race he ran or started, by session, with its meeting (built once from the package). */
+let meetings: Map<string, Meeting> | null = null;
+const meetingOf = (sessionId: string): Meeting | null => {
+  if (!sessionId) return null;
+  if (!meetings) {
+    meetings = new Map();
+    const lab = uiDataPackage.screens.careerLab;
+    const text = (value: unknown): string => (typeof value === 'string' ? value : '');
+    const rows = [...(lab.resultConversion ?? []), ...(lab.unclassifiedRaces ?? [])] as Array<Record<string, unknown>>;
+    const byMeeting = new Map<string, Array<{ id: string; day: string; n: number }>>();
+    const seen = new Set<string>();
+    for (const row of rows) {
+      const id = text(row.sessionId);
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      const key = meetingKey(row.seasonYear, text(row.eventName) || text(row.trackName));
+      const n = Number(id.match(/race[_-]?(\d+)/i)?.[1] ?? text(row.eventName).match(/Race\s+(\d+)$/i)?.[1] ?? 0);
+      byMeeting.set(key, [...(byMeeting.get(key) ?? []), { id, day: text(row.raceDate) || text(row.eventStartDate), n }]);
+    }
+    for (const races of byMeeting.values()) {
+      races.sort((a, b) => a.day.localeCompare(b.day) || a.n - b.n);
+      races.forEach((race, i) => meetings!.set(race.id, { size: races.length, place: i + 1 }));
     }
   }
-  return roundSizes.get(sessionId) ?? null;
+  return meetings.get(sessionId) ?? null;
 };
 
 /** Which race of the meeting, read from the session id (the source's own race naming). */
@@ -119,7 +152,31 @@ export const raceName = ({ eventName, sessionId, trackName, raceInRound, racesIn
       .trim();
   }
   if (!event) event = shortPlace(trackName);
-  const inRound = (racesInRound ?? racesInRoundOf(sessionId)) === 1 ? null : raceInRound;
+  /* The meeting decides: a meeting of one race is the plain event; otherwise the race says which. */
+  const meeting = meetingOf(sessionId);
+  const size = meeting?.size ?? racesInRound ?? null;
+  const inRound = size === 1 ? null : raceInRound ?? meeting?.place ?? null;
   const race = named ? `Race ${Number(named[2])}` : raceOf(sessionId, inRound);
   return { event, race, round, title: race ? `${event} · ${race}` : event };
+};
+
+/** A race named from a season-index or race-pack label ("2026 Grand Prix of Monterey Race 2 R2",
+ *  "INDY NXT by Firestone at the Milwaukee Mile", "Indianapolis Grand Prix, Race 1"): the year,
+ *  the trailing "R2" and the sponsor prefix go, a trailing race number becomes the race, and
+ *  raceName says it. Every INDY NXT title on the site (races list, race page, home page) comes
+ *  through here, so each reads "<event> · Race N" or the plain event. */
+export const labelledRaceTitle = ({ raceLabel, sessionId, trackName }: { raceLabel: string; sessionId: string; trackName?: string | null }): string => {
+  const bare = raceLabel
+    .trim()
+    .replace(/^\d{4}\s+/, '')
+    .replace(/\s+R\d+$/, '')
+    .replace(/^INDY NXT by Firestone at (the )?/i, '')
+    .trim();
+  const double = bare.match(/^(.*?)[,\s]+Race\s+(\d+)$/i);
+  return raceName({
+    eventName: double ? double[1] : bare,
+    sessionId,
+    trackName: trackName ?? '',
+    raceInRound: double ? Number(double[2]) : null
+  }).title;
 };
