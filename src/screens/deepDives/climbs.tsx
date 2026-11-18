@@ -638,7 +638,8 @@ export const ClimbsDeepDive = () => {
           <strong>
             P{top.start} to P{top.finish}
           </strong>{' '}
-          at {raceTitleOf(top.row.sessionId, top.row.raceLabel)}, {top.row.seasonYear}. His five biggest climbs, each drawn to the length of the field he raced.
+          at {raceTitleOf(top.row.sessionId, top.row.raceLabel)}
+          {top.row.seasonYear ? `, ${top.row.seasonYear}` : ''}. His five biggest climbs, each drawn to the length of the field he raced.
         </>
       }
       sources={

@@ -40,16 +40,18 @@ export const PHONE_ROWS = 12;
  * into noise. The tyre is now three flat shapes plus spokes drawn as plain
  * strokes, every edge at least a pixel wide at the sizes the charts use:
  *
- *   ?rvtyre (default)  spoked: black rubber, a gold (Bryce) or silver (the
- *                      rival) wheel, five straight spokes and a hub; the
- *                      spokes are what you see turn as the tyres roll in.
- *   ?rvtyre=slick      a race slick, no spokes: rubber, wheel, hub, and one
- *                      short white sidewall mark that shows the roll.
+ *   ?rvtyre (default)  a race slick: black rubber, a gold (Bryce) or silver
+ *                      (the rival) wheel, a hub, and one short white sidewall
+ *                      mark that shows the roll. Proxy review 3 (Nov 18): at
+ *                      actual size (about 16 px) the five spokes read as
+ *                      stars; the slick reads as a tyre and nothing else.
+ *   ?rvtyre=spoked     the same with five straight spokes (round 3's first
+ *                      default), spokes only from 7.5 px radius.
  *   ?rvtyre=old        round 2's tyre (tread ring, gold stripe, tapered spokes).
  */
 const tyreStyle = (): 'spoked' | 'slick' | 'old' => {
   const asked = switchValue('rvtyre');
-  return asked === 'slick' || asked === 'old' ? asked : 'spoked';
+  return asked === 'spoked' || asked === 'old' ? asked : 'slick';
 };
 
 const SPOKES = [0, 72, 144, 216, 288];
