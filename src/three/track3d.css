@@ -165,3 +165,13 @@
   background: repeating-linear-gradient(90deg, #c6c6cb 0 5px, #F1EDE6 5px 10px);
   box-shadow: inset 0 0 0 2px #45413D;
 }
+
+/* The race hour's rain over the model (weather/WeatherRain.tsx): above the
+ * picture, under the overlay and the buttons, never in the pointer's way. */
+.track3d__rain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

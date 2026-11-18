@@ -19,11 +19,14 @@
 //   scene.resetView(), scene.zoomBy(factor), scene.resize(), scene.dispose(), scene.stats()
 //   onHover({ key, x, y, pinned } | null)   key null: a stretch no section covers; x, y CSS px inside the canvas
 //   onView({ home: boolean })               after every camera change
+//   scene.setWeather(weather | null, { take, reduced })   the race hour's weather on the model (weather/weatherScene.js)
+//   scene.windScreen()                      the downwind direction on screen now, [dx, dy] unit, or null
 import { THREE, hex } from './rig/lib/rig.js';
 import { KIT, createStage } from './rig/shots/brycecast-film/kit.js';
 import { createLaguna } from './rig/shots/brycecast-film/world/laguna.js';
 import { createVenue } from './rig/shots/brycecast-film/world/venues.js';
 import { createCity, trackRibbon } from './rig/shots/brycecast-film/world/city.js';
+import { createWeather } from './weather/weatherScene.js';
 
 const FOV = 25;
 const PALE = '#F1EDE6';          // a section with no comparison in this scope, and stretches no section covers
@@ -108,7 +111,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     const Wd = L.data.width;
     // the pit lane, its wall, fence and box lines: light and quiet (its lane material is the rig's '#5A5652')
     L.root.traverse((o) => { if (o.isMesh && o.material && o.material.color && o.material.color.getHexString() === '5a5652') o.material.color.copy(hex(PIT_ROAD)); });
-    model = { at: (u, lat = 0, dy = 0) => L.pointAt(u, lat, dy), half: Wd / 2, bandHalf: Wd / 2 + 0.05, bandDy: 0.012, length: L.lap,
+    model = { north: L.north, at: (u, lat = 0, dy = 0) => L.pointAt(u, lat, dy), half: Wd / 2, bandHalf: Wd / 2 + 0.05, bandDy: 0.012, length: L.lap,
       slab: L.data.slab.outline.map(([x, z]) => [x, L.gridY(x, z), z]).concat(L.data.slab.outline.map(([x, z]) => [x, 0, z])) };
   } else if (data.kind === 'venue') {
     const V = createVenue(rig, M);
@@ -188,7 +191,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   const base = new THREE.Mesh(ribbonGeometry(0, 1, model.bandHalf, model.bandHalf, model.bandDy * 0.5), bandMat(PALE, -4));
   base.receiveShadow = true; base.renderOrder = 2; base.visible = false; bandRoot.add(base);
 
-  let sections = [], sectionMeshes = new Map(), spanSig = '', active = null, hoverKey;
+  let sections = [], sectionMeshes = new Map(), spanSig = '', active = null, hoverKey, wx = null;
   const ranges = [];   // [u0, u1, key] for picking
   function setSections(list, force = false) {
     const sig = JSON.stringify(list.map((s) => [s.key, s.spans, Boolean(s.dashed)]));
@@ -216,10 +219,12 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   }
   function recolour() {
     const focus = hoverKey !== undefined && hoverKey !== null ? hoverKey : active;
+    base.material.color.copy(hex(PALE)); if (wx) base.material.color.multiply(wx.bandComp);
     for (const s of sections) {
       const g = sectionMeshes.get(s.key); if (!g) continue;
       const c = hex(s.color || PALE);
       if (focus && focus !== s.key) c.lerp(hex(DIM_TO), 0.62);
+      if (wx) c.multiply(wx.bandComp);   // the weather's light lands on the model, never on the heat's colours
       g.userData.mat.color.copy(c);
       // a pale (not compared) section draws no band of its own: the pale lane under it shows
       g.visible = Boolean(s.color) || (focus === s.key);
@@ -455,6 +460,20 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   // ---------- frames on demand ----------
   let queued = false, disposed = false, frames = 0, lastMs = 0;
   const times = [];
+  // the weather's motion (the trees swaying, the arrow's pulse, the sock): frames at most 30 a second, only while the
+  // model is on screen and the page is shown; otherwise frames stay on demand
+  let onScreen = true, loopId = 0, lastLoop = 0;
+  const seen = typeof IntersectionObserver === 'function' ? new IntersectionObserver((es) => { onScreen = es.some((e) => e.isIntersecting); kick(); }) : null;
+  seen?.observe(canvas);
+  const onVis = () => kick();
+  document.addEventListener('visibilitychange', onVis);
+  function loop(now) {
+    loopId = 0;
+    if (disposed || !wx?.animating || !onScreen || document.hidden) return;
+    if (now - lastLoop >= 31) { lastLoop = now; wx.tick(now / 1000); invalidate(); }
+    loopId = requestAnimationFrame(loop);
+  }
+  function kick() { if (!loopId && wx?.animating && onScreen && !document.hidden && !disposed) loopId = requestAnimationFrame(loop); }
   function render() {
     queued = false; if (disposed) return;
     const t0 = performance.now();
@@ -468,16 +487,29 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     renderer.setSize(cssW(), cssH(), false);
     home = frame(framePts, { elev: cam0.elev, azim: cam0.azim, fill: cam0.fill ?? 0.9 });
     if (atHome) pose = { ...home, target: [...home.target] }; else clampPose();
-    placeCamera(); refreshPick(); renderer.shadowMap.needsUpdate = true; invalidate(); checkBandWidth();
+    placeCamera(); refreshPick(); renderer.shadowMap.needsUpdate = true; wx?.relayout(); invalidate(); checkBandWidth();
   }
   placeCamera();
   checkBandWidth();
+  wx = createWeather({
+    scene, camera, stage, model, invalidate, cssW, cssH, applyPose, centre,
+    ribbon: (u0, u1, hl, hr, dy) => ribbonGeometry(u0, u1, hl, hr, dy),
+    northWorld: model.north ?? [0, -1],   // venue and city models: x east, north toward -z
+    getHome: () => home,
+    frameBox: () => ({ x0: bx0, x1: bx1, z0: bz0, z1: bz1 }),
+    silhouettes: () => {
+      const n = model.slab.length / 2, top = model.slab.slice(0, n), bottom = model.slab.slice(n);
+      return [top, bottom];
+    },
+    shadowsDirty: () => { renderer.shadowMap.needsUpdate = true; },
+  });
   renderer.shadowMap.needsUpdate = true;
   renderer.compile(scene, camera);
   render();
 
   function dispose() {
-    disposed = true; clearTimeout(widthTimer);
+    disposed = true; clearTimeout(widthTimer); if (loopId) cancelAnimationFrame(loopId); seen?.disconnect();
+    document.removeEventListener('visibilitychange', onVis); wx?.dispose();
     canvas.removeEventListener('pointerdown', onDown); canvas.removeEventListener('pointermove', onMove);
     canvas.removeEventListener('pointerup', onUp); canvas.removeEventListener('pointercancel', onCancel);
     canvas.removeEventListener('pointerleave', onLeave); canvas.removeEventListener('wheel', onWheel);
@@ -501,6 +533,9 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
 
   return {
     setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect, projectT, trackHalfWidth: model.half,
+    setWeather(w, opts) { wx.set(w, opts); recolour(); invalidate(); kick(); },
+    windScreen: () => wx.windScreen(),
+    weatherInfo: () => wx.info(),
     stats: () => ({ frames, lastMs, times: times.slice(), pose: { ...pose }, home: { ...home }, atHome }),
     // for headless checks: where on screen a section's middle is drawn, and a hover at that point
     screenPointOf(key) {

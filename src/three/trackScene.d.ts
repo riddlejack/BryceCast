@@ -43,6 +43,11 @@ export interface TrackScene {
   projectT(t: number, lat?: number): [number, number] | null;
   /** Half the track's width, in metres. */
   trackHalfWidth: number;
+  /** The race hour's weather on the model (weather/weatherScene.js); null clears it. */
+  setWeather(weather: import('./weather/sceneWeather').SceneWeather | null, opts?: { take?: string; reduced?: boolean }): void;
+  /** The downwind ground direction on screen now, as a unit [dx, dy] in CSS px axes; null in still air or no bearing. */
+  windScreen(): [number, number] | null;
+  weatherInfo(): Record<string, unknown>;
 }
 export function webglAvailable(): boolean;
 export function createTrackScene(options: {

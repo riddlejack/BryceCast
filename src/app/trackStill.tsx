@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
 import type { TrackModelSection } from '../three/TrackModel3D';
 import { useCoarsePointer } from './charts';
+import { StillWeather } from '../three/weather/StillWeather';
+import type { SceneWeather } from '../three/weather/sceneWeather';
 import './trackStill.css';
 
 /* ============================================================================
@@ -163,7 +165,8 @@ export const TrackStill = ({
   sizes = '(max-width: 760px) 100vw, 600px',
   fallback = null,
   eager = false,
-  className
+  className,
+  weather
 }: {
   /** The venue (outline slug). */
   slug: string | null | undefined;
@@ -183,6 +186,10 @@ export const TrackStill = ({
   fallback?: ReactNode;
   eager?: boolean;
   className?: string;
+  /** The race hour's weather over the picture: 'auto' (the race's own, by
+   *  sessionId), a SceneWeather, or null for none. Left out: the page's
+   *  (TrackWeatherProvider), else none. */
+  weather?: SceneWeather | null | 'auto';
 }) => {
   const index = useStillIndex();
   const picture = stillPictureFor(index, slug, sessionId);
@@ -363,6 +370,7 @@ export const TrackStill = ({
         decoding="async"
         draggable={false}
       />
+      <StillWeather slug={slug} sessionId={sessionId} weather={weather} centreline={geo?.pts ?? null} aspect={W / H} />
       {geo && (shown || dot) ? (
         <svg className="track-still__over" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden>
           {shown ? (
