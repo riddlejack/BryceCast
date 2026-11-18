@@ -25,14 +25,33 @@ export const loadIndex = () => {
   return indexPromise;
 };
 
+/* The build writes a gzip copy of each model beside it (scripts/gzip-track-
+ * models.mjs): a quarter of the bytes, and a file Cloudflare caches at its edge
+ * (it caches .gz, never .json). It is served as plain bytes, not as an encoded
+ * response, so it is unpacked here; the result is the model's exact JSON. Any
+ * trouble (no DecompressionStream, no copy, a server that encoded it again)
+ * returns null and the caller fetches the .json as before. */
+const loadPacked = async (file: string): Promise<unknown> => {
+  if (typeof DecompressionStream === 'undefined') return null;
+  const response = await fetch(`${file}.gz`);
+  if (!response.ok || !response.body || /text\/html/.test(response.headers.get('content-type') ?? '')) return null;
+  return new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).json();
+};
+
 const modelPromises = new Map<string, Promise<unknown>>();
 export const loadModel = <T>(file: string): Promise<T> => {
   let promise = modelPromises.get(file);
   if (!promise) {
-    promise = fetch(file).then((response) => {
-      if (!response.ok) throw new Error(`model ${response.status}`);
-      return response.json() as Promise<T>;
-    });
+    promise = loadPacked(file)
+      .catch(() => null)
+      .then(
+        (packed) =>
+          packed ??
+          fetch(file).then((response) => {
+            if (!response.ok) throw new Error(`model ${response.status}`);
+            return response.json() as Promise<T>;
+          })
+      );
     promise.catch(() => modelPromises.delete(file));
     modelPromises.set(file, promise);
   }

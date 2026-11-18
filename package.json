@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc && vite build && node scripts/write-release.mjs",
+    "build": "tsc && vite build && node scripts/gzip-track-models.mjs && node scripts/write-release.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "serve:api": "node scripts/api-server.mjs",
     "serve:app": "node scripts/api-server.mjs --static=dist",
