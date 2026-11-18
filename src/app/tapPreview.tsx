@@ -31,10 +31,11 @@ const SAME_SPOT = 12;
 
 /** The drawn mark nearest a tap: the smallest unit a reader can point at,
  *  whatever key the chart gives it (the restarts key every dot by its race). */
-const markNear = (scope: Element, x: number, y: number): { x: number; y: number } | null => {
+const MARK_SHAPES = 'circle, ellipse, rect, path, polygon, [data-mark]';
+const markNear = (scope: Element, x: number, y: number, reach = 30, kinds = MARK_SHAPES): { x: number; y: number } | null => {
   let best: { x: number; y: number } | null = null;
-  let bestD = 30;
-  const shapes = scope.matches('circle, ellipse, rect, path, polygon, [data-mark]') ? [scope] : [...scope.querySelectorAll('circle, ellipse, rect, path, polygon, [data-mark]')];
+  let bestD = reach;
+  const shapes = scope.matches(kinds) ? [scope] : [...scope.querySelectorAll(kinds)];
   for (const el of shapes) {
     if (el.closest('[data-tap-card]')) continue;
     const r = el.getBoundingClientRect();
@@ -283,7 +284,8 @@ export const useTapPreview = (): TapPreview => {
  * 393 often landed on the card and opened the card's race. Three rules now:
  *   - the card goes where it covers the fewest of the chart's marks: any spot
  *     on the screen, above the tab bar, that leaves the tapped mark clear and
- *     hides least (the button's band counts triple, since a tap there opens);
+ *     hides least, a mark under its button (where a tap opens) before any
+ *     number under its body (taps pass through it);
  *     ties go to the spot nearest the mark;
  *   - a second tap opens only on the same drawn mark (same centre), not on
  *     another dot the chart keys by the same race;
@@ -291,12 +293,16 @@ export const useTapPreview = (): TapPreview => {
  *     [data-tap-card] is pointer-events none, its button and links auto), so a
  *     mark under the card's words still reads;
  *   - only the button opens, and not in the first moment after the card
- *     appears or changes (TapAction). */
+ *     appears or changes (TapAction);
+ *   - where no spot leaves the button clear, a tap on it right over a mark
+ *     goes to that mark (tapThrough). */
 
 const GUTTER = 8;
 const GAP = 10;
 const BUTTON_BAND = 48;
 const MARK_MAX = 28;
+/** A fingertip's slack round the card's button: a mark this near it is under the finger too. */
+const FINGER = 6;
 
 /** The chart's marks in screen space: its small SVG shapes and tagged marks. */
 const marksIn = (parent: HTMLElement, card: HTMLElement): Array<{ x: number; y: number }> => {
@@ -345,13 +351,23 @@ export const useTouchPlacement = (
      * the mark, above or below the chart) are often all on top of other marks. */
     const fits = (top: number) => top >= GUTTER && top + h <= floor - GUTTER;
     const marks = marksIn(parent, card);
+    /* The button is the one part of the card a tap can land on (its body lets
+     * taps through), so a mark under the button, with a finger's slack round
+     * it, outweighs any number of marks the body hides (proxy review 5). */
+    const button = card.querySelector('.tap-card__open');
+    const cardBox = card.getBoundingClientRect();
+    const buttonBox = button ? button.getBoundingClientRect() : null;
+    const buttonTop = buttonBox ? buttonBox.top - cardBox.top : h - BUTTON_BAND;
+    const buttonBottom = buttonBox ? buttonBox.bottom - cardBox.top : h;
     const covers = (top: number) => {
-      let n = 0;
+      let underButton = 0;
+      let underBody = 0;
       for (const m of marks) {
-        if (m.x < left - 4 || m.x > left + w + 4 || m.y < top - 4 || m.y > top + h + 4) continue;
-        n += m.y >= top + h - BUTTON_BAND ? 3 : 1;
+        if (m.x < left - FINGER || m.x > left + w + FINGER || m.y < top - FINGER || m.y > top + h + FINGER) continue;
+        if (m.y >= top + buttonTop - FINGER && m.y <= top + buttonBottom + FINGER) underButton += 1;
+        else underBody += 1;
       }
-      return n;
+      return underButton * 1_000_000 + underBody * 10_000;
     };
     const away = (top: number) => {
       if (top + h <= markTop - GAP) return markTop - GAP - (top + h);
@@ -366,7 +382,7 @@ export const useTouchPlacement = (
       if (!fits(top)) continue;
       const gap = away(top);
       if (!Number.isFinite(gap)) continue;
-      const c = covers(top) * 10000 + gap;
+      const c = covers(top) + gap;
       if (c < bestCost) {
         best = top;
         bestCost = c;
@@ -387,6 +403,29 @@ export const useTouchPlacement = (
 };
 
 const BUTTON_SETTLE_MS = 350;
+/** How near (px) a tap on the button must land to a mark under it to go to that mark. */
+const THROUGH_REACH = 9;
+
+/** Proxy review 5: where the card has nowhere to sit that leaves its button
+ *  clear of the chart's marks (the explorer and Rain fill the phone's
+ *  screen), a tap on the button over one of those marks is a tap on the mark.
+ *  Hands the tap to the chart under the card; true if it did. */
+const tapThrough = (button: Element, x: number, y: number): boolean => {
+  const card = button.closest(`[${TAP_CARD}]`);
+  const scope = card instanceof HTMLElement ? card.offsetParent ?? card.parentElement : null;
+  if (!card || !scope) return false;
+  /* dots only: a tick, an arrowhead or a swatch under the button is not a race */
+  const mark = markNear(scope, x, y, THROUGH_REACH, 'circle, ellipse, [data-mark]');
+  if (!mark) return false;
+  const under = document.elementsFromPoint(mark.x, mark.y).find((el) => !card.contains(el));
+  if (!under) return false;
+  const at = { bubbles: true, cancelable: true, composed: true, clientX: mark.x, clientY: mark.y };
+  const finger = { ...at, pointerType: 'touch', isPrimary: true, pointerId: 1 };
+  under.dispatchEvent(new PointerEvent('pointerdown', finger));
+  under.dispatchEvent(new PointerEvent('pointerup', finger));
+  under.dispatchEvent(new MouseEvent('click', { ...at, detail: 1 }));
+  return true;
+};
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 const lower = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
@@ -413,6 +452,9 @@ export const TapAction = ({ tap, label, fallback = 'open the race' }: { tap?: Ta
         className="tap-card__open"
         onClick={(event) => {
           event.stopPropagation();
+          /* A finger on the button right over another of the chart's marks
+           * meant that mark: it reads, and this race does not open. */
+          if (tapThrough(event.currentTarget, event.clientX, event.clientY)) return;
           if (performance.now() - shownAt.current < BUTTON_SETTLE_MS) return;
           open();
         }}
