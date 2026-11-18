@@ -509,7 +509,7 @@ export const ExplorerDeepDive = () => {
               {
                 label: 'Career result conversion table',
                 path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-                note: `${rows.length} races with an official or source-backed finishing position. Each dot sits at his finish percentile: the share of the rest of the field he finished ahead of (a win is 100%). Within a row a dot moves up or down only to clear its neighbours; across is exact. "Typical day" is the median race, taken as the old explorer took it: races sorted by that share, the one at position floor(n / 2), so with an even count it is the upper of the two middle races; a group of one race has no median mark. Gold is a win (P1); a hollow dot is a day that ended early (contact or mechanical).`
+                note: `${rows.length} races with an official or source-backed finishing position. Each dot sits at the share of the rest of the field he finished ahead of, (field − place) ÷ (field − 1) (a win is 100%). Within a row a dot moves up or down only to clear its neighbours; across is exact. "Typical day" is the median race, taken as the old explorer took it: races sorted by that share, the one at position floor(n / 2), so with an even count it is the upper of the two middle races; a group of one race has no median mark. Gold is a win (P1); a hollow dot is a day that ended early (contact or mechanical).`
               },
               {
                 label: 'Weather rows',

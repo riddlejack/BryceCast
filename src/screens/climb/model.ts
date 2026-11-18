@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { asNumber, asString } from '../../app/format';
 import { uiDataPackage, type UiCareerMoment } from '../../data/uiDataPackage';
-import { chapterTint, seriesShort, useCareerRows } from '../careerExplorer';
+import { chapterTint, seriesIdOf, seriesShort, useCareerRows } from '../careerExplorer';
 import { raceName } from '../careerRaceNames';
 import { useArchiveRaces, useSheetRaces } from '../careerRaceList';
 import { beatLine, beatShare, placeLine } from '../../app/raceFacts';
@@ -9,7 +9,7 @@ import { beatLine, beatShare, placeLine } from '../../app/raceFacts';
 /* ============================================================================
  * The climb's model (career round 2, November 17, 2026).
  *
- * Every race of the record, all 173, in the order he ran them: the 165 with a
+ * Every race of the record, all 175, in the order he ran them: the 167 with a
  * classified finish from the conversion table (uiDataPackage resultConversion,
  * the rows every other career chart reads) and the 8 with none (a DNF, DNS or
  * DSQ with no finishing position) from careerLab.unclassifiedRaces. Both come
@@ -17,7 +17,7 @@ import { beatLine, beatShare, placeLine } from '../../app/raceFacts';
  * and which step of the climb a series sits on.
  *
  * The steps are the series in the order he reached them. The three 2019
- * series (SCCA Super Tour, F1600 and RCFFS) share one step, as they share a
+ * series (SCCA, F1600 and RCFFS) share one step, as they share a
  * car class and their meetings interleave; the step names all three. USF Pro 2000 (one race, May 2024) and IMSA (the
  * 2025 Rolex 24) ran inside his INDY NXT years, so they are one-offs drawn on
  * that step in their own colour rather than steps of their own.
@@ -84,22 +84,24 @@ export interface ClimbModel {
 }
 
 const STEPS: Array<{ key: string; name: string; tintSeries: string; series: string[] }> = [
-  { key: 'formula-f', name: 'SCCA · F1600 · RCFFS', tintSeries: 'F1600 Championship Series', series: ['Hoosier SCCA Super Tour', 'F1600 Championship Series', 'Right Coast Formula F Series'] },
-  { key: 'formula-ford', name: 'Formula Ford', tintSeries: 'Formula Ford', series: ['Formula Ford'] },
-  { key: 'gb3', name: 'GB3', tintSeries: 'GB3 Championship', series: ['GB3 Championship'] },
-  { key: 'euroformula', name: 'Euroformula', tintSeries: 'Euroformula Open', series: ['Euroformula Open'] },
-  { key: 'fr-oceania', name: 'FR Oceania', tintSeries: 'Castrol Toyota Formula Regional Oceania Championship', series: ['Castrol Toyota Formula Regional Oceania Championship'] },
-  { key: 'indy-nxt', name: 'INDY NXT', tintSeries: 'INDY NXT', series: ['INDY NXT'] }
+  /* Matched on seriesId, so a series renamed at the source stays on its step. */
+  { key: 'formula-f', name: 'SCCA · F1600 · RCFFS', tintSeries: 'series_frp_f1600', series: ['series_scca_super_tour', 'series_frp_f1600', 'series_rcffs'] },
+  { key: 'formula-ford', name: 'Formula Ford', tintSeries: 'series_formula_ford', series: ['series_formula_ford'] },
+  { key: 'gb3', name: 'GB3', tintSeries: 'series_gb3', series: ['series_gb3'] },
+  { key: 'euroformula', name: 'Euroformula', tintSeries: 'series_euroformula_open', series: ['series_euroformula_open'] },
+  { key: 'fr-oceania', name: 'FR Oceania', tintSeries: 'series_froc', series: ['series_froc'] },
+  { key: 'indy-nxt', name: 'INDY NXT', tintSeries: 'series_indy_nxt', series: ['series_indy_nxt'] }
 ];
 const ONE_OFF_STEP: Record<string, string> = {
-  'USF Pro 2000 Championship': 'indy-nxt',
-  'IMSA WeatherTech SportsCar Championship': 'indy-nxt'
+  series_usf_pro_2000: 'indy-nxt',
+  series_imsa_weathertech: 'indy-nxt'
 };
 
 const stepIndexOf = (seriesName: string): { step: number; oneOff: boolean } => {
-  const direct = STEPS.findIndex((step) => step.series.includes(seriesName));
+  const seriesId = seriesIdOf(seriesName);
+  const direct = STEPS.findIndex((step) => step.series.includes(seriesId));
   if (direct !== -1) return { step: direct, oneOff: false };
-  const host = ONE_OFF_STEP[seriesName];
+  const host = ONE_OFF_STEP[seriesId];
   return { step: host ? STEPS.findIndex((step) => step.key === host) : STEPS.length - 1, oneOff: true };
 };
 
@@ -115,6 +117,7 @@ interface UnclassifiedRow {
   eventName: string | null;
   trackName: string | null;
   eventStartDate: string | null;
+  raceDate?: string | null;
   raceNumber: number | null;
   startPosition: number | null;
   fieldSize: number | null;
@@ -172,7 +175,7 @@ export const useClimbModel = (): ClimbModel | null => {
         seasonYear: u.seasonYear,
         eventName: u.eventName ?? u.trackName ?? '',
         trackName: u.trackName ?? '',
-        date: u.eventStartDate,
+        date: u.raceDate ?? u.eventStartDate,
         start: u.startPosition,
         finish: null,
         field: u.fieldSize,

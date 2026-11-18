@@ -36,7 +36,7 @@ import './careerRace.css';
  * same rows the Career charts draw. Two are read from elsewhere and say so in
  * Sources: the chapter's entered-race count (the life-stats weeks grid, which
  * the Career page's chapter counts read) and the field size (read back from
- * the finishing percentile, as the Biggest climbs dive does).
+ * the share of the field beaten, as the Biggest climbs dive does).
  * `?racesheet=row` lays the field on its side at every width.
  * ==========================================================================*/
 
@@ -809,7 +809,11 @@ const Unclassified = ({ sessionId }: { sessionId: string }) => {
           </span>
           <h1 className="screen-head__title crs-head__title">{title.replace(' · ', '\u00a0· ')}</h1>
           <p className="crs-head__sub">
-            {race.eventStartDate ? `Weekend of ${formatDate(race.eventStartDate, { month: 'long', day: 'numeric', year: 'numeric' })}` : null}
+            {race.raceDate
+              ? formatDate(race.raceDate, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+              : race.eventStartDate
+                ? `Weekend of ${formatDate(race.eventStartDate, { month: 'long', day: 'numeric', year: 'numeric' })}`
+                : null}
             {race.trackName ? ` · ${race.trackName}` : null}
           </p>
         </div>
@@ -958,7 +962,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
             },
             {
               label: 'Field size',
-              note: 'Read back from the finishing percentile, which is (field − finish + 1) ÷ field, so field = (finish − 1) ÷ (1 − percentile): the cars classified. It can’t be read back for a win. Where he started behind the last classified car, the slots past it are dashed.'
+              note: 'The canonical result row’s field size; where it has none, read back from the share of the field beaten, (field − finish) ÷ (field − 1), so field = (finish − share) ÷ (1 − share): the cars classified. It can’t be read back for a win. Where he started behind the last classified car, the slots past it are dashed.'
             },
             {
               label: 'Races in the chapter',
@@ -966,7 +970,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
             },
             {
               label: 'Race day',
-              note: 'The season campaign’s race date where it gives one; otherwise the meeting’s first day, shown as “Weekend of”.'
+              note: 'The race’s own day from its official start (raceDate), else the season campaign’s race date; otherwise the meeting’s first day, shown as “Weekend of”.'
             },
             ...(race.row.wetDry
               ? [

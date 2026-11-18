@@ -5,7 +5,7 @@ series_formula_ford,Formula Ford,23,14.3,lap_weather_specialist_pass
 series_euroformula_open,Euroformula Open,17,12.7,result_conversion_pass
 series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,1,12.1,standalone_daytona_feature
 series_frp_f1600,F1600 Championship Series,20,10.0,result_conversion_pass
-series_scca_super_tour,Hoosier SCCA Super Tour,8,8.8,lightweight_context_only
+series_scca_super_tour,SCCA U.S. Majors Tour,8,8.8,lightweight_context_only
 series_froc,Castrol Toyota Formula Regional Oceania Championship,6,8.6,lightweight_context_only
 series_rcffs,Right Coast Formula F Series,1,8.1,lightweight_context_only
 series_usf_pro_2000,USF Pro 2000 Championship,1,8.1,lightweight_context_only

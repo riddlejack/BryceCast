@@ -323,7 +323,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
 /* ---------- 3 · The venues: six circuits, two seasons ---------- */
 
 const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
-  const venues = useMemo(() => [...pack.trackProfile].sort((a, b) => b.avgFinishPercentile - a.avgFinishPercentile), [pack]);
+  const venues = useMemo(() => [...pack.trackProfile].sort((a, b) => (b.avgFieldBeatenShare ?? b.avgFinishPercentile) - (a.avgFieldBeatenShare ?? a.avgFinishPercentile)), [pack]);
 
   /* Best classified race per venue → the light race sheet it opens. */
   const bestRaceByVenue = useMemo(() => {
@@ -362,7 +362,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
         </div>
         {venues.map((venue) => {
           const best = bestRaceByVenue.get(venue.trackName);
-          const beat = pctBeaten(venue.avgFinishPercentile);
+          const beat = pctBeaten(venue.avgFieldBeatenShare ?? venue.avgFinishPercentile);
           const inner = (
             <>
               <span className="tower__name" style={{ whiteSpace: 'normal' }}>

@@ -11,7 +11,7 @@ import { SeriesCoverage } from './aboutData/SeriesCoverage';
 import './aboutData/data.css';
 
 /* Data & sources (final pass, November 17, 2026). Named as the footer names
- * it. What the record holds first: the 173-race career record and what each
+ * it. What the record holds first: the 175-race career record and what each
  * series' record carries, then the INDY NXT 2024–2026 dataset (the source
  * families below count only that dataset: their audit is
  * indy_nxt_source_family_audit.csv), the three kinds of source, the checks

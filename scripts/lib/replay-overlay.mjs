@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
+import { archiveSignatureOf } from './archive-signature.mjs';
 
 // Playback speeds. The Time Machine UI offers 1×/4×/16×; 2× stays valid for the
 // replay test harness and the live:replay convenience. Speed only changes which
@@ -163,11 +164,20 @@ export const createReplayOverlay = ({
 
   /** The captured-race index: which archived sessions exist and which map to a
    *  race page. One ~1s GROUP BY over the archive, cached briefly so live polling
-   *  stays cheap while a freshly captured race still appears within the TTL. */
+   *  stays cheap while a freshly captured race still appears within the TTL.
+   *  Every replay request resolves through this index, so while anyone watches a
+   *  replay the GROUP BY used to run every 30 s with the whole server waiting.
+   *  An index built without error is kept past the TTL while the archive and
+   *  its WAL are unchanged (it cannot differ); after a write it is rebuilt at
+   *  most once per TTL, as before. */
   const available = ({ ttlMs = 30_000 } = {}) => {
     if (!enabled) return { enabled: false, checkedAt: new Date(now()).toISOString(), active: null, sessions: [] };
+    const signature = archiveSignatureOf(sqlitePath);
     if (availableCache && now() - availableCache.computedAtMs < ttlMs) {
       return { ...availableCache.value, active: playback?.sessionKey ?? null };
+    }
+    if (availableCache && !availableCache.value.error && availableCache.signature === signature) {
+      return { ...availableCache.value, checkedAt: new Date(now()).toISOString(), active: playback?.sessionKey ?? null };
     }
     let rows = [];
     let error = null;
@@ -237,7 +247,7 @@ export const createReplayOverlay = ({
       })
       .sort((left, right) => (parseTime(right.firstCheckedAt) ?? 0) - (parseTime(left.firstCheckedAt) ?? 0));
     const value = { enabled: true, checkedAt: new Date(now()).toISOString(), sessions: sessionsList, ...(error ? { error } : {}) };
-    availableCache = { computedAtMs: now(), value };
+    availableCache = { computedAtMs: now(), signature, value };
     return { ...value, active: playback?.sessionKey ?? null };
   };
 

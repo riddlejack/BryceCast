@@ -55,7 +55,7 @@ const useEuroRaces = (): EuroRace[] =>
         start: asNumber(row.startPosition),
         finish: asNumber(row.finishPosition),
         gain: asNumber(row.positionGain),
-        percentile: asNumber(row.finishPercentile)
+        percentile: asNumber(row.fieldBeatenShare ?? row.finishPercentile)
       }));
   }, []);
 

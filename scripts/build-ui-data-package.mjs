@@ -67,6 +67,7 @@ const sources = {
   careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv',
   careerRaceWeatherOutput: 'analysis/career-weather/output/race-weather.json',
   careerRaceWeatherBuilderScript: 'scripts/build-career-race-weather.mjs',
+  careerRaceWeatherObservedCalls: 'analysis/career-weather/data/observed_calls.json',
   careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
   careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
   careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
@@ -3887,7 +3888,10 @@ const buildPackage = () => {
           tempC: numberOrNull(row.tempC),
           source: row.source,
           /* The official condition words, where the series reported them. */
-          seriesReport: row.seriesReport ? { conditionRaw: row.seriesReport.conditionRaw ?? null, source: row.seriesReport.source ?? null, url: row.seriesReport.url ?? null } : null
+          seriesReport: row.seriesReport ? { conditionRaw: row.seriesReport.conditionRaw ?? null, source: row.seriesReport.source ?? null, url: row.seriesReport.url ?? null } : null,
+          /* Station and race-report evidence behind an observed call. */
+          observed: row.observed ? { summary: row.observed.summary, evidence: row.observed.evidence ?? [] } : null,
+          modelWetDry: row.modelWetDry ?? null
         }])),
         raceWeatherSummary: {
           schemaVersion: careerRaceWeather.schemaVersion,
@@ -3898,6 +3902,7 @@ const buildPackage = () => {
           calibration: careerRaceWeather.calibration,
           sourceRefs: [
             sourceRef('careerRaceWeatherOutput', 'Per-race weather over the official session window: Open-Meteo reanalysis (modelled) with the official series condition report deciding wet or dry where one exists.'),
+            sourceRef('careerRaceWeatherObservedCalls', 'Observed wet/dry calls (NOAA GHCNh station reports and race reports) for disputed races with no official report.'),
             sourceRef('careerRaceWeatherBuilderScript', 'Windowing, hourly aggregation, sky and wet/dry rules, and the calibration against official reports.')
           ]
         },

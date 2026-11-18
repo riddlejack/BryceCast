@@ -67,7 +67,7 @@ const NewClimb = ({ version }: { version: Exclude<Version, 'old'> }) => {
             {
               label: 'How the chart is drawn',
               path: 'src/screens/climb/model.ts',
-              note: 'A step per series in the order he first raced it; the three 2019 series (SCCA Super Tour, F1600 and RCFFS) share one step, as they share a car class and their meetings interleave; each dot keeps its own series’ colour. USF Pro 2000 and the Rolex 24 ran during his INDY NXT years and sit on that step as one-offs. The line on each step is a seven-race trimmed mean of that share (the middle 60% of the window). Named moments use the package’s deterministic rules.'
+              note: 'A step per series in the order he first raced it; the three 2019 series (SCCA, F1600 and RCFFS) share one step, as they share a car class and their meetings interleave; each dot keeps its own series’ colour. USF Pro 2000 and the Rolex 24 ran during his INDY NXT years and sit on that step as one-offs. The line on each step is a seven-race trimmed mean of that share (the middle 60% of the window). Named moments use the package’s deterministic rules.'
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}

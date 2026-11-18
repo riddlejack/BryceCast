@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-11-18T04:01:49Z",
+  "generatedAt": "2026-11-18T04:33:34Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -607,7 +607,7 @@
       "metricLabel": "Result conversion across all series",
       "parityStatus": "production_safe",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "8",
       "uiUse": "Use in Career Analytics Lab."
     },
@@ -617,7 +617,7 @@
       "metricLabel": "Qualifying-to-race conversion where qualifying rows exist",
       "parityStatus": "unavailable_without_guessing",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "0",
       "uiUse": "Show unavailable or omit from comparison charts."
     },
@@ -627,7 +627,7 @@
       "metricLabel": "Track type and venue history",
       "parityStatus": "production_safe",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "4",
       "uiUse": "Use in Career Analytics Lab."
     },
@@ -637,7 +637,7 @@
       "metricLabel": "Weather or conditions where source-backed",
       "parityStatus": "unavailable",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "0",
       "uiUse": "Show unavailable or omit from comparison charts."
     },
@@ -647,7 +647,7 @@
       "metricLabel": "Lap-shape where lap samples exist",
       "parityStatus": "unavailable",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "0",
       "uiUse": "Show unavailable or omit from comparison charts."
     },
@@ -657,7 +657,7 @@
       "metricLabel": "Team and teammate context where field rows support it",
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "184",
       "uiUse": "Use with coverage badge and denominators."
     },
@@ -667,7 +667,7 @@
       "metricLabel": "Section pace where official section metrics exist",
       "parityStatus": "unavailable",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sourceRowsOrSessions": "0",
       "uiUse": "Show unavailable or omit from comparison charts."
     },
@@ -3596,7 +3596,7 @@
       "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_cota_saturday_race",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "1.0",
@@ -3614,7 +3614,7 @@
       "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_cota_sunday_race",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "3.0",
@@ -3632,7 +3632,7 @@
       "raceLabel": "2019 SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_homestead_race_1",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "",
@@ -3650,7 +3650,7 @@
       "raceLabel": "2019 SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_homestead_race_2",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "",
@@ -3668,7 +3668,7 @@
       "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_road_atlanta_saturday_race",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "5.0",
@@ -3686,7 +3686,7 @@
       "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_road_atlanta_sunday_race",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "8.0",
@@ -3704,7 +3704,7 @@
       "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_sebring_race_1",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "9.0",
@@ -3722,7 +3722,7 @@
       "raceLabel": "2019 Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
       "seasonYear": "2019",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "sessionId": "session_scca_super_tour_2019_sebring_race_2",
       "sourceState": "official_or_source_backed_result",
       "startPosition": "9.0",
@@ -3821,7 +3821,7 @@
       "medianFinish": "8.0",
       "raceRows": "8",
       "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
+      "seriesName": "SCCA U.S. Majors Tour",
       "top10Rate": "0.75",
       "top5Rate": "0.375"
     },
@@ -3881,31 +3881,31 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
+  "sourceHash": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a",
   "sourceRefs": [
     {
-      "bytes": 1206,
+      "bytes": 1204,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "ccf66ecd1007e400cb88c6f0ea08b17fd700ecd0959da764dae58a83fe638bf5"
+      "sha256": "1ff1bdc32aedb6b87e3aac7b20fd833fe847180bb36c07b3f1c92a4c240d664a"
     },
     {
-      "bytes": 17456,
+      "bytes": 17442,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "6181af2d09064398bd5eb2e3517c7a890fdfb575776102b6ff47ea0adf17a187"
+      "sha256": "133faac8a137abe25e349c866a37b0215090db3fd3e1259df29777ea62ce2f37"
     },
     {
-      "bytes": 43914,
+      "bytes": 43898,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "b5265a6b17a8941aa7ac9c592b7329aac98ff9b300b9809f36fe47f964cf2073"
+      "sha256": "f58e150c7bf56fe04ca22432712c05b3ddd09051607d9054491509cd2b9b075c"
     },
     {
-      "bytes": 32759,
+      "bytes": 32717,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "41b5e37d65c8a9901c99a69dc97f744f85d4bdd5ec1576aadc3edf5872ed39a7"
+      "sha256": "de248e081bb7a7b1285f9f3d5ebe44132e601e459981b5e36865f3f1d4c4c514"
     }
   ],
   "topCareerStories": [

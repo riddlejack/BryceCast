@@ -769,7 +769,7 @@ if (badUnclassifiedDates.length) fail(`careerLab.unclassifiedRaces raceDate must
   if (missingWeather.length) fail(`careerLab.raceWeather must cover every race (${missingWeather.length} missing, e.g. ${missingWeather[0]}).`);
   const skies = new Set(['clear', 'partly', 'overcast', 'rain', 'storm']);
   const wetDries = new Set(['wet', 'dry', 'mixed', null]);
-  const wetDrySources = new Set(['series_report', 'reanalysis', null]);
+  const wetDrySources = new Set(['series_report', 'observed', 'reanalysis', null]);
   const isWindowTime = (value) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(String(value ?? ''));
   for (const [sessionId, row] of Object.entries(raceWeather)) {
     if (row.sessionId !== sessionId) fail(`careerLab.raceWeather key ${sessionId} carries sessionId ${row.sessionId}.`);
@@ -781,6 +781,7 @@ if (badUnclassifiedDates.length) fail(`careerLab.unclassifiedRaces raceDate must
     if ((row.wetDry == null) !== (row.wetDrySource == null)) fail(`careerLab.raceWeather ${sessionId} must name a wet/dry source exactly when it has a wet/dry call.`);
     if (row.wetDrySource === 'reanalysis' && row.wetDry === 'mixed') fail(`careerLab.raceWeather ${sessionId}: the reanalysis never calls a race mixed.`);
     if (row.wetDrySource === 'series_report' && !row.seriesReport) fail(`careerLab.raceWeather ${sessionId} cites a series report it does not carry.`);
+    if (row.wetDrySource === 'observed' && !(row.observed?.evidence ?? []).some((item) => item.url)) fail(`careerLab.raceWeather ${sessionId} makes an observed call with no cited evidence.`);
     if (row.source?.tier !== 'modelled' || !/Open-Meteo/.test(row.source?.name ?? '')) fail(`careerLab.raceWeather ${sessionId} must label the reanalysis as modelled Open-Meteo.`);
     for (const key of ['rainMm', 'cloudPct', 'windKph', 'gustKph', 'tempC']) {
       if (row[key] !== null && !Number.isFinite(row[key])) fail(`careerLab.raceWeather ${sessionId}.${key} must be a number or null.`);

@@ -18,7 +18,7 @@ import './about.css';
 export const REPO_URL: string | null = null;
 
 /* About (final pass, November 17, 2026): what the site is and the career it
- * covers first, with the Career page's own figures (173 races, 10 series, 38
+ * covers first, with the Career page's own figures (175 races, 10 series, 39
  * tracks, 9 countries) in place of the README's stat tiles; then the hard
  * parts, each with a drawing; the flow as a diagram; credits. The "what it
  * won't show" list lives once, on Data & sources.

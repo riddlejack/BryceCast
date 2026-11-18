@@ -939,7 +939,7 @@ const IncidentsVisual = () => {
         .map((row) => ({
           sessionId: asString(row.sessionId) ?? '',
           trackName: asString(row.trackName) ?? '',
-          date: asString(row.eventStartDate) ?? '',
+          date: asString(row.raceDate) ?? asString(row.eventStartDate) ?? '',
           label: asString(row.raceLabel) ?? '',
           event: asString(row.eventName) ?? asString(row.raceLabel) ?? '',
           status: asString(row.status) ?? 'running',
@@ -2008,10 +2008,10 @@ const seriesChapters: Array<{ key: string; seriesId: string; name: string; years
   {
     key: 'scca',
     seriesId: 'series_scca_super_tour',
-    name: 'Hoosier SCCA Super Tour',
+    name: 'SCCA U.S. Majors Tour',
     years: '2019',
     short: 'SCCA',
-    narrative: 'His first races on the record: Formula F at Sebring, COTA and Road Atlanta, January to March 2019.'
+    narrative: 'His first races on the record: Formula F at Homestead-Miami, Sebring, COTA and Road Atlanta, January to March 2019.'
   },
   {
     key: 'f1600',
@@ -2139,7 +2139,7 @@ const ChapterPanel = ({
         <div className="chapter-panel__head">
           <span className="chapter-panel__years">{chapter.years}</span>
           <h3 className="chapter-panel__name">
-            <span aria-hidden className="chapter-panel__dot" style={{ background: chapterTint(chapter.name) }} />
+            <span aria-hidden className="chapter-panel__dot" style={{ background: chapterTint(chapter.seriesId) }} />
             {chapter.short ?? chapter.name}
           </h3>
           <span className="chapter-panel__count">
@@ -2165,12 +2165,12 @@ const ChapterPanel = ({
               {row ? (
                 <div className="chapter-panel__stats">
                   <Stat label="Average finish" value={formatNumber(row.avgFinish)} />
-                  <Stat label="Field beaten, on average" value={formatPct(row.avgFinishPercentile)} />
+                  <Stat label="Field beaten, on average" value={formatPct(row.avgFieldBeatenPct ?? row.avgFinishPercentile)} />
                   <Stat label="Top-ten rate" value={formatPct(row.top10RatePct)} />
                 </div>
               ) : null}
               <div className="chapter-panel__strip">
-                <ChapterStrip seriesName={chapter.name} />
+                <ChapterStrip seriesName={chapter.seriesId} />
               </div>
               {extra ? <p className="caption caption--secondary chapter-panel__extra">{extra}</p> : null}
             </>
@@ -2199,7 +2199,7 @@ const chapterFromHash = (): string | null => {
   return match && seriesChapters.some((chapter) => chapter.key === match[1]) ? match[1] : null;
 };
 
-const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; lapLine: string | null }) => {
+const ChapterTimeline = ({ rowBySeriesId, lapLine }: { rowBySeriesId: Map<string, Row>; lapLine: string | null }) => {
   const [openKey, setOpenKey] = useState<string>(() => chapterFromHash() ?? seriesChapters[seriesChapters.length - 1].key);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const railRef = useRef<HTMLDivElement | null>(null);
@@ -2244,7 +2244,7 @@ const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; 
       <div ref={railRef} className="chapter-rail" role="tablist" aria-label="Career chapters">
         {seriesChapters.map((chapter, index) => {
           const selected = index === openIndex;
-          const row = rowByName.get(chapter.name);
+          const row = rowBySeriesId.get(chapter.seriesId);
           const f1600Totals = chapter.key === 'f1600' ? uiDataPackage.screens.careerLab.smallSeriesStories.f1600?.totals ?? null : null;
           const races = f1600Totals ? f1600Totals.raceCount : enteredBySeries.get(chapter.seriesId) ?? (row ? asNumber(row.raceRows) : null);
           return (
@@ -2260,7 +2260,7 @@ const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; 
               aria-controls="chapter-panel"
               tabIndex={selected ? 0 : -1}
               className={`chapter-rail__tab${selected ? ' chapter-rail__tab--open' : ''}`}
-              style={{ ['--tint' as string]: chapterTint(chapter.name) }}
+              style={{ ['--tint' as string]: chapterTint(chapter.seriesId) }}
               onClick={() => choose(chapter.key)}
               onKeyDown={(event) => onKey(event, index)}
             >
@@ -2280,7 +2280,7 @@ const ChapterTimeline = ({ rowByName, lapLine }: { rowByName: Map<string, Row>; 
         <ChapterPanel
           key={open.key}
           chapter={open}
-          row={rowByName.get(open.name)}
+          row={rowBySeriesId.get(open.seriesId)}
           current={openIndex === seriesChapters.length - 1}
           extra={openIndex === seriesChapters.length - 1 ? lapLine : null}
         />
@@ -2399,7 +2399,7 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
   const careerLab = uiDataPackage.screens.careerLab;
   const lifeStats = careerLab.lifeStats;
   const rows = careerLab.seriesSummary as Row[];
-  const rowByName = new Map(rows.map((row) => [asString(row.seriesName) ?? '', row]));
+  const rowBySeriesId = new Map(rows.map((row) => [asString(row.seriesId) ?? '', row]));
 
   /* Lap texture for the current chapter: every sourced INDY NXT lap chart. */
   const lapTotals = (careerLab.lapPositionMix ?? []).reduce(
@@ -2474,7 +2474,7 @@ export const CareerScreen = ({ readiness }: { readiness?: ReadinessStatus }) => 
           <Unavailable>Career summary data unavailable.</Unavailable>
         </section>
       ) : (
-        <ChapterTimeline rowByName={rowByName} lapLine={lapLine} />
+        <ChapterTimeline rowBySeriesId={rowBySeriesId} lapLine={lapLine} />
       )}
 
       {/* The campaigns (cumulative points arcs) retired 2026-07-21 on Jack's

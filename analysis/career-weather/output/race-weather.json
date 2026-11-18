@@ -1,6 +1,6 @@
 {
   "schemaVersion": "career-race-weather.v1",
-  "generatedAt": "2026-11-18T03:58:52.400Z",
+  "generatedAt": "2026-11-18T04:13:59.073Z",
   "datasetUpdatedAt": "2026-11-18T03:45:57.310Z",
   "source": "Open-Meteo Historical Weather API (ERA5 / ERA5-Land reanalysis, hourly)",
   "grain": "hourly (the finest the Open-Meteo historical archive serves)",
@@ -9,7 +9,7 @@
     "aggregation": "Instantaneous values (temperature, cloud, wind) average the hourly stamps from the hour at or before the start to the hour at or after the end; gust is the maximum; wind direction is the speed-weighted circular mean of the from-direction. Rain sums the hourly precipitation of the hours that overlap the window.",
     "sky": "storm: a thunderstorm code (95-99) in the window; rain: 0.3 mm or more, or a moderate drizzle, rain or shower code (light drizzle, code 51, alone is not rain); overcast: mean cloud 80% or more; partly: 30% or more; clear: below 30%.",
     "wetDry": "series_report: the official series condition report on the race session decides (wet; dry; damp, drying or mixed read as mixed). reanalysis: 0.5 mm or more in the window is wet, else dry; the model never says mixed.",
-    "tiers": "Reanalysis is modelled, never observed. An official series report decides wet or dry where one exists."
+    "tiers": "Reanalysis is modelled, never observed. An official series report decides wet or dry where one exists; then an observed call (nearest station reports and race reports, analysis/career-weather/data/observed_calls.json); else the reanalysis."
   },
   "coverage": {
     "races": 175,
@@ -17,8 +17,9 @@
       "session_sheet": 175
     },
     "byWetDrySource": {
-      "reanalysis": 124,
-      "series_report": 51
+      "reanalysis": 117,
+      "series_report": 51,
+      "observed": 7
     },
     "bySky": {
       "overcast": 57,
@@ -62,6 +63,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.227&longitude=-8.6267&start_date=2023-04-29&end_date=2023-04-29&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLisbon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Lisbon",
         "durationSource": "winner_total_time",
@@ -128,6 +131,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.227&longitude=-8.6267&start_date=2023-04-30&end_date=2023-04-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLisbon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Lisbon",
         "durationSource": "winner_total_time",
@@ -184,6 +189,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=37.227&longitude=-8.6267&start_date=2023-04-30&end_date=2023-04-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLisbon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Lisbon",
         "durationSource": "winner_total_time",
@@ -240,6 +247,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=50.4372&longitude=5.9714&start_date=2023-05-27&end_date=2023-05-27&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBrussels&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -306,6 +315,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=50.4372&longitude=5.9714&start_date=2023-05-28&end_date=2023-05-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBrussels&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -362,6 +373,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=50.4372&longitude=5.9714&start_date=2023-05-28&end_date=2023-05-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBrussels&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -428,6 +441,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=47.583&longitude=19.2526&start_date=2023-06-17&end_date=2023-06-17&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBudapest&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Budapest",
         "durationSource": "winner_total_time",
@@ -484,6 +499,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=47.583&longitude=19.2526&start_date=2023-06-18&end_date=2023-06-18&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBudapest&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Budapest",
         "durationSource": "winner_total_time",
@@ -540,6 +557,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=47.583&longitude=19.2526&start_date=2023-06-18&end_date=2023-06-18&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBudapest&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Budapest",
         "durationSource": "winner_total_time",
@@ -596,6 +615,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.2506&longitude=5.7917&start_date=2023-07-22&end_date=2023-07-22&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FParis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Paris",
         "durationSource": "winner_total_time",
@@ -662,6 +683,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.2506&longitude=5.7917&start_date=2023-07-23&end_date=2023-07-23&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FParis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Paris",
         "durationSource": "winner_total_time",
@@ -718,6 +741,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.2506&longitude=5.7917&start_date=2023-07-23&end_date=2023-07-23&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FParis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Paris",
         "durationSource": "winner_total_time",
@@ -784,6 +809,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=47.2197&longitude=14.7647&start_date=2023-09-09&end_date=2023-09-09&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FVienna&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Vienna",
         "durationSource": "winner_total_time",
@@ -840,6 +867,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=47.2197&longitude=14.7647&start_date=2023-09-10&end_date=2023-09-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FVienna&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Vienna",
         "durationSource": "winner_total_time",
@@ -906,6 +935,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=47.2197&longitude=14.7647&start_date=2023-09-10&end_date=2023-09-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FVienna&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Vienna",
         "durationSource": "winner_total_time",
@@ -962,6 +993,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.6156&longitude=9.2811&start_date=2023-09-23&end_date=2023-09-23&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FRome&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Rome",
         "durationSource": "winner_total_time",
@@ -1028,6 +1061,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.6156&longitude=9.2811&start_date=2023-09-24&end_date=2023-09-24&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FRome&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Rome",
         "durationSource": "winner_total_time",
@@ -1084,6 +1119,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.6156&longitude=9.2811&start_date=2023-09-24&end_date=2023-09-24&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FRome&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Rome",
         "durationSource": "winner_total_time",
@@ -1145,6 +1182,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2019/194331fok.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1216,6 +1255,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2019/194331fok.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1277,6 +1318,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=CCRC/2020/202768cf6.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1348,6 +1391,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=CCRC/2020/202768cf6.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1409,6 +1454,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=CCRC/2020/203168cf6.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1480,6 +1527,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=CCRC/2020/203168cf6.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1541,6 +1590,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=CCRC/2020/203668cf6.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1602,6 +1653,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=CCRC/2020/203668cf6.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1663,6 +1716,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2020/203505Cob.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1724,6 +1779,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2020/203851cob.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1785,6 +1842,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2020/203851cob.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1846,6 +1905,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2020/203752cob.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1907,6 +1968,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2020/203752cob.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -1968,6 +2031,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2020/203452hef.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2029,6 +2094,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2020/203452hef.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2100,6 +2167,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://brscc.co.uk/wp-content/uploads/2021/04/2020-BRSCC-Formula-Ford-Festival-TSL-Results.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2171,6 +2240,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://brscc.co.uk/wp-content/uploads/2021/04/2020-BRSCC-Formula-Ford-Festival-TSL-Results.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "bryce_total_time",
@@ -2242,6 +2313,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2020/203931ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2313,6 +2386,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2020/203931ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2384,6 +2459,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2020/203931ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2445,6 +2522,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2020/202931ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2506,6 +2585,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BRSCC/2020/202931ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2567,6 +2648,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BARC/2020/204121ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2628,6 +2711,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BARC/2020/204121ffn.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2689,6 +2774,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=HSCC/2020/204456wht.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2750,6 +2837,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=HSCC/2020/204456wht.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -2792,8 +2881,8 @@
         "basis": "session_sheet"
       },
       "sky": "rain",
-      "wetDry": "wet",
-      "wetDrySource": "reanalysis",
+      "wetDry": "dry",
+      "wetDrySource": "observed",
       "rainMm": 1,
       "cloudPct": 69,
       "windKph": 31,
@@ -2806,6 +2895,19 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-43.5311&longitude=172.4807&start_date=2024-02-10&end_date=2024-02-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Pacific%2FAuckland&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Dry. Christchurch International (NZCH, 6 km) reports no present weather and 10 km visibility in every half-hourly report from 00:00 to 04:00 UTC, covering the 02:57-03:24 UTC race.",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "NZI0000NZCH CHRISTCHURCH INTL (NZCH)",
+            "distanceKm": 6.2,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_NZI0000NZCH_2024-02-09_to_2024-02-10.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_NZI0000NZCH_2024.psv"
+          }
+        ]
+      },
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "Pacific/Auckland",
         "durationSource": "winner_laps_times_best_lap",
@@ -2872,6 +2974,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-43.5311&longitude=172.4807&start_date=2024-02-11&end_date=2024-02-11&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Pacific%2FAuckland&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Pacific/Auckland",
         "durationSource": "winner_laps_times_best_lap",
@@ -2938,6 +3042,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-43.5311&longitude=172.4807&start_date=2024-02-11&end_date=2024-02-11&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Pacific%2FAuckland&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Pacific/Auckland",
         "durationSource": "winner_laps_times_best_lap",
@@ -2994,6 +3100,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-45.0591&longitude=169.1703&start_date=2024-02-17&end_date=2024-02-17&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Pacific%2FAuckland&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Pacific/Auckland",
         "durationSource": "winner_laps_times_best_lap",
@@ -3050,6 +3158,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-45.0591&longitude=169.1703&start_date=2024-02-18&end_date=2024-02-18&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Pacific%2FAuckland&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Pacific/Auckland",
         "durationSource": "winner_laps_times_best_lap",
@@ -3106,6 +3216,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-45.0591&longitude=169.1703&start_date=2024-02-18&end_date=2024-02-18&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Pacific%2FAuckland&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Pacific/Auckland",
         "durationSource": "winner_laps_times_best_lap",
@@ -3172,6 +3284,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=34.146667&longitude=-83.817778&start_date=2019-04-19&end_date=2019-04-19&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3228,6 +3342,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=34.146667&longitude=-83.817778&start_date=2019-04-20&end_date=2019-04-20&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3284,6 +3400,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=34.146667&longitude=-83.817778&start_date=2019-04-20&end_date=2019-04-20&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3350,6 +3468,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=42.33693&longitude=-76.92721&start_date=2019-05-11&end_date=2019-05-11&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3403,7 +3523,7 @@
       },
       "sky": "rain",
       "wetDry": "wet",
-      "wetDrySource": "reanalysis",
+      "wetDrySource": "observed",
       "rainMm": 1.8,
       "cloudPct": 100,
       "windKph": 14.3,
@@ -3416,6 +3536,19 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=42.33693&longitude=-76.92721&start_date=2019-05-12&end_date=2019-05-12&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Wet. Elmira Corning airport (KELM, 20 km) reports continuous rain from 11:53 UTC, moderate (RA) with 1.5-3.5 mm per report and 2.8-6.4 km visibility through the 14:25-14:55 UTC race.",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "USW00014748 ELMIRA CORNING RGNL AP (KELM)",
+            "distanceKm": 20.1,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00014748_2019-05-12_to_2019-05-12.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2019/psv/GHCNh_USW00014748_2019.psv"
+          }
+        ]
+      },
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3459,7 +3592,7 @@
       },
       "sky": "rain",
       "wetDry": "wet",
-      "wetDrySource": "reanalysis",
+      "wetDrySource": "observed",
       "rainMm": 0.6,
       "cloudPct": 100,
       "windKph": 12.8,
@@ -3472,6 +3605,19 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=42.33693&longitude=-76.92721&start_date=2019-05-12&end_date=2019-05-12&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Wet. Elmira Corning airport (KELM, 20 km) reports rain all day: light rain to 17:53 UTC, moderate rain at 18:35 UTC and light rain at 18:51-18:53 UTC, inside the 18:06-18:38 UTC race.",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "USW00014748 ELMIRA CORNING RGNL AP (KELM)",
+            "distanceKm": 20.1,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00014748_2019-05-12_to_2019-05-12.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2019/psv/GHCNh_USW00014748_2019.psv"
+          }
+        ]
+      },
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3528,6 +3674,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2019-06-29&end_date=2019-06-29&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3584,6 +3732,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2019-06-30&end_date=2019-06-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3640,6 +3790,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2019-06-30&end_date=2019-06-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3696,6 +3848,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5618&longitude=-79.2046&start_date=2019-07-27&end_date=2019-07-27&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3752,6 +3906,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5618&longitude=-79.2046&start_date=2019-07-28&end_date=2019-07-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3808,6 +3964,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5618&longitude=-79.2046&start_date=2019-07-28&end_date=2019-07-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3864,6 +4022,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.85&longitude=-80.3432&start_date=2019-08-03&end_date=2019-08-03&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3920,6 +4080,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.85&longitude=-80.3432&start_date=2019-08-04&end_date=2019-08-04&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -3986,6 +4148,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.85&longitude=-80.3432&start_date=2019-08-04&end_date=2019-08-04&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4042,6 +4206,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.2344&longitude=-77.9753&start_date=2019-08-24&end_date=2019-08-24&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4108,6 +4274,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.2344&longitude=-77.9753&start_date=2019-08-24&end_date=2019-08-24&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4174,6 +4342,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.2344&longitude=-77.9753&start_date=2019-08-25&end_date=2019-08-25&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4240,6 +4410,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.35897&longitude=-75.061628&start_date=2019-09-15&end_date=2019-09-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4296,6 +4468,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.35897&longitude=-75.061628&start_date=2019-09-15&end_date=2019-09-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4362,6 +4536,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.35897&longitude=-75.061628&start_date=2019-09-15&end_date=2019-09-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -4423,6 +4599,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212005rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4484,6 +4662,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212005rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4545,6 +4725,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212005rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4606,6 +4788,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212505rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4667,6 +4851,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212505rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4728,6 +4914,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212505rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4789,6 +4977,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212705rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4850,6 +5040,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212705rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4911,6 +5103,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212705rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -4982,6 +5176,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212905rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -5043,6 +5239,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212905rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -5114,6 +5312,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/212905rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -5175,6 +5375,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/213105rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5246,6 +5448,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/213105rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5307,6 +5511,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/213105rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5368,6 +5574,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2021/213252rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5439,6 +5647,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2021/213252rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5500,6 +5710,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=MSVR/2021/213252rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5571,6 +5783,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/213605rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5632,6 +5846,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/213605rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5693,6 +5909,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/213605rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5764,6 +5982,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/214105rc1bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5825,6 +6045,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/214105rc2bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5886,6 +6108,8 @@
         "source": "TSL official classification weather/track line",
         "url": "https://www.tsl-timing.com/file/?f=BF3GT/2021/214105rc3bf3.pdf"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5942,6 +6166,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.0733&longitude=-1.0147&start_date=2022-05-07&end_date=2022-05-07&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -5998,6 +6224,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.0733&longitude=-1.0147&start_date=2022-05-08&end_date=2022-05-08&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6054,6 +6282,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.0733&longitude=-1.0147&start_date=2022-05-08&end_date=2022-05-08&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6110,6 +6340,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.8306&longitude=-1.3753&start_date=2022-05-28&end_date=2022-05-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6166,6 +6398,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.8306&longitude=-1.3753&start_date=2022-05-29&end_date=2022-05-29&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6232,6 +6466,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.4631&longitude=0.9479&start_date=2022-06-25&end_date=2022-06-25&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6288,6 +6524,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.4631&longitude=0.9479&start_date=2022-06-26&end_date=2022-06-26&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6344,6 +6582,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.0733&longitude=-1.0147&start_date=2022-07-30&end_date=2022-07-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6400,6 +6640,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.0733&longitude=-1.0147&start_date=2022-07-31&end_date=2022-07-31&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6456,6 +6698,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=51.3569&longitude=0.2631&start_date=2022-09-10&end_date=2022-09-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6522,6 +6766,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=51.3569&longitude=0.2631&start_date=2022-09-11&end_date=2022-09-11&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6578,6 +6824,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=51.3569&longitude=0.2631&start_date=2022-09-11&end_date=2022-09-11&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6634,6 +6882,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.8306&longitude=-1.3753&start_date=2022-10-15&end_date=2022-10-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6690,6 +6940,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.8306&longitude=-1.3753&start_date=2022-10-16&end_date=2022-10-16&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6746,6 +6998,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.8306&longitude=-1.3753&start_date=2022-10-16&end_date=2022-10-16&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6802,6 +7056,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.8306&longitude=-1.3753&start_date=2022-05-29&end_date=2022-05-29&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6858,6 +7114,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.4631&longitude=0.9479&start_date=2022-06-26&end_date=2022-06-26&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -6924,6 +7182,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=50.4372&longitude=5.9714&start_date=2022-07-23&end_date=2022-07-23&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBrussels&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -6990,6 +7250,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=50.4372&longitude=5.9714&start_date=2022-07-23&end_date=2022-07-23&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBrussels&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -7056,6 +7318,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=50.4372&longitude=5.9714&start_date=2022-07-24&end_date=2022-07-24&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FBrussels&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/Brussels",
         "durationSource": "winner_total_time",
@@ -7112,6 +7376,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=52.0733&longitude=-1.0147&start_date=2022-07-31&end_date=2022-07-31&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -7168,6 +7434,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=53.1776&longitude=-2.614&start_date=2022-04-16&end_date=2022-04-16&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -7234,6 +7502,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=53.1776&longitude=-2.614&start_date=2022-04-18&end_date=2022-04-18&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -7290,6 +7560,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=53.1776&longitude=-2.614&start_date=2022-04-18&end_date=2022-04-18&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=Europe%2FLondon&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "Europe/London",
         "durationSource": "winner_total_time",
@@ -7351,6 +7623,8 @@
         "source": "IMSA/Al Kamel official race result JSON",
         "url": "https://imsa.results.alkamelcloud.com/Results/25_2025/02_Daytona%20International%20Speedway/01_IMSA%20WeatherTech%20SportsCar%20Championship/202501251340_Race/24_Hour%2024/03_Results_Race_Official.JSON"
       },
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -7648,6 +7922,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=33.5325&longitude=-86.6189&start_date=2024-04-28&end_date=2024-04-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -7704,6 +7980,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.7936&longitude=-86.2353&start_date=2024-05-10&end_date=2024-05-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",
@@ -7760,6 +8038,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.7971&longitude=-87.989&start_date=2024-06-09&end_date=2024-06-09&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -7816,6 +8096,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5843&longitude=-121.7539&start_date=2024-06-22&end_date=2024-06-22&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -7882,6 +8164,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2024-07-07&end_date=2024-07-07&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -7938,6 +8222,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=41.6779&longitude=-93.0147&start_date=2024-07-13&end_date=2024-07-13&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -7994,6 +8280,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=38.6507&longitude=-90.1355&start_date=2024-08-17&end_date=2024-08-17&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -8060,6 +8348,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.5939&longitude=-122.6946&start_date=2024-08-25&end_date=2024-08-25&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -8116,6 +8406,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.0206&longitude=-88.0105&start_date=2024-08-31&end_date=2024-08-31&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -8182,6 +8474,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.0469&longitude=-86.4119&start_date=2024-09-15&end_date=2024-09-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -8248,6 +8542,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.7676&longitude=-82.6321&start_date=2024-03-10&end_date=2024-03-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -8304,6 +8600,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.7936&longitude=-86.2353&start_date=2024-05-11&end_date=2024-05-11&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",
@@ -8347,7 +8645,7 @@
       },
       "sky": "overcast",
       "wetDry": "dry",
-      "wetDrySource": "reanalysis",
+      "wetDrySource": "observed",
       "rainMm": 0.1,
       "cloudPct": 83,
       "windKph": 12.1,
@@ -8360,6 +8658,29 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=42.3299&longitude=-83.0409&start_date=2024-06-02&end_date=2024-06-02&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FDetroit&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Dry. Detroit City airport (KDET, 9 km) reports rain overnight that ended by 10:00 UTC (06:00 local), mist to 12:53 UTC, then 0.0 mm and no present weather at 13:53, 14:53 and 15:53 UTC, bracketing the 14:20-15:16 UTC race; rain returns only at 16:53 UTC. No race report mentions a wet track; Bryce describes oversteer into the Turn 7 wall.",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "USW00014822 DETROIT CITY AP (KDET)",
+            "distanceKm": 9,
+            "path": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00014822_2024.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_USW00014822_2024.psv"
+          },
+          {
+            "kind": "report",
+            "source": "Andretti Global race report",
+            "url": "https://andrettiglobal.com/news/2024/06/andretti-indy-nxt-detroit-grand-prix-race-report"
+          },
+          {
+            "kind": "report",
+            "source": "Motorsport.com",
+            "url": "https://www.motorsport.com/indylights/news/indy-nxt-detroit-louis-foster-dominates-crash-filled-race/10618881/"
+          }
+        ]
+      },
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Detroit",
         "durationSource": "winner_total_time",
@@ -8426,6 +8747,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5843&longitude=-121.7539&start_date=2024-06-23&end_date=2024-06-23&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -8492,6 +8815,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5843&longitude=-121.7539&start_date=2025-07-26&end_date=2025-07-26&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -8558,6 +8883,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.7936&longitude=-86.2353&start_date=2025-05-10&end_date=2025-05-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",
@@ -8614,6 +8941,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.7936&longitude=-86.2353&start_date=2025-05-09&end_date=2025-05-09&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",
@@ -8670,6 +8999,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=33.5325&longitude=-86.6189&start_date=2025-05-04&end_date=2025-05-04&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -8736,6 +9067,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.7676&longitude=-82.6321&start_date=2025-03-02&end_date=2025-03-02&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -8792,6 +9125,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.0469&longitude=-86.4119&start_date=2025-08-31&end_date=2025-08-31&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -8858,6 +9193,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.0206&longitude=-88.0105&start_date=2025-08-24&end_date=2025-08-24&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -8924,6 +9261,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.5939&longitude=-122.6946&start_date=2025-08-10&end_date=2025-08-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -8980,6 +9319,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5843&longitude=-121.7539&start_date=2025-07-27&end_date=2025-07-27&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -9046,6 +9387,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=41.6779&longitude=-93.0147&start_date=2025-07-12&end_date=2025-07-12&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9102,6 +9445,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2025-07-06&end_date=2025-07-06&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -9168,6 +9513,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.7971&longitude=-87.989&start_date=2025-06-22&end_date=2025-06-22&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9224,6 +9571,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=38.6507&longitude=-90.1355&start_date=2025-06-15&end_date=2025-06-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9290,6 +9639,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=42.3299&longitude=-83.0409&start_date=2025-06-01&end_date=2025-06-01&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FDetroit&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Detroit",
         "durationSource": "winner_total_time",
@@ -9356,6 +9707,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=42.3299&longitude=-83.0409&start_date=2026-05-31&end_date=2026-05-31&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FDetroit&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Detroit",
         "durationSource": "winner_total_time",
@@ -9422,6 +9775,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=33.5325&longitude=-86.6189&start_date=2026-03-28&end_date=2026-03-28&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9478,6 +9833,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.7676&longitude=-82.6321&start_date=2026-03-01&end_date=2026-03-01&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -9534,6 +9891,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=33.5325&longitude=-86.6189&start_date=2026-03-29&end_date=2026-03-29&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9590,6 +9949,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=32.7473&longitude=-97.0945&start_date=2026-03-15&end_date=2026-03-15&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9656,6 +10017,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.7971&longitude=-87.989&start_date=2026-06-21&end_date=2026-06-21&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9712,6 +10075,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.0469&longitude=-86.4119&start_date=2026-07-19&end_date=2026-07-19&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9754,8 +10119,8 @@
         "basis": "session_sheet"
       },
       "sky": "rain",
-      "wetDry": "wet",
-      "wetDrySource": "reanalysis",
+      "wetDry": "mixed",
+      "wetDrySource": "observed",
       "rainMm": 0.6,
       "cloudPct": 100,
       "windKph": 12.1,
@@ -9768,6 +10133,31 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.7936&longitude=-86.2353&start_date=2026-05-08&end_date=2026-05-08&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Mixed. Dry at the start: Eagle Creek (KEYE, 6 km) and Indianapolis International (KIND, 10 km) report no present weather to 19:54 UTC, then light rain at 20:53-20:54 UTC, inside the 20:00-20:55 UTC race window, and moderate rain by 21:53. The season record says the race was halted when it started to rain and every driver switched to wet tyres.",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "USW00053842 INDIANAPOLIS EAGLE CREEK AP (KEYE)",
+            "distanceKm": 6.2,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00053842_2026-05-08_to_2026-05-08.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00053842_2026.psv"
+          },
+          {
+            "kind": "station",
+            "station": "USW00093819 INDIANAPOLIS (KIND)",
+            "distanceKm": 10.3,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00093819_2026-05-08_to_2026-05-08.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00093819_2026.psv"
+          },
+          {
+            "kind": "report",
+            "source": "Wikipedia, 2026 Indy NXT (Indianapolis Race 1)",
+            "url": "https://en.wikipedia.org/wiki/2026_Indy_NXT"
+          }
+        ]
+      },
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",
@@ -9824,6 +10214,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.0206&longitude=-88.0105&start_date=2026-08-30&end_date=2026-08-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -9880,6 +10272,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5843&longitude=-121.7539&start_date=2026-09-06&end_date=2026-09-06&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -9946,6 +10340,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.5843&longitude=-121.7539&start_date=2026-09-05&end_date=2026-09-05&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -9999,7 +10395,7 @@
       },
       "sky": "rain",
       "wetDry": "dry",
-      "wetDrySource": "reanalysis",
+      "wetDrySource": "observed",
       "rainMm": 0.2,
       "cloudPct": 91,
       "windKph": 6.5,
@@ -10012,6 +10408,29 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2026-07-05&end_date=2026-07-05&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Dry. Mansfield Lahm airport (KMFD, 18 km) reports no precipitation and no present weather from a thunderstorm in the vicinity at 19:20 UTC on July 4 through the 14:08-14:44 UTC race, with 16 km visibility all morning. The reanalysis's 2.8 mm in the hour before the start is not observed. The race ran all-green (Andretti Global; INDYCAR: 'went ahead without interruption').",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "USW00014891 MANSFIELD LAHM RGNL AP (KMFD)",
+            "distanceKm": 17.6,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00014891_2026-07-04_to_2026-07-05.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00014891_2026.psv"
+          },
+          {
+            "kind": "report",
+            "source": "Andretti Global race report",
+            "url": "https://andrettiglobal.com/news/2026/07/indy-nxt-race-report-grand-prix-at-mid-ohio-race-2/"
+          },
+          {
+            "kind": "report",
+            "source": "INDYCAR",
+            "url": "https://www.indycar.com/news/2026/07/07-05-nxt-race2"
+          }
+        ]
+      },
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10068,6 +10487,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2026-07-04&end_date=2026-07-04&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10124,6 +10545,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=43.7971&longitude=-87.989&start_date=2026-06-20&end_date=2026-06-20&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -10176,8 +10599,8 @@
         "basis": "session_sheet"
       },
       "sky": "rain",
-      "wetDry": "wet",
-      "wetDrySource": "reanalysis",
+      "wetDry": "dry",
+      "wetDrySource": "observed",
       "rainMm": 0.5,
       "cloudPct": 50,
       "windKph": 12.8,
@@ -10190,6 +10613,19 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=38.6507&longitude=-90.1355&start_date=2026-06-07&end_date=2026-06-07&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": {
+        "summary": "Dry. St. Louis Downtown airport (KCPS, 10 km) reports no precipitation and no present weather, with 16 km visibility, from 18:53 to 23:15 UTC, covering the 21:35-22:18 UTC race. Bryce retired on lap 5 (mechanical).",
+        "evidence": [
+          {
+            "kind": "station",
+            "station": "USW00003960 CAHOKIA ST LOUIS DWTN AP (KCPS)",
+            "distanceKm": 9.7,
+            "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00003960_2026-06-07_to_2026-06-08.psv",
+            "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00003960_2026.psv"
+          }
+        ]
+      },
+      "modelWetDry": "wet",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "winner_total_time",
@@ -10256,6 +10692,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=45.5939&longitude=-122.6946&start_date=2026-08-09&end_date=2026-08-09&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Los_Angeles",
         "durationSource": "winner_total_time",
@@ -10312,6 +10750,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.7936&longitude=-86.2353&start_date=2026-05-09&end_date=2026-05-09&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",
@@ -10378,6 +10818,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=40.6893&longitude=-82.6355&start_date=2019-06-30&end_date=2019-06-30&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_laps_times_best_lap",
@@ -10444,6 +10886,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=30.1328&longitude=-97.6411&start_date=2019-02-09&end_date=2019-02-09&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "sheet_race_format",
@@ -10510,6 +10954,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=30.1328&longitude=-97.6411&start_date=2019-02-10&end_date=2019-02-10&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FChicago&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Chicago",
         "durationSource": "sheet_race_format",
@@ -10576,6 +11022,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=25.4519&longitude=-80.4086&start_date=2019-01-05&end_date=2019-01-05&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10632,6 +11080,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=25.4519&longitude=-80.4086&start_date=2019-01-06&end_date=2019-01-06&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10688,6 +11138,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=34.146667&longitude=-83.817778&start_date=2019-03-16&end_date=2019-03-16&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10744,6 +11196,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=34.146667&longitude=-83.817778&start_date=2019-03-17&end_date=2019-03-17&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10800,6 +11254,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.455&longitude=-81.35&start_date=2019-01-12&end_date=2019-01-12&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "winner_total_time",
@@ -10856,6 +11312,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=27.455&longitude=-81.35&start_date=2019-01-13&end_date=2019-01-13&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FNew_York&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/New_York",
         "durationSource": "sheet_race_format",
@@ -10912,6 +11370,8 @@
         "url": "https://archive-api.open-meteo.com/v1/archive?latitude=39.8128&longitude=-86.3408&start_date=2024-05-25&end_date=2024-05-25&hourly=temperature_2m%2Capparent_temperature%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Crain%2Cweather_code%2Ccloud_cover%2Cpressure_msl%2Cwind_speed_10m%2Cwind_gusts_10m%2Cwind_direction_10m%2Cshortwave_radiation%2Csoil_temperature_0_to_7cm&timezone=America%2FIndiana%2FIndianapolis&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
       },
       "seriesReport": null,
+      "observed": null,
+      "modelWetDry": "dry",
       "detail": {
         "timezone": "America/Indiana/Indianapolis",
         "durationSource": "winner_total_time",

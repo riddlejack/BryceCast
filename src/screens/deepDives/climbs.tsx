@@ -73,12 +73,12 @@ const placeOf = (trackName: string): string =>
 
 const shortPlaceOf = (trackName: string): string => shortPlaceNames[trackName] ?? placeOf(trackName);
 
-/** The classified field a finishing percentile was taken over: the site's
- *  percentile is (field − finish + 1) / field, so field = (finish − 1) / (1 − p).
+/** The classified field a share was taken over: the career rows' share is the
+ *  field beaten, (field − finish) / (field − 1), so field = (finish − p) / (1 − p).
  *  Only accepted when it lands on a whole number (a win, p = 1, gives none). */
 const fieldFromPercentile = (finish: number, percentile: number): number | null => {
   if (!(percentile < 1) || finish < 2) return null;
-  const n = (finish - 1) / (1 - percentile);
+  const n = (finish - percentile) / (1 - percentile);
   const whole = Math.round(n);
   return Math.abs(n - whole) < 0.05 && whole >= finish ? whole : null;
 };
@@ -557,14 +557,14 @@ const fieldNote = (climbs: Climb[]): string => {
         ? 'from the official INDY NXT result'
         : climb.fieldFrom === 'gb3'
           ? 'from the official 2021 GB3 classification (TSL PDFs)'
-          : `read back from its finishing percentile (P${climb.finish} at ${climb.row.percentile}, which only a ${climb.field}-car classification gives)`;
+          : `read back from the share of the field it beat (P${climb.finish} at ${climb.row.percentile}, which only a ${climb.field}-car classification gives)`;
     const behind =
       climb.start > climb.field
         ? `; he started P${climb.start}, behind the classified field, so the dotted rungs are grid slots below it`
         : '';
     return `${name}: ${climb.field} classified, ${from}${behind}`;
   });
-  return `Each ladder is as long as that race's classified field, the cars its finishing percentile counts. ${parts.join('. ')}.`;
+  return `Each ladder is as long as that race's classified field, the cars that share counts. ${parts.join('. ')}.`;
 };
 
 export const ClimbsDeepDive = () => {

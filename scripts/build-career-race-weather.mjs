@@ -36,6 +36,9 @@ const datasetPath = join(root, 'data/career/career.dataset.json');
 const careerRawRoot = join(root, 'data/career/raw/weather/open-meteo/career');
 const indyRawRoot = join(root, 'data/career/raw/weather/open-meteo/indy-nxt');
 const outputPath = join(root, 'analysis/career-weather/output/race-weather.json');
+// Observed wet/dry calls (station reports, race reports) for disputed races with no
+// official series report. They outrank the reanalysis; a series report outranks them.
+const observedCallsPath = join(root, 'analysis/career-weather/data/observed_calls.json');
 const reportPath = join(root, 'data/career/reports/career-race-weather-report.json');
 const refresh = process.argv.includes('--refresh');
 const BRYCE = 'driver_bryce_aron';
@@ -215,6 +218,7 @@ const main = async () => {
     if (!resultsBySession.has(result.sessionId)) resultsBySession.set(result.sessionId, []);
     resultsBySession.get(result.sessionId).push(result);
   }
+  const observedCalls = new Map(asArray((await readJson(observedCallsPath)).calls).map((call) => [call.sessionId, call]));
   const raceSessionIds = [...new Set(asArray(dataset.results)
     .filter((row) => row.driverId === BRYCE && sessions.get(row.sessionId)?.sessionType === 'race')
     .map((row) => row.sessionId))].sort();
@@ -321,13 +325,14 @@ const main = async () => {
     else if ((cloudPct ?? 0) >= 30) sky = 'partly';
     else sky = 'clear';
 
-    // Wet or dry: the official series report wins; else the reanalysis rain.
+    // Wet or dry: the official series report wins; then an observed call; else the reanalysis rain.
     const reportRow = asArray(session.weatherObservationRefs)
       .map((id) => weatherById.get(id))
       .find((row) => row?.weatherSourceType === 'series_report' && seriesWetDry(row.wetDry ?? row.trackCondition) !== null);
     let wetDry;
     let wetDrySource;
     let seriesReport = null;
+    let observed = null;
     if (reportRow) {
       wetDry = seriesWetDry(reportRow.wetDry ?? reportRow.trackCondition);
       wetDrySource = 'series_report';
@@ -338,6 +343,12 @@ const main = async () => {
         source: reportRow.source ?? null,
         url: evidence?.url ?? null
       };
+    } else if (observedCalls.has(sessionId)) {
+      const call = observedCalls.get(sessionId);
+      if (!['wet', 'dry', 'mixed'].includes(call.wetDry)) throw new Error(`observed call for ${sessionId} has wetDry ${call.wetDry}`);
+      wetDry = call.wetDry;
+      wetDrySource = 'observed';
+      observed = { summary: call.summary, evidence: asArray(call.evidence) };
     } else {
       wetDry = reanalysisWetDry(rainMm);
       wetDrySource = 'reanalysis';
@@ -357,6 +368,9 @@ const main = async () => {
       tempC: round(tempC, 1),
       source: { name: SOURCE_NAME, tier: 'modelled', url: requestUrl },
       seriesReport,
+      observed,
+      /* What the reanalysis alone would call, kept beside an official or observed call. */
+      modelWetDry: reanalysisWetDry(rainMm),
       detail: {
         timezone,
         durationSource,
@@ -402,6 +416,11 @@ const main = async () => {
     if ((official === 'dry') === (row.sky !== 'rain' && row.sky !== 'storm')) calibration.skyRainAgree += 1;
   }
   report.calibration = calibration;
+  for (const sessionId of observedCalls.keys()) {
+    const row = records.find((record) => record.sessionId === sessionId);
+    if (!row) throw new Error(`observed call ${sessionId} is not a race of the record`);
+    if (row.wetDrySource !== 'observed') throw new Error(`observed call ${sessionId} is shadowed by ${row.wetDrySource}`);
+  }
   report.rawArtifacts = [...new Set(report.rawArtifacts)].sort();
   report.records = records.length;
   const output = {
@@ -415,7 +434,7 @@ const main = async () => {
       aggregation: 'Instantaneous values (temperature, cloud, wind) average the hourly stamps from the hour at or before the start to the hour at or after the end; gust is the maximum; wind direction is the speed-weighted circular mean of the from-direction. Rain sums the hourly precipitation of the hours that overlap the window.',
       sky: 'storm: a thunderstorm code (95-99) in the window; rain: 0.3 mm or more, or a moderate drizzle, rain or shower code (light drizzle, code 51, alone is not rain); overcast: mean cloud 80% or more; partly: 30% or more; clear: below 30%.',
       wetDry: 'series_report: the official series condition report on the race session decides (wet; dry; damp, drying or mixed read as mixed). reanalysis: 0.5 mm or more in the window is wet, else dry; the model never says mixed.',
-      tiers: 'Reanalysis is modelled, never observed. An official series report decides wet or dry where one exists.'
+      tiers: 'Reanalysis is modelled, never observed. An official series report decides wet or dry where one exists; then an observed call (nearest station reports and race reports, analysis/career-weather/data/observed_calls.json); else the reanalysis.'
     },
     coverage: { races: records.length, byBasis: report.byBasis, byWetDrySource: report.byWetDrySource, bySky: report.bySky, skipped: report.skipped },
     calibration: { ...calibration, note: 'Wet-or-dry agreement of the reanalysis rule with the official series reports on the same races (wet, damp and drying count as not dry). allDryBaselineAgree is what calling every race dry would score. A modelled dry is weak evidence.' },
