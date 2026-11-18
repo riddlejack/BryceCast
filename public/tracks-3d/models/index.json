@@ -285,6 +285,32 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
+  },
+  "castle-combe-full": {
+   "file": "/tracks-3d/models/castle-combe-full.json",
+   "kind": "venue",
+   "bytes": 175110,
+   "gzipBytes": 56206,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/castle-combe-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "circuit-of-the-americas-gp": {
+   "file": "/tracks-3d/models/circuit-of-the-americas-gp.json",
+   "kind": "venue",
+   "bytes": 256199,
+   "gzipBytes": 86696,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/circuit-of-the-americas-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",

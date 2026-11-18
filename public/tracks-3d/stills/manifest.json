@@ -7638,6 +7638,54 @@
      "track_circuit_de_spa_francorchamps"
     ],
     "call": "Grand Prix (7.004 km): GB3 2021-22 and Euroformula Open 2023 (qualifying 2:11.7-2:20.4). Run-off works at Raidillon, La Source, Les Combes, Blanchimont and Stavelot between his 2021 and 2022 races; the track line is unchanged (research notes item 11). OSM loop through Speaker's Corner (the car layout), not OSM's 'Moto layout' chicane."
+   },
+   "castle-combe-full": {
+    "camera": {
+     "azim": 210,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -65.57104177111871,
+      -71.2497156623261,
+      -112.72111017628332
+     ],
+     "D": 1814.6059063818388,
+     "elev": 40,
+     "azim": 210
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.7701820660280128,
+    "layout": "Full Circuit with Chicanes",
+    "trackIds": [
+     "track_castle_combe"
+    ],
+    "call": "Full circuit with the two 1999 chicanes, Bobbies and the Esses (2.977 km): CCRC Formula Ford 1600, July and August 2020. Resurfaced 2015 and partly 2018, surface only; corner renames since 2020 (Hammerdown to Howard's Way, Tower to Gooch's) are names only (research notes item 4). OSM loop through both chicane ways, 'Bobbies' and 'The Esses'."
+   },
+   "circuit-of-the-americas-gp": {
+    "camera": {
+     "azim": 200,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      25.942699231276194,
+      56.19627520706149,
+      -98.7954721366694
+     ],
+     "D": 2975.7219658329877,
+     "elev": 40,
+     "azim": 200
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 3.1675022605376815,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_circuit_of_the_americas"
+    ],
+    "call": "Grand Prix circuit, 20 turns (5.513 km): SCCA Hoosier Super Tour, February 2019. 2022-24 repaving, concrete slabs and verge changes moved no corner (research notes table). OSM loop without the MotoGP long-lap loop and the short-course links. Start/finish at OSM's 'finish' node (the timing line), as at the Algarve; OSM also has an older 'start-finish' node about 300 m away."
    }
   },
   "generated": "2026-11-17",
