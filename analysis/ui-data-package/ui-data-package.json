@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-18T00:19:01.359Z",
+  "generatedAt": "2026-11-18T01:50:49.085Z",
   "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9659310",
@@ -126,6 +126,12 @@
       "bytes": 11519,
       "modifiedAt": "2026-09-10T23:14:43.957Z",
       "sha256": "6d585ae1452b5d529f944296033494c3bf9a7a6d90457638c5a595c5770e4992"
+    },
+    "headToHeadRaces": {
+      "path": "analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head_races.csv",
+      "bytes": 160778,
+      "modifiedAt": "2026-11-18T01:50:47.517Z",
+      "sha256": "ec65b3cdc9fbe79334399b7643a8dfbba211a2b5adca8f43ce51422795f47718"
     },
     "raceLapInflectionPoints": {
       "path": "analysis/indy-nxt-race-lap-section-enhancement/output/race_lap_inflection_points.csv",
@@ -549,9 +555,9 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 198651,
-      "modifiedAt": "2026-11-15T23:10:57.561Z",
-      "sha256": "6f088733f334404ffadf3e22c51e52289f587a5610d1742ae0a7bb3ec92d0791"
+      "bytes": 199675,
+      "modifiedAt": "2026-11-18T01:48:57.870Z",
+      "sha256": "a754566b64ab4b53d84caa4e1d7897451eafcf9f3907cdf98eb18432276ad3c5"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
@@ -23034,6 +23040,278 @@
               "label": "2024 Grand Prix of Monterey Race 2 R2",
               "finishDelta": -16
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 3,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 15,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 4,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 18,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 5,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 15,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 2,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 10,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 6,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 4,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 21,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 17,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 23,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 12,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 10,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 22,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 18,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 18,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 15,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 20,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 14,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 15,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 21,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 16,
+              "sameTeam": true
+            }
           ]
         },
         {
@@ -23061,6 +23339,278 @@
             {
               "label": "2024 INDY NXT By Firestone at The Milwaukee Mile",
               "finishDelta": -8
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 9,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 24,
+              "sameTeam": false
             }
           ]
         },
@@ -23090,6 +23640,278 @@
               "label": "2024 Detroit Grand Prix",
               "finishDelta": 16
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 6,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23117,6 +23939,260 @@
             {
               "label": "2024 Grand Prix at Road America",
               "finishDelta": -13
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 19,
+              "sameTeam": false
             }
           ]
         },
@@ -23146,6 +24222,248 @@
               "label": "2025 Grand Prix of Monterey Race 2 R2",
               "finishDelta": 13
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 13,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 18,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 6,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 9,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 10,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 15,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 14,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 5,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 11,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 6,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 6,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 12,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 7,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 22,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 13,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 17,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 20,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 8,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 14,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 23,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 4,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 11,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 9,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 13,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 13,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 21,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 17,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 23,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 5,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 23,
+              "sameTeam": true
+            }
           ]
         },
         {
@@ -23173,6 +24491,200 @@
             {
               "label": "2025 Grand Prix of Monterey Race 2 R2",
               "finishDelta": 9
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 22,
+              "sameTeam": false
             }
           ]
         },
@@ -23202,6 +24714,194 @@
               "label": "2025 Indianapolis Grand Prix Race 2 R2",
               "finishDelta": 13
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 3,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23229,6 +24929,188 @@
             {
               "label": "2026 Grand Prix of Arlington",
               "finishDelta": 11
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 11,
+              "sameTeam": false
             }
           ]
         },
@@ -23258,6 +25140,176 @@
               "label": "2024 Grand Prix of Monterey Race 1 R1",
               "finishDelta": 14
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 3,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 4,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23285,6 +25337,176 @@
             {
               "label": "2024 Detroit Grand Prix",
               "finishDelta": 17
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 18,
+              "sameTeam": false
             }
           ]
         },
@@ -23314,6 +25536,176 @@
               "label": "2024 Music City Grand Prix",
               "finishDelta": -8
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 15,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23341,6 +25733,176 @@
             {
               "label": "2025 INDY NXT by Firestone at Iowa Speedway",
               "finishDelta": -10
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 22,
+              "sameTeam": false
             }
           ]
         },
@@ -23370,6 +25932,164 @@
               "label": "2026 Indianapolis Grand Prix Race 1 R1",
               "finishDelta": 10
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 12,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23397,6 +26117,152 @@
             {
               "label": "2025 Detroit Grand Prix",
               "finishDelta": -10
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 11,
+              "sameTeam": false
             }
           ]
         },
@@ -23426,6 +26292,146 @@
               "label": "2026 Grand Prix of St. Petersburg",
               "finishDelta": 16
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 14,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23453,6 +26459,128 @@
             {
               "label": "2026 Indianapolis Grand Prix Race 1 R1",
               "finishDelta": 19
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 11,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 2,
+              "sameTeam": false
             }
           ]
         },
@@ -23482,6 +26610,116 @@
               "label": "2024 Detroit Grand Prix",
               "finishDelta": 15
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 4,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23509,6 +26747,116 @@
             {
               "label": "2026 Grand Prix at Road America Race 2 R2",
               "finishDelta": -14
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 20,
+              "sameTeam": false
             }
           ]
         },
@@ -23538,6 +26886,110 @@
               "label": "2026 Detroit Grand Prix",
               "finishDelta": -14
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 8,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23565,6 +27017,110 @@
             {
               "label": "2026 Grand Prix of Monterey Race 1 R1",
               "finishDelta": -10
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 18,
+              "sameTeam": false
             }
           ]
         },
@@ -23594,6 +27150,110 @@
               "label": "2026 Grand Prix at Mid-Ohio Race 2 R2",
               "finishDelta": -9
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 24,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 21,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 21,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 17,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 19,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 13,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 21,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 23,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 20,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 24,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 20,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 19,
+              "sameTeam": true
+            }
           ]
         },
         {
@@ -23621,6 +27281,110 @@
             {
               "label": "2026 Grand Prix at Mid-Ohio Race 2 R2",
               "finishDelta": -8
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 13,
+              "sameTeam": false
             }
           ]
         },
@@ -23650,6 +27414,110 @@
               "label": "2026 INDY NXT by Firestone at World Wide Technology Raceway",
               "finishDelta": 10
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 22,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 5,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23677,6 +27545,110 @@
             {
               "label": "2026 Grand Prix at Mid-Ohio Race 2 R2",
               "finishDelta": 12
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 10,
+              "sameTeam": false
             }
           ]
         },
@@ -23706,6 +27678,110 @@
               "label": "2026 Music City Grand Prix",
               "finishDelta": 9
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 7,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23733,6 +27809,110 @@
             {
               "label": "2026 Grand Prix at Road America Race 1 R1",
               "finishDelta": 11
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 24,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 21,
+              "sameTeam": false
             }
           ]
         },
@@ -23762,6 +27942,110 @@
               "label": "2026 Indianapolis Grand Prix Race 2 R2",
               "finishDelta": 11
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 1,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23789,6 +28073,104 @@
             {
               "label": "2026 Grand Prix of Monterey Race 1 R1",
               "finishDelta": -11
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6751",
+              "bryceFinish": 18,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6753",
+              "bryceFinish": 18,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6750",
+              "bryceFinish": 8,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6752",
+              "bryceFinish": 7,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6756",
+              "bryceFinish": 22,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6765",
+              "bryceFinish": 12,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6749",
+              "bryceFinish": 8,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6762",
+              "bryceFinish": 21,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6754",
+              "bryceFinish": 10,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6761",
+              "bryceFinish": 16,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6760",
+              "bryceFinish": 14,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6755",
+              "bryceFinish": 10,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 23,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6757",
+              "bryceFinish": 8,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 15,
+              "sameTeam": false
             }
           ]
         },
@@ -23818,6 +28200,98 @@
               "label": "2024 Grand Prix at Road America",
               "finishDelta": -9
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 7,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23837,6 +28311,98 @@
             {
               "label": "2024 Grand Prix of Monterey Race 1 R1",
               "finishDelta": 12
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 3,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6763",
+              "bryceFinish": 23,
+              "rivalFinish": 21,
+              "sameTeam": false
             }
           ]
         },
@@ -23866,6 +28432,92 @@
               "label": "2024 Grand Prix of Portland",
               "finishDelta": -8
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 9,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 11,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23893,6 +28545,92 @@
             {
               "label": "2025 Detroit Grand Prix",
               "finishDelta": 9
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 3,
+              "sameTeam": false
             }
           ]
         },
@@ -23922,6 +28660,92 @@
               "label": "2025 INDY NXT by Firestone at the Milwaukee Mile",
               "finishDelta": -9
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 14,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 13,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -23949,6 +28773,92 @@
             {
               "label": "2024 Grand Prix at Mid-Ohio",
               "finishDelta": 8
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 20,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 20,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 3,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 12,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 9,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 6,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 10,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 7,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 16,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 14,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 5,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 17,
+              "sameTeam": true
             }
           ]
         },
@@ -23978,6 +28888,92 @@
               "label": "2024 Grand Prix of Monterey Race 1 R1",
               "finishDelta": 15
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 3,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 5,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 7,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 2,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 2,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 2,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 1,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 1,
+              "sameTeam": true
+            }
           ]
         },
         {
@@ -24005,6 +29001,92 @@
             {
               "label": "2025 Music City Grand Prix",
               "finishDelta": -11
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 15,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 21,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 17,
+              "sameTeam": false
             }
           ]
         },
@@ -24034,6 +29116,86 @@
               "label": "2024 Detroit Grand Prix",
               "finishDelta": 14
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 17,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24062,6 +29224,68 @@
               "label": "2025 Grand Prix of Portland",
               "finishDelta": 12
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 4,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 11,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6449",
+              "bryceFinish": 19,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 14,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24082,6 +29306,56 @@
               "label": "2024 Grand Prix at Mid-Ohio",
               "finishDelta": 13
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6321",
+              "bryceFinish": 3,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 9,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24101,6 +29375,56 @@
             {
               "label": "2025 Indianapolis Grand Prix Race 1 R1",
               "finishDelta": 8
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 18,
+              "sameTeam": true
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 6,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 7,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6455",
+              "bryceFinish": 10,
+              "rivalFinish": 14,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6442",
+              "bryceFinish": 10,
+              "rivalFinish": 8,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6450",
+              "bryceFinish": 19,
+              "rivalFinish": 18,
+              "sameTeam": false
             }
           ]
         },
@@ -24126,6 +29450,56 @@
               "label": "2024 Grand Prix of Monterey Race 2 R2",
               "finishDelta": -12
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 20,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 19,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6317",
+              "bryceFinish": 16,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6327",
+              "bryceFinish": 3,
+              "rivalFinish": 15,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24141,6 +29515,38 @@
             {
               "label": "2025 Grand Prix of Alabama",
               "finishDelta": 13
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6445",
+              "bryceFinish": 15,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6444",
+              "bryceFinish": 15,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6443",
+              "bryceFinish": 15,
+              "rivalFinish": 13,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6453",
+              "bryceFinish": 9,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6452",
+              "bryceFinish": 12,
+              "rivalFinish": 9,
+              "sameTeam": false
             }
           ]
         },
@@ -24166,6 +29572,38 @@
               "label": "2024 Indianapolis Grand Prix Race 2 R2",
               "finishDelta": 14
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 1,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6315",
+              "bryceFinish": 14,
+              "rivalFinish": 2,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6325",
+              "bryceFinish": 19,
+              "rivalFinish": 5,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6326",
+              "bryceFinish": 20,
+              "rivalFinish": 18,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24185,6 +29623,32 @@
             {
               "label": "2025 Music City Grand Prix",
               "finishDelta": -10
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6454",
+              "bryceFinish": 14,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6451",
+              "bryceFinish": 9,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6448",
+              "bryceFinish": 5,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2025_6447",
+              "bryceFinish": 6,
+              "rivalFinish": 16,
+              "sameTeam": false
             }
           ]
         },
@@ -24214,6 +29678,32 @@
               "label": "2024 Music City Grand Prix",
               "finishDelta": -11
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6319",
+              "bryceFinish": 8,
+              "rivalFinish": 16,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6320",
+              "bryceFinish": 6,
+              "rivalFinish": 15,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6322",
+              "bryceFinish": 4,
+              "rivalFinish": 18,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6323",
+              "bryceFinish": 7,
+              "rivalFinish": 18,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24229,6 +29719,26 @@
             {
               "label": "2026 Grand Prix of Monterey Race 2 R2",
               "finishDelta": -8
+            }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2026_6764",
+              "bryceFinish": 16,
+              "rivalFinish": 10,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6759",
+              "bryceFinish": 6,
+              "rivalFinish": 12,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2026_6758",
+              "bryceFinish": 9,
+              "rivalFinish": 17,
+              "sameTeam": false
             }
           ]
         },
@@ -24246,6 +29756,20 @@
               "label": "2024 Grand Prix of Alabama",
               "finishDelta": -8
             }
+          ],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6324",
+              "bryceFinish": 19,
+              "rivalFinish": 17,
+              "sameTeam": false
+            },
+            {
+              "sessionId": "session_indy_nxt_2024_6314",
+              "bryceFinish": 8,
+              "rivalFinish": 16,
+              "sameTeam": false
+            }
           ]
         },
         {
@@ -24257,7 +29781,15 @@
           "headToHeadWinRate": 0,
           "avgFinishDeltaVsRival": 5,
           "sameTeamRaces": 0,
-          "notableRaces": []
+          "notableRaces": [],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6318",
+              "bryceFinish": 18,
+              "rivalFinish": 13,
+              "sameTeam": false
+            }
+          ]
         },
         {
           "driverId": "driver_kiko_porto",
@@ -24268,7 +29800,15 @@
           "headToHeadWinRate": 1,
           "avgFinishDeltaVsRival": -4,
           "sameTeamRaces": 0,
-          "notableRaces": []
+          "notableRaces": [],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2024_6316",
+              "bryceFinish": 8,
+              "rivalFinish": 12,
+              "sameTeam": false
+            }
+          ]
         },
         {
           "driverId": "driver_sophia_floersch",
@@ -24279,7 +29819,15 @@
           "headToHeadWinRate": 0,
           "avgFinishDeltaVsRival": 1,
           "sameTeamRaces": 1,
-          "notableRaces": []
+          "notableRaces": [],
+          "sharedRaces": [
+            {
+              "sessionId": "session_indy_nxt_2025_6446",
+              "bryceFinish": 13,
+              "rivalFinish": 12,
+              "sameTeam": true
+            }
+          ]
         }
       ],
       "lapPositionMix": [
