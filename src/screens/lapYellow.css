@@ -1,0 +1,28 @@
+/* Yellow flags on the lap chart (round 2, intersections lane; switch `lapyellow`).
+ * Quiet by default: a wash the lines sit on, a flag tab above the plot, and a
+ * hairline where the field went green. Reading one lifts it. */
+.lap-yellow__wash {
+  fill: var(--status-warn-dot);
+  opacity: 0.11;
+  transition: opacity 150ms ease;
+}
+.lap-yellow__tab {
+  fill: var(--status-warn-dot);
+  opacity: 0.75;
+  transition: opacity 150ms ease;
+}
+.lap-yellow__green {
+  stroke: var(--status-warn-dot);
+  stroke-width: 1;
+  opacity: 0.45;
+  transition: opacity 150ms ease;
+}
+.lap-yellow--active .lap-yellow__wash { opacity: 0.22; }
+.lap-yellow--active .lap-yellow__tab { opacity: 1; }
+.lap-yellow--active .lap-yellow__green { opacity: 0.9; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lap-yellow__wash,
+  .lap-yellow__tab,
+  .lap-yellow__green { transition: none; }
+}
