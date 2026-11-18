@@ -231,7 +231,7 @@ export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
             The {review.seasonYear} season in review <ArrowRight size={16} aria-hidden />
           </Link>
           <Link to="/career" className="hero-now__action">
-            Career Lab <ArrowRight size={16} aria-hidden />
+            Career <ArrowRight size={16} aria-hidden />
           </Link>
         </div>
       </div>

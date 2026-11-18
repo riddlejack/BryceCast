@@ -20,6 +20,7 @@ import { RestartsDeepDive } from './deepDives/restarts';
 import { QualifyingDeepDive } from './deepDives/qualifying';
 import { ClimbsDeepDive } from './deepDives/climbs';
 import { RainDeepDive } from './deepDives/rain';
+import { BeforeDeepDive } from './deepDives/before';
 import { Gb3DepthLayer } from './gb3Depth';
 import { FormulaFordDepthLayer } from './formulaFordDepth';
 import { DaytonaDepthLayer } from './daytonaDepth';
@@ -1190,7 +1191,7 @@ const WeekStory = ({ model, week }: { model: LifeModel; week: LifeWeek }) => {
         <span className="life-tip__muted">
           {week.year >= 2016
             ? `The data holds a few karting milestones from 2016 to 2018, but no race-by-race results before ${monthYear(uiDataPackage.screens.careerLab.lifeStats.lifeShare.firstRaceDate)}.`
-            : `The record starts with his first car race, in ${monthYear(uiDataPackage.screens.careerLab.lifeStats.lifeShare.firstRaceDate)}.`}
+            : `The record starts with his first classified car race, in ${monthYear(uiDataPackage.screens.careerLab.lifeStats.lifeShare.firstRaceDate)}.`}
         </span>
       </>
     );
@@ -1602,7 +1603,7 @@ const seriesChapters: Array<{ key: string; seriesId: string; name: string; years
     name: 'Hoosier SCCA Super Tour',
     years: '2019',
     short: 'SCCA',
-    narrative: 'His first car races: Formula F at Sebring, COTA and Road Atlanta, January to March 2019.'
+    narrative: 'His first races on the record: Formula F at Sebring, COTA and Road Atlanta, January to March 2019.'
   },
   {
     key: 'f1600',
@@ -1893,8 +1894,8 @@ const archiveItems: Array<{ key: string; title: string; blurb: string; render: (
   {
     key: 'before',
     title: 'Before the record',
-    blurb: 'The karting years, 2016 through 2018: sourced facts, not race results.',
-    render: () => <OriginTimeline />
+    blurb: 'The karting years, and the run-up to his first race on the record.',
+    render: () => <DeepOrOld old={<OriginTimeline />} now={<BeforeDeepDive />} />
   },
   {
     key: 'explorer',

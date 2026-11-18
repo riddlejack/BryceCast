@@ -4,15 +4,16 @@
     {
       "id": "dd-qualifying",
       "page": "/career",
-      "title": "Qualifying to the flag: every race drawn, not six per-series bars",
+      "title": "Qualifying to the flag, made easier to read: one line per race, up for places made up, down for places lost",
       "switch": "ddquali",
       "values": [
-        { "value": null, "label": "grid against flag: each dot a race, qualified across, finished down; above the line he made up ground; series key on the right (new, default)" },
-        { "value": "ladder", "label": "the ladder: the 77 races in order, one stroke each from his grid slot to the flag, chapters labelled in place" }
+        { "value": null, "label": "places gained (final pass, default): each race a line from his grid slot, sorted so the 39 ahead / 7 held / 31 behind split is the picture; flips to race order by series" },
+        { "value": "grid", "label": "grid against flag (the version live now): qualified across, finished down, series key on the right" },
+        { "value": "ladder", "label": "the ladder: the 77 races in order, one stroke each from his grid slot to the flag" }
       ],
-      "look": "Career → More from the archive → Qualifying to the flag. Watch the dots rise from the diagonal to where he finished; point at (or tap) a dot to read the race and see its P-numbers on the axes; point at a series in the key to light only its races.",
+      "look": "Career → More from the archive → Qualifying to the flag. Watch the lines grow from the grid-slot line; flip 'Biggest gain first' / 'In race order' and watch them regroup into the series; point at (or tap) a line to read the race.",
       "anchor": "#archive-qualifying",
-      "added": "2026-11-17T18:00",
+      "added": "2026-11-17T22:00",
       "reviewed": false
     }
   ]

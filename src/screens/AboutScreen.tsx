@@ -1,7 +1,12 @@
-import { Fragment } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { Card, HeroPanel, Reveal, Stat } from '../app/components';
+import { SourcePill } from '../app/components';
 import { Link } from '../app/router';
+import { switchValue } from '../review/switches';
+import { DeepDive } from './deepDives/frame';
+import { careerRecord, countWord } from './aboutData/career';
+import { RaceStrip, SeriesBar } from './aboutData/RaceStrip';
+import { HardParts } from './aboutData/HardParts';
+import { Pipeline } from './aboutData/Pipeline';
 import './about.css';
 
 /**
@@ -12,214 +17,121 @@ import './about.css';
  */
 export const REPO_URL: string | null = null;
 
-/* ---------- by the numbers: the README's sourced headline stats, verified
- * line by line against docs/README.md's "What went into it" table ---------- */
+/* About (final pass, November 17, 2026): what the site is and the career it
+ * covers first, with the Career page's own figures (173 races, 10 series, 38
+ * tracks, 9 countries) in place of the README's stat tiles; then the hard
+ * parts, each with a drawing; the flow as a diagram; credits. The "what it
+ * won't show" list lives once, on Data & sources.
+ *
+ * Review switch `ddabout`: unset = every race on one line (default);
+ * `bar` = the same races as one bar by series. */
 
-const stats: Array<{ label: string; value: string; note: string }> = [
-  { label: 'Series', value: '10', note: '2019–2026 · 99 events, 533 sessions' },
-  { label: 'Lap samples', value: '75,740', note: '9,826 session-result records' },
-  { label: 'Timing-loop passages', value: '~690,000', note: '143 source captures, resends removed, not GPS telemetry' },
-  { label: 'INDY NXT races', value: '45 of 45', note: 'observed timing and replay coverage, 2024–2026' },
-  { label: 'Weather joins', value: '135', note: 'exact-window sessions, modeled near-track weather' },
-  { label: 'Historical archive', value: '7.62 GB', note: '1,136 source objects indexed, not shipped in this build' }
-];
+const linkStyle = { padding: 0, fontSize: 'inherit', color: 'var(--link)' } as const;
 
-/* ---------- the hard parts: one card per engineering case study, in the
- * README's own order, each pointed at where the result actually shows up ---------- */
-
-type HardPart = { title: string; body: string; href: string; label: string };
-
-const hardParts: HardPart[] = [
-  {
-    title: 'Heat maps without GPS',
-    body: 'The timing feed reports when a car crosses fixed physical loops around a track, not GPS coordinates. BryceCast decodes those crossings, reconciles official section distances against a traced outline of the circuit, and colors each named stretch by how the car performed there. Checked against the official timing sheets, which come from the same timing system, 1,098 of Bryce’s 1,101 rebuilt laps across 24 races match.',
-    href: '/tracks',
-    label: 'Pace maps'
-  },
-  {
-    title: 'Pass placement between timing loops',
-    body: "A lap chart only updates running order once per lap, and the raw position field in the timing feed is just the starting grid, not live order. BryceCast rebuilds the field's order at every timing loop and, when two cars swap places, brackets the change to the interval between those two loops rather than inventing an exact spot on track.",
-    href: '/races',
-    label: 'Race replays'
-  },
-  {
-    title: 'One qualifying model, many formats',
-    body: "Bryce's career mixes group qualifying, combined grids, reverse-grid races, oval two-lap averages, and a couple of canceled sessions: formats that don't collapse into one clean qualifying-position number. BryceCast keeps each format's own source record intact, links a qualifying result to a race only when the grid position actually matches it, and shows a canceled session as canceled instead of guessing a rank.",
-    href: '/races',
-    label: 'Race replays'
-  },
-  {
-    title: 'Weather and wind, honestly joined',
-    body: "Official series sources don't publish session weather at all, so BryceCast only backfills modeled near-track weather for sessions with a confirmed start-time window, skipping the rest rather than guessing an hour. And because meteorological wind direction is reported as where the wind comes from, the live wind arrow on the track map is rotated so it actually shows which way the air is moving.",
-    href: '/live',
-    label: 'Live'
-  },
-  {
-    title: 'Models that retain their failures',
-    body: "Race history is short, and a model that peeks at information only available after the finish can look great while being useless before a race even starts. BryceCast's prediction workbench keeps every candidate on the record, including its best-scoring model, which is flagged and rejected for exactly that kind of after-the-fact leakage, instead of only publishing the winner.",
-    href: '/career',
-    label: 'Career Lab'
-  },
-  {
-    title: 'One process, after a drill went wrong',
-    body: "During a live-race drill at Road America, several overlapping monitoring processes exhausted the machine's process budget and the capture stopped recording mid-session. BryceCast's live system now runs through one supervised, long-running process that owns polling, storage, and health checks, while every other screen on the site simply reads what that process has already captured.",
-    href: '/live',
-    label: 'Live'
-  },
-  {
-    title: 'A career across unequal sources',
-    body: "Bryce's ten series carry very different depth of timing. Some have lap-by-lap and section data, others only official classification. BryceCast keeps each series' native evidence intact rather than filling gaps with zeros, and uses one shared, descriptive scale (finish percentile) to make the whole career comparable without pretending a thin season has the same evidence as a rich one.",
-    href: '/career',
-    label: 'Career Lab'
-  },
-  {
-    title: 'An archive that stores each byte once',
-    body: "Early live captures re-saved a full copy of slow-changing data (driver bios, schedules, track info) inside every one-second timing snapshot, which multiplied storage for content that hadn't actually changed. The current archive stores each unique payload once, keyed by a content hash, and every observation just points back to it, so exact timestamps are kept without repeating the same bytes.",
-    href: '/data',
-    label: 'Data & trust'
-  }
-];
-
-/* ---------- how it works: sources through to the app, text and boxes only ---------- */
-
-const pipeline: Array<{ label: string; note: string }> = [
-  { label: 'Sources', note: 'official timing, results, and near-track weather' },
-  { label: 'Single ingestor / capture', note: 'one long-running process owns polling and writes' },
-  { label: 'SQLite + archives', note: 'content-addressed, one payload per hash' },
-  { label: 'Analysis pipeline', note: 'reconciliation, validation, derived reports' },
-  { label: 'Typed UI data package', note: 'a compact, versioned data contract' },
-  { label: 'React app', note: 'this site: TypeScript, Vite, typed adapters' }
-];
-
-/* ---------- honest limits: verbatim from the Data page's own list ---------- */
-
-const limits: string[] = [
-  'Live GPS or a moving car dot: no validated position feed exists.',
-  'Win or finish predictions: history gets shown as ranges and paths, never as a forecast.',
-  'Official series weather: near-track NWS weather is labeled for what it is.',
-  'Pit, tire or fuel strategy calls: the official feeds don’t carry them. The Career page’s fuel figure is a modelled range, and says how.'
-];
-
-const HardPartCard = ({ part }: { part: HardPart }) => (
-  <Card title={part.title} className="about-hardpart">
-    <p className="about-hardpart__body">{part.body}</p>
-    <Link to={part.href} className="navlink about-hardpart__link">
-      {part.label} <ArrowRight size={12} aria-hidden />
-    </Link>
-  </Card>
-);
+const TheRecord = () => {
+  if (!careerRecord) return null;
+  const r = careerRecord;
+  const bar = switchValue('ddabout') === 'bar';
+  return (
+    <DeepDive
+      className="about-record"
+      figure={r.races}
+      unit="races"
+      lede={
+        <>
+          in <strong>{countWord(r.series)} series</strong>, at {r.venues} tracks in {countWord(Number(r.countries))} countries, from his first car
+          race in {r.from} to {r.to}
+          {r.wins && r.podiums ? `: ${r.wins} wins and ${r.podiums} podiums.` : '.'}
+        </>
+      }
+      sources={
+        <SourcePill
+          title="The career record"
+          entries={r.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))}
+          caveats={r.caveats}
+        />
+      }
+      foot={
+        <Link to="/career" className="navlink about-inline-link">
+          The whole career, race by race, on Career <ArrowRight size={12} aria-hidden />
+        </Link>
+      }
+    >
+      {bar ? <SeriesBar /> : <RaceStrip />}
+    </DeepDive>
+  );
+};
 
 export const AboutScreen = () => (
-  <div className="page stack">
-    <HeroPanel tint="bryce">
-      <span className="kicker">About</span>
-      <h1 className="screen-head__title" style={{ marginTop: 6 }}>
-        How BryceCast is built
-      </h1>
-      <p className="screen-head__sub" style={{ maxWidth: '62ch' }}>
-        BryceCast is a race companion and career-analytics site built by a friend for Bryce Aron, driver of the No. 9
-        car in INDY NXT. It turns raw timing feeds, official results, and near-track weather into a companion for race
-        weekends and a navigable record of his career. This page is the tour of how that's built, section by
-        section, and what it deliberately won't claim.
+  <div className="page stack about">
+    <header className="about-head">
+      <span className="kicker">About BryceCast</span>
+      <h1 className="screen-head__title">Bryce Aron’s racing, on the record</h1>
+      <p className="screen-head__sub">
+        BryceCast follows Bryce Aron, driver of the No. 9 car in INDY NXT, live through his race weekends, and keeps the record of every
+        car race he has run. A friend built it from the series’ own results and timing.
       </p>
-    </HeroPanel>
+    </header>
 
-    <Reveal>
-      <section aria-label="By the numbers">
-        <h2 className="section-title">By the numbers</h2>
-        <Card>
-          <div className="about-stats">
-            {stats.map((stat) => (
-              <Stat key={stat.label} label={stat.label} value={stat.value} note={stat.note} />
-            ))}
-          </div>
-        </Card>
-      </section>
-    </Reveal>
+    <TheRecord />
 
-    <Reveal delay={40}>
-      <section aria-label="The hard parts">
-        <h2 className="section-title">The hard parts</h2>
-        <div className="grid grid--2">
-          {hardParts.map((part) => (
-            <HardPartCard key={part.title} part={part} />
-          ))}
+    <section aria-labelledby="about-hard" className="about-section">
+      <h2 id="about-hard" className="section-title">
+        The hard parts
+      </h2>
+      <HardParts />
+    </section>
+
+    <section aria-labelledby="about-how" className="about-section">
+      <h2 id="about-how" className="section-title">
+        How it works
+      </h2>
+      <Pipeline />
+      <p className="about-after">
+        <Link to="/data#wont-show" className="navlink about-inline-link">
+          What the site will not show, and why, on Data &amp; sources <ArrowRight size={12} aria-hidden />
+        </Link>
+      </p>
+    </section>
+
+    <section aria-labelledby="about-credits" className="about-section">
+      <h2 id="about-credits" className="section-title">
+        Credits
+      </h2>
+      <div className="about-credits">
+        <div className="about-credit">
+          <span className="about-credit__label">Built by</span>
+          <p className="about-credit__detail">Jack Riddle.</p>
         </div>
-      </section>
-    </Reveal>
-
-    <Reveal delay={60}>
-      <section aria-label="How it works">
-        <h2 className="section-title">How it works</h2>
-        <Card>
-          <div className="about-pipeline">
-            {pipeline.map((step, index) => (
-              <Fragment key={step.label}>
-                <div className="about-pipeline__step">
-                  <span className="about-pipeline__step-label">{step.label}</span>
-                  <span className="about-pipeline__step-note">{step.note}</span>
-                </div>
-                {index < pipeline.length - 1 ? (
-                  <ArrowRight size={14} className="about-pipeline__arrow" aria-hidden />
-                ) : null}
-              </Fragment>
-            ))}
+        <div className="about-credit">
+          <span className="about-credit__label">Data sources</span>
+          <p className="about-credit__detail">
+            Official series timing, results, lap charts, and section reports; modeled near-track NWS weather; and permissioned third-party
+            captures: RaceTools race-weekend geometry and Timing71 timing for 2026 replays.{' '}
+            <Link to="/data" className="navlink" style={linkStyle}>
+              Data &amp; sources
+            </Link>{' '}
+            names each source behind every number on the site.
+          </p>
+        </div>
+        <div className="about-credit">
+          <span className="about-credit__label">AI use</span>
+          <p className="about-credit__detail">
+            Some of the implementation used AI coding tools, primarily OpenAI Codex with additional Claude Code work, directed throughout by
+            Jack.
+          </p>
+        </div>
+        {REPO_URL ? (
+          <div className="about-credit">
+            <span className="about-credit__label">Source</span>
+            <p className="about-credit__detail">
+              <a href={REPO_URL} className="navlink" style={linkStyle}>
+                Source on GitHub
+              </a>
+            </p>
           </div>
-        </Card>
-      </section>
-    </Reveal>
-
-    <Reveal delay={80}>
-      <section aria-label="Honest limits">
-        <h2 className="section-title">Honest limits</h2>
-        <Card>
-          <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--ink-secondary)', fontSize: 13.5, display: 'grid', gap: 8 }}>
-            {limits.map((limit) => (
-              <li key={limit}>{limit}</li>
-            ))}
-          </ul>
-        </Card>
-      </section>
-    </Reveal>
-
-    <Reveal delay={100}>
-      <section aria-label="Credits">
-        <h2 className="section-title">Credits</h2>
-        <Card>
-          <div className="stack" style={{ gap: 12 }}>
-            <div className="about-credit">
-              <span className="about-credit__label">Built by</span>
-              <p className="about-credit__detail">Jack Riddle.</p>
-            </div>
-            <div className="about-credit">
-              <span className="about-credit__label">Data sources</span>
-              <p className="about-credit__detail">
-                Official series timing, results, lap charts, and section reports; modeled near-track NWS weather;
-                and permissioned third-party captures: RaceTools race-weekend geometry and Timing71 timing for
-                2026 replays. The <Link to="/data" className="navlink" style={{ padding: 0, fontSize: 'inherit', color: 'var(--link)' }}>data
-                page</Link> names each source behind every number on the site.
-              </p>
-            </div>
-            <div className="about-credit">
-              <span className="about-credit__label">AI use</span>
-              <p className="about-credit__detail">
-                Some of the implementation used AI coding tools, primarily OpenAI Codex with additional Claude
-                Code work, directed throughout by Jack.
-              </p>
-            </div>
-            {REPO_URL ? (
-              <div className="about-credit">
-                <span className="about-credit__label">Source</span>
-                <p className="about-credit__detail">
-                  <a href={REPO_URL} className="navlink" style={{ padding: 0, fontSize: 'inherit', color: 'var(--link)' }}>
-                    Source on GitHub
-                  </a>
-                </p>
-              </div>
-            ) : null}
-          </div>
-        </Card>
-      </section>
-    </Reveal>
+        ) : null}
+      </div>
+    </section>
   </div>
 );

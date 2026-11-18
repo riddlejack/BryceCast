@@ -1,0 +1,25 @@
+{
+  "lane": "final-pass",
+  "entries": [
+    {
+      "id": "fp-race-sheet",
+      "page": "/career",
+      "title": "The race sheet every non-INDY NXT chart dot opens (/career/race/…): clean titles, the field as a picture, the chapter as a labelled chart",
+      "switch": "racesheet",
+      "values": [
+        {
+          "value": null,
+          "label": "ladder (final pass, default): words, the field as a ladder (P1 at the top, his car rising from grid slot to flag, once), and his chapter side by side; on a phone the ladder lies on its side"
+        },
+        {
+          "value": "row",
+          "label": "row: the field on its side at every width, the chapter chart full width under it"
+        }
+      ],
+      "look": "Open any non-INDY NXT dot on Career (a chapter strip or the climb). Watch his car move from grid slot to flag; point at (or tap) a dot in the chapter chart to read that race, click to open it. Try Mid-Ohio (track picture), the 2019 Festival Last Chance Race (started behind the classified field), a win (no field size), Daytona (61 cars) and a one-race series (USF Pro 2000: his whole career instead). Back to Career returns to where you clicked.",
+      "anchor": "#career-chapters-title",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}

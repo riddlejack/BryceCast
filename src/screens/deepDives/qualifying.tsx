@@ -6,7 +6,7 @@ import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
-import { QualiConversion, chapterTint, raceHref, seriesShort, useCareerRows } from '../careerExplorer';
+import { QualiConversion, Segmented, chapterTint, raceHref, seriesShort, useCareerRows } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
 import './qualifying.css';
 
@@ -24,7 +24,9 @@ import './qualifying.css';
  * section falls back to the old per-series chart rather than show a second
  * set of numbers.
  *
- *   default            grid against flag: x = where he qualified, y = where he
+ *   default            places gained (version C, the final pass): one line per
+ *                      race from the qualifying baseline, sorted or in race order.
+ *   ?ddquali=grid      grid against flag: x = where he qualified, y = where he
  *                      finished; above the line he made up ground. Dots rise
  *                      from their grid slot to the flag on reveal.
  *   ?ddquali=ladder    the races in order, one stroke each from the grid slot
@@ -634,6 +636,273 @@ const Ladder = ({ races }: { races: QualiRace[] }) => {
   );
 };
 
+/* ---------- version C (default since the final pass): places gained ----------
+ *
+ * Jack, November 17: "It's kind of hard to analyze or interpret the
+ * qualifying to the flag graph." One mark is one race: a line from the
+ * baseline (where he qualified) up one step for every place he made up, or
+ * down for every place he lost. Sorted, the 39 / 7 / 31 split is the picture;
+ * in race order, the chapters. Lines grow from the baseline on reveal and
+ * glide between the two orders. */
+
+type GainOrder = 'sorted' | 'race';
+
+const Gains = ({ races, order }: { races: QualiRace[]; order: GainOrder }) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [viewRef, inView] = useInViewOnce<HTMLDivElement>(0.3);
+  const reduced = useReducedMotion();
+  const coarse = useCoarsePointer();
+  const tap = useTapPreview();
+  const { navigate } = useRouter();
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const elapsed = useRevealClock(inView, reduced, 1500);
+  const career = uiDataPackage.screens.careerLab.qualifyingLayer.career;
+
+  const rows = useMemo(() => tallies(races), [races]);
+  const raceOrder = useMemo(() => rows.flatMap((row) => row.races), [rows]);
+  const sortedOrder = useMemo(
+    () => [...races].sort((a, b) => b.grid - b.finish - (a.grid - a.finish) || a.date.localeCompare(b.date) || a.sessionId.localeCompare(b.sessionId)),
+    [races]
+  );
+  const delta = (race: QualiRace) => race.grid - race.finish;
+  const maxUp = Math.max(...races.map(delta));
+  const maxDown = Math.min(...races.map(delta));
+
+  const phone = width < 640;
+  const sorted = order === 'sorted';
+  const left = phone ? 40 : 72;
+  const right = phone ? 6 : 12;
+  const top = phone ? 64 : 58;
+  const plotH = phone ? 300 : 340;
+  const bottom = phone ? 44 : 40;
+  const height = top + plotH + bottom;
+  const Y = (d: number) => top + ((maxUp + 1 - d) / (maxUp + 1 - (maxDown - 1))) * plotH;
+  const y0 = Y(0);
+
+  /* x for every race in each order; race order leaves a gap between chapters */
+  const gap = sorted ? 0 : phone ? 6 : 14;
+  const bandGaps = sorted ? 0 : gap * (rows.length - 1);
+  const cw = Math.max(1, (width - left - right - bandGaps) / Math.max(1, races.length));
+  const xOf = useMemo(() => {
+    const map = new Map<string, number>();
+    if (sorted) sortedOrder.forEach((race, i) => map.set(race.sessionId, left + (i + 0.5) * cw));
+    else {
+      let x = left;
+      rows.forEach((row) => {
+        row.races.forEach((race, i) => map.set(race.sessionId, x + (i + 0.5) * cw));
+        x += row.races.length * cw + gap;
+      });
+    }
+    return map;
+  }, [sorted, sortedOrder, rows, left, cw, gap]);
+  const bands = useMemo(() => {
+    let x = left;
+    return rows.map((row) => {
+      const start = x;
+      const w = row.races.length * cw;
+      x += w + gap;
+      return { row, start, w };
+    });
+  }, [rows, left, cw, gap]);
+
+  const strokeW = Math.max(1.6, Math.min(5, cw * 0.46));
+  const dotR = Math.max(2.4, Math.min(4.6, cw * 0.44));
+  const glide = reduced ? undefined : 'transform 650ms cubic-bezier(0.22, 1, 0.36, 1)';
+  const fade = reduced ? undefined : 'opacity 300ms ease';
+
+  /* the worked example: the earliest of his biggest climbs */
+  const example = sortedOrder[0];
+  const exampleX = example ? xOf.get(example.sessionId) ?? 0 : 0;
+
+  /* run boundaries in the sorted order, for the brackets */
+  const aheadN = career.finishedAhead;
+  const heldN = career.held;
+  const behindN = career.finishedBehind;
+  const runX = (from: number, count: number) => [left + from * cw + 1, left + (from + count) * cw - 1] as const;
+  const [aheadA, aheadB] = runX(0, aheadN);
+  const [heldA, heldB] = runX(aheadN, heldN);
+  const [behindA, behindB] = runX(aheadN + heldN, behindN);
+
+  const find = (event: MouseEvent<Element>): string | null => {
+    const bounds = svgRef.current?.getBoundingClientRect();
+    if (!bounds) return null;
+    const mx = event.clientX - bounds.left;
+    const my = event.clientY - bounds.top;
+    if (my < top - 12 || my > top + plotH + 12) {
+      setHovered(null);
+      return null;
+    }
+    let pick: string | null = null;
+    let dist = Number.POSITIVE_INFINITY;
+    xOf.forEach((x, id) => {
+      const d = Math.abs(x - mx);
+      if (d < dist) {
+        dist = d;
+        pick = id;
+      }
+    });
+    if (pick === null || dist > Math.max(cw, coarse ? 12 : 8)) {
+      setHovered(null);
+      return null;
+    }
+    setHovered(pick);
+    return pick;
+  };
+
+  const byId = useMemo(() => new Map(races.map((race) => [race.sessionId, race])), [races]);
+  const hoveredRace = hovered ? byId.get(hovered) ?? null : null;
+  const tip: ChartTip | null = hoveredRace
+    ? (() => {
+        const d = delta(hoveredRace);
+        const yTop = Math.min(Y(d), y0) - 8;
+        const yBottom = Math.max(Y(d), y0) + 8;
+        return { ...tipOf(hoveredRace), x: xOf.get(hoveredRace.sessionId) ?? 0, y: yTop, over: yTop, under: yBottom };
+      })()
+    : null;
+
+  const ticks = [5, 0, -5, -10].filter((t) => t <= maxUp + 1 && t >= maxDown - 1);
+  const tickLabel = (t: number) => (t > 0 ? `+${t}` : t === 0 ? '0' : `−${-t}`);
+  const halo = { stroke: 'var(--paper)', strokeWidth: 4, paintOrder: 'stroke' as const, strokeLinejoin: 'round' as const };
+
+  return (
+    <div className="ddq-c" ref={viewRef}>
+      <div ref={ref} style={{ position: 'relative' }}>
+        {width > 0 ? (
+          <svg
+            ref={svgRef}
+            width={width}
+            height={height}
+            role="img"
+            aria-label={`${races.length} races, each a line from where he qualified: up for places made up, down for places lost. ${aheadN} up, ${heldN} held, ${behindN} down.`}
+            {...tap.surface({ find, clear: () => setHovered(null), open: (id) => () => navigate(raceHref(id as string)) })}
+          >
+            {/* the two halves, named where they are */}
+            <rect x={left} y={top} width={Math.max(0, width - left - right)} height={y0 - top} fill="var(--amber)" opacity={0.07} />
+            {ticks.map((t) => (
+              <g key={t}>
+                {t !== 0 ? <line x1={left} x2={width - right} y1={Y(t)} y2={Y(t)} stroke="var(--grid-hairline)" /> : null}
+                {t === 0 ? (
+                  <text x={left - 8} y={Y(t) + (phone ? -2 : 4)} textAnchor="end" fontFamily={chartFont} fontSize={12} fill="var(--ink)" fontWeight={600}>
+                    {phone ? (
+                      <>
+                        <tspan x={left - 6}>grid</tspan>
+                        <tspan x={left - 6} dy={14}>slot</tspan>
+                      </>
+                    ) : (
+                      'grid slot'
+                    )}
+                  </text>
+                ) : (
+                  <text x={left - 8} y={Y(t) + 4} textAnchor="end" fontFamily={chartFont} fontSize={12} fill="var(--ink-muted)">
+                    {tickLabel(t)}
+                  </text>
+                )}
+              </g>
+            ))}
+            {!phone ? (
+              <text x={left - 8} y={top - 10} textAnchor="end" fontFamily={chartFont} fontSize={12} fill="var(--ink-muted)">
+                places
+              </text>
+            ) : null}
+
+            {/* chapters, in race order */}
+            <g style={{ opacity: sorted ? 0 : 1, transition: fade }} aria-hidden={sorted}>
+              {bands.map((band) => {
+                const short = seriesShort(band.row.seriesName);
+                const text = phone || band.w < short.length * 7 + 8 ? PHONE_SHORT[short] ?? short : short;
+                const cx = band.start + band.w / 2;
+                return (
+                  <g key={band.row.seriesId}>
+                    <rect x={band.start} y={top - 6} width={Math.max(2, band.w)} height={2.5} rx={1} fill={chapterTint(band.row.seriesName)} />
+                    {band.w + gap >= text.length * 7.2 ? (
+                      <text x={cx} y={top - 14} textAnchor="middle" fontFamily={chartFont} fontSize={12} fontWeight={600} fill="var(--ink)">
+                        {text}
+                      </text>
+                    ) : null}
+                    {!phone && band.w >= (`${band.row.ahead} up · ${band.row.held} held · ${band.row.behind} down`.length * 6.6 + 12) ? (
+                      <text x={cx} y={top + plotH + 26} textAnchor="middle" fontFamily={chartFont} fontSize={12} fill="var(--ink-muted)">
+                        <tspan fill="var(--link)" fontWeight={600}>
+                          {band.row.ahead} up
+                        </tspan>
+                        {band.row.held ? ` · ${band.row.held} held` : ''}
+                        {band.row.behind ? ` · ${band.row.behind} down` : ''}
+                      </text>
+                    ) : null}
+                  </g>
+                );
+              })}
+            </g>
+
+            {/* the split, in sorted order */}
+            <g style={{ opacity: sorted ? 1 : 0, transition: fade }} aria-hidden={!sorted} fontFamily={chartFont} fontSize={phone ? 12 : 13}>
+              <path d={`M${aheadA} ${top - 8} V${top - 14} H${aheadB} V${top - 8}`} fill="none" stroke="var(--amber)" strokeWidth={1.5} />
+              <text x={(aheadA + aheadB) / 2} y={top - 22} textAnchor="middle" fill="var(--link)" fontWeight={600}>
+                {aheadN} finished ahead{phone ? '' : ' of where he qualified'}
+              </text>
+              <path d={`M${behindA} ${top + plotH + 8} V${top + plotH + 14} H${behindB} V${top + plotH + 8}`} fill="none" stroke="var(--grey-ink3)" strokeWidth={1.5} />
+              <text x={(behindA + behindB) / 2} y={top + plotH + 32} textAnchor="middle" fill="var(--ink-secondary)" fontWeight={600}>
+                {behindN} finished behind
+              </text>
+              <text x={(heldA + heldB) / 2} y={phone ? y0 - 22 : y0 + 22} textAnchor="middle" fill="var(--ink)" fontWeight={600} {...halo}>
+                {heldN} held
+              </text>
+            </g>
+
+            {/* the baseline: where he qualified */}
+            <line x1={left} x2={width - right} y1={y0} y2={y0} stroke="var(--ink)" strokeWidth={1.2} />
+
+
+            {hoveredRace ? (
+              <rect x={(xOf.get(hoveredRace.sessionId) ?? 0) - Math.max(cw, 6) / 2} y={top} width={Math.max(cw, 6)} height={plotH} fill="var(--grey-wash)" />
+            ) : null}
+
+            {/* the races */}
+            {races.map((race) => {
+              const d = delta(race);
+              const x = xOf.get(race.sessionId) ?? 0;
+              const index = sortedOrder.indexOf(race);
+              const delay = (index / races.length) * 700;
+              const t = Number.isFinite(elapsed) ? easeOutCubic((elapsed - delay) / 600) : 1;
+              const y = y0 + (Y(d) - y0) * t;
+              const dim = hovered !== null && hovered !== race.sessionId;
+              const up = d > 0;
+              return (
+                <g key={race.sessionId} style={{ transform: `translateX(${x}px)`, transition: glide }} opacity={dim ? 0.3 : 1}>
+                  {d === 0 ? (
+                    <circle cx={0} cy={y0} r={dotR} fill="var(--paper)" stroke="var(--ink)" strokeWidth={1.4} opacity={t} />
+                  ) : (
+                    <>
+                      <line x1={0} x2={0} y1={y0} y2={y} stroke={up ? 'var(--amber)' : 'var(--grey-ink3)'} strokeWidth={strokeW} strokeLinecap="round" opacity={up ? 0.95 : 0.75} />
+                      <circle cx={0} cy={y} r={dotR} fill={up ? 'var(--amber)' : 'var(--grey-ink2)'} />
+                    </>
+                  )}
+                </g>
+              );
+            })}
+
+            {/* how to read one line, on his biggest climb: told in the empty space under the baseline */}
+            {example && sorted && !hoveredRace ? (
+              <g fontFamily={chartFont} fontSize={12} {...halo} style={{ opacity: Number.isFinite(elapsed) ? 0 : 1, transition: fade }}>
+                <circle cx={exampleX} cy={Y(delta(example))} r={dotR + 3.5} fill="none" stroke="var(--ink)" strokeWidth={1.2} />
+                <line x1={exampleX} x2={exampleX} y1={y0 + 5} y2={y0 + (phone ? 66 : 60)} stroke="var(--ink-muted)" strokeWidth={1} />
+                <text x={exampleX + 8} y={y0 + (phone ? 50 : 44)} fill="var(--ink)" fontWeight={600} fontSize={phone ? 12 : 13}>
+                  {`This line: qualified P${example.grid}, finished P${example.finish}`}
+                </text>
+                <text x={exampleX + 8} y={y0 + (phone ? 66 : 61)} fill="var(--link)" fontWeight={600} fontSize={phone ? 12 : 13}>
+                  {`up ${placesWord(delta(example))}`}
+                  <tspan fill="var(--ink-muted)" fontWeight={400}>{` · ${seriesShort(example.seriesName)} ${example.seasonYear}`}</tspan>
+                </text>
+              </g>
+            ) : null}
+          </svg>
+        ) : null}
+        {tip ? <DeepTip tip={tip} width={width} tap={tap} /> : null}
+      </div>
+    </div>
+  );
+};
+
 /* ---------- the section ---------- */
 
 const OCCURRENCE_WORDS: Record<number, string> = { 1: 'once', 2: 'twice', 3: 'three times', 4: 'four times', 5: 'five times' };
@@ -641,7 +910,9 @@ const OCCURRENCE_WORDS: Record<number, string> = { 1: 'once', 2: 'twice', 3: 'th
 export const QualifyingDeepDive = () => {
   const races = useQualiRaces();
   const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
-  const view = switchValue('ddquali') === 'ladder' ? 'ladder' : 'grid';
+  const asked = switchValue('ddquali');
+  const view = asked === 'ladder' ? 'ladder' : asked === 'grid' ? 'grid' : 'gains';
+  const [order, setOrder] = useState<GainOrder>('sorted');
   if (!races) return <QualiConversion />;
 
   const career = layer.career;
@@ -667,8 +938,18 @@ export const QualifyingDeepDive = () => {
       unit="races finished ahead of where he qualified"
       lede={
         <>
-          {view === 'grid' ? 'Each dot is one race: where he qualified, against where he finished.' : 'Each stroke is one race, from where he qualified to where he finished.'}{' '}
-          He held his slot in <strong>{career.held}</strong> and gave ground in <strong>{career.finishedBehind}</strong>.
+          {view === 'gains' ? (
+            <>
+              Each line is one race, starting from where he qualified: <strong>up</strong> one step for every place he made up by the flag,{' '}
+              <strong>down</strong> for every place he lost. He held his slot in <strong>{career.held}</strong> and finished behind it in{' '}
+              <strong>{career.finishedBehind}</strong>.
+            </>
+          ) : (
+            <>
+              {view === 'grid' ? 'Each dot is one race: where he qualified, against where he finished.' : 'Each stroke is one race, from where he qualified to where he finished.'}{' '}
+              He held his slot in <strong>{career.held}</strong> and gave ground in <strong>{career.finishedBehind}</strong>.
+            </>
+          )}
         </>
       }
       sources={
@@ -694,13 +975,25 @@ export const QualifyingDeepDive = () => {
           caveats={layer.caveats}
         />
       }
+      controls={
+        view === 'gains' ? (
+          <Segmented
+            options={[
+              { value: 'sorted', label: 'Biggest gain first' },
+              { value: 'race', label: 'In race order' }
+            ]}
+            value={order}
+            onChange={setOrder}
+          />
+        ) : null
+      }
       foot={
         <>
           {career.qualifyingAppearances} qualifying sessions in {coverage.seriesWithQualifying} series{bestLine ? `; ${bestLine}` : ''}.
         </>
       }
     >
-      {view === 'ladder' ? <Ladder races={races} /> : <GridAgainstFlag races={races} />}
+      {view === 'ladder' ? <Ladder races={races} /> : view === 'grid' ? <GridAgainstFlag races={races} /> : <Gains races={races} order={order} />}
     </DeepDive>
   );
 };
