@@ -7782,6 +7782,78 @@
      "track_watkins_glen_international"
     ],
     "call": "Long course with the Boot, 3.370 mi (5.423 km), through the Inner Loop (Bus Stop): F1600 Championship Series, May 2019 (official timing sheet prints 3.370 mi; research notes item 5). The 2024 Bus Stop rework was kerbs and paving only."
+   },
+   "hungaroring-gp": {
+    "camera": {
+     "azim": 260,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -3.01226586842505,
+      -10.365496167934623,
+      -27.851582776070988
+     ],
+     "D": 2237.587085204688,
+     "elev": 40,
+     "azim": 260
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.567294042186763,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_hungaroring"
+    ],
+    "call": "Grand Prix circuit (4.381 km): Euroformula Open, June 2023. 2024-26 rebuilds of the pit building, paddock and grandstands and 2025-26 resurfacing changed no corner (research notes table). OSM's other loop runs down 'Bokszutca' (the pit lane), drawn here as the pit."
+   },
+   "paul-ricard-gp": {
+    "camera": {
+     "azim": 330,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      38.795498729298025,
+      55.38258359233176,
+      -43.77066146030253
+     ],
+     "D": 3664.729047587244,
+     "elev": 40,
+     "azim": 330
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 5.330744122402193,
+    "layout": "Grand Prix Circuit",
+    "trackIds": [
+     "track_circuit_paul_ricard"
+    ],
+    "call": "Grand Prix layout with the Mistral chicane, 15 turns, 1C-V2 (5.842 km nominal; 2023 timing sheets print 5.822 km): Euroformula Open, July 2023 (research notes item 1, from the FRECA and GT Open timing of the same weekends). OSM loop through both 'Chicane Nord' ways on the Mistral straight (5853 m); OSM's loop without the chicane measures 5771 m, the 13-turn 1A-V2 (5.770 km). Driving Center, skid pan and test areas excluded; the 'Stand' ways drawn as the pit lane."
+   },
+   "vir-full": {
+    "camera": {
+     "azim": 275,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      42.73632556326512,
+      -80.69841068053047,
+      -29.85348278575578
+     ],
+     "D": 3022.0605337601264,
+     "elev": 40,
+     "azim": 275
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.757452685529941,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_virginia_international_raceway"
+    ],
+    "call": "Full course, 17 turns (5.263 km): F1600 Championship Series, July 2019. Last full repave and widening was 2014, before (research notes table). OSM's main line (5268 m), not the 'Madison Avenue' and north-course links beside it."
    }
   },
   "generated": "2026-11-17",

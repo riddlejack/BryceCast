@@ -363,6 +363,45 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
+  },
+  "hungaroring-gp": {
+   "file": "/tracks-3d/models/hungaroring-gp.json",
+   "kind": "venue",
+   "bytes": 241398,
+   "gzipBytes": 86262,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/hungaroring-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "paul-ricard-gp": {
+   "file": "/tracks-3d/models/paul-ricard-gp.json",
+   "kind": "venue",
+   "bytes": 349253,
+   "gzipBytes": 114871,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/paul-ricard-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "vir-full": {
+   "file": "/tracks-3d/models/vir-full.json",
+   "kind": "venue",
+   "bytes": 310409,
+   "gzipBytes": 106234,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/vir-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",
