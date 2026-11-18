@@ -7,12 +7,38 @@
       "title": "Yellow flags on the lap chart: every full-course caution as a faint yellow band behind the field's lines, so you can see why the order shuffles where it does",
       "switch": "lapyellow",
       "values": [
-        { "value": null, "label": "on (default): a yellow wash from the lap the caution came out to its last lap under yellow, a flag tab above the chart, a hairline where the field went green" },
-        { "value": "off", "label": "off: the lap chart as it was" }
+        {
+          "value": null,
+          "label": "on (default): a yellow wash from the lap the caution came out to its last lap under yellow, a flag tab above the chart, a hairline where the field went green"
+        },
+        {
+          "value": "off",
+          "label": "off: the lap chart as it was"
+        }
       ],
-      "look": "Any INDY NXT race page → The race, lap by lap. Detroit 2024 has four cautions (14 of 45 laps under yellow). Point at a yellow tab (or tap it) to read the caution: its cause, its laps, the restart lap. Hover a line inside a band and the card says 'under yellow'.",
+      "look": "Any INDY NXT race page \u2192 The race, lap by lap. Detroit 2024 has four cautions (14 of 45 laps under yellow). Point at a yellow tab (or tap it) to read the caution: its cause, its laps, the restart lap. Hover a line inside a band and the card says 'under yellow'.",
       "anchor": "",
       "added": "2026-11-17T23:30",
+      "reviewed": false
+    },
+    {
+      "id": "r2-leg-mode",
+      "page": "/career",
+      "title": "Flights arc, drives stay on the ground: on the travel map, legs the rule of thumb calls a flight lift off the globe with a faint dashed ground shadow; drives are drawn flat",
+      "switch": "legmode",
+      "values": [
+        {
+          "value": null,
+          "label": "arc (default): drives flat on the globe, flights lifted with their ground track as a dashed shadow; the leg readout says 'a drive' or 'a flight'"
+        },
+        {
+          "value": "off",
+          "label": "off: every leg lifts a little by its length, as before"
+        }
+      ],
+      "look": "Career \u2192 The travel map. Watch the journey play: the Atlantic crossings and the West Coast trips rise; the UK and Midwest hops stay on the ground. The readout under the big figure says which each leg is.",
+      "anchor": "",
+      "added": "2026-11-18T00:30",
       "reviewed": false
     }
   ]

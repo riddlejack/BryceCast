@@ -21,6 +21,8 @@ import {
   type UiCareerTravelLegs
 } from '../data/uiDataPackage';
 import { chapterTint, ControlRow, FilterChip } from './careerExplorer';
+import { switchValue } from '../review/switches';
+import './legMode.css';
 
 const formatCount = new Intl.NumberFormat('en-US');
 const DEG_TO_RAD = Math.PI / 180;
@@ -109,13 +111,32 @@ const projectPoint = (lat: number, lon: number, lift: number, view: GlobeView, w
   return { x: width / 2 + dx, y: height / 2 + dy, visible };
 };
 
-/** SVG path for part of a leg (fractions t0..t1), broken where it passes behind the globe. */
-const legPath = (leg: TravelLeg, t0: number, t1: number, view: GlobeView, width: number, height: number): string => {
+/* Flights arc, drives stay on the ground (round 2, intersections; switch
+ * `legmode`: arc (default) | off). With arcs on, a leg the rule of thumb calls a
+ * drive (same country, under 750 miles) is drawn flat on the globe and a flight
+ * lifts off it, with its ground track left as a faint dashed shadow. Off, every
+ * leg lifts a little by its length, as before. */
+type LegMode = 'arc' | 'off';
+const maxLift = (leg: TravelLeg, angle: number, mode: LegMode): number =>
+  mode === 'off' ? Math.min(0.24, angle * 0.2) : leg.modeProxy === 'flight' ? Math.min(0.24, 0.04 + angle * 0.24) : 0;
+
+/** SVG path for part of a leg (fractions t0..t1), broken where it passes behind the globe.
+ *  `ground` draws the leg flat on the surface (a flight's shadow). */
+const legPath = (
+  leg: TravelLeg,
+  t0: number,
+  t1: number,
+  view: GlobeView,
+  width: number,
+  height: number,
+  mode: LegMode = 'off',
+  ground = false
+): string => {
   if (leg.greatCircleMiles <= 0 || t1 <= t0) return '';
   const a = toVec(leg.from.lat, leg.from.lon);
   const b = toVec(leg.to.lat, leg.to.lon);
   const angle = Math.acos(Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z)));
-  const lift = Math.min(0.24, angle * 0.2);
+  const lift = ground ? 0 : maxLift(leg, angle, mode);
   const steps = Math.max(6, Math.min(72, Math.ceil((angle * RAD_TO_DEG * (t1 - t0)) / 1.2)));
   let d = '';
   let pen = false;
@@ -138,12 +159,12 @@ const legHead = (leg: TravelLeg, t: number): { lat: number; lon: number } =>
     ? { lat: leg.to.lat, lon: leg.to.lon }
     : toLatLon(slerp(toVec(leg.from.lat, leg.from.lon), toVec(leg.to.lat, leg.to.lon), t));
 
-const legLift = (leg: TravelLeg, t: number): number => {
+const legLift = (leg: TravelLeg, t: number, mode: LegMode = 'off'): number => {
   if (leg.greatCircleMiles <= 0) return 0;
   const a = toVec(leg.from.lat, leg.from.lon);
   const b = toVec(leg.to.lat, leg.to.lon);
   const angle = Math.acos(Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z)));
-  return Math.min(0.24, angle * 0.2) * Math.sin(Math.PI * t);
+  return maxLift(leg, angle, mode) * Math.sin(Math.PI * t);
 };
 
 /* Each leg takes time by its length (square root, so an ocean crossing is not
@@ -1010,19 +1031,36 @@ export const CareerAtlas = () => {
 
   /* ---- the legs drawn so far ---- */
   const doneCount = finished ? legs.length : started ? currentIndex : 0;
+  const legMode: LegMode = switchValue('legmode') === 'off' ? 'off' : 'arc';
+  const doneLegs = legs.slice(0, doneCount);
   const donePath =
     width > 0
-      ? legs
-          .slice(0, doneCount)
-          .map((leg) => legPath(leg, 0, 1, globeView, width, height))
+      ? doneLegs
+          .filter((leg) => legMode === 'off' || leg.modeProxy !== 'flight')
+          .map((leg) => legPath(leg, 0, 1, globeView, width, height, legMode))
           .join('')
       : '';
-  const livePath = !finished && started && currentLeg && width > 0 ? legPath(currentLeg, 0, currentT, globeView, width, height) : '';
+  /* Arcs on: flights drawn apart, so their lift and their ground shadow read as one thing. */
+  const flightPath =
+    width > 0 && legMode === 'arc'
+      ? doneLegs
+          .filter((leg) => leg.modeProxy === 'flight')
+          .map((leg) => legPath(leg, 0, 1, globeView, width, height, legMode))
+          .join('')
+      : '';
+  const flightShadow =
+    width > 0 && legMode === 'arc'
+      ? [...doneLegs.filter((leg) => leg.modeProxy === 'flight'), ...(currentLeg?.modeProxy === 'flight' && started && !finished ? [currentLeg] : [])]
+          .map((leg) => legPath(leg, 0, leg === currentLeg && !finished ? currentT : 1, globeView, width, height, legMode, true))
+          .join('')
+      : '';
+  const livePath =
+    !finished && started && currentLeg && width > 0 ? legPath(currentLeg, 0, currentT, globeView, width, height, legMode) : '';
   const headPoint =
     !finished && started && currentLeg && width > 0
       ? (() => {
           const head = legHead(currentLeg, currentT);
-          return projectPoint(head.lat, head.lon, legLift(currentLeg, currentT), globeView, width, height);
+          return projectPoint(head.lat, head.lon, legLift(currentLeg, currentT, legMode), globeView, width, height);
         })()
       : null;
   const filtering = seriesFilter !== null || regionFilter !== null;
@@ -1077,7 +1115,9 @@ export const CareerAtlas = () => {
                   {formatCount.format(travel.legCount)} legs, {formatCount.format(atlas.venueCount)} tracks
                 </span>
                 <span className="career-travel__leg-route">
-                  {modeCounts.drive} short enough to drive, {modeCounts.flight} longer, {modeCounts.same_venue} back at the same track
+                  {legMode === 'arc'
+                    ? `${modeCounts.drive} short enough to drive, drawn on the ground; ${modeCounts.flight} longer, drawn in the air; ${modeCounts.same_venue} back at the same track`
+                    : `${modeCounts.drive} short enough to drive, ${modeCounts.flight} longer, ${modeCounts.same_venue} back at the same track`}
                 </span>
               </div>
             ) : currentLeg ? (
@@ -1091,7 +1131,11 @@ export const CareerAtlas = () => {
                     : `${currentLeg.from.trackName} to ${currentLeg.to.trackName}`}
                 </span>
                 <span className="career-travel__leg-miles">
-                  {currentLeg.greatCircleMiles <= 0 ? 'same track' : `${wholeMiles.format(currentLeg.greatCircleMiles)} miles`}
+                  {currentLeg.greatCircleMiles <= 0
+                    ? 'same track'
+                    : `${wholeMiles.format(currentLeg.greatCircleMiles)} miles${
+                        legMode === 'arc' ? (currentLeg.modeProxy === 'flight' ? ' · a flight' : ' · a drive') : ''
+                      }`}
                 </span>
               </div>
             ) : null
@@ -1263,9 +1307,11 @@ export const CareerAtlas = () => {
                   aria-hidden="true"
                 />
                 <g aria-hidden="true" pointerEvents="none" opacity={filtering ? 0.35 : 1}>
+                  {flightShadow ? <path className="leg-mode__shadow" d={flightShadow} /> : null}
                   {donePath ? (
                     <path d={donePath} fill="none" stroke="var(--ink)" strokeOpacity={0.42} strokeWidth={1.25} strokeLinecap="round" strokeLinejoin="round" />
                   ) : null}
+                  {flightPath ? <path className="leg-mode__flight" d={flightPath} /> : null}
                   {livePath ? (
                     <path d={livePath} fill="none" stroke="var(--amber)" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
                   ) : null}
