@@ -1,0 +1,33 @@
+{
+  "lane": "races",
+  "entries": [
+    {
+      "id": "races-years",
+      "page": "/races",
+      "title": "Every season on the Races page, 2019 to 2026 (173 races): the years before INDY NXT folded under their year's dots, or open",
+      "switch": "racesyears",
+      "values": [
+        { "value": null, "label": "folded (default): each year 2019-2023 shows its dots, one per race coloured by series, and a 'Show the N races' button opens its rows" },
+        { "value": "open", "label": "open: every year's rows listed under its dots, all 173 rows on the page" }
+      ],
+      "look": "Races. Use the year links under the title to jump; point at (or tap) any dot in any season for the track card; open 2019 and click a race; open a DNF/DNS race (2019 Watkins Glen Race 3) to see its own page.",
+      "anchor": "#season-2019",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    },
+    {
+      "id": "races-row-picture",
+      "page": "/races",
+      "title": "The track on each Races row: the 3D still, as in the Career explorer's cards, or round seven's bird's-eye icon",
+      "switch": "racepic",
+      "values": [
+        { "value": null, "label": "3D still (default): the venue's model at its opening angle, the race's own shaded still where one exists; the 2D line only where no model exists" },
+        { "value": "icon", "label": "bird's-eye icon (live now): the model seen from straight above, line drawing where none" }
+      ],
+      "look": "Races → any INDY NXT season's rows, and 2024's FR Oceania rows (no models yet: the picture column drops out).",
+      "anchor": "#season-2026",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}
