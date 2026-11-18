@@ -1,6 +1,7 @@
-import { createReadStream } from 'node:fs';
+import { createReadStream, statSync } from 'node:fs';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
+import { gzipSync, brotliCompressSync, constants as zlibConstants } from 'node:zlib';
 import { timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { dirname, extname, join, normalize, relative, resolve, sep } from 'node:path';
@@ -160,7 +161,9 @@ const mimeTypes = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.json': 'application/json; charset=utf-8',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.webp': 'image/webp',
+  '.woff2': 'font/woff2'
 };
 
 const safeNumber = (value) => {
@@ -1321,6 +1324,35 @@ export const queryReplay = ({
   }
 };
 
+// queryReplay({ limit: 5 }) is what every readiness answer carries, and it is
+// costly: archive-wide COUNT(*) and GROUP BY scans of bryce_samples (no index on
+// session_key or checked_at) plus a race_snapshots lookup per sample, all on
+// node:sqlite's synchronous driver, so the whole server (pages, assets, every
+// other API call) waits while it runs. Each open tab asks for readiness every
+// 15 s off-season. Its answer changes only when the archive does, so keep it
+// until the SQLite file or its WAL changes size or modification time.
+const archiveSignature = () => {
+  const part = (path) => {
+    try {
+      const info = statSync(path);
+      return `${info.size}:${info.mtimeMs}`;
+    } catch {
+      return '-';
+    }
+  };
+  return `${part(sqlitePath)}|${part(`${sqlitePath}-wal`)}`;
+};
+// Nothing downstream writes to the summary (buildReadinessPayloadFromParts
+// embeds it, buildReadinessGates reads archiveState, sendJson serializes it),
+// but every caller gets its own copy all the same: a few KB, so one response
+// can never change what the next one sends.
+let readinessReplayMemo = null;
+export const readinessReplaySummary = () => {
+  const signature = archiveSignature();
+  if (readinessReplayMemo?.signature !== signature) readinessReplayMemo = { signature, value: queryReplay({ limit: 5 }) };
+  return structuredClone(readinessReplayMemo.value);
+};
+
 export const compactTimingRowForReadiness = (row, heartbeat = null) => ({
   driverId: row?.DriverID === null || row?.DriverID === undefined ? '' : String(row.DriverID),
   no: row?.no ?? '',
@@ -1753,7 +1785,7 @@ const buildReadinessPayloadFromUpstream = async () => {
     fetchRaceControl(),
     buildSourceReportFromUpstream(),
     readJsonFile(historyPath),
-    Promise.resolve(queryReplay({ limit: 5 }))
+    Promise.resolve(readinessReplaySummary())
   ]);
   return buildReadinessPayloadFromRuntimeParts({
     checkedAt,
@@ -1842,7 +1874,7 @@ const buildReadinessPayloadFromRunnerRecord = async (record) => {
     results,
     sourceReportBase,
     historyPayload: await readJsonFile(historyPath),
-    replay: queryReplay({ limit: 5 })
+    replay: readinessReplaySummary()
   });
 };
 
@@ -2076,7 +2108,7 @@ const cachedReadinessPayload = async (replayRecord = null) => {
     const status = await readJsonFile(runnerStatusPath);
     if (isHealthyWaitingRunner(status)) {
       const history = await readJsonFile(historyPath);
-      return buildIdleReadinessPayload({ status, history: history ? compactHistory(history) : null, replay: queryReplay({ limit: 5 }) });
+      return buildIdleReadinessPayload({ status, history: history ? compactHistory(history) : null, replay: readinessReplaySummary() });
     }
   }
   return requireCached('readiness', 'Readiness');
@@ -2702,7 +2734,7 @@ const proxyRaceControl = async (req, res, pathname) => {
   return true;
 };
 
-const sendStatic = async (res, pathname, acceptsHtml = false) => {
+const sendStatic = async (res, pathname, acceptsHtml = false, acceptEncoding = '') => {
   if (!staticDir) return false;
   const requested = pathname === '/' ? '/index.html' : pathname;
   const normalizedPath = normalize(decodeURIComponent(requested)).replace(/^(\.\.[/\\])+/, '');
@@ -2730,12 +2762,45 @@ const sendStatic = async (res, pathname, acceptsHtml = false) => {
   try {
     await access(candidate);
     const type = mimeTypes[extname(candidate)] ?? 'application/octet-stream';
-    res.writeHead(200, { ...securityHeaders, 'content-type': type, 'cache-control': staticCacheControl(staticDir, candidate) });
+    const headers = { ...securityHeaders, 'content-type': type, 'cache-control': staticCacheControl(staticDir, candidate) };
+    const packed = await compressedStatic(candidate, type, acceptEncoding);
+    if (packed) {
+      res.writeHead(200, { ...headers, 'content-encoding': packed.encoding, 'content-length': packed.body.length, vary: 'accept-encoding' });
+      res.end(packed.body);
+      return true;
+    }
+    res.writeHead(200, headers);
     createReadStream(candidate).pipe(res);
     return true;
   } catch {
     return false;
   }
+};
+
+/* Text files leave this host compressed. Cloudflare compresses for the browser
+ * either way, but the hop from this host to Cloudflare (the tunnel, this
+ * host's upload) carried them raw: the Laguna Seca model's 945 KB, a 1.1 MB
+ * context pack on every Tracks visit. A built file never changes in place (a
+ * release is a new dist), so each one is compressed once, on first request,
+ * and kept, keyed by path, size and modification time. */
+const COMPRESSIBLE = /^(text\/|application\/(json|javascript)|image\/svg\+xml)/;
+const compressedCache = new Map();
+const compressedStatic = async (candidate, type, acceptEncoding) => {
+  if (!COMPRESSIBLE.test(type)) return null;
+  const encoding = /\bbr\b/.test(acceptEncoding) ? 'br' : /\bgzip\b/.test(acceptEncoding) ? 'gzip' : null;
+  if (!encoding) return null;
+  const info = await stat(candidate);
+  if (info.size < 1024) return null;
+  const key = `${encoding}:${candidate}:${info.size}:${info.mtimeMs}`;
+  let body = compressedCache.get(key);
+  if (!body) {
+    const raw = await readFile(candidate);
+    body = encoding === 'br'
+      ? brotliCompressSync(raw, { params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 5, [zlibConstants.BROTLI_PARAM_SIZE_HINT]: raw.length } })
+      : gzipSync(raw, { level: 6 });
+    compressedCache.set(key, body);
+  }
+  return { encoding, body };
 };
 
 /** Vite content-hashes every file under `dist/assets/` (a new filename on any
@@ -3221,7 +3286,7 @@ const handler = async (req, res) => {
     // route that collides with an asset directory (e.g. `/data`) fall through to
     // the app shell instead of 404-ing, while data fetches (accept JSON) don't.
     const acceptsHtml = (req.headers.accept ?? '').includes('text/html');
-    if (await sendStatic(res, pathname, acceptsHtml)) return;
+    if (await sendStatic(res, pathname, acceptsHtml, String(req.headers['accept-encoding'] ?? ''))) return;
     sendError(res, 404, 'Route not found', pathname);
   } catch (error) {
     if (error?.sourceGap) {
@@ -3241,6 +3306,15 @@ export const startServer = () => {
   // requests read its status and append-only SQLite cache without starting a
   // competing Race Control refresh loop.
   if (!replayEnabled && !runnerOnlyApi) startApiRuntimeCacheLoop();
+  // Pay the archive scan once now, not on the first visitor's page load. A
+  // missing or unreadable archive must never stop the server starting.
+  setImmediate(() => {
+    try {
+      readinessReplaySummary();
+    } catch (error) {
+      console.warn('Readiness replay summary warm-up failed:', error instanceof Error ? error.message : error);
+    }
+  });
   const server = createServer(handler);
 
   server.listen(port, host, () => {
