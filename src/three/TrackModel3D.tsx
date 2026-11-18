@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useCoarsePointer } from '../app/charts';
 import type { TrackModelData, TrackScene, TrackSceneHover } from './trackScene.js';
+import { POSTER_SIZES, hasWebgl, loadIndex, loadModel, posterSrcSet, type ModelIndexEntry } from './trackModelLoad';
 import './track3d.css';
 
 /* ============================================================================
@@ -8,7 +9,9 @@ import './track3d.css';
  * (Jack's review of Nov 16). The model and three.js load only here: this
  * module is itself lazy-loaded by the Tracks layout of SectionHeatCard, and the
  * renderer (./trackScene.js, the film rig's world modules, three r186) is a
- * dynamic import inside it. Per-venue data is baked by
+ * dynamic import inside it. The Tracks page starts these loads (and the model
+ * and its poster) as soon as it knows the venue: trackModelLoad.ts,
+ * prefetchTrackModel. Per-venue data is baked by
  * scripts/build-track-models.mjs into public/tracks-3d/models/.
  * Fallback: no WebGL, or no model for the venue, renders `fallback` (the 2D map).
  * ==========================================================================*/
@@ -26,49 +29,6 @@ export interface TrackModelSection {
   /** A second, quieter line (e.g. "beat 62% of the field this race"). */
   detail?: string | null;
 }
-
-interface ModelIndexEntry {
-  file: string;
-  kind: string;
-  bytes: number;
-  gzipBytes: number;
-  poster: Record<string, string> | null;
-  attribution: string;
-}
-
-let indexPromise: Promise<Record<string, ModelIndexEntry> | null> | null = null;
-const loadIndex = () => {
-  indexPromise ??= fetch('/tracks-3d/models/index.json')
-    .then((response) => (response.ok ? response.json() : null))
-    .then((json) => (json?.venues as Record<string, ModelIndexEntry>) ?? null)
-    .catch(() => null);
-  return indexPromise;
-};
-const modelPromises = new Map<string, Promise<TrackModelData>>();
-const loadModel = (file: string) => {
-  let promise = modelPromises.get(file);
-  if (!promise) {
-    promise = fetch(file).then((response) => {
-      if (!response.ok) throw new Error(`model ${response.status}`);
-      return response.json() as Promise<TrackModelData>;
-    });
-    promise.catch(() => modelPromises.delete(file));
-    modelPromises.set(file, promise);
-  }
-  return promise;
-};
-let webgl: boolean | null = null;
-const hasWebgl = () => {
-  if (webgl === null) {
-    try {
-      const canvas = document.createElement('canvas');
-      webgl = Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl'));
-    } catch {
-      webgl = false;
-    }
-  }
-  return webgl;
-};
 
 type Status = 'checking' | 'fallback' | 'loading' | 'ready';
 
@@ -158,7 +118,7 @@ export const TrackModel3D = ({
     if (!entry) return;
     let live = true;
     let scene: TrackScene | null = null;
-    Promise.all([loadModel(entry.file), import('./trackScene.js')])
+    Promise.all([loadModel<TrackModelData>(entry.file), import('./trackScene.js')])
       .then(async ([data, mod]) => {
         if (!live || !canvasRef.current) return;
         scene = await mod.createTrackScene({
@@ -293,8 +253,8 @@ export const TrackModel3D = ({
           <img
             className="track3d__poster"
             src={poster}
-            srcSet={[entry?.poster?.['1200'] ? `${entry.poster['1200']} 1200w` : null, entry?.poster?.['2400'] ? `${entry.poster['2400']} 2400w` : null].filter(Boolean).join(', ')}
-            sizes="100vw"
+            srcSet={posterSrcSet(entry?.poster)}
+            sizes={POSTER_SIZES}
             alt=""
             aria-hidden
           />

@@ -11,6 +11,7 @@ import { useQualiLabForRace } from '../data/qualiLab';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 import { TrackModelSlot } from '../three/TrackModelSlot';
+import { prefetchTrackModel } from '../three/trackModelLoad';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
 import { switchValue } from '../review/switches';
 import { watchableCaptureForRace } from '../data/replayAvailable';
@@ -219,6 +220,14 @@ export const TracksScreen = ({
     null;
   const selectedVisit = data.visits.find((visit) => visit.sessionId === selectedCanonicalVisit?.sessionId) ?? null;
   const outline = trackOutlineFor(selectedVenue);
+  /* Every state of this page draws the venue's 3D model (shaded, plain, or
+   * under a replay), but only once the section data is in. Start its chunk,
+   * three.js, the model and its poster now, so they load alongside that data
+   * rather than after it. */
+  const outlineSlug = outline?.slug ?? null;
+  useEffect(() => {
+    if (outlineSlug) prefetchTrackModel(outlineSlug);
+  }, [outlineSlug]);
   const qualiResolution = useQualiLabForRace(selectedCanonicalVisit?.sessionId ?? '');
   const qualifying = useMemo(
     () =>
