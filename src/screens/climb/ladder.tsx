@@ -11,8 +11,9 @@ import { clamp, ease, type ClimbModel, type ClimbRace } from './model';
  *
  * One idea: he went up a step at a time. Each step is a series, in the order
  * he reached it, as wide as the races he ran there; each race is a dot on its
- * step, higher the more of the field he beat, so a win sits level with the
- * next step. The 8 races with no classified finish are a small cross under
+ * step, higher the more of the other cars he finished ahead of (raceFacts
+ * beatShare), so a win sits level with the next step and a last place on its
+ * tread. The 8 races with no classified finish are a small cross under
  * the tread. The thin line on each step is his running form there (a
  * seven-race trimmed mean of the dots, middle 60%).
  *
@@ -110,7 +111,7 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
     const colW = (W - padL - padR) / n;
     const x = (i: number) => padL + (i + 0.5) * colW;
     const floor = (step: number) => topPad + (steps.length - step) * S;
-    const markY = (race: ClimbRace) => floor(race.step) - 6 - (race.percentile ?? 0) * (S - 12);
+    const markY = (race: ClimbRace) => floor(race.step) - 6 - (race.share ?? 0) * (S - 12);
     const stepX = steps.map((step) => ({ x0: x(step.from) - colW / 2, x1: x(step.to) + colW / 2 }));
     const unitOf = (i: number, step: number) => i + RISER_UNITS * (step + 1);
     const totalUnits = n + RISER_UNITS * (steps.length + 1) + 2;
@@ -126,8 +127,8 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
   const forms = useMemo(
     () =>
       steps.map((_, s) => {
-        const on = races.filter((race) => race.step === s && !race.oneOff && race.percentile !== null);
-        const form = trimmedForm(on.map((race) => race.percentile!), 3);
+        const on = races.filter((race) => race.step === s && !race.oneOff && race.share !== null);
+        const form = trimmedForm(on.map((race) => race.share!), 3);
         return on.map((race, k) => ({ x: x(race.index), y: floor(s) - 6 - form[k] * (S - 12), index: race.index }));
       }),
     [steps, races, x, floor, S]

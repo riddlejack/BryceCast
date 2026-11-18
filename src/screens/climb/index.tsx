@@ -57,17 +57,17 @@ const NewClimb = ({ version }: { version: Exclude<Version, 'old'> }) => {
             {
               label: 'Career result conversion · all series',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: `${classified} races with a classified finish: start, finish and the finishing percentile (the share of the field beaten, as the source computes it), which stays honest as field sizes change between series. Field size is the canonical result row's count of cars in the result.`
+              note: `${classified} races with a classified finish: start, finish and field size (the canonical result row's count of cars in the result). How high a dot sits is the share of the other cars he finished ahead of: (field − place) ÷ (field − 1), so a win is at the top of its step and a last place at the bottom. It stays fair as field sizes change between series.`
             },
             {
               label: 'Canonical career results · no classified finish',
               path: 'data/career/career.dataset.json',
-              note: `${unclassified} races with no finishing position in the source (a DNF, DNS or DSQ): drawn as a cross, with no percentile and no race page. Together, ${model.races.length} races, the record's count.`
+              note: `${unclassified} races with no finishing position in the source (a DNF, DNS or DSQ): drawn as a cross under its step, each with its own race page. Together, ${model.races.length} races, the record's count.`
             },
             {
               label: 'How the chart is drawn',
               path: 'src/screens/climb/model.ts',
-              note: 'A step per series in the order he first raced it; the three 2019 Formula F series (SCCA Super Tour, F1600, Right Coast) share one step. USF Pro 2000 and the Rolex 24 ran during his INDY NXT years and sit on that step as one-offs. The line on each step is a seven-race trimmed mean of his percentile there (the middle 60% of the window). Named moments use the package’s deterministic rules.'
+              note: 'A step per series in the order he first raced it; the three 2019 series (SCCA Super Tour, F1600 and RCFFS) share one step, as they share a car class and their meetings interleave; each dot keeps its own series’ colour. USF Pro 2000 and the Rolex 24 ran during his INDY NXT years and sit on that step as one-offs. The line on each step is a seven-race trimmed mean of that share (the middle 60% of the window). Named moments use the package’s deterministic rules.'
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
@@ -77,7 +77,7 @@ const NewClimb = ({ version }: { version: Exclude<Version, 'old'> }) => {
       <p className="caption caption--secondary climb-caption">
         {version === 'stairs' ? (
           <>
-            One step per series, in the order he raced them · the higher the dot, the more of the field he beat · ✕ no classified finish ·{' '}
+            One step per series, in the order he raced them · the higher the dot, the more of the other cars he finished ahead of · ✕ no classified finish ·{' '}
             <PointerOpen what="any dot" then="to open its race" />
           </>
         ) : (

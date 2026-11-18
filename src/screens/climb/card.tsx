@@ -3,14 +3,13 @@ import { useCoarsePointer } from '../../app/charts';
 import { TAP_CARD, TapAction, useTouchPlacement, type TapPreview } from '../../app/tapPreview';
 import { useVenuePicture } from '../../app/venuePeek';
 import { chapterTint } from '../careerExplorer';
+import { beatLine, placeLine } from '../../app/raceFacts';
 import { clamp, statusWords, type ClimbRace } from './model';
 
 /* The climb's race card: the explorer's mouse card (its track's 3D still on
  * top where the venue is modelled, then series, race, numbers) and, on a
  * touch screen, the same card placed by the tap-to-read rules with its
  * "Open the race →" row. A race with no page (the 8 unclassified) says so. */
-
-const pct = (value: number) => Math.round(value * 100);
 
 const Body = ({ race }: { race: ClimbRace }) => {
   const classified = race.finish !== null;
@@ -28,9 +27,9 @@ const Body = ({ race }: { race: ClimbRace }) => {
       <strong className="climb-card__title">{race.title}</strong>
       {classified ? (
         <span className="climb-card__nums">
-          {race.start !== null ? `P${race.start} → ` : 'finished '}
-          <b>P{race.finish}</b>
-          {race.field ? ` of ${race.field}` : ''} · beat <b>{pct(race.percentile ?? 0)}%</b> of the field
+          {race.start !== null ? `P${race.start} → ` : ''}
+          <b>{placeLine(race.finish, race.field) ?? `P${race.finish}`}</b>
+          {beatLine(race.finish, race.field) ? ` · ${beatLine(race.finish, race.field)}` : ''}
         </span>
       ) : (
         <span className="climb-card__nums">
@@ -77,7 +76,7 @@ export const ClimbCard = ({
       {picture ? <img className="climb-card__still" src={picture.src600} width={picture.width} height={picture.height} alt="" decoding="async" /> : null}
       <div className="climb-card__body">
         <Body race={race} />
-        <span className="climb-card__action">{race.hasPage ? 'Click to open the race' : 'No race page: no classified result'}</span>
+        <span className="climb-card__action">{race.hasPage ? 'Click to open the race' : 'No race page'}</span>
       </div>
     </div>
   );
@@ -105,7 +104,7 @@ const TouchCard = ({
       {still ? <img className="climb-card__still" src={still.src600} width={still.width} height={still.height} alt="" decoding="async" /> : null}
       <div className="climb-card__body">
         <Body race={race} />
-        {race.hasPage ? <TapAction tap={tap} label="open the race" /> : <span className="climb-card__note">No race page: no classified result</span>}
+        {race.hasPage ? <TapAction tap={tap} label="open the race" /> : <span className="climb-card__note">No race page</span>}
       </div>
     </div>
   );

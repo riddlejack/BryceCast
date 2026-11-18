@@ -3,6 +3,8 @@ import { asNumber, asString } from '../../app/format';
 import { uiDataPackage, type UiCareerMoment } from '../../data/uiDataPackage';
 import { chapterTint, seriesShort, useCareerRows } from '../careerExplorer';
 import { raceName } from '../careerRaceNames';
+import { useArchiveRaces, useSheetRaces } from '../careerRaceList';
+import { beatLine, beatShare, placeLine } from '../../app/raceFacts';
 
 /* ============================================================================
  * The climb's model (career round 2, November 17, 2026).
@@ -15,8 +17,8 @@ import { raceName } from '../careerRaceNames';
  * and which step of the climb a series sits on.
  *
  * The steps are the series in the order he reached them. The three 2019
- * Formula F series (SCCA Super Tour, F1600, Right Coast) are one step, as
- * they share a car class. USF Pro 2000 (one race, May 2024) and IMSA (the
+ * series (SCCA Super Tour, F1600 and RCFFS) share one step, as they share a
+ * car class and their meetings interleave; the step names all three. USF Pro 2000 (one race, May 2024) and IMSA (the
  * 2025 Rolex 24) ran inside his INDY NXT years, so they are one-offs drawn on
  * that step in their own colour rather than steps of their own.
  * ==========================================================================*/
@@ -35,8 +37,12 @@ export interface ClimbRace {
   finish: number | null;
   /** Cars in the race's result, from the canonical result row. */
   field: number | null;
-  /** Share of the field beaten, as the conversion table has it; null when unclassified. */
+  /** Share of the field beaten, as the conversion table has it (it counts him); null when unclassified. */
   percentile: number | null;
+  /** How high the mark sits: the share of the other cars he finished ahead
+   *  of (raceFacts beatShare: P1 → 1, last → 0); the table's percentile only
+   *  where the field is unknown; null when unclassified. */
+  share: number | null;
   /** running · contact · mechanical · dnf · dns · dsq */
   status: string;
   wetDry: string | null;
@@ -78,7 +84,7 @@ export interface ClimbModel {
 }
 
 const STEPS: Array<{ key: string; name: string; tintSeries: string; series: string[] }> = [
-  { key: 'formula-f', name: 'Formula F', tintSeries: 'F1600 Championship Series', series: ['Hoosier SCCA Super Tour', 'F1600 Championship Series', 'Right Coast Formula F Series'] },
+  { key: 'formula-f', name: 'SCCA · F1600 · RCFFS', tintSeries: 'F1600 Championship Series', series: ['Hoosier SCCA Super Tour', 'F1600 Championship Series', 'Right Coast Formula F Series'] },
   { key: 'formula-ford', name: 'Formula Ford', tintSeries: 'Formula Ford', series: ['Formula Ford'] },
   { key: 'gb3', name: 'GB3', tintSeries: 'GB3 Championship', series: ['GB3 Championship'] },
   { key: 'euroformula', name: 'Euroformula', tintSeries: 'Euroformula Open', series: ['Euroformula Open'] },
@@ -121,14 +127,22 @@ type CareerLabExtras = {
 
 export const useClimbModel = (): ClimbModel | null => {
   const rows = useCareerRows();
+  const sheets = useSheetRaces();
+  const archive = useArchiveRaces();
   return useMemo(() => {
+    /* Titles, race days and programme order as the race pages have them
+     * (careerRaceList: the campaign's round index and race day), so a card
+     * names a race exactly as the page it opens does. */
+    const named = new Map<string, { title: string; day: string; order: number }>();
+    for (const sheet of sheets) named.set(sheet.row.sessionId, { title: sheet.title, day: sheet.raceDay ?? sheet.meetingDay, order: sheet.order });
+    for (const race of archive) named.set(race.sessionId, { title: race.title, day: race.day, order: race.order });
     const lab = uiDataPackage.screens.careerLab;
     const raw = new Map<string, Record<string, string | number | null>>();
     for (const entry of lab.resultConversion ?? []) {
       const id = asString(entry.sessionId);
       if (id) raw.set(id, entry);
     }
-    type Draft = Omit<ClimbRace, 'title' | 'step' | 'oneOff' | 'index'> & { eventName: string; order: number };
+    type Draft = Omit<ClimbRace, 'title' | 'step' | 'oneOff' | 'index' | 'share'> & { eventName: string; order: number };
     const drafts: Draft[] = rows.map((row) => {
       const source = raw.get(row.sessionId) ?? {};
       return {
@@ -172,8 +186,15 @@ export const useClimbModel = (): ClimbModel | null => {
     /* Date, then the race's number within its meeting. The conversion rows
      * arrive in the order they ran (useCareerRows sorts stably by date), so
      * a meeting without numbers keeps that order. */
+    for (const draft of drafts) {
+      const page = named.get(draft.sessionId);
+      if (page) {
+        draft.date = page.day;
+        draft.order = page.order;
+      }
+    }
     const position = new Map(drafts.map((draft, i) => [draft, i]));
-    drafts.sort((a, b) => a.date.localeCompare(b.date) || (a.order && b.order ? a.order - b.order : 0) || position.get(a)! - position.get(b)!);
+    drafts.sort((a, b) => a.date.localeCompare(b.date) || a.order - b.order || position.get(a)! - position.get(b)!);
 
     /* Which race of its meeting, where the session id has no number (GB3 2022). */
     const seenInEvent = new Map<string, number>();
@@ -185,7 +206,8 @@ export const useClimbModel = (): ClimbModel | null => {
       const sameEvent = drafts.filter((other) => other.eventName === draft.eventName && other.seasonYear === draft.seasonYear).length;
       const name = raceName({ eventName: draft.eventName, sessionId: draft.sessionId, trackName: draft.trackName, raceInRound: sameEvent > 1 ? k : null });
       const { eventName: _e, order: _o, ...rest } = draft;
-      return { ...rest, title: name.title, step, oneOff, index };
+      const share = draft.finish === null ? null : beatShare(draft.finish, draft.field) ?? (draft.field === 1 ? 1 : draft.percentile);
+      return { ...rest, share, title: named.get(draft.sessionId)?.title ?? name.title, step, oneOff, index };
     });
 
     const steps: ClimbStep[] = STEPS.map((def, s) => {
@@ -213,7 +235,7 @@ export const useClimbModel = (): ClimbModel | null => {
 
     const lifeTotal = lab.lifeStats?.figures.find((figure) => figure.id === 'races')?.value;
     return races.length >= 10 ? { races, steps, moments, total: typeof lifeTotal === 'number' ? lifeTotal : races.length } : null;
-  }, [rows]);
+  }, [rows, sheets, archive]);
 };
 
 /* ---------- shared drawing helpers ---------- */
@@ -251,14 +273,15 @@ export const statusWords: Record<string, string> = {
   dsq: 'disqualified'
 };
 
-/** "P4 → P2 · beat 92% of the field", or "started P5 · did not finish". */
+/** "P4 → P8 of 23 · ahead of 15 of the other 22", or "started P5 · did not finish · 12 cars". */
 export const raceNumbers = (race: ClimbRace): string => {
   if (race.finish === null) {
     return [race.start !== null ? `started P${race.start}` : null, statusWords[race.status] ?? race.status, race.field ? `${race.field} cars` : null]
       .filter(Boolean)
       .join(' · ');
   }
-  const move = race.start !== null ? `P${race.start} → P${race.finish}` : `finished P${race.finish}`;
-  const of = race.field ? ` of ${race.field}` : '';
-  return `${move}${of}`;
+  const place = placeLine(race.finish, race.field) ?? `P${race.finish}`;
+  const move = race.start !== null ? `P${race.start} → ${place}` : place;
+  const beat = beatLine(race.finish, race.field);
+  return beat ? `${move} · ${beat}` : move;
 };
