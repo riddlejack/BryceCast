@@ -532,6 +532,32 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
+  },
+  "homestead-miami-road-course": {
+   "file": "/tracks-3d/models/homestead-miami-road-course.json",
+   "kind": "venue",
+   "bytes": 110306,
+   "gzipBytes": 35348,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/homestead-miami-road-course-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "mugello-gp": {
+   "file": "/tracks-3d/models/mugello-gp.json",
+   "kind": "venue",
+   "bytes": 213556,
+   "gzipBytes": 77199,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/mugello-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",

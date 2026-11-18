@@ -8094,6 +8094,50 @@
      "track_daytona_international_speedway"
     ],
     "call": "Sports-car road course, 12 turns, 3.56 mi (5.729 km), counterclockwise: 2025 Rolex 24 (research notes item 10). OSM loop through the International and West Horseshoes and the Le Mans (Bus Stop) chicane, not the '2021 NASCAR chicane' (5768 m). One OSM link way is tagged oneway=alternating, so this layout searches every kept way, not only oneway ones. Post-2023 kerb and paving changes at the Bus Stop left the layout unchanged. Pit lane: the main pit road along the tri-oval (OSM way 352067003), not the infield road-course pit lane; start/finish beside its middle (approximate: OSM has no start/finish node)."
+   },
+   "homestead-miami-road-course": {
+    "camera": {
+     "azim": 210,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -14.964360636847776,
+      -27.094047167275885,
+      -21.822961336159313
+     ],
+     "D": 1609.8823886643045,
+     "elev": 40,
+     "azim": 210
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.35404547950062,
+    "layout": "Road course using oval turns 3 and 4",
+    "trackIds": [],
+    "call": "2.300-mile road course using oval turns 3 and 4 (not the 2.21-mile all-infield course): SCCA U.S. Majors Tour Southeast Conference, Formula F, 4-6 January 2019, two races recorded as gaps. The official results PDF prints 2.300 miles for every group that weekend, Bryce's Group 7 included."
+   },
+   "mugello-gp": {
+    "camera": {
+     "azim": 235,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      3.8342036914566617,
+      62.08653142971308,
+      8.818395455275594
+     ],
+     "D": 2381.181265596822,
+     "elev": 40,
+     "azim": 235
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.79504278217347,
+    "layout": "Grand Prix",
+    "trackIds": [],
+    "call": "The one Mugello circuit, 5.245 km, 15 turns, clockwise: Euroformula Open 2023 Round 7, 30 September and 1 October, two races recorded as gaps (reported results only)."
    }
   },
   "generated": "2026-11-17",
