@@ -188,7 +188,7 @@
   width: 11px;
   height: 11px;
   background: var(--bryce);
-  box-shadow: inset 0 0 0 1.5px var(--ink);
+  box-shadow: inset 0 0 0 1px var(--amber);
   margin-left: 8px;
   vertical-align: -2px;
 }

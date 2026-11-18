@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
-import conversionCsv from '../../../analysis/qualifying-layer/output/tables/quali_race_conversion.csv?raw';
+import { useMemo, useRef, useState, type MouseEvent } from 'react';
 import { SourcePill } from '../../app/components';
 import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
 import type { VenueTip } from '../../app/venueCard';
@@ -7,10 +6,21 @@ import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
-import { QualiConversion, Segmented, chapterTint, raceHref, seriesShort, useCareerRows } from '../careerExplorer';
+import { QualiConversion, Segmented, chapterTint, raceHref, seriesShort } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
-import { placeLine } from '../../app/raceFacts';
-import { raceFieldOf, raceTitleOf } from '../raceCardFacts';
+import {
+  OUTCOMES,
+  easeOutCubic,
+  placesWord,
+  posTicks,
+  tallies,
+  tipOf,
+  useQualiRaces,
+  useRevealClock,
+  type QualiRace,
+  type SeriesTally
+} from './qualifyingData';
+import { FlagRuns, FlagSplit, type SplitLayout } from './qualifyingFlag';
 import './qualifying.css';
 
 /* ============================================================
@@ -36,174 +46,6 @@ import './qualifying.css';
  *                      to the flag, chapters labelled in place.
  * ============================================================ */
 
-type Outcome = 'ahead' | 'held' | 'behind';
-
-interface QualiRace {
-  sessionId: string;
-  seriesId: string;
-  seriesName: string;
-  seasonYear: number;
-  label: string;
-  trackName: string | null;
-  date: string;
-  grid: number;
-  gridField: number;
-  finish: number;
-  finishField: number;
-  outcome: Outcome;
-}
-
-/* A small quote-aware CSV reader: one event name carries a comma. */
-const parseCsv = (text: string): Array<Record<string, string>> => {
-  const rows: string[][] = [];
-  let field = '';
-  let row: string[] = [];
-  let quoted = false;
-  for (let i = 0; i < text.length; i += 1) {
-    const ch = text[i];
-    if (quoted) {
-      if (ch === '"' && text[i + 1] === '"') {
-        field += '"';
-        i += 1;
-      } else if (ch === '"') quoted = false;
-      else field += ch;
-    } else if (ch === '"') quoted = true;
-    else if (ch === ',') {
-      row.push(field);
-      field = '';
-    } else if (ch === '\n' || ch === '\r') {
-      if (ch === '\r' && text[i + 1] === '\n') i += 1;
-      row.push(field);
-      field = '';
-      if (row.some((cell) => cell !== '')) rows.push(row);
-      row = [];
-    } else field += ch;
-  }
-  if (field !== '' || row.length) {
-    row.push(field);
-    rows.push(row);
-  }
-  const [head, ...body] = rows;
-  return body.map((cells) => Object.fromEntries(head.map((key, index) => [key, cells[index] ?? ''])));
-};
-
-const OUTCOMES: Outcome[] = ['ahead', 'held', 'behind'];
-
-/** The 77 races, joined to the career rows for their names and dates, or null when they disagree with the package. */
-const useQualiRaces = (): QualiRace[] | null => {
-  const careerRows = useCareerRows();
-  return useMemo(() => {
-    const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
-    const nameById = new Map((layer.bySeries ?? []).map((row) => [row.seriesId, row.seriesName]));
-    const careerById = new Map(careerRows.map((row) => [row.sessionId, row]));
-    const races: QualiRace[] = [];
-    for (const raw of parseCsv(conversionCsv)) {
-      const grid = Number(raw.qualiRank);
-      const finish = Number(raw.finish);
-      const outcome = raw.conversionOutcome as Outcome;
-      if (!Number.isFinite(grid) || !Number.isFinite(finish) || !OUTCOMES.includes(outcome)) return null;
-      const career = careerById.get(raw.raceSessionId);
-      races.push({
-        sessionId: raw.raceSessionId,
-        seriesId: raw.seriesId,
-        seriesName: nameById.get(raw.seriesId) ?? raw.seriesName,
-        seasonYear: Number(raw.seasonYear),
-        label: career?.raceLabel ?? `${raw.eventName} · ${raw.raceLabel}`,
-        trackName: career?.trackName ?? null,
-        date: career?.date ?? `${raw.seasonYear}-01-01`,
-        grid,
-        gridField: Number(raw.qualiFieldSize),
-        finish,
-        finishField: Number(raw.raceFieldSize),
-        outcome
-      });
-    }
-    // The checks: career totals, then every series' totals, exactly as the package has them.
-    const career = layer.career;
-    const count = (list: QualiRace[], outcome: Outcome) => list.filter((race) => race.outcome === outcome).length;
-    if (races.length !== career.conversionRaces) return null;
-    if (count(races, 'ahead') !== career.finishedAhead || count(races, 'held') !== career.held || count(races, 'behind') !== career.finishedBehind) return null;
-    for (const row of layer.bySeries ?? []) {
-      const mine = races.filter((race) => race.seriesId === row.seriesId);
-      if (mine.length !== row.conversionRaces) return null;
-      if (count(mine, 'ahead') !== row.finishedAhead || count(mine, 'held') !== row.held || count(mine, 'behind') !== row.finishedBehind) return null;
-    }
-    // the outcome agrees with the two positions it is read from
-    for (const race of races) {
-      const read: Outcome = race.finish < race.grid ? 'ahead' : race.finish === race.grid ? 'held' : 'behind';
-      if (read !== race.outcome) return null;
-    }
-    return races.sort((a, b) => a.date.localeCompare(b.date) || a.sessionId.localeCompare(b.sessionId));
-  }, [careerRows]);
-};
-
-const placesWord = (n: number) => `${n} place${n === 1 ? '' : 's'}`;
-
-const tipOf = (race: QualiRace): Omit<VenueTip, 'x' | 'y'> => {
-  const delta = race.grid - race.finish;
-  return {
-    venue: { sessionId: race.sessionId, trackName: race.trackName },
-    meta: `${seriesShort(race.seriesName)} · ${race.seasonYear}`,
-    tint: chapterTint(race.seriesName),
-    title: raceTitleOf(race.sessionId, race.label),
-    detail: `qualified ${placeLine(race.grid, race.gridField) ?? `P${race.grid}`} · finished ${placeLine(race.finish, raceFieldOf(race.sessionId)) ?? `P${race.finish}`}`,
-    note: delta > 0 ? `made up ${placesWord(delta)}` : delta < 0 ? `gave back ${placesWord(-delta)}` : 'held his slot',
-    action: 'open the race'
-  };
-};
-
-const easeOutCubic = (t: number) => 1 - (1 - Math.min(1, Math.max(0, t))) ** 3;
-
-/** Milliseconds since the chart first came into view (Infinity when motion is off or done). */
-const useRevealClock = (active: boolean, reduced: boolean, totalMs: number): number => {
-  const [elapsed, setElapsed] = useState(reduced ? Number.POSITIVE_INFINITY : 0);
-  useEffect(() => {
-    if (reduced) {
-      setElapsed(Number.POSITIVE_INFINITY);
-      return undefined;
-    }
-    if (!active) return undefined;
-    let frame = 0;
-    const start = performance.now();
-    const step = (now: number) => {
-      const ms = now - start;
-      if (ms >= totalMs) {
-        setElapsed(Number.POSITIVE_INFINITY);
-        return;
-      }
-      setElapsed(ms);
-      frame = requestAnimationFrame(step);
-    };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
-  }, [active, reduced, totalMs]);
-  return elapsed;
-};
-
-const posTicks = (max: number) => [1, 5, 10, 15, 20, 25, 30, 35].filter((p) => p <= max);
-
-/* ---------- each chapter's own count ---------- */
-
-interface SeriesTally {
-  seriesId: string;
-  seriesName: string;
-  races: QualiRace[];
-  ahead: number;
-  held: number;
-  behind: number;
-}
-
-const tallies = (races: QualiRace[]): SeriesTally[] => {
-  const order = (uiDataPackage.screens.careerLab.qualifyingLayer.bySeries ?? []).filter((row) => row.conversionRaces > 0);
-  return order.map((row) => ({
-    seriesId: row.seriesId,
-    seriesName: row.seriesName,
-    races: races.filter((race) => race.seriesId === row.seriesId),
-    ahead: row.finishedAhead,
-    held: row.held,
-    behind: row.finishedBehind
-  }));
-};
 
 const SeriesKey = ({ rows, focus, onFocus }: { rows: SeriesTally[]; focus: string | null; onFocus: (seriesId: string | null) => void }) => (
   <ul className="ddq-key" aria-label="By series">
@@ -915,8 +757,9 @@ export const QualifyingDeepDive = () => {
   const races = useQualiRaces();
   const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
   const asked = switchValue('ddquali');
-  const view = asked === 'ladder' ? 'ladder' : asked === 'grid' ? 'grid' : 'gains';
+  const view = asked === 'ladder' ? 'ladder' : asked === 'grid' ? 'grid' : asked === 'old' ? 'gains' : asked === 'runs' ? 'runs' : 'split';
   const [order, setOrder] = useState<GainOrder>('sorted');
+  const [split, setSplit] = useState<SplitLayout>('all');
   if (!races) return <QualiConversion />;
 
   const career = layer.career;
@@ -943,7 +786,17 @@ export const QualifyingDeepDive = () => {
       unit="races finished ahead of where he qualified"
       lede={
         <>
-          {view === 'gains' ? (
+          {view === 'split' ? (
+            <>
+              Every race where qualifying set his start, by how many places he moved from there to the flag: <strong className="ddq-gold">gold</strong> he
+              finished ahead, <strong>ink</strong> behind, a ring he held his slot.
+            </>
+          ) : view === 'runs' ? (
+            <>
+              Each row is one race: a ring where he qualified, a dot where he finished, the front of the grid on the right.{' '}
+              <strong className="ddq-gold">Gold</strong> he made up places, <strong>ink</strong> he lost them.
+            </>
+          ) : view === 'gains' ? (
             <>
               Each line is one race, starting from where he qualified: <strong>up</strong> one step for every place he made up by the flag,{' '}
               <strong>down</strong> for every place he lost. He held his slot in <strong>{career.held}</strong> and finished behind it in{' '}
@@ -981,7 +834,16 @@ export const QualifyingDeepDive = () => {
         />
       }
       controls={
-        view === 'gains' ? (
+        view === 'split' ? (
+          <Segmented
+            options={[
+              { value: 'all', label: 'All races' },
+              { value: 'series', label: 'By series' }
+            ]}
+            value={split}
+            onChange={setSplit}
+          />
+        ) : view === 'gains' ? (
           <Segmented
             options={[
               { value: 'sorted', label: 'Biggest gain first' },
@@ -998,7 +860,17 @@ export const QualifyingDeepDive = () => {
         </>
       }
     >
-      {view === 'ladder' ? <Ladder races={races} /> : view === 'grid' ? <GridAgainstFlag races={races} /> : <Gains races={races} order={order} />}
+      {view === 'split' ? (
+        <FlagSplit races={races} layout={split} />
+      ) : view === 'runs' ? (
+        <FlagRuns races={races} />
+      ) : view === 'ladder' ? (
+        <Ladder races={races} />
+      ) : view === 'grid' ? (
+        <GridAgainstFlag races={races} />
+      ) : (
+        <Gains races={races} order={order} />
+      )}
     </DeepDive>
   );
 };

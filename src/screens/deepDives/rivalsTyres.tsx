@@ -4,6 +4,7 @@ import { TAP_CARD, TapAction, useTapPreview, useTouchPlacement, type TapPreview 
 import { useRouter } from '../../app/router';
 import { VenuePeek, useVenuePicture } from '../../app/venuePeek';
 import { chapterTint, raceHref } from '../careerExplorer';
+import { switchValue } from '../../review/switches';
 import { GROUP_LABEL, surname, teammateWords, type Rival, type RivalRace } from './rivalsModel';
 
 /**
@@ -33,36 +34,92 @@ export const PHONE_ROWS = 12;
 
 /* ---------- the tyre ---------- */
 
-/** One tyre, drawn at unit radius 10 and scaled. Two levels of detail: tread,
- *  stripe and five spokes from about 5 px radius up; rubber, wheel and hub below. */
-export const TyreDefs = ({ prefix }: { prefix: string }) => (
-  <defs>
-    {(['b', 'r'] as const).map((side) => {
-      const wheel = side === 'b' ? GOLD : METAL;
-      return (
-        <g key={side}>
-          <symbol id={`${prefix}-${side}`} viewBox="-10 -10 20 20" overflow="visible">
-            <circle r={10} fill={RUBBER} />
-            <circle r={9.2} fill="none" stroke="#ffffff" strokeOpacity={0.18} strokeWidth={1.2} strokeDasharray="1.5 1.15" />
-            {side === 'b' ? <circle r={7.7} fill="none" stroke={GOLD} strokeWidth={1.05} /> : null}
-            <circle r={6.1} fill={wheel} />
-            {[0, 72, 144, 216, 288].map((angle) => (
-              <path key={angle} d="M -0.8 -2 L -1.4 -5.25 A 5.35 5.35 0 0 1 1.4 -5.25 L 0.8 -2 Z" fill={FACE} fillOpacity={side === 'b' ? 0.42 : 0.36} transform={`rotate(${angle + 36})`} />
-            ))}
-            <circle r={1.35} fill={FACE} />
-          </symbol>
-          <symbol id={`${prefix}-${side}s`} viewBox="-10 -10 20 20" overflow="visible">
-            <circle r={10} fill={RUBBER} />
-            <circle r={6.7} fill={wheel} />
-            <circle r={1.9} fill={FACE} />
-          </symbol>
-        </g>
-      );
-    })}
-  </defs>
-);
+/* Round 3 (November 18, 2026). Jack: "if we could use cleaner tires for the
+ * rivals section, that'd be great." The round 2 tyre carried a dashed tread
+ * ring, a sidewall stripe and five tapered spokes: at 7-10 px they blurred
+ * into noise. The tyre is now three flat shapes plus spokes drawn as plain
+ * strokes, every edge at least a pixel wide at the sizes the charts use:
+ *
+ *   ?rvtyre (default)  spoked: black rubber, a gold (Bryce) or silver (the
+ *                      rival) wheel, five straight spokes and a hub; the
+ *                      spokes are what you see turn as the tyres roll in.
+ *   ?rvtyre=slick      a race slick, no spokes: rubber, wheel, hub, and one
+ *                      short white sidewall mark that shows the roll.
+ *   ?rvtyre=old        round 2's tyre (tread ring, gold stripe, tapered spokes).
+ */
+const tyreStyle = (): 'spoked' | 'slick' | 'old' => {
+  const asked = switchValue('rvtyre');
+  return asked === 'slick' || asked === 'old' ? asked : 'spoked';
+};
 
-export const tyreHref = (prefix: string, ahead: boolean, r: number) => `#${prefix}-${ahead ? 'b' : 'r'}${r < 4.6 ? 's' : ''}`;
+const SPOKES = [0, 72, 144, 216, 288];
+
+/** One tyre, drawn at unit radius 10 and scaled. */
+export const TyreDefs = ({ prefix }: { prefix: string }) => {
+  const style = tyreStyle();
+  return (
+    <defs>
+      {(['b', 'r'] as const).map((side) => {
+        const wheel = side === 'b' ? GOLD : METAL;
+        if (style === 'old') {
+          return (
+            <g key={side}>
+              <symbol id={`${prefix}-${side}`} viewBox="-10 -10 20 20" overflow="visible">
+                <circle r={10} fill={RUBBER} />
+                <circle r={9.2} fill="none" stroke="#ffffff" strokeOpacity={0.18} strokeWidth={1.2} strokeDasharray="1.5 1.15" />
+                {side === 'b' ? <circle r={7.7} fill="none" stroke={GOLD} strokeWidth={1.05} /> : null}
+                <circle r={6.1} fill={wheel} />
+                {SPOKES.map((angle) => (
+                  <path key={angle} d="M -0.8 -2 L -1.4 -5.25 A 5.35 5.35 0 0 1 1.4 -5.25 L 0.8 -2 Z" fill={FACE} fillOpacity={side === 'b' ? 0.42 : 0.36} transform={`rotate(${angle + 36})`} />
+                ))}
+                <circle r={1.35} fill={FACE} />
+              </symbol>
+              <symbol id={`${prefix}-${side}s`} viewBox="-10 -10 20 20" overflow="visible">
+                <circle r={10} fill={RUBBER} />
+                <circle r={6.7} fill={wheel} />
+                <circle r={1.9} fill={FACE} />
+              </symbol>
+            </g>
+          );
+        }
+        const body = (small: boolean) => (
+          <>
+            <circle r={10} fill={RUBBER} />
+            <circle r={6.4} fill={wheel} />
+            {style === 'spoked' && !small
+              ? SPOKES.map((angle) => (
+                  <line key={angle} x1={0} y1={-2.2} x2={0} y2={-5.6} stroke={FACE} strokeOpacity={side === 'b' ? 0.55 : 0.5} strokeWidth={1.25} strokeLinecap="round" transform={`rotate(${angle})`} />
+                ))
+              : null}
+            {style === 'slick' && !small ? <path d="M -3.2 -8.3 A 8.3 8.3 0 0 1 3.2 -8.3" fill="none" stroke="#ffffff" strokeOpacity={0.55} strokeWidth={1.3} strokeLinecap="round" /> : null}
+            <circle r={small ? 1.9 : 1.8} fill={FACE} />
+          </>
+        );
+        return (
+          <g key={side}>
+            <symbol id={`${prefix}-${side}`} viewBox="-10 -10 20 20" overflow="visible">
+              {body(false)}
+            </symbol>
+            <symbol id={`${prefix}-${side}s`} viewBox="-10 -10 20 20" overflow="visible">
+              {body(true)}
+            </symbol>
+          </g>
+        );
+      })}
+    </defs>
+  );
+};
+
+/* Under 7.5 px of radius the spokes and the slick's mark become noise (little
+ * stars on the board and the phone): the small tyre is rubber, wheel and hub.
+ * Round 2's cut-over stays 4.6. */
+export const tyreHref = (prefix: string, ahead: boolean, r: number) =>
+  `#${prefix}-${ahead ? 'b' : 'r'}${r < (tyreStyle() === 'old' ? 4.6 : 7.5) ? 's' : ''}`;
+
+/** Tyre centres on whole pixels and radii on half pixels, so every tyre's
+ *  edge lands the same way on the screen (no soft and sharp neighbours). */
+export const snap = (v: number) => Math.round(v);
+export const snapR = (r: number) => Math.round(r * 2) / 2;
 
 /** A tyre glyph for a key or a label, in its own little SVG. */
 const TyreIcon = ({ ahead, size = 13 }: { ahead: boolean; size?: number }) => {
@@ -70,7 +127,7 @@ const TyreIcon = ({ ahead, size = 13 }: { ahead: boolean; size?: number }) => {
   return (
     <svg width={size} height={size} viewBox="-10.5 -10.5 21 21" aria-hidden className="rv-ty__icon">
       <TyreDefs prefix={prefix} />
-      <use href={tyreHref(prefix, ahead, size / 2)} x={-10} y={-10} width={20} height={20} />
+      <use href={`#${prefix}-${ahead ? 'b' : 'r'}`} x={-10} y={-10} width={20} height={20} />
     </svg>
   );
 };
@@ -306,7 +363,7 @@ export const TyreBoard = ({ rivals, sort }: { rivals: Rival[]; sort: SortKey }) 
     spineR = spineL + nameCol;
     groupGap = sort === 'record' ? 32 : 0;
   }
-  const r = cell / 2 - Math.max(0.35, cell * 0.035);
+  const r = snapR(cell / 2 - Math.max(0.35, cell * 0.035));
 
   const places: RowPlace[] = [];
   const groupHeads: Array<{ group: Rival['group']; y: number; count: number }> = [];
@@ -402,7 +459,7 @@ export const TyreBoard = ({ rivals, sort }: { rivals: Rival[]; sort: SortKey }) 
             {phone ? null : (
               <>
                 <g transform={`translate(${spineL - 4}, ${header - 17})`}>
-                  <use href={tyreHref(prefix, false, 6)} x={-12} y={-6} width={12} height={12} />
+                  <use href={tyreHref(prefix, false, r)} x={-12} y={-6} width={12} height={12} />
                   <text x={-17} y={4} textAnchor="end" className="rv__side" fill={INK} fontFamily={chartFont}>
                     rival ahead
                   </text>
@@ -411,7 +468,7 @@ export const TyreBoard = ({ rivals, sort }: { rivals: Rival[]; sort: SortKey }) 
                   one tyre per race
                 </text>
                 <g transform={`translate(${spineR + 4}, ${header - 17})`}>
-                  <use href={tyreHref(prefix, true, 6)} x={0} y={-6} width={12} height={12} />
+                  <use href={tyreHref(prefix, true, r)} x={0} y={-6} width={12} height={12} />
                   <text x={17} y={4} textAnchor="start" className="rv__side" fill={GOLD_TEXT} fontFamily={chartFont}>
                     Bryce ahead
                   </text>
@@ -420,11 +477,11 @@ export const TyreBoard = ({ rivals, sort }: { rivals: Rival[]; sort: SortKey }) 
             )}
             {phone ? (
               <g transform={`translate(4, ${header - 16})`}>
-                <use href={tyreHref(prefix, true, 6)} x={0} y={-6} width={12} height={12} />
+                <use href={tyreHref(prefix, true, r)} x={0} y={-6} width={12} height={12} />
                 <text x={16} y={4} className="rv__side" fill={GOLD_TEXT} fontFamily={chartFont}>
                   Bryce ahead
                 </text>
-                <use href={tyreHref(prefix, false, 6)} x={112} y={-6} width={12} height={12} />
+                <use href={tyreHref(prefix, false, r)} x={112} y={-6} width={12} height={12} />
                 <text x={128} y={4} className="rv__side" fill={INK} fontFamily={chartFont}>
                   rival ahead
                 </text>
@@ -494,7 +551,7 @@ export const TyreBoard = ({ rivals, sort }: { rivals: Rival[]; sort: SortKey }) 
                     const lit = hoveredRace === null || hoveredRace === tyre.race.sessionId;
                     const isFocus = lit && hoveredRace !== null && hoveredRival === rival.name;
                     return (
-                      <g key={tyre.race.sessionId} transform={`translate(${tyre.x}, ${tyre.y})`} data-race={tyre.race.sessionId} className="rv-ty__tyre" style={{ opacity: lit ? 1 : 0.2 }}>
+                      <g key={tyre.race.sessionId} transform={`translate(${snap(tyre.x)}, ${snap(tyre.y)})`} data-race={tyre.race.sessionId} className="rv-ty__tyre" style={{ opacity: lit ? 1 : 0.2 }}>
                         <g className="rv-ty__roll" style={rollStyle(tyre.from, tyre.x, rowIndex)}>
                           <use href={tyreHref(prefix, tyre.race.ahead, r)} x={-r} y={-r} width={r * 2} height={r * 2} />
                         </g>
