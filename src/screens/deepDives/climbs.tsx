@@ -18,7 +18,7 @@ import { switchValue } from '../../review/switches';
 import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
-import { finishLine, raceFieldOf } from '../raceCardFacts';
+import { finishLine, raceFieldOf, raceTitleOf } from '../raceCardFacts';
 import { FlagDot, RUN_W, StartRing, runColour, runOpacity } from './flagMarks';
 import './climbs.css';
 
@@ -179,7 +179,7 @@ const tipWords = (climb: Climb): Omit<VenueTip, 'x' | 'y'> =>
   });
 
 const ariaFor = (climb: Climb) =>
-  `${climb.row.raceLabel}, ${climb.row.seasonYear ?? ''}: from P${climb.start} to P${climb.finish}, ${climb.gain} places${
+  `${raceTitleOf(climb.row.sessionId, climb.row.raceLabel)}, ${climb.row.seasonYear ?? ''}: from P${climb.start} to P${climb.finish}, ${climb.gain} places${
     climb.field !== null ? `, ${climb.field} classified` : ''
   }. Open the race.`;
 
@@ -638,7 +638,7 @@ export const ClimbsDeepDive = () => {
           <strong>
             P{top.start} to P{top.finish}
           </strong>{' '}
-          at the {top.row.raceLabel}. His five biggest climbs, each drawn to the length of the field he raced.
+          at {raceTitleOf(top.row.sessionId, top.row.raceLabel)}, {top.row.seasonYear}. His five biggest climbs, each drawn to the length of the field he raced.
         </>
       }
       sources={

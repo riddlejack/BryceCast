@@ -1,4 +1,5 @@
 import type { UiCareerRival } from '../../data/uiDataPackage';
+import { raceTitleOf } from '../raceCardFacts';
 import type { CareerRow } from '../careerExplorer';
 
 /* The rivals' data, shared by every design behind ?ddrivals (career round 2,
@@ -44,7 +45,8 @@ export const toRival = (rival: UiCareerRival, rowsById: Map<string, CareerRow>):
     const row = rowsById.get(race.sessionId);
     return {
       sessionId: race.sessionId,
-      label: row?.raceLabel ?? race.sessionId,
+      /* the race's clean name, as every other card names it (raceCardFacts → careerRaceNames) */
+      label: raceTitleOf(race.sessionId, row?.raceLabel ?? race.sessionId),
       year: row?.seasonYear ?? null,
       trackName: row?.trackName ?? '',
       date: row?.date ?? '',
