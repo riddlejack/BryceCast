@@ -17,6 +17,9 @@ import { fieldSizeFor, useArchiveRaces, type ArchiveRace } from './careerRaceLis
 import { beatLine, placeLine } from '../app/raceFacts';
 import { RaceStillCard, RowPicture } from './racesPeek';
 import { AlsoInYear, EarlierSeason } from './racesEarlier';
+import { anyWet, RainStreaks, wetFor } from './raceWet';
+import { switchValue } from '../review/switches';
+import './fieldFloor.css';
 import './race.css';
 
 /** Archive labels drop the series prefix (everything here is INDY NXT) and
@@ -64,7 +67,8 @@ const SpineCard = ({ row, x, y, width, tap }: { row: UiSeasonIndexRow; x: number
           row.startPosition !== null && row.finishPosition !== null && row.startPosition !== row.finishPosition ? `started P${row.startPosition}` : null,
           row.points !== null ? `${row.points} pts` : null,
           row.standingRank !== null ? `P${row.standingRank} in points` : null,
-          !clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null
+          !clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null,
+          wetFor(row.sessionId)?.words ?? null
         ]
           .filter(Boolean)
           .join(' · ') || null
@@ -98,7 +102,16 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const x = (index: number) => margin.left + (index / (n - 1)) * plotWidth;
 
   const finishes = ordered.map((row) => row.finishPosition ?? 0);
-  const worstFinish = Math.max(...finishes, ...ordered.map((row) => row.startPosition ?? 1));
+  /* The field's floor (round 2, intersections; switch fieldfloor: on | off): a
+   * short dash per round at last place that day, so P20 of 21 and P20 of 24 read
+   * apart. The axis runs to the biggest field so every floor fits. */
+  const floorOn = switchValue('fieldfloor') !== 'off';
+  const fields = ordered.map((row) => (floorOn ? fieldSizeFor(row.sessionId) : null));
+  const worstFinish = Math.max(
+    ...finishes,
+    ...ordered.map((row) => row.startPosition ?? 1),
+    ...fields.filter((value): value is number => value !== null)
+  );
   const yFinish = (position: number) => margin.top + ((position - 1) / Math.max(worstFinish, 2)) * finishPanelHeight;
 
   const standings = ordered.map((row) => row.standingRank).filter((value): value is number => value !== null);
@@ -108,7 +121,8 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const yStanding = (rank: number) =>
     standingTop + ((rank - standingMin) / Math.max(standingMax - standingMin, 1)) * standingPanelHeight;
 
-  const finishTicks = [1, 5, 10, 15, 20, 25].filter((tick) => tick <= worstFinish + 1);
+  const finishTicks = [1, 5, 10, 15, 20, 25].filter((tick) => tick <= worstFinish + (floorOn ? 0 : 1));
+  const floorHalf = Math.max(3, Math.min(8, (plotWidth / Math.max(n - 1, 1)) * 0.28));
   const standingTicks = [...new Set([standingMin + 1, standingMax - 1])].filter(
     (tick) => tick >= standingMin && tick <= standingMax
   );
@@ -227,6 +241,19 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
             />
           ) : null}
 
+          {fields.map((field, index) =>
+            field !== null ? (
+              <line
+                key={`floor-${ordered[index].sessionId}`}
+                className={`field-floor${hovered === index ? ' field-floor--on' : ''}`}
+                x1={x(index) - floorHalf}
+                x2={x(index) + floorHalf}
+                y1={yFinish(field)}
+                y2={yFinish(field)}
+              />
+            ) : null
+          )}
+
           {/* QoL 2 (proxy review 1): the season line in INDY NXT's own gold, so
               gold means one thing site-wide; a top 5 is ringed, as a win is
               on the earlier seasons. */}
@@ -248,6 +275,10 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                   strokeWidth={1.6}
                   style={{ transition: 'r 120ms ease' }}
                 />
+                {(() => {
+                  const wet = wetFor(row.sessionId);
+                  return wet ? <RainStreaks cx={x(index)} cy={pointY} r={topFive ? dotR + 3.4 : dotR} read={wet} /> : null;
+                })()}
               </g>
             );
           })}
@@ -596,7 +627,10 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
                 between it and the completed rows, so the whole card reads as
                 one timeline — future at the top, past running down. */}
             <p className="caption caption--secondary races-index__legend">
-              A ring marks a top-5 finish · a hollow dot a day that ended early · the quiet line is his championship position · <PointerOpen what="any round" />
+              A ring marks a top-5 finish · a hollow dot a day that ended early
+              {anyWet(rows.map((row) => row.sessionId)) ? ' · rain streaks a wet track' : ''}
+              {switchValue('fieldfloor') !== 'off' ? ' · a short dash marks last place in that day’s field' : ''} · the quiet line is his championship position ·{' '}
+              <PointerOpen what="any round" />
             </p>
             <SeasonSpine rows={rows} />
             {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}

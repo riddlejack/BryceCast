@@ -1,6 +1,8 @@
 import { useCallback, useRef } from 'react';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
 import { loadStillIndex, stillPictureFor, useStillIndex, type StillIndex, type StillPicture } from './trackStill';
+import { sceneWeatherFor, weatherTake } from '../three/weather/sceneWeather';
+import { StillWeather, useStillCentreline } from '../three/weather/StillWeather';
 
 /* ============================================================================
  * The track's 3D still for any venue in the career (career round 2, Nov 17 2026).
@@ -79,20 +81,40 @@ export const useVenuePicture = (ref: VenueRef): StillPicture | null | undefined 
   return venuePictureFor(index, ref);
 };
 
+/** A card's still, with the race hour's weather laid over it (the race's own sky, rain and wind arrow; none for a
+ *  venue mark or a race with no weather on file). Without weather it is the plain <img>, as before; with it, the
+ *  card's class moves to a positioned box round the picture, so the card's own sizing and margins still hold. */
+export const CardStill = ({
+  className,
+  venue,
+  picture,
+  size = 600,
+  loading
+}: {
+  className: string;
+  venue: VenueRef;
+  picture: StillPicture;
+  size?: 600 | 1200;
+  loading?: 'lazy' | 'eager';
+}) => {
+  const index = useStillIndex();
+  const weather = venue.plain || weatherTake() === 'off' ? null : sceneWeatherFor(venue.sessionId);
+  const centreline = useStillCentreline(weather ? picture.geometry : null);
+  const src = size === 1200 ? picture.src1200 : picture.src600;
+  if (!weather) return <img className={className} src={src} width={picture.width} height={picture.height} alt="" loading={loading} decoding="async" draggable={false} />;
+  return (
+    <span className={`${className} wx-peek`}>
+      <img className="wx-peek__img" src={src} width={picture.width} height={picture.height} alt="" loading={loading} decoding="async" draggable={false} />
+      <StillWeather slug={venueSlugFor(index, venue)} weather={weather} centreline={centreline} aspect={picture.width / picture.height} />
+    </span>
+  );
+};
+
 /** The still itself, sized by the card; renders nothing without a model. */
 export const VenuePeek = ({ className, size = 600, ...ref }: VenueRef & { className?: string; size?: 600 | 1200 }) => {
   const picture = useVenuePicture(ref);
   if (!picture) return null;
-  return (
-    <img
-      className={className ?? 'venue-peek'}
-      src={size === 1200 ? picture.src1200 : picture.src600}
-      width={picture.width}
-      height={picture.height}
-      alt=""
-      decoding="async"
-    />
-  );
+  return <CardStill className={className ?? 'venue-peek'} venue={ref} picture={picture} size={size} />;
 };
 
 /* ---------- a venue with no model yet ---------- */

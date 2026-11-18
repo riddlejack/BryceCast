@@ -13,6 +13,7 @@ export const WeatherRain = ({
   drift = () => 0,
   reduced = false,
   scale = 1,
+  density = 1,
   className = 'wx-rain'
 }: {
   /** 0..1: how hard it rains (drizzle about 0.3, moderate rain 0.6). */
@@ -22,6 +23,8 @@ export const WeatherRain = ({
   reduced?: boolean;
   /** Streak size against a full-size stage (a small still: about 0.6). */
   scale?: number;
+  /** Streaks per area against the full-size stage (a small still: about 2, so a card's few square inches still read as rain). */
+  density?: number;
   className?: string;
 }) => {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -44,7 +47,8 @@ export const WeatherRain = ({
       y: fromTop ? -Math.random() * 40 : Math.random() * H,
       len: (7 + Math.random() * (6 + 9 * intensity)) * scale,
       speed: (0.55 + Math.random() * 0.35 + intensity * 0.55) * Math.max(0.6, scale),
-      alpha: 0.13 + Math.random() * 0.1 + intensity * 0.12
+      // a small still's streaks are fewer pixels: darker, so they still read as rain
+      alpha: (0.13 + Math.random() * 0.1 + intensity * 0.12) * (scale < 1 ? 1 + (1 - scale) * 1.6 : 1)
     });
     const size = () => {
       dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -52,7 +56,7 @@ export const WeatherRain = ({
       H = canvas.clientHeight;
       canvas.width = Math.max(1, Math.round(W * dpr));
       canvas.height = Math.max(1, Math.round(H * dpr));
-      const count = Math.round(((W * H) / (1600 * scale * scale)) * (0.25 + intensity * 0.75));
+      const count = Math.round(((W * H) / (1600 * scale * scale)) * (0.25 + intensity * 0.75) * density);
       drops = Array.from({ length: Math.min(900, count) }, () => seed(false));
     };
     const draw = () => {
@@ -110,7 +114,7 @@ export const WeatherRain = ({
       seen.disconnect();
       document.removeEventListener('visibilitychange', vis);
     };
-  }, [intensity, reduced, scale]);
+  }, [intensity, reduced, scale, density]);
 
   if (intensity <= 0) return null;
   return <canvas ref={ref} className={className} aria-hidden />;

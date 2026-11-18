@@ -7,12 +7,102 @@
       "title": "Yellow flags on the lap chart: every full-course caution as a faint yellow band behind the field's lines, so you can see why the order shuffles where it does",
       "switch": "lapyellow",
       "values": [
-        { "value": null, "label": "on (default): a yellow wash from the lap the caution came out to its last lap under yellow, a flag tab above the chart, a hairline where the field went green" },
-        { "value": "off", "label": "off: the lap chart as it was" }
+        {
+          "value": null,
+          "label": "on (default): a yellow wash from the lap the caution came out to its last lap under yellow, a flag tab above the chart, a hairline where the field went green"
+        },
+        {
+          "value": "off",
+          "label": "off: the lap chart as it was"
+        }
       ],
-      "look": "Any INDY NXT race page → The race, lap by lap. Detroit 2024 has four cautions (14 of 45 laps under yellow). Point at a yellow tab (or tap it) to read the caution: its cause, its laps, the restart lap. Hover a line inside a band and the card says 'under yellow'.",
+      "look": "Any INDY NXT race page \u2192 The race, lap by lap. Detroit 2024 has four cautions (14 of 45 laps under yellow). Point at a yellow tab (or tap it) to read the caution: its cause, its laps, the restart lap. Hover a line inside a band and the card says 'under yellow'.",
       "anchor": "",
       "added": "2026-11-17T23:30",
+      "reviewed": false
+    },
+    {
+      "id": "r2-leg-mode",
+      "page": "/career",
+      "title": "Flights arc, drives stay on the ground: on the travel map, legs the rule of thumb calls a flight lift off the globe with a faint dashed ground shadow; drives are drawn flat",
+      "switch": "legmode",
+      "values": [
+        {
+          "value": null,
+          "label": "arc (default): drives flat on the globe, flights lifted with their ground track as a dashed shadow; the leg readout says 'a drive' or 'a flight'"
+        },
+        {
+          "value": "off",
+          "label": "off: every leg lifts a little by its length, as before"
+        }
+      ],
+      "look": "Career \u2192 The travel map. Watch the journey play: the Atlantic crossings and the West Coast trips rise; the UK and Midwest hops stay on the ground. The readout under the big figure says which each leg is.",
+      "anchor": "",
+      "added": "2026-11-18T00:30",
+      "reviewed": false
+    },
+    {
+      "id": "r2-rain-marks",
+      "page": "/races",
+      "title": "Rain on the race marks: a wet race's dot gets short rain streaks (three for wet, two fainter for damp or drying) on the INDY NXT season charts, the earlier seasons' charts and the 'His \u2026 races' chart on each race page; the card says 'wet track', with '(modelled)' when the call comes from the weather model",
+      "switch": "rainmarks",
+      "values": [
+        {
+          "value": null,
+          "label": "on (default): streaks in the rain dive's blue"
+        },
+        {
+          "value": "ink",
+          "label": "ink: the same streaks in grey, so they never sit near a series colour (Formula Ford's navy is close to the rain blue)"
+        },
+        {
+          "value": "off",
+          "label": "off: no marks; cards fall back to the old wet/dry words"
+        }
+      ],
+      "look": "Races \u2192 2026 (Indianapolis Race 1 and World Wide Technology Raceway, both modelled wet) and 2020 (10 of 24 Formula Ford races wet or damp, from the official TSL reports). Also /career/race/session_gb3_2021_212905_race_1_result \u2192 His GB3 races. Point at (or tap) a streaked dot.",
+      "anchor": "",
+      "added": "2026-11-18T01:00",
+      "reviewed": false
+    },
+    {
+      "id": "r2-field-floor",
+      "page": "/races",
+      "title": "The field's floor on each INDY NXT season chart: a short dash per round at last place in that day's field, so P20 of 21 and P20 of 24 read apart",
+      "switch": "fieldfloor",
+      "values": [
+        {
+          "value": null,
+          "label": "on (default): a quiet dash at each round's field size; the hovered round's dash darkens; the axis runs to the biggest field"
+        },
+        {
+          "value": "off",
+          "label": "off: the chart as before"
+        }
+      ],
+      "look": "Races \u2192 2024 season: the field shrinks from 21 cars to 18\u201319 mid-season, so his P19 at St. Petersburg sits on the floor. 2026: 24 cars almost every round, so his P22 and P23 sit just above it.",
+      "anchor": "",
+      "added": "2026-11-18T01:20",
+      "reviewed": false
+    },
+    {
+      "id": "r2-wet-weeks",
+      "page": "/career",
+      "title": "Wet weekends in his life in weeks: a fine paper-coloured diagonal across each race week that held a wet or damp race; the week's card says how many of the meeting's races were wet, '(modelled)' where the weather model made the call",
+      "switch": "wetweeks",
+      "values": [
+        {
+          "value": null,
+          "label": "on (default): 12 weeks marked, most of them UK Formula Ford and GB3 in 2020 and 2021; a key item 'a race on a wet track'"
+        },
+        {
+          "value": "off",
+          "label": "off: the grid as before"
+        }
+      ],
+      "look": "Career \u2192 His life in weeks. The 2020 Formula Ford autumn is where most of the diagonals sit; 2026 has two (Indianapolis in May, World Wide Technology Raceway in June). Point at a marked week.",
+      "anchor": "",
+      "added": "2026-11-18T01:40",
       "reviewed": false
     }
   ]

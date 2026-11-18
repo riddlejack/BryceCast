@@ -10,12 +10,14 @@ import { TrackArt } from '../app/trackArt';
 import { TrackStill, useStillIndex } from '../app/trackStill';
 import { venueSlugFor } from '../app/venuePeek';
 import { TrackModelSlot } from '../three/TrackModelSlot';
+import { sceneWeatherFor } from '../three/weather/sceneWeather';
 import { loadIndex } from '../three/trackModelLoad';
 import { trackOutlineFor } from '../assets/tracks';
 import { switchValue } from '../review/switches';
 import { chapterTint, raceHref, seriesShort } from './careerExplorer';
 import { enteredBySeries, statusShort, useArchiveRaces, statusWords, unclassifiedRaceFor, unclassifiedTitle, useSheetRaces, type SheetRace } from './careerRaceList';
 import { DeepTip } from './deepDives/frame';
+import { RainStreaks, wetFor } from './raceWet';
 import './careerRace.css';
 
 /* ============================================================================
@@ -437,8 +439,11 @@ const ChapterChart = ({
     detail: [
       shortDay(race),
       race.row.start !== null ? `P${race.row.start} → P${race.row.finish}` : `finished P${race.row.finish}`,
-      `beat ${Math.round(race.row.percentile * 100)}% of the field`
-    ].join(' · '),
+      `beat ${Math.round(race.row.percentile * 100)}% of the field`,
+      wetFor(race.row.sessionId)?.words ?? null
+    ]
+      .filter(Boolean)
+      .join(' · '),
     action: race.row.sessionId === current.row.sessionId ? undefined : 'open the race page'
   });
 
@@ -495,6 +500,24 @@ const ChapterChart = ({
               />
             );
           })}
+          {/* rain streaks over a wet race's dot (round 2, intersections; switch rainmarks) */}
+          {career
+            ? null
+            : races.map((race, index) => {
+                const wet = wetFor(race.row.sessionId);
+                if (!wet) return null;
+                const isThis = index === currentIndex;
+                return (
+                  <RainStreaks
+                    key={`wet-${race.row.sessionId}`}
+                    cx={x(index)}
+                    cy={y(race.row.percentile)}
+                    r={isThis ? 8 : narrow ? 3.8 : 4.6}
+                    read={wet}
+                    dim={hover !== null && hover !== race.row.sessionId}
+                  />
+                );
+              })}
           {currentIndex >= 0 ? (
             <g>
               <line x1={x(currentIndex)} x2={x(currentIndex)} y1={m.top + plotH} y2={y(current.row.percentile)} stroke="var(--ink)" strokeOpacity={0.25} />
@@ -650,6 +673,8 @@ interface SheetTrackInfo {
   kind: 'model' | 'still' | 'line' | 'none' | 'wait';
   /** The picture is the layout he raced that day (a per-session alias). */
   raced: boolean;
+  /** The race, for its race-hour weather on the model and the still. */
+  sessionId: string;
 }
 
 const useSheetTrack = (sessionId: string, trackName: string): SheetTrackInfo => {
@@ -659,9 +684,9 @@ const useSheetTrack = (sessionId: string, trackName: string): SheetTrackInfo => 
   const slug = venueSlugFor(stillIndex, { sessionId, trackName }) ?? outline?.slug ?? null;
   const raced = Boolean(stillIndex && (stillIndex as { bySession?: Record<string, string> }).bySession?.[sessionId]);
   const name = outline?.name ?? trackName;
-  if (stillIndex === undefined || models === undefined) return { slug, name, kind: 'wait', raced };
+  if (stillIndex === undefined || models === undefined) return { slug, name, kind: 'wait', raced, sessionId };
   const kind = slug && models?.has(slug) ? 'model' : slug && stillIndex?.venues[slug] ? 'still' : outline ? 'line' : 'none';
-  return { slug, name, kind, raced };
+  return { slug, name, kind, raced, sessionId };
 };
 
 const layoutWords = (track: SheetTrackInfo, seriesShort: string, year: number | null): string =>
@@ -681,6 +706,7 @@ const SheetModel = ({ track, words }: { track: SheetTrackInfo; words: string }) 
       name={track.name}
       sections={[]}
       caption={words}
+      weather={sceneWeatherFor(track.sessionId)}
       hint={coarse ? 'Drag sideways to turn it, pinch to zoom.' : 'Drag to turn it, hold ⌘ or Ctrl and scroll to zoom.'}
       fallback={<TrackStill slug={track.slug} interactive={false} alt={`${track.name}: the 3D track.`} sizes="100vw" />}
     />
@@ -699,6 +725,7 @@ const SheetStill = ({ track, words, trackName }: { track: SheetTrackInfo; words:
         interactive={false}
         alt={`${track.name}: the 3D track.`}
         sizes="(max-width: 900px) 100vw, 420px"
+        weather={sceneWeatherFor(track.sessionId)}
         fallback={outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={260} /> : null}
       />
       <figcaption>{words}</figcaption>

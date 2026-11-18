@@ -20,6 +20,7 @@ import {
   type SectionObservationSet
 } from '../data/sectionObservations';
 import { TrackModelSlot } from '../three/TrackModelSlot';
+import { TrackWeatherProvider } from '../three/weather/sceneWeather';
 import type { TrackModelSection } from '../three/TrackModel3D';
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
@@ -1761,12 +1762,14 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         </div>
         {outline ? (
           <div className="race-hero__model">
+            <TrackWeatherProvider sessionId={sessionId}>
             <HeroTrackModel
               outline={outline}
               anchors={sectionAnchors}
               laps={sectionLaps}
               fallbackSet={fallbackSet}
             />
+            </TrackWeatherProvider>
           </div>
         ) : null}
       </section>

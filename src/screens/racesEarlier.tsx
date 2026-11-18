@@ -9,6 +9,7 @@ import { switchValue } from '../review/switches';
 import { chapterTint } from './careerExplorer';
 import { statusShort, statusWords, type ArchiveRace } from './careerRaceList';
 import { RaceStillCard, RowPicture } from './racesPeek';
+import { anyWet, RainStreaks, wetFor } from './raceWet';
 import { useStillIndex } from '../app/trackStill';
 import { venuePictureFor } from '../app/venuePeek';
 import { trackOutlineFor } from '../assets/tracks';
@@ -44,7 +45,7 @@ const noteFor = (race: ArchiveRace): string | null => {
   return [
     race.start !== null && race.finish !== null && race.start !== race.finish ? `started P${race.start}` : null,
     ended ? `ended early: ${ended.toLowerCase()}` : null,
-    race.wetDry && race.wetDry !== 'dry' ? `${race.wetDry} track` : null
+    switchValue('rainmarks') === 'off' ? (race.wetDry && race.wetDry !== 'dry' ? `${race.wetDry} track` : null) : (wetFor(race.sessionId)?.words ?? null)
   ]
     .filter(Boolean)
     .join(' · ') || null;
@@ -191,6 +192,10 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
               <g key={race.sessionId} opacity={dim ? 0.45 : 1}>
                 {win ? <circle cx={x(index)} cy={yOf(race)} r={(on ? r + 1.4 : r) + 3.2} fill="none" stroke="var(--ink-primary)" strokeWidth={1.6} /> : null}
                 <circle cx={x(index)} cy={yOf(race)} r={on ? r + 1.4 : r} fill={tint} stroke="var(--surface-0)" strokeWidth={1.2} />
+                {(() => {
+                  const wet = wetFor(race.sessionId);
+                  return wet ? <RainStreaks cx={x(index)} cy={yOf(race)} r={(on ? r + 1.4 : r) + (win ? 3.2 : 0)} read={wet} /> : null;
+                })()}
               </g>
             );
           })}
@@ -372,7 +377,7 @@ export const EarlierSeason = ({ year, races }: { year: number; races: ArchiveRac
         }
       >
         <p className="caption caption--secondary races-index__legend">
-          <SeriesKey races={races} /> <span className="races-key__how">Each dot a race, by date · a ring marks a win · <PointerOpen what="any race" /></span>
+          <SeriesKey races={races} /> <span className="races-key__how">Each dot a race, by date · a ring marks a win{anyWet(races.map((race) => race.sessionId)) ? ' · rain streaks a wet track' : ''} · <PointerOpen what="any race" /></span>
         </p>
         <YearSpine races={races} year={year} />
         <button type="button" className="races-fold" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
