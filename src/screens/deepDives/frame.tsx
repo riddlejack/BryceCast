@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ChartTipCard, useCoarsePointer, type ChartTip } from '../../app/charts';
+import type { ReactNode } from 'react';
+import { VenueTipCard, type VenueTip } from '../../app/venueCard';
+import { useVenuePreload, type VenueRef } from '../../app/venuePeek';
 import type { TapPreview } from '../../app/tapPreview';
 import { switchValue } from '../../review/switches';
 import './deepDives.css';
@@ -19,7 +20,8 @@ export const DeepDive = ({
   controls,
   foot,
   children,
-  className
+  className,
+  venues
 }: {
   /** The section's one headline number, already formatted ("39 of 77"). */
   figure?: ReactNode;
@@ -35,7 +37,12 @@ export const DeepDive = ({
   foot?: ReactNode;
   children: ReactNode;
   className?: string;
-}) => (
+  /** The races or tracks the chart's marks stand for: their stills are warmed
+   *  the first time the pointer comes onto the stage, so a card never waits. */
+  venues?: () => Iterable<VenueRef>;
+}) => {
+  const preload = useVenuePreload(venues ?? (() => []));
+  return (
   <section className={`dd${className ? ` ${className}` : ''}`}>
     {figure != null || lede || sources ? (
       <div className="dd__head">
@@ -52,33 +59,24 @@ export const DeepDive = ({
       </div>
     ) : null}
     {controls ? <div className="dd__controls">{controls}</div> : null}
-    <div className="dd__stage">{children}</div>
+    <div className="dd__stage" onPointerEnter={venues ? preload : undefined}>
+      {children}
+    </div>
     {foot ? <p className="dd__foot">{foot}</p> : null}
   </section>
-);
+  );
+};
 
 /** Review switch: `?deepdive=old` shows the live site's versions of all six sections. */
 export const useOldDeepDives = (): boolean => switchValue('deepdive') === 'old';
 
 /**
- * The deep dives' race card. On a mouse it is measured and clamped inside the
- * chart so a mark near either edge never pushes it off the page; on touch, or
- * once a tap has armed a race, it is the site's ChartTipCard with "Open the race".
+ * The deep dives' race card: the site's one race card (app/venueCard.tsx).
+ * A tip that names its race (`venue`) shows the track's 3D still on top, the
+ * way the Career explorer's dots always have; placed against the screen so a
+ * mark near either edge never pushes it off the page; on touch, or once a tap
+ * has armed a race, it carries "Open the race".
  */
-export const DeepTip = ({ tip, width, tap }: { tip: ChartTip; width: number; tap?: TapPreview }) => {
-  const coarse = useCoarsePointer();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [w, setW] = useState(300);
-  useEffect(() => {
-    if (ref.current) setW(ref.current.offsetWidth);
-  }, [tip.title, tip.detail]);
-  if (coarse || (tap && tap.armed !== null)) return <ChartTipCard tip={tip} width={width} tap={tap} />;
-  const left = Math.min(Math.max(tip.x - w / 2, 0), Math.max(0, width - w));
-  return (
-    <div ref={ref} className="dd-card" style={{ left, top: tip.y }} role="status">
-      <strong>{tip.title}</strong>
-      {tip.detail ? <span>{tip.detail}</span> : null}
-      {tip.action ? <em>Click to {tip.action}</em> : null}
-    </div>
-  );
-};
+export const DeepTip = ({ tip, width, tap }: { tip: VenueTip; width: number; tap?: TapPreview }) => (
+  <VenueTipCard tip={tip} width={width} tap={tap} />
+);

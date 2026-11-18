@@ -12,6 +12,8 @@ import { uiDataPackage } from '../../data/uiDataPackage';
 import type { UiCitedSource, UiOriginMilestone, UiSourceRef } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
 import { seriesMetaById } from '../careerAtlas';
+import { venueBetween } from '../venueOfDates';
+import type { VenueTip } from '../../app/venueCard';
 import { DeepDive, DeepTip } from './frame';
 import './before.css';
 
@@ -237,7 +239,7 @@ const factTip = (fact: Fact, x: number, y: number, under?: number): ChartTip => 
   detail: `${fact.item.detail}${fact.item.sourceName ? ` Source: ${fact.item.sourceName}.` : ''}`
 });
 
-const monthTip = (month: Month, x: number, y: number, under?: number): ChartTip => {
+const monthTip = (month: Month, x: number, y: number, under?: number): VenueTip => {
   const groups = new Map<string, { short: string; places: string[]; n: number }>();
   for (const race of month.races) {
     const meta = seriesMetaById(race.seriesId);
@@ -251,6 +253,7 @@ const monthTip = (month: Month, x: number, y: number, under?: number): ChartTip 
     y,
     over: y,
     under,
+    venue: month.total > 0 ? venueBetween(month.t, month.t1) : null,
     title: `${monthYear(month.t)} · ${month.total === 0 ? 'no races' : month.total === 1 ? '1 race' : `${month.total} races`}`,
     detail: month.total === 0 ? null : [...groups.values()].map((g) => `${g.short} at ${g.places.join(' and ')} (${g.n})`).join(', ')
   };
@@ -361,7 +364,7 @@ const recordSquares = (months: Month[], at: (month: Month) => { x: number; w: nu
   return out;
 };
 
-type Hover = { tip: ChartTip; key: string } | null;
+type Hover = { tip: VenueTip; key: string } | null;
 
 /** The month under the pointer, or the nearest one with a race when it is within two months (a thin column is easy to miss). */
 const nearestMonth = (months: Month[], i: number): Month | null => {
@@ -873,6 +876,7 @@ export const BeforeDeepDive = () => {
   return (
     <DeepDive
       className="dd--before"
+      venues={() => (model ? model.months.map((month) => venueBetween(month.t, month.t1)).filter((ref) => ref !== null) : [])}
       figure={shortDate(model.firstRace)}
       unit={
         <>

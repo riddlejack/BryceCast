@@ -1,5 +1,8 @@
 import { useMemo, useState, type PointerEvent } from 'react';
-import { ChartTipCard, chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../../app/charts';
+import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
+import { VenueTipCard, type VenueTip } from '../../app/venueCard';
+import { useVenuePreload, type VenueRef } from '../../app/venuePeek';
+import { venueOfWeek } from '../venueOfDates';
 import { careerRecord, eventPlace, monthYear, racesBySeries, seriesInfo } from './career';
 import './raceStrip.css';
 
@@ -35,6 +38,7 @@ export const RaceStrip = () => {
   const coarse = useCoarsePointer();
   const [hover, setHover] = useState<number | null>(null);
   const shown = inView || reduced;
+  const preload = useVenuePreload(() => (careerRecord?.weeks ?? []).map((week) => venueOfWeek(week.monday)).filter((ref): ref is VenueRef => ref !== null));
 
   const weeks = careerRecord?.weeks ?? [];
   const phone = width > 0 && width < 560;
@@ -85,7 +89,7 @@ export const RaceStrip = () => {
     setHover((current) => (next === current ? null : next));
   };
 
-  let tip: ChartTip | null = null;
+  let tip: VenueTip | null = null;
   if (hover !== null && marks[hover]) {
     const mark = marks[hover];
     const total = mark.races.reduce((sum, race) => sum + race.raceCount, 0);
@@ -96,6 +100,7 @@ export const RaceStrip = () => {
     tip = {
       x: mark.x,
       y: base - total * step - 6,
+      venue: venueOfWeek(mark.monday),
       title: `${places}, ${monthYear(mark.monday)}`,
       detail: `${series} · ${total} ${total === 1 ? 'race' : 'races'}${best !== null ? `, best P${best}` : ''}`
     };
@@ -110,6 +115,7 @@ export const RaceStrip = () => {
             height={H}
             role="img"
             aria-label={`Every race from ${careerRecord.from} to ${careerRecord.to}, one stroke each, stacked by weekend.`}
+            onPointerEnter={preload}
             onPointerMove={onMove}
             onPointerLeave={() => !coarse && setHover(null)}
             onPointerDown={onDown}
@@ -166,7 +172,7 @@ export const RaceStrip = () => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} /> : null}
       </div>
       <SeriesKey />
     </div>

@@ -11,14 +11,15 @@
  *  No lap, sector, weather, or team-pace claims: Euro's records hold none. */
 
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord, type ChartTip } from '../app/charts';
+import { chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord } from '../app/charts';
+import { VenueTipCard, type VenueTip } from '../app/venueCard';
 import { SourcePill } from '../app/components';
 import { asNumber, ordinal } from '../app/format';
 import { useRouter } from '../app/router';
 import { useTapPreview } from '../app/tapPreview';
 import { Link } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { chapterTint, raceHref } from './careerExplorer';
+import { chapterTint, raceHref, useCareerRows } from './careerExplorer';
 
 const EURO_SERIES = 'Euroformula Open';
 const EURO_TINT = chapterTint(EURO_SERIES);
@@ -62,8 +63,10 @@ const QualiToRace = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const tap = useTapPreview();
+  const careerRows = useCareerRows();
+  const trackOf = useMemo(() => new Map(careerRows.map((row) => [row.sessionId, row.trackName])), [careerRows]);
 
   const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
   const euroSummary = useMemo(() => (layer.bySeries ?? []).find((row) => row.seriesName === EURO_SERIES) ?? null, [layer]);
@@ -142,6 +145,7 @@ const QualiToRace = () => {
                           y: (y1 + y2) / 2 - 6,
                           over: Math.min(y1, y2) - 6,
                           under: Math.max(y1, y2) + 6,
+                          venue: { sessionId: row.raceSessionId, trackName: trackOf.get(row.raceSessionId) ?? null },
                           title: `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`,
                           detail: `qualified P${row.qualiRank} → finished P${row.finish} · ${outcome}`,
                           action: 'Open the race'
@@ -159,7 +163,7 @@ const QualiToRace = () => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="euro-caption">
         Each line is one race, qualifying slot to flag · a Euro-magenta line marks a race he gained on his grid · P1 at the top.

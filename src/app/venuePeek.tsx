@@ -1,4 +1,6 @@
-import { stillPictureFor, useStillIndex, type StillIndex, type StillPicture } from './trackStill';
+import { useCallback, useRef } from 'react';
+import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
+import { loadStillIndex, stillPictureFor, useStillIndex, type StillIndex, type StillPicture } from './trackStill';
 
 /* ============================================================================
  * The track's 3D still for any venue in the career (career round 2, Nov 17 2026).
@@ -45,6 +47,10 @@ export interface VenueRef {
   sessionId?: string | null;
   trackName?: string | null;
   trackId?: string | null;
+  /** A mark that is a venue, not one race (the travel map's dots): the layout
+   *  comes from the session as usual, but the picture is the plain model, not
+   *  one race's shading. */
+  plain?: boolean;
 }
 
 /** The model slug for a race or venue, or null where none is modelled. */
@@ -64,7 +70,7 @@ export const venueSlugFor = (index: StillIndex | null | undefined, ref: VenueRef
 
 /** The picture for a race or venue (see stillPictureFor), or null. */
 export const venuePictureFor = (index: StillIndex | null | undefined, ref: VenueRef): StillPicture | null =>
-  stillPictureFor(index, venueSlugFor(index, ref), ref.sessionId ?? null);
+  stillPictureFor(index, venueSlugFor(index, ref), ref.plain ? null : ref.sessionId ?? null);
 
 /** Hook form: undefined while the stills index loads, null when no model. */
 export const useVenuePicture = (ref: VenueRef): StillPicture | null | undefined => {
@@ -87,4 +93,53 @@ export const VenuePeek = ({ className, size = 600, ...ref }: VenueRef & { classN
       decoding="async"
     />
   );
+};
+
+/* ---------- a venue with no model yet ---------- */
+
+/** The traced 2D outline for a venue with no 3D still (null where none is
+ *  traced). The hover card draws it small, so a card without a model still
+ *  shows the track's shape where one exists. */
+export const venueOutlineFor = (ref: VenueRef): TrackOutline | null => trackOutlineFor(ref.trackName ?? null);
+
+/* ---------- warm the stills before the pointer reaches a mark ---------- */
+
+const warmed = new Set<string>();
+const keep: HTMLImageElement[] = [];
+
+/** Fetch and decode the stills these marks will show, so a hover card never
+ *  waits on a picture. Reads the stills index (lazily, once, as today) and
+ *  warms each distinct 600 px still a single time per page. */
+export const preloadVenueStills = (refs: Iterable<VenueRef>): void => {
+  if (typeof Image === 'undefined') return;
+  const list = [...refs];
+  if (list.length === 0) return;
+  void loadStillIndex().then((index) => {
+    if (!index) return;
+    for (const ref of list) {
+      const picture = venuePictureFor(index, ref);
+      if (!picture || warmed.has(picture.src600)) continue;
+      warmed.add(picture.src600);
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = picture.src600;
+      keep.push(image);
+      image.decode?.().catch(() => undefined);
+    }
+  });
+};
+
+/** A chart's onPointerEnter: warms every mark's still the first time the
+ *  pointer (or a finger) comes onto the chart. `refs` is read only then. */
+export const useVenuePreload = (refs: () => Iterable<VenueRef>) => {
+  const latest = useRef(refs);
+  latest.current = refs;
+  const done = useRef(false);
+  return useCallback(() => {
+    if (done.current) return;
+    const list = [...latest.current()];
+    if (list.length === 0) return;
+    done.current = true;
+    preloadVenueStills(list);
+  }, []);
 };

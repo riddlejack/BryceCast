@@ -8,9 +8,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 // (immutable, see scripts/api-server.mjs) independent of app code.
 import worldLandTextureUrl from '../../analysis/career-atlas/output/world_land_texture.png?url';
 import { SourcePill, Unavailable } from '../app/components';
-import { ChartTipCard, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen } from '../app/charts';
+import { focusFade, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen } from '../app/charts';
 import { useRouter } from '../app/router';
 import { useTapPreview } from '../app/tapPreview';
+import { VenueTipCard, type VenueTip } from '../app/venueCard';
+import { useVenuePreload } from '../app/venuePeek';
 import {
   uiDataPackage,
   type UiCareerAtlasSeriesSpan,
@@ -526,16 +528,6 @@ const yearSpan = (first: number, last: number): string => {
 const chapterLine = (chapter: UiCareerAtlasSeriesSpan): string =>
   `${chapter.seriesShort} ${yearSpan(chapter.firstYear, chapter.lastYear)}`;
 
-const venueDetail = (view: VenueView): string =>
-  [
-    `${formatCount.format(view.raceCount)} ${view.raceCount === 1 ? 'race' : 'races'}`,
-    chapterLine(view.chapter),
-    view.bestFinish === null ? null : `best P${view.bestFinish}`,
-    view.venue.country
-  ]
-    .filter(Boolean)
-    .join(' · ');
-
 const venueAccessibleLabel = (view: VenueView, seriesFiltered: boolean): string => {
   const series = seriesFiltered
     ? `${view.chapter.seriesShort} ${yearSpan(view.chapter.firstYear, view.chapter.lastYear)}`
@@ -619,29 +611,31 @@ const projectVenue = (
   };
 };
 
-const AtlasTipCard = ({ view, x, y, width }: { view: VenueView; x: number; y: number; width: number }) => {
-  const cardWidth = Math.min(330, Math.max(width - 16, 190));
-  const left = Math.min(Math.max(x, cardWidth / 2 + 4), Math.max(width - cardWidth / 2 - 4, cardWidth / 2 + 4));
-  const below = y < 84;
-  return (
-    <div
-      className="career-atlas__tip"
-      role="status"
-      aria-live="polite"
-      style={{
-        left,
-        top: y,
-        width: cardWidth,
-        transform: below ? 'translate(-50%, 12px)' : 'translate(-50%, calc(-100% - 12px))'
-      }}
-    >
-      <strong>{view.venue.trackName}</strong>
-      <span>{venueDetail(view)}</span>
-      <span className="career-atlas__tip-action">open the latest applicable race</span>
-    </div>
-  );
-};
+/* The travel map's card for one track (round 2): the track's 3D still where
+ * it is modelled (the plain model: a dot is the venue, not one race), the
+ * country, the track, the series he raced there and his best day. */
+const venueTip = (view: VenueView, point: ProjectedVenue, seriesFiltered: boolean): VenueTip => ({
+  x: point.x,
+  y: point.y - point.radius - 3,
+  over: point.y - point.radius - 3,
+  under: point.y + point.radius + 3,
+  venue: { sessionId: view.latestRace.sessionId, trackName: view.venue.trackName, trackId: view.venue.trackIds[0] ?? null, plain: true },
+  meta: view.venue.country,
+  tint: chapterTint(view.chapter.seriesName),
+  title: view.venue.trackName,
+  detail: (seriesFiltered ? [view.chapter] : view.venue.seriesSpans).map(chapterLine).join(' · '),
+  note: [`${formatCount.format(view.raceCount)} ${view.raceCount === 1 ? 'race' : 'races'}`, view.bestFinish === null ? null : `best P${view.bestFinish}`]
+    .filter(Boolean)
+    .join(' · '),
+  action: 'open his latest race here'
+});
 
+/* A tip measured in the map's own pixels, moved into its parent's. */
+const offsetTip = (tip: VenueTip, map: HTMLElement | null): VenueTip => {
+  const dx = map?.offsetLeft ?? 0;
+  const dy = map?.offsetTop ?? 0;
+  return { ...tip, x: tip.x + dx, y: tip.y + dy, over: (tip.over ?? tip.y) + dy, under: (tip.under ?? tip.y) + dy };
+};
 
 /* The travel map. The globe draws each leg of the career, one race meeting's
  * track to the next, in date order, while a counter adds up the miles. It plays
@@ -698,7 +692,11 @@ export const CareerAtlas = () => {
   /* Round 9: on a phone the first tap on a track reads it (the ring and the
    * card), the second tap or the card's button opens its latest race. */
   const tap = useTapPreview();
-  const coarse = useCoarsePointer();
+  /* The first time a pointer (or a finger) comes onto the globe, warm the
+   * stills of the tracks in the filter, so a card never waits on a picture. */
+  const preloadStills = useVenuePreload(() =>
+    filteredViews.map((view) => ({ sessionId: view.latestRace.sessionId, trackName: view.venue.trackName, trackId: view.venue.trackIds[0] ?? null, plain: true }))
+  );
   const [seriesFilter, setSeriesFilter] = useState<string | null>(null);
   const [regionFilter, setRegionFilter] = useState<AtlasRegion | null>(null);
   const [globeView, setGlobeView] = useState<GlobeView>(defaultView);
@@ -1114,7 +1112,16 @@ export const CareerAtlas = () => {
             </div>
           ) : null}
         </div>
-        <div className="career-travel__globe">
+        {/* The card sits outside the map, which clips the globe: a track near
+         * the map's top edge still gets its whole card, still and all. */}
+        <div className="career-travel__globe" style={{ position: 'relative' }}>
+          {activeView && activePoint ? (
+            <VenueTipCard
+              tip={offsetTip(venueTip(activeView, activePoint, seriesFilter !== null), ref.current)}
+              width={width}
+              tap={tap}
+            />
+          ) : null}
           <div
             ref={ref}
             className="career-atlas__map career-atlas__map--globe"
@@ -1136,6 +1143,7 @@ export const CareerAtlas = () => {
                 aria-roledescription="interactive globe"
                 tabIndex={0}
                 aria-label={`Globe with the ${travel?.legCount ?? 0} legs between his race meetings drawn in order, and ${filteredViews.length} tracks. Drag to spin. Use the zoom buttons, or the plus and minus keys, to zoom.`}
+                onPointerEnter={preloadStills}
                 onPointerMove={(event) => {
                   const drag = dragRef.current;
                   if (drag && drag.pointerId === event.pointerId) {
@@ -1328,24 +1336,6 @@ export const CareerAtlas = () => {
               <div className="career-atlas__empty">
                 <Unavailable>No venues match this series and region combination.</Unavailable>
               </div>
-            ) : null}
-            {activeView && activePoint ? (
-              coarse || tap.armed !== null ? (
-                <ChartTipCard
-                  tip={{
-                    x: activePoint.x,
-                    y: activePoint.y - activePoint.radius - 3,
-                    under: activePoint.y + activePoint.radius + 3,
-                    title: activeView.venue.trackName,
-                    detail: venueDetail(activeView),
-                    action: 'open the latest applicable race'
-                  }}
-                  width={width}
-                  tap={tap}
-                />
-              ) : (
-                <AtlasTipCard view={activeView} x={activePoint.x} y={activePoint.y} width={width} />
-              )
             ) : null}
             <div className="career-atlas__zoom" role="group" aria-label="Globe zoom controls">
               <button type="button" aria-label="Zoom in" title="Zoom in" disabled={globeView.zoom >= maxZoom} onClick={() => zoomBy(ZOOM_STEP)}>

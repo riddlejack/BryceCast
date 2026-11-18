@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { useCareerRows, chapterTint, raceHref, seriesShort, Segmented, type CareerRow } from '../careerExplorer';
-import { chartFont, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen, type ChartTip } from '../../app/charts';
+import { chartFont, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen } from '../../app/charts';
+import type { VenueTip } from '../../app/venueCard';
+import { useVenuePreload } from '../../app/venuePeek';
 import { useTapPreview } from '../../app/tapPreview';
 import { useRouter } from '../../app/router';
 import { SourcePill } from '../../app/components';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
 import { DeepDive, DeepTip } from './frame';
+import { raceTipOf, venuesOf } from './raceTip';
 import './rain.css';
 
 /**
@@ -143,10 +146,11 @@ export const RainDeepDive = () => {
   const [view, setView] = useState<View>(() => (switchValue('ddrain') === 'series' ? 'series' : 'together'));
   const [phase, setPhase] = useState<Phase>(reduced ? 'done' : 'pre');
   const [hovered, setHovered] = useState<string | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
 
   const reported = useMemo(() => rows.filter((row) => row.wetDry !== null), [rows]);
   const dry = useMemo(() => reported.filter((row) => row.wetDry === 'dry'), [reported]);
+  const preload = useVenuePreload(() => venuesOf(reported));
   const wet = useMemo(() => reported.filter((row) => row.wetDry !== 'dry'), [reported]);
   /* Stable keys: the same race keeps its dot across both views. */
   const keyed = useMemo(() => reported.map((row, index) => ({ row, key: rowKey(row, index) })), [reported]);
@@ -342,22 +346,16 @@ export const RainDeepDive = () => {
   if (!enough) return null;
 
   const conditionWord = (row: CareerRow) => (row.wetDry === 'dry' ? 'dry' : row.wetDry ?? '');
-  const tipOf = (row: CareerRow, at: { x: number; y: number }): ChartTip => ({
+  const tipOf = (row: CareerRow, at: { x: number; y: number }): VenueTip => ({
     x: at.x,
     y: at.y - r - 3,
     over: at.y - r - 3,
     under: at.y + r + 4,
-    title: row.raceLabel,
-    detail: [
-      conditionWord(row),
-      row.seasonYear !== null && !row.raceLabel.includes(String(row.seasonYear)) ? `${row.seasonYear} ${row.seriesShort}` : row.seriesShort,
-      row.start !== null ? `P${row.start} → P${row.finish}` : `finished P${row.finish}`,
-      row.status !== 'running' ? row.status : null,
-      `beat ${Math.round(row.percentile * 100)}% of the field`
-    ]
-      .filter(Boolean)
-      .join(' · '),
-    action: 'open the race page'
+    ...raceTipOf(row, {
+      note: [conditionWord(row) ? `${conditionWord(row)} track` : null, row.status !== 'running' ? `ended early: ${row.status}` : null]
+        .filter(Boolean)
+        .join(' · ') || null
+    })
   });
 
   const find = (event: MouseEvent<Element>): string | null => {
@@ -475,7 +473,7 @@ export const RainDeepDive = () => {
       }
     >
       <div ref={viewRef}>
-        <div ref={ref} className="rain__stage">
+        <div ref={ref} className="rain__stage" onPointerEnter={preload}>
           {layout ? (
             <svg
               ref={svgRef}

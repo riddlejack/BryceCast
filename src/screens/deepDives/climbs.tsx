@@ -6,9 +6,9 @@ import {
   focusFade,
   useInViewOnce,
   useMeasuredWidth,
-  useReducedMotion,
-  type ChartTip
+  useReducedMotion
 } from '../../app/charts';
+import type { VenueTip } from '../../app/venueCard';
 import { useRouter } from '../../app/router';
 import { useTapPreview, type TapPreview } from '../../app/tapPreview';
 import { uiDataPackage } from '../../data/uiDataPackage';
@@ -17,6 +17,7 @@ import { useGb3DeepDive } from '../../data/gb3DeepDive';
 import { switchValue } from '../../review/switches';
 import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
+import { raceTipOf, venuesOf } from './raceTip';
 import './climbs.css';
 
 /* ============================================================================
@@ -170,21 +171,10 @@ const progressOf = (elapsed: number, index: number) => ease(Math.min(Math.max((e
 
 /* ---------- shared reading ---------- */
 
-const tipWords = (climb: Climb): Omit<ChartTip, 'x' | 'y'> => ({
-  title: climb.row.raceLabel,
-  detail: [
-    climb.row.seriesShort,
-    climb.row.seasonYear !== null ? String(climb.row.seasonYear) : null,
-    `P${climb.start} → P${climb.finish}`,
-    `${climb.gain} places`,
-    climb.field !== null ? `${climb.field} classified` : null,
-    climb.row.status !== 'running' ? climb.row.status : null,
-    climb.row.wetDry && climb.row.wetDry !== 'dry' ? `${climb.row.wetDry} track` : null
-  ]
-    .filter(Boolean)
-    .join(' · '),
-  action: 'open the race page'
-});
+const tipWords = (climb: Climb): Omit<VenueTip, 'x' | 'y'> =>
+  raceTipOf(climb.row, {
+    detail: `P${climb.start} → P${climb.finish} · ${climb.gain} places${climb.field !== null ? ` · ${climb.field} classified` : ''}`
+  });
 
 const ariaFor = (climb: Climb) =>
   `${climb.row.raceLabel}, ${climb.row.seasonYear ?? ''}: from P${climb.start} to P${climb.finish}, ${climb.gain} places${
@@ -255,7 +245,7 @@ const Ladders = ({ climbs, width, play }: { climbs: Climb[]; width: number; play
   const elapsed = useClock(play, reduced, climbs.length);
   const tap = useTapPreview();
   const [focus, setFocus] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const svgRefs = useRef<Array<SVGSVGElement | null>>([]);
   const boxRef = useRef<HTMLDivElement | null>(null);
   const handlersFor = useClimbHandlers(climbs, tap, (index) => {
@@ -418,7 +408,7 @@ const Rows = ({ climbs, width, play }: { climbs: Climb[]; width: number; play: b
   const elapsed = useClock(play, reduced, climbs.length);
   const tap = useTapPreview();
   const [focus, setFocus] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const svgRefs = useRef<Array<SVGSVGElement | null>>([]);
   const boxRef = useRef<HTMLDivElement | null>(null);
   const handlersFor = useClimbHandlers(climbs, tap, (index) => {
@@ -585,6 +575,7 @@ export const ClimbsDeepDive = () => {
   return (
     <DeepDive
       className="dd--climbs"
+      venues={() => venuesOf(climbs.map((climb) => climb.row))}
       figure={top.gain}
       unit="places in one race"
       lede={

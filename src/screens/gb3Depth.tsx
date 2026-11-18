@@ -10,7 +10,8 @@
  *  deliberately no pace-trace, stint, or sector module here. */
 
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord, type ChartTip } from '../app/charts';
+import { chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord } from '../app/charts';
+import { VenueTipCard, type VenueTip } from '../app/venueCard';
 import { SourcePill } from '../app/components';
 import { ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
@@ -58,7 +59,7 @@ const SectionHead = ({ title, badge }: { title: string; badge?: string }) => (
 const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const tap = useTapPreview();
 
@@ -148,7 +149,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     strokeWidth={1.2}
                     style={{ cursor: 'default' }}
                     {...tap.target(row.sessionId, {
-                      show: () => setTip({ x: cx, y: missY - 8, under: missY + 8, title: raceLabel(row), detail: statusWord }),
+                      show: () => setTip({ x: cx, y: missY - 8, under: missY + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, title: raceLabel(row), detail: statusWord }),
                       hide: () => setTip(null)
                     })}
                   />
@@ -168,7 +169,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   {...tap.target(row.sessionId, {
                     show: () => {
                       setHoveredId(row.sessionId);
-                      setTip({ x: cx, y: cy - 8, under: cy + 8, title: raceLabel(row), detail: rankPhrase(row) });
+                      setTip({ x: cx, y: cy - 8, under: cy + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, title: raceLabel(row), detail: rankPhrase(row), action: 'open the race' });
                     },
                     hide: () => {
                       setHoveredId(null);
@@ -181,7 +182,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
         Amber = races he led the team’s cars home · result order only: where he placed among his own cars, not a read on
@@ -198,7 +199,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const tap = useTapPreview();
 
   const races = useMemo(
@@ -221,7 +222,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const y = (position: number) => top + ((position - 1) / (maxPos - 1)) * plotH;
   const gainColor = (row: Gb3RaceResult) => ((row.positionGain ?? 0) > 0 ? 'var(--chapter-gb3)' : 'var(--ink-muted)');
 
-  const tipFor = (row: Gb3RaceResult): ChartTip => {
+  const tipFor = (row: Gb3RaceResult): VenueTip => {
     const gain = row.positionGain ?? 0;
     const move = gain > 0 ? `+${gain} gained` : gain < 0 ? `${gain} places` : 'held station';
     return {
@@ -229,6 +230,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
       y: (y(row.startPosition ?? 1) + y(row.finishPosition ?? 1)) / 2 - 6,
       over: Math.min(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) - 6,
       under: Math.max(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) + 6,
+      venue: { sessionId: row.sessionId, trackName: row.trackName },
       title: raceLabel(row),
       detail: `P${row.startPosition} → P${row.finishPosition} · ${move}`,
       action: 'Open the race'
@@ -299,7 +301,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
         Each line is one race, grid to flag · amber marks a race he gained ground · P1 sits at the top. Grid data is unavailable
@@ -457,7 +459,7 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
 const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const tap = useTapPreview();
 
@@ -587,6 +589,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
               y: (fy ?? qy ?? panel.yTop) - 8,
               over: Math.min(fy ?? Infinity, qy ?? Infinity, fy ?? qy ?? panel.yTop) - PODIUM_R - 4,
               under: Math.max(fy ?? -Infinity, qy ?? -Infinity, fy ?? qy ?? panel.yTop) + PODIUM_R + 4,
+              venue: { sessionId: race?.sessionId ?? null, trackName: row.trackName },
               title: `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName}`,
               detail: `${q} · ${f} · ${row.raceRows} ${row.raceRows === 1 ? 'race' : 'races'}`,
               action: race ? 'Open the round’s best race' : undefined
@@ -666,7 +669,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
             {panels.map(renderPanel)}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
         Open marks = qualifying, filled = the round’s best finish; the amber line follows his best finish through each season, and

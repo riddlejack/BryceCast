@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { SourcePill } from '../../app/components';
-import { ChartTipCard, chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../../app/charts';
+import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
 import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
-import { stillPictureFor, useStillIndex } from '../../app/trackStill';
+import { VenueTipCard, type VenueTip } from '../../app/venueCard';
+import { useVenuePreload } from '../../app/venuePeek';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
-import { chapterTint, raceHref, tipFor, useCareerRows, type CareerRow } from '../careerExplorer';
+import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
 import { DeepDive } from './frame';
+import { raceTipOf, venuesOf } from './raceTip';
 import './explorer.css';
 
 /* ============================================================================
@@ -212,49 +214,6 @@ const jitter = (id: string) => {
   return Math.abs(hash) % 90;
 };
 
-/* ---------- the mouse card: the race, its numbers, its 3D still where one exists ---------- */
-
-const MouseCard = ({ row, x, y, r, width }: { row: CareerRow; x: number; y: number; r: number; width: number }) => {
-  const index = useStillIndex();
-  const raceStill = index ? index.races[row.sessionId] : undefined;
-  const still = raceStill ? stillPictureFor(index, raceStill.slug, row.sessionId) : null;
-  const cardW = still ? 260 : 236;
-  const cardH = still ? 250 : 104;
-  const below = y - r - 12 < cardH;
-  const notes = [
-    row.status !== 'running' ? `ended early: ${row.status}` : null,
-    row.wetDry && row.wetDry !== 'dry' ? `${row.wetDry} track` : null
-  ].filter(Boolean);
-  return (
-    <div
-      className={`ddx-card${below ? ' ddx-card--below' : ''}`}
-      style={{
-        left: clamp(x, cardW / 2 + 2, Math.max(width - cardW / 2 - 2, cardW / 2 + 2)),
-        top: below ? y + r + 10 : y - r - 10,
-        width: cardW
-      }}
-      aria-hidden
-    >
-      {still ? (
-        <img className="ddx-card__still" src={still.src600} width={still.width} height={still.height} alt="" decoding="async" />
-      ) : null}
-      <div className="ddx-card__body">
-        <span className="ddx-card__meta">
-          <i style={{ background: chapterTint(row.seriesName) }} />
-          {row.seriesShort} · {row.seasonYear ?? '—'}
-        </span>
-        <strong className="ddx-card__title">{row.raceLabel}</strong>
-        <span className="ddx-card__nums">
-          {row.start !== null ? `P${row.start} → P${row.finish}` : `finished P${row.finish}`} · beat <b>{pct(row.percentile)}%</b> of the
-          field
-        </span>
-        {notes.length ? <span className="ddx-card__note">{notes.join(' · ')}</span> : null}
-        <span className="ddx-card__action">Click to open the race</span>
-      </div>
-    </div>
-  );
-};
-
 /* ---------- the chart ---------- */
 
 interface Focus {
@@ -281,7 +240,8 @@ const Swarm = ({
   const tap = useTapPreview();
   const coarse = useCoarsePointer();
   const [hovered, setHovered] = useState<string | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
+  const preload = useVenuePreload(() => venuesOf(rows));
 
   const layout = useMemo(() => (width > 0 ? layoutFor(width, grouping, rows) : null), [width, grouping, rows]);
   const byId = useMemo(() => new Map(rows.map((row) => [row.sessionId, row])), [rows]);
@@ -310,18 +270,15 @@ const Swarm = ({
     const point = layout.pos.get(best.id)!;
     const row = byId.get(best.id)!;
     setHovered(best.id);
-    setTip({ x: point.x, y: point.y - layout.r - 2, over: point.y - layout.r - 4, under: point.y + layout.r + 4, ...tipFor(row) });
+    setTip({ x: point.x, y: point.y - layout.r - 2, over: point.y - layout.r - 4, under: point.y + layout.r + 4, ...raceTipOf(row) });
     return best.id;
   };
 
   const rowsCount = layout?.groups.length ?? 1;
-  const hoveredRow = hovered ? byId.get(hovered) ?? null : null;
-  const hoveredPoint = hovered && layout ? layout.pos.get(hovered) ?? null : null;
   const xOf = (share: number) => (layout ? layout.plotL + share * (layout.plotR - layout.plotL) : 0);
-  const mouseCard = !coarse && tap.armed === null && hoveredRow && hoveredPoint && layout ? { row: hoveredRow, point: hoveredPoint } : null;
 
   return (
-    <div ref={ref} className={`ddx${animate ? '' : ' ddx--still'}`}>
+    <div ref={ref} className={`ddx${animate ? '' : ' ddx--still'}`} onPointerEnter={preload}>
       {layout ? (
         <svg
           ref={svgRef}
@@ -483,8 +440,7 @@ const Swarm = ({
           ) : null}
         </svg>
       ) : null}
-      {mouseCard ? <MouseCard row={mouseCard.row} x={mouseCard.point.x} y={mouseCard.point.y} r={layout!.r} width={width} /> : null}
-      {tip && !mouseCard ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
+      {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };

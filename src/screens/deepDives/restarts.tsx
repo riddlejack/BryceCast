@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
-import { ChartTipCard, chartFont, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../../app/charts';
+import { chartFont, focusFade, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
+import { VenueTipCard, type VenueTip } from '../../app/venueCard';
 import { SourcePill } from '../../app/components';
 import { ordinal } from '../../app/format';
 import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
-import { TrackStillIcon } from '../../app/trackStill';
-import { trackOutlineFor } from '../../assets/tracks';
 import { restartBaselineSentence } from '../../data/restartBaseline';
 import { uiDataPackage, type UiRestartByRace } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
-import { raceHref } from '../careerExplorer';
+import { chapterTintForShort, raceHref } from '../careerExplorer';
 import { DeepDive } from './frame';
 import './restarts.css';
 
@@ -45,7 +44,6 @@ interface Race {
   index: number;
   season: number;
   marks: Mark[];
-  slug: string | null;
 }
 
 const KIND_ORDER: Kind[] = ['gained', 'held', 'lost'];
@@ -69,7 +67,7 @@ const useRestartData = () => {
           order += 1;
         }
       }
-      return { row, index, season: row.seasonYear ?? 0, marks, slug: trackOutlineFor(row.trackName)?.slug ?? null };
+      return { row, index, season: row.seasonYear ?? 0, marks };
     });
     const seasons: Array<{ year: number; races: Race[] }> = [];
     for (const race of races) {
@@ -96,29 +94,13 @@ const tipLines = (race: Race) => {
   const netWords = net > 0 ? `up ${net} place${net === 1 ? '' : 's'} net` : net === 0 ? 'even net' : `back ${Math.abs(net)} place${net === -1 ? '' : 's'} net`;
   const rank = row.bryceRankInField !== null && row.fieldSizeRanked ? `${ordinal(row.bryceRankInField)} of ${row.fieldSizeRanked} on restarts` : null;
   return {
-    title: `${row.raceLabel}${row.seasonYear ? ` · ${row.seasonYear}` : ''}`,
+    venue: { sessionId: row.sessionId, trackName: row.trackName },
+    meta: ['INDY NXT', row.seasonYear ? String(row.seasonYear) : null].filter(Boolean).join(' · '),
+    tint: chapterTintForShort('INDY NXT'),
+    title: row.raceLabel,
     detail: [`${counted} restart${counted === 1 ? '' : 's'}: ${parts.join(', ')}`, netWords, rank].filter(Boolean).join(' · '),
     flag: row.soleBestInField ? 'best in the field that day' : row.bryceBeatFieldTypical ? "beat the field's typical move" : null
   };
-};
-
-const MouseCard = ({ race, x, y, width }: { race: Race; x: number; y: number; width: number }) => {
-  const lines = tipLines(race);
-  return (
-    <div className="ddr-tip" style={{ left: Math.min(Math.max(x, 170), Math.max(width - 170, 170)), top: y }} role="status">
-      {race.slug ? (
-        <span className="ddr-tip__still">
-          <TrackStillIcon slug={race.slug} />
-        </span>
-      ) : null}
-      <span className="ddr-tip__words">
-        <strong>{lines.title}</strong>
-        <span className="ddr-tip__detail">{lines.detail}</span>
-        {lines.flag ? <span className="ddr-tip__flag">{lines.flag}</span> : null}
-        <span className="ddr-tip__action">click to open the race</span>
-      </span>
-    </div>
-  );
 };
 
 /* ---------- one restart, drawn: a ring on the line that moves up or down ---------- */
@@ -192,13 +174,12 @@ const MovesChart = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [viewRef, inView] = useInViewOnce<HTMLDivElement>(0.3);
   const reduced = useReducedMotion();
-  const coarse = useCoarsePointer();
   const settled = inView || reduced;
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
   const tap = useTapPreview();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<(ChartTip & { race: number }) | null>(null);
+  const [tip, setTip] = useState<(VenueTip & { race: number }) | null>(null);
   const career = report.career;
   const bySeason = new Map((report.bySeason ?? []).map((row) => [row.seasonYear ?? 0, row]));
 
@@ -270,8 +251,12 @@ const MovesChart = () => {
       y: best.y,
       over: best.y,
       under: best.y + layout.step * 2 + layout.r * 2 + 12,
+      venue: lines.venue,
+      meta: lines.meta,
+      tint: lines.tint,
       title: lines.title,
-      detail: [lines.detail, lines.flag].filter(Boolean).join(' · '),
+      detail: lines.detail,
+      flag: lines.flag,
       action: 'open the race'
     });
     return best.race;
@@ -389,13 +374,7 @@ const MovesChart = () => {
             })}
           </svg>
         ) : null}
-        {tip && layout ? (
-          coarse || tap.armed !== null ? (
-            <ChartTipCard tip={tip} width={width} tap={tap} />
-          ) : (
-            <MouseCard race={races[tip.race]} x={tip.x} y={tip.y} width={width} />
-          )
-        ) : null}
+        {tip && layout ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
     </div>
   );
@@ -408,12 +387,11 @@ const TallyChart = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [viewRef, inView] = useInViewOnce<HTMLDivElement>(0.3);
   const reduced = useReducedMotion();
-  const coarse = useCoarsePointer();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
   const tap = useTapPreview();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<(ChartTip & { race: number }) | null>(null);
+  const [tip, setTip] = useState<(VenueTip & { race: number }) | null>(null);
   const [sorted, setSorted] = useState(false);
   const settled = inView || reduced;
   const career = report.career;
@@ -490,8 +468,12 @@ const TallyChart = () => {
       y,
       over: y,
       under: p.midY + step + r + 8,
+      venue: lines.venue,
+      meta: lines.meta,
+      tint: lines.tint,
       title: lines.title,
-      detail: [lines.detail, lines.flag].filter(Boolean).join(' · '),
+      detail: lines.detail,
+      flag: lines.flag,
       action: 'open the race'
     });
     return mark.race;
@@ -596,13 +578,7 @@ const TallyChart = () => {
             })}
           </svg>
         ) : null}
-        {tip && width > 0 ? (
-          coarse || tap.armed !== null ? (
-            <ChartTipCard tip={tip} width={width} tap={tap} />
-          ) : (
-            <MouseCard race={races[tip.race]} x={tip.x} y={tip.y} width={width} />
-          )
-        ) : null}
+        {tip && width > 0 ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
     </div>
   );
@@ -624,6 +600,7 @@ export const RestartsDeepDive = () => {
   return (
     <DeepDive
       className="ddr"
+      venues={() => races.map((race) => ({ sessionId: race.row.sessionId, trackName: race.row.trackName }))}
       figure={
         <>
           {heldOrGained}

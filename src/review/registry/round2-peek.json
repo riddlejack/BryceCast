@@ -1,0 +1,20 @@
+{
+  "lane": "round2-peek",
+  "entries": [
+    {
+      "id": "r2-peek-card",
+      "page": "/career",
+      "title": "One race card everywhere: the track's 3D still pops up on every chart where a mark is a race or a track, the way the explorer's dots already did",
+      "switch": "peek",
+      "values": [
+        { "value": null, "label": "the still at 272 px on top of the card (default, the explorer's size)" },
+        { "value": "small", "label": "a smaller still, 208 px, for a lighter card" },
+        { "value": "off", "label": "no stills: how a track without a model reads (text card, or its 2D outline where one is traced)" }
+      ],
+      "look": "Career → the travel map: point at (or tap) any track dot, including the European ones, which have no model yet. Then More from the archive → open Before the record, the explorer, Restarts, Qualifying to the flag, Biggest climbs and Rain, and point at any race. Also the GB3 and Euroformula season pictures, and the race strip at the top of About. On the phone the first tap reads, the second (or Open the race →) opens.",
+      "anchor": "#archive-explorer",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}

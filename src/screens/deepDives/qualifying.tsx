@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import conversionCsv from '../../../analysis/qualifying-layer/output/tables/quali_race_conversion.csv?raw';
 import { SourcePill } from '../../app/components';
-import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../../app/charts';
+import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
+import type { VenueTip } from '../../app/venueCard';
 import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
 import { uiDataPackage } from '../../data/uiDataPackage';
@@ -41,6 +42,7 @@ interface QualiRace {
   seriesName: string;
   seasonYear: number;
   label: string;
+  trackName: string | null;
   date: string;
   grid: number;
   gridField: number;
@@ -105,6 +107,7 @@ const useQualiRaces = (): QualiRace[] | null => {
         seriesName: nameById.get(raw.seriesId) ?? raw.seriesName,
         seasonYear: Number(raw.seasonYear),
         label: career?.raceLabel ?? `${raw.eventName} · ${raw.raceLabel}`,
+        trackName: career?.trackName ?? null,
         date: career?.date ?? `${raw.seasonYear}-01-01`,
         grid,
         gridField: Number(raw.qualiFieldSize),
@@ -134,17 +137,16 @@ const useQualiRaces = (): QualiRace[] | null => {
 
 const placesWord = (n: number) => `${n} place${n === 1 ? '' : 's'}`;
 
-const tipOf = (race: QualiRace): Omit<ChartTip, 'x' | 'y'> => {
+const tipOf = (race: QualiRace): Omit<VenueTip, 'x' | 'y'> => {
   const delta = race.grid - race.finish;
   return {
+    venue: { sessionId: race.sessionId, trackName: race.trackName },
+    meta: `${seriesShort(race.seriesName)} · ${race.seasonYear}`,
+    tint: chapterTint(race.seriesName),
     title: race.label,
-    detail: [
-      `${seriesShort(race.seriesName)} ${race.seasonYear}`,
-      `qualified P${race.grid}${race.gridField ? ` of ${race.gridField}` : ''}`,
-      `finished P${race.finish}`,
-      delta > 0 ? `made up ${placesWord(delta)}` : delta < 0 ? `gave back ${placesWord(-delta)}` : 'held his slot'
-    ].join(' · '),
-    action: 'open the race page'
+    detail: `qualified P${race.grid}${race.gridField ? ` of ${race.gridField}` : ''} · finished P${race.finish}`,
+    note: delta > 0 ? `made up ${placesWord(delta)}` : delta < 0 ? `gave back ${placesWord(-delta)}` : 'held his slot',
+    action: 'open the race'
   };
 };
 
@@ -283,7 +285,7 @@ const GridAgainstFlag = ({ races }: { races: QualiRace[] }) => {
 
   const progressOf = (delay: number) => (Number.isFinite(elapsed) ? easeOutCubic((elapsed - delay) / 800) : 1);
 
-  const tip: ChartTip | null =
+  const tip: VenueTip | null =
     hovered !== null
       ? (() => {
           const { race, nudge } = points[hovered];
@@ -532,7 +534,7 @@ const Ladder = ({ races }: { races: QualiRace[] }) => {
     return pick;
   };
 
-  const tip: ChartTip | null =
+  const tip: VenueTip | null =
     hovered !== null
       ? (() => {
           const race = ordered[hovered];
@@ -752,7 +754,7 @@ const Gains = ({ races, order }: { races: QualiRace[]; order: GainOrder }) => {
 
   const byId = useMemo(() => new Map(races.map((race) => [race.sessionId, race])), [races]);
   const hoveredRace = hovered ? byId.get(hovered) ?? null : null;
-  const tip: ChartTip | null = hoveredRace
+  const tip: VenueTip | null = hoveredRace
     ? (() => {
         const d = delta(hoveredRace);
         const yTop = Math.min(Y(d), y0) - 8;
@@ -929,6 +931,7 @@ export const QualifyingDeepDive = () => {
   return (
     <DeepDive
       className="ddq"
+      venues={() => races.map((race) => ({ sessionId: race.sessionId, trackName: race.trackName }))}
       figure={
         <>
           {career.finishedAhead}
