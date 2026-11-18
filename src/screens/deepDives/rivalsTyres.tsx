@@ -110,10 +110,11 @@ export const TyreDefs = ({ prefix }: { prefix: string }) => {
   );
 };
 
-/* Under 6 px of radius the spokes and the slick's mark become noise (stars on
- * a phone): the small tyre is rubber, wheel and hub. Round 2's cut-over stays 4.6. */
+/* Under 7.5 px of radius the spokes and the slick's mark become noise (little
+ * stars on the board and the phone): the small tyre is rubber, wheel and hub.
+ * Round 2's cut-over stays 4.6. */
 export const tyreHref = (prefix: string, ahead: boolean, r: number) =>
-  `#${prefix}-${ahead ? 'b' : 'r'}${r < (tyreStyle() === 'old' ? 4.6 : 6) ? 's' : ''}`;
+  `#${prefix}-${ahead ? 'b' : 'r'}${r < (tyreStyle() === 'old' ? 4.6 : 7.5) ? 's' : ''}`;
 
 /** Tyre centres on whole pixels and radii on half pixels, so every tyre's
  *  edge lands the same way on the screen (no soft and sharp neighbours). */
@@ -126,7 +127,7 @@ const TyreIcon = ({ ahead, size = 13 }: { ahead: boolean; size?: number }) => {
   return (
     <svg width={size} height={size} viewBox="-10.5 -10.5 21 21" aria-hidden className="rv-ty__icon">
       <TyreDefs prefix={prefix} />
-      <use href={tyreHref(prefix, ahead, size / 2)} x={-10} y={-10} width={20} height={20} />
+      <use href={`#${prefix}-${ahead ? 'b' : 'r'}`} x={-10} y={-10} width={20} height={20} />
     </svg>
   );
 };
