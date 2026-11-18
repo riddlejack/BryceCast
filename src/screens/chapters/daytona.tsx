@@ -11,7 +11,7 @@ import type { VenueTip } from '../../app/venueCard';
 import { useImsaDaytonaStint } from '../../data/imsaDaytonaStint';
 import { useCareerRows } from '../careerExplorer';
 import { clockLabel, countWord, lab, minutesOf, openOf, Signature, tintOf, useEntrance, useRaceCard, EASE } from './common';
-import { CAR85_SPELLS, type CarSpell } from './daytonaSpells';
+import { CAR85_SPELLS as FALLBACK_SPELLS, type CarSpell } from './daytonaSpells';
 
 const SERIES = 'series_imsa_weathertech';
 const DAY = 86_400;
@@ -45,6 +45,10 @@ export const DaytonaSignature = () => {
   const [stageRef, settled, reduced] = useEntrance<HTMLDivElement>();
   const card = useRaceCard();
   const pack = useImsaDaytonaStint();
+  /* The pack's own `car85Spells` (r2-data, ae1fe12) once that branch is in
+   * this base; until then the same derivation, kept as a constant. */
+  const packSpells = pack && pack !== 'failed' ? (pack as { car85Spells?: CarSpell[] }).car85Spells : undefined;
+  const CAR85_SPELLS: CarSpell[] = packSpells && packSpells.length > 0 ? packSpells : FALLBACK_SPELLS;
   const rows = useCareerRows();
   const race = rows.find((row) => row.seriesId === SERIES) ?? null;
   const tint = tintOf(SERIES);
@@ -62,7 +66,7 @@ export const DaytonaSignature = () => {
     const total = CAR85_SPELLS[CAR85_SPELLS.length - 1].endElapsedSeconds;
     const bryce = CAR85_SPELLS.filter((spell) => spell.driverId === BRYCE);
     return { clock, startLocal, night, total, bryce };
-  }, [race]);
+  }, [race, CAR85_SPELLS]);
 
   if (!race || !model) return null;
   const { startLocal, night, total, bryce } = model;

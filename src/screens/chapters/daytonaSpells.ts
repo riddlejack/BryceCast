@@ -9,8 +9,10 @@
  * hours plus the last lap); a spell is an unbroken run of one driver. Bryce's
  * three spells hold 49 + 59 + 34 = 142 laps, the pack's own count.
  *
- * Asked of the data lane (r2-data, November 18, 2026) as a pack field,
- * `car85Spells`; when it lands, read it from the pack and delete this file. */
+ * The data lane added the same rows to the stint pack as `car85Spells`
+ * (r2-data ae1fe12/0947804, checked against this list: 16 spells, 780 laps,
+ * 86,507.096 s). daytona.tsx reads the pack field when present; this file is
+ * the fallback until r2-data is in this branch's base, then delete it. */
 
 export interface CarSpell {
   driverName: string;
