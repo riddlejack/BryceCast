@@ -1,4 +1,5 @@
-/* GB3, 2021–22: the only series before INDY NXT he raced twice. Both
+/* GB3, 2021–22: his only two full seasons in one series before INDY NXT
+ * (Formula Ford spans 2019–20, but 2019 was the Festival alone). Both
  * seasons ran the same six circuits, with a new team the second time
  * (Carlin, then Hitech Pulse-Eight) and deeper grids. The visual sets each
  * circuit's best result in 2021 against the same circuit a year later. */
@@ -84,7 +85,7 @@ export const Gb3Signature = () => {
   const chartW = Math.min(width, 640);
   const labelW = phone ? 104 : 150;
   const x1 = labelW + 26;
-  const x2 = chartW - (phone ? 40 : 60);
+  const x2 = chartW - (phone ? 40 : 130);
   const top = 46;
   const step = phone ? 15 : 17;
   const y = (place: number) => top + (place - 1) * step;
@@ -113,7 +114,7 @@ export const Gb3Signature = () => {
   return (
     <>
       <p className="chapter-panel__narrative">
-        The only series before INDY NXT he raced twice: the same {countWord(venues.length)} circuits two years running, with {team1} and then {team2}, and grids
+        His only two full seasons in one series before INDY NXT: the same {countWord(venues.length)} circuits two years running, with {team1} and then {team2}, and grids
         that grew from about {field1} cars to {field2}. A year on, his best result improved at {countWord(better)} of the {countWord(venues.length)}
         {win ? <>, and {placeName(win.track)} gave him his first GB3 win</> : null}.
       </p>

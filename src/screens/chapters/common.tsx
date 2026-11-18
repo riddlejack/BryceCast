@@ -8,8 +8,8 @@
  * had, in place of the three stat tiles and the percentile strip every chapter
  * shared. This file holds what they share: the race rows, the entrance clock,
  * the card, the frame and the words. Every number is read from the validated
- * UI package (or, for Daytona's clock, the official time card; see
- * daytonaSpells.ts); none is typed in by hand.
+ * UI package (Daytona's spells from its IMSA stint pack; SCCA's circuit
+ * outlines from the 3D venue models, see circuits.ts); none is typed in by hand.
  *
  * Review switch `?chapters=old` shows round 2's chapters (tiles and strip). */
 
@@ -19,12 +19,13 @@ import { useTapPreview } from '../../app/tapPreview';
 import { useRouter } from '../../app/router';
 import type { VenueTip } from '../../app/venueCard';
 import { useVenuePreload, type VenueRef } from '../../app/venuePeek';
+import { wetDryCall } from '../../app/wetDry';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
 import { DeepTip } from '../deepDives/frame';
 import { raceTipOf } from '../deepDives/raceTip';
 import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
-import { placeNameOf, raceFieldOf } from '../raceCardFacts';
+import { placeNameOf, raceFieldOf, raceTitleOf } from '../raceCardFacts';
 import './chapters.css';
 
 export const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
@@ -230,14 +231,34 @@ export const useRaceCard = () => {
 };
 
 /** A race row's card, placed at (x, y), with the race's own still on top. */
-export const rowTip = (row: CareerRow, x: number, y: number, under: number, extra: Parameters<typeof raceTipOf>[1] = {}): VenueTip => ({
+/** The track in the call's own words and its tier ("damp track (series report)"), from the one wet/dry call
+ * every page reads (app/wetDry.ts); null for a dry race or one with no call. */
+export const weatherWords = (sessionId: string): string | null => {
+  const call = wetDryCall(lab.raceWeather?.[sessionId]);
+  return call && call.state !== 'dry' ? `${call.words} (${call.tierWords})` : null;
+};
+
+/** The shared race card, with the weather said the way wetDry.ts says it (raceTip.ts is shared and says "mixed track"). */
+export const rowTip = (row: CareerRow, x: number, y: number, under: number, extra: Parameters<typeof raceTipOf>[1] = {}): VenueTip => {
+  const ended = row.status !== 'running' ? `ended early: ${row.status}` : null;
+  const note = [extra.note !== undefined ? extra.note : ended, weatherWords(row.sessionId)].filter(Boolean).join(' · ') || null;
+  return { x, y, under, ...raceTipOf(row, extra), note };
+};
+
+export const openOf = (row: CareerRow): string => raceHref(row.sessionId);
+
+/** The card for a race with no classified finish (DNS, DNF, DSQ): its track, how it ended, its weather. */
+export const outTip = (race: ReturnType<typeof unclassifiedOf>[number], meta: string, tint: string, x: number, y: number, under: number): VenueTip => ({
   x,
   y,
   under,
-  ...raceTipOf(row, extra)
+  venue: { sessionId: race.sessionId, trackName: race.trackName },
+  meta,
+  tint,
+  title: raceTitleOf(race.sessionId, placeName(race.trackName)),
+  detail: `no classified finish (${race.status.toUpperCase()})${race.start ? `, from P${race.start}` : ''}`,
+  note: weatherWords(race.sessionId)
 });
-
-export const openOf = (row: CareerRow): string => raceHref(row.sessionId);
 
 export const tintOf = (seriesId: string): string => chapterTint(seriesId);
 

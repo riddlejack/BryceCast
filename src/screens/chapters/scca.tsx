@@ -58,7 +58,7 @@ export const SccaSignature = () => {
   return (
     <>
       <p className="chapter-panel__narrative">
-        His first {countWord(rows.length)} races: {countWord(weekends.length)} winter weekends across the South, a race on the
+        The first {countWord(rows.length)} races on his record: {countWord(weekends.length)} winter weekends across the South, a race on the
         Saturday and one on the Sunday, in fields of {minField} to {maxField} cars
         {poleIndex >= 0 ? <>, and pole for his {ordinalWord(poleIndex + 1)} race</> : null}.
       </p>
