@@ -2,11 +2,14 @@
 // official classification sheet was found. They are gaps, not results: no
 // session or result rows are created, and no career figure counts them.
 //
-// Level B: the official SCCA conference standings list his class finish, but no
-// race sheet was found (Homestead-Miami, January 2019).
 // Level C: reported only, by press and a results aggregator; the series'
 // own documents for the meeting were not found (Mugello, Euroformula 2023).
 // See MISSING-RACES-CHECK.md (November 15, 2026) in the BryceCast build folder.
+//
+// Retired November 17, 2026: the two Homestead-Miami 2019 races (level B) are now
+// result rows. The official Orbits book for the meeting is in the SCCA results
+// archive, and scripts/import-orbits-career.mjs imports both Group 7 races. Their
+// gap rows are removed; the conference report is now the import's supporting evidence.
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,16 +22,6 @@ const accessedBy = 'scripts/backfill-unclassified-race-gaps.mjs';
 
 const evidence = [
   {
-    id: 'source_scca_2019_southeast_conference_report',
-    sourceType: 'official_pdf',
-    sourceName: 'SCCA 2019 U.S. Majors Tour Southeast Conference report',
-    url: 'https://growtiming.scca.com/downloads/48003-southeast-2019-conference-report/download',
-    confidenceTier: 'official',
-    coverage: 'Official season standings for the 2019 SCCA Southeast Conference, with per-race class finishes and starting positions in parentheses.',
-    rawArtifactPath: 'data/career/raw/scca-2019/pdf/2019-southeast-conference-report.pdf',
-    notes: 'Formula F row for Bryce Aron lists the two Homestead-Miami races as "(5) 4" and "(4) 8*". The asterisk marks a race that scored no points. No Homestead race sheet was found on growtiming.scca.com.'
-  },
-  {
     id: 'source_speedsport_euroformula_2023_mugello_race_1',
     sourceType: 'press_results',
     sourceName: 'Speedsport Magazine Euroformula Open 2023 Mugello Race 1 results',
@@ -36,7 +29,7 @@ const evidence = [
     confidenceTier: 'reported',
     coverage: 'Third-party results table for Euroformula Open 2023 Round 7 Race 1 at Mugello.',
     rawArtifactPath: 'data/career/raw/career-gaps/speedsport-euroformula-2023-21-mugello.html',
-    notes: 'Reported only. The Euroformula Open race-documents page used for the other 2023 rounds has no Mugello classification.'
+    notes: 'Reported only. Searched for an official classification on November 17, 2026 and found none: the Euroformula Open race-documents page (euroformula.gtsport.es/carreras?year=2023) and its document store (gtsports-media S3: "Race 1 - Mugello.pdf" and variants answer 403, as missing files do, while "Race 1 - Monza.pdf" answers 200) have no Mugello file; the ACI Sport folder for the same ACI Racing Weekend (30 September to 1 October 2023, Italian GT, acisport.it/public/2023/pdf/CIGT/2023_7381) holds only Italian GT sheets; formel3guide.com\'s 2023 Mugello mirrors are FRECA (July), Drexler F3 and F2000 meetings, not Euroformula.'
   },
   {
     id: 'source_speedsport_euroformula_2023_mugello_race_2',
@@ -62,28 +55,6 @@ const evidence = [
 
 const gaps = [
   {
-    id: 'gap_career_race_scca_2019_homestead_race_1_no_sheet',
-    level: 'B',
-    date: '2019-01-04/2019-01-06',
-    venue: 'Homestead-Miami Speedway',
-    country: 'United States',
-    series: 'SCCA U.S. Majors Tour, Southeast Conference, Formula F',
-    known: { classStart: 5, classFinish: 4, overallFinish: null, fieldSize: null },
-    evidenceRefs: ['source_scca_2019_southeast_conference_report'],
-    description: 'Homestead-Miami, January 2019, race 1 of the weekend: the official SCCA Southeast Conference report lists Bryce 5th on the Formula F grid and 4th in class at the finish ("(5) 4"). No race sheet was found, so laps, time, overall finish and field size are unknown. Counted in no career figure.'
-  },
-  {
-    id: 'gap_career_race_scca_2019_homestead_race_2_no_sheet',
-    level: 'B',
-    date: '2019-01-04/2019-01-06',
-    venue: 'Homestead-Miami Speedway',
-    country: 'United States',
-    series: 'SCCA U.S. Majors Tour, Southeast Conference, Formula F',
-    known: { classStart: 4, classFinish: 8, overallFinish: null, fieldSize: null, pointsScored: false },
-    evidenceRefs: ['source_scca_2019_southeast_conference_report'],
-    description: 'Homestead-Miami, January 2019, race 2: the official SCCA Southeast Conference report lists Bryce 4th on the Formula F grid and 8th in class, with no points ("(4) 8*"). No race sheet was found. Counted in no career figure.'
-  },
-  {
     id: 'gap_career_race_euroformula_2023_mugello_race_1_reported_only',
     level: 'C',
     date: '2023-09-30',
@@ -107,13 +78,19 @@ const gaps = [
   }
 ];
 
+// Gaps closed by an import, and the evidence rows only they used.
+const retiredGapIds = new Set(['gap_career_race_scca_2019_homestead_race_1_no_sheet', 'gap_career_race_scca_2019_homestead_race_2_no_sheet']);
+// The Southeast Conference report stays: the Orbits import now writes it as supporting evidence for Homestead.
+const retiredEvidenceIds = new Set();
+
 const main = async () => {
   const dataset = JSON.parse(await readFile(datasetPath, 'utf8'));
   const retrievedAt = new Date().toISOString();
   const evidenceIds = new Set(evidence.map((row) => row.id));
   const gapIds = new Set(gaps.map((row) => row.id));
+  dataset.gaps = dataset.gaps.filter((row) => !retiredGapIds.has(row.id));
   dataset.sourceEvidence = [
-    ...dataset.sourceEvidence.filter((row) => !evidenceIds.has(row.id)),
+    ...dataset.sourceEvidence.filter((row) => !evidenceIds.has(row.id) && !retiredEvidenceIds.has(row.id)),
     ...evidence.map((row) => ({
       ...row,
       retrievedAt,
@@ -143,7 +120,7 @@ const main = async () => {
     }))
   ];
   await writeFile(datasetPath, `${JSON.stringify(dataset, null, 2)}\n`);
-  const report = { checkedAt: retrievedAt, gapsWritten: gaps.length, sourceEvidenceWritten: evidence.length, gapIds: [...gapIds] };
+  const report = { checkedAt: retrievedAt, gapsWritten: gaps.length, sourceEvidenceWritten: evidence.length, gapIds: [...gapIds], retiredGapIds: [...retiredGapIds] };
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
 };

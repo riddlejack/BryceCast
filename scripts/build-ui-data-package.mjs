@@ -2137,14 +2137,36 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
     const session = sessionById.get(row.sessionId);
     const event = session ? eventById.get(session.eventId) : null;
     const weather = weatherBySession.get(row.sessionId) ?? null;
+    const fieldSize = fieldBySession.get(row.sessionId) ?? null;
     return {
       ...row,
       eventStartDate: event?.eventStartDate ?? null,
-      fieldSize: fieldBySession.get(row.sessionId) ?? null,
+      raceDate: sessionDay(session),
+      fieldSize,
+      fieldBeatenShare: fieldBeatenShare(row.finishPosition, fieldSize),
       wetDry: weather?.wetDry ?? null,
       weatherConfidence: weather?.weatherConfidence ?? null
     };
   });
+};
+
+/* The race's own day: the session's actual start, else its scheduled start, else
+ * null (never the meeting's first day, which is eventStartDate). SCCA Saturday and
+ * Sunday races used to read as the Friday because only eventStartDate was carried. */
+const sessionDay = (session) => {
+  const start = session?.actualStart ?? session?.scheduledStart ?? null;
+  return typeof start === 'string' && /^\d{4}-\d{2}-\d{2}/.test(start) ? start.slice(0, 10) : null;
+};
+
+/* The share of the OTHER cars he finished ahead of: (field - place) / (field - 1).
+ * finishPercentile ((field - place + 1) / field) counts Bryce himself, so last of
+ * 7 reads 14%; it stays as the analysis layer's normalised finish, but a reader
+ * claim ("beat N% of the field") must use this share. Null without a field. */
+const fieldBeatenShare = (finishPosition, fieldSize) => {
+  const place = numberOrNull(finishPosition);
+  const field = numberOrNull(fieldSize);
+  if (place === null || field === null || field <= 1 || place < 1 || place > field) return null;
+  return Number(((field - place) / (field - 1)).toFixed(4));
 };
 
 /* The races the conversion table leaves out because they have no classified
@@ -2176,6 +2198,7 @@ const buildUnclassifiedCanonical = (canonicalDataset, conversionRows) => {
           trackName: track.canonicalName ?? track.name ?? null,
           trackType: track.trackType ?? null,
           eventStartDate: event.eventStartDate ?? null,
+          raceDate: sessionDay(session),
           raceNumber: numberOrNull(session.raceNumber),
           startPosition: numberOrNull(result.startPosition ?? result.gridPosition),
           fieldSize: numberOrNull(result.fieldSize),
@@ -3754,6 +3777,14 @@ const buildPackage = () => {
           medianFinish: numberOrNull(row.medianFinish),
           avgGain: numberOrNull(row.avgGain),
           avgFinishPercentile: percentOrNull(row.avgFinishPercentile),
+          /* Mean share of the other cars he finished ahead of, in percent: the
+           * figure for "field beaten, on average". avgFinishPercentile counts him. */
+          avgFieldBeatenPct: (() => {
+            const shares = careerConversionEnriched
+              .filter((race) => race.seriesId === row.seriesId && race.fieldBeatenShare !== null)
+              .map((race) => race.fieldBeatenShare);
+            return shares.length ? Math.round((shares.reduce((sum, value) => sum + value, 0) / shares.length) * 1000) / 10 : null;
+          })(),
           top5RatePct: percentOrNull(row.top5Rate),
           top10RatePct: percentOrNull(row.top10Rate),
           issueLikeStatusRatePct: percentOrNull(row.issueLikeStatusRate)
@@ -3779,6 +3810,7 @@ const buildPackage = () => {
             const extra = canonical.get(row.sessionId);
             return {
               ...row,
+              raceDate: extra?.raceDate ?? null,
               raceNumber: extra?.raceNumber ?? null,
               startPosition: extra?.startPosition ?? null,
               fieldSize: extra?.fieldSize ?? null,

@@ -30,6 +30,8 @@ export interface UiUnclassifiedRace {
   eventId: string | null;
   eventName: string | null;
   eventStartDate: string | null;
+  /** The race's own day (YYYY-MM-DD, local) from its official start; eventStartDate is the meeting's first day. */
+  raceDate?: string | null;
   seriesId: string | null;
   seriesName: string | null;
   seasonYear: number | null;
@@ -1417,8 +1419,14 @@ export interface UiDataPackage {
         modifiedAt: string;
         sha256: string;
       } | null;
+      /** Per series. avgFinishPercentile is (field - place + 1) / field and counts him in
+       *  his own field; avgFieldBeatenPct is the mean share of the OTHER cars he finished
+       *  ahead of, (field - place) / (field - 1), in percent: the "beat N%" figure. */
       seriesSummary: Array<Record<string, string | number | null>>;
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
+      /** Per classified race. raceDate is the race's own day (the meeting's eventStartDate can
+       *  be a Friday for a Sunday race); fieldBeatenShare is (field - place) / (field - 1),
+       *  0 to 1, the share of the other cars he beat; finishPercentile counts him. */
       resultConversion: Array<Record<string, string | number | null>>;
       resultConversionSample: Array<Record<string, string | number | null>>;
       /** Races he entered with no classified finish (DNS, DNF, DSQ), from the A2 miles ledger. */

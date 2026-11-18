@@ -151,7 +151,12 @@ const slug = (value) =>
     .replace(/^_+|_+$/g, '')
     .replace(/_{2,}/g, '_');
 
-const cleanDriverName = (value) => String(value ?? '').replace(/\/M$/i, '').trim();
+// The FRP sheets print the masters-class marker after the name ("/M") and glue a
+// generational suffix to the surname ("John RobinsonII/M"). Every other sheet that
+// names him (SCCA 2019 results, the SCCA Southeast Conference report) prints
+// "John Robinson II", so the suffix is split off with a space.
+const legacyCleanDriverName = (value) => String(value ?? '').replace(/\/M$/i, '').trim();
+const cleanDriverName = (value) => legacyCleanDriverName(value).replace(/([a-z])(II|III|IV)$/, '$1 $2');
 
 const readJsonIfExists = async (path, fallback) => {
   try {
@@ -895,6 +900,16 @@ const main = async () => {
     for (const row of entry.parsedRows.rows) {
       const displayName = cleanDriverName(row.nameRaw);
       const driverId = /^bryce\s+aron$/i.test(displayName) ? 'driver_bryce_aron' : `driver_${slug(displayName || row.carNumber)}`;
+      // Rows written under the name before the suffix fix ("driver_john_robinsonii")
+      // are replaced, not left beside the corrected ones.
+      const legacyName = legacyCleanDriverName(row.nameRaw);
+      if (legacyName !== displayName) {
+        const legacyDriverId = `driver_${slug(legacyName || row.carNumber)}`;
+        results.delete(`result_frp_f1600_${year}_r${entry.event.eventIndex + 1}_${entry.sessionSlug}_${legacyDriverId}_${slug(row.carNumber)}`);
+        cars.delete(`car_frp_f1600_${year}_${legacyDriverId}_${slug(row.carNumber)}`);
+        const legacyDriver = drivers.get(legacyDriverId);
+        if (legacyDriver && asArray(legacyDriver.provenanceRefs).every((ref) => String(ref).startsWith('source_frp_f1600_'))) drivers.delete(legacyDriverId);
+      }
       const finish = parsePosition(row.position);
       const status = statusCategory(row.position);
       const teamId = driverId === 'driver_bryce_aron' ? 'team_k_hill_motorsports' : null;

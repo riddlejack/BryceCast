@@ -133,7 +133,8 @@ export const parseOrbitsSheet = (text, { columns, headerPattern = /^\s*Pos\b/i, 
   const summaryIndex = lines.findIndex((line) => /^\s*Margin of Victory/i.test(line));
   const summaryValues = summaryIndex >= 0 ? lines[summaryIndex + 1]?.trim().split(/\s{2,}/) ?? [] : [];
   const lengthMatch = text.match(/([0-9]+\.[0-9]+)\s+miles/i);
-  const startedMatch = text.match(/Race\s+\(([^)]*)\)\s+started at\s+([0-9]{1,2}:[0-9]{2}:[0-9]{2})/i);
+  // "Race (20:00 Time) started at 16:18:29", or "Race started at 16:32:52" with no format.
+  const startedMatch = text.match(/Race\s+(?:\(([^)]*)\)\s+)?started at\s+([0-9]{1,2}:[0-9]{2}:[0-9]{2})/i);
   const printedMatch = text.match(/Printed:\s*([0-9/]+\s+[0-9:]+\s*[AP]M)/i);
   return {
     header: lines[headerIndex],
@@ -143,7 +144,7 @@ export const parseOrbitsSheet = (text, { columns, headerPattern = /^\s*Pos\b/i, 
     meta: {
       titleLines: lines.slice(0, headerIndex).map((line) => line.trim()).filter(Boolean),
       circuitLengthMi: lengthMatch ? Number(lengthMatch[1]) : null,
-      raceFormat: startedMatch ? startedMatch[1] : null,
+      raceFormat: startedMatch ? startedMatch[1] ?? null : null,
       startedAtLocal: startedMatch ? startedMatch[2] : null,
       printed: printedMatch ? printedMatch[1] : null,
       marginOfVictory: summaryValues[0] ?? null,

@@ -737,6 +737,25 @@ const undatedConversionRows = conversionRows.filter((row) => !row.eventStartDate
 if (conversionRows.length === 0 || undatedConversionRows > 0) {
   fail(`careerLab.resultConversion must carry eventStartDate on every row (${undatedConversionRows} missing of ${conversionRows.length}).`);
 }
+/* The race's own day, not the meeting's first day (SCCA Saturday and Sunday
+ * races were dated the Friday), and the field-beaten share that does not count
+ * him in his own field. */
+const isoDay = /^\d{4}-\d{2}-\d{2}$/;
+const badRaceDateRows = conversionRows.filter((row) => !isoDay.test(String(row.raceDate ?? '')) || String(row.raceDate) < String(row.eventStartDate));
+if (badRaceDateRows.length) {
+  fail(`careerLab.resultConversion must carry a raceDate on or after eventStartDate on every row (${badRaceDateRows.length} bad, e.g. ${badRaceDateRows[0].sessionId}).`);
+}
+const badBeatenRows = conversionRows.filter((row) => {
+  const place = Number(row.finishPosition);
+  const field = Number(row.fieldSize);
+  if (!(field > 1 && place >= 1 && place <= field)) return row.fieldBeatenShare !== null && row.fieldBeatenShare !== undefined;
+  return Math.abs(Number(row.fieldBeatenShare) - (field - place) / (field - 1)) > 0.0001;
+});
+if (badBeatenRows.length) {
+  fail(`careerLab.resultConversion fieldBeatenShare must be (field - place) / (field - 1) (${badBeatenRows.length} bad, e.g. ${badBeatenRows[0].sessionId}).`);
+}
+const badUnclassifiedDates = (dataPackage.screens.careerLab.unclassifiedRaces ?? []).filter((row) => row.raceDate != null && !isoDay.test(String(row.raceDate)));
+if (badUnclassifiedDates.length) fail(`careerLab.unclassifiedRaces raceDate must be YYYY-MM-DD (${badUnclassifiedDates.length} bad).`);
 
 /* ---------- career named moments: deterministic semantics + referential integrity ---------- */
 
