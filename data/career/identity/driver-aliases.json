@@ -1,0 +1,157 @@
+{
+  "about": "Driver records that are one person entered twice, or a row whose name was parsed wrong. Each row folds the `from` record into the `to` record in the canonical dataset (scripts/backfill-driver-identities.mjs), so counts, shared races and head-to-heads see one driver. The test for a merge: the same car number or the same uncommon chassis, the same series and seasons, and never both in one session. Records that only look alike stay apart and are listed under `heldApart`.",
+  "checkedAt": "2026-11-18",
+  "aliases": [
+    {
+      "from": "driver_1",
+      "to": "driver_jonathan_browne",
+      "kind": "parse_error",
+      "reason": "2020 Formula Ford Festival Semi-final 1 (Race 13) winner's row, car 122, Ray GR18: the classification prints Jonathan BROWNE; the importer read his name as the number 1."
+    },
+    {
+      "from": "driver_tbc_tbc",
+      "to": "driver_tommy_smith",
+      "kind": "placeholder_name",
+      "reason": "GB3 2022 official session JSON names car 16, Douglas Motorsport, \"TBC TBC\" in all 76 rows, but gives initials TS and DriverUrl /drivers/2022/tommy-smith."
+    },
+    {
+      "from": "driver_zak_taylor_fortec_old",
+      "to": "driver_zak_taylor",
+      "kind": "same_driver",
+      "reason": "GB3 2022 car 21: Fortec Motorsports rounds 1-6 under the series' old profile (/drivers/2022/zak-taylor-old, surname \"Taylor FORTEC (OLD)\"), Chris Dittmann Racing rounds 7-8 under /drivers/2022/zak-taylor. Never both in one session."
+    },
+    {
+      "from": "driver_robero_faria",
+      "to": "driver_roberto_faria",
+      "kind": "misspelling",
+      "reason": "GB3 2021 round 1, car 7, Fortec Motorsports: the same car and team Roberto Faria drives in rounds 2-8; \"Robero\" is a typo on the round 1 timing sheets."
+    },
+    {
+      "from": "driver_maxwell_esterson",
+      "to": "driver_max_esterson",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 42, the same Ray GR15 (Festival, Walter Hayes) and Van Diemen RF99 (Brands Hatch) entries; Maxwell is the long form."
+    },
+    {
+      "from": "driver_alexander_walker",
+      "to": "driver_alex_walker",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 41, Van Diemen RF00, at Oulton Park; the same car and chassis Alex Walker races all season."
+    },
+    {
+      "from": "driver_alexander_henry_walker",
+      "to": "driver_alex_walker",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 41, Van Diemen RF00, at Brands Hatch; the same car and chassis Alex Walker races all season."
+    },
+    {
+      "from": "driver_chris_perkins",
+      "to": "driver_christopher_perkins",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 18, Van Diemen RF87, at the Champion of Brands; Christopher Perkins races the same car at the Walter Hayes Trophy."
+    },
+    {
+      "from": "driver_burton_august",
+      "to": "driver_burton_kyle_august",
+      "kind": "same_driver",
+      "reason": "2019 car 07 in FRP F1600 and SCCA: Burton August at Road Atlanta, Homestead and Sebring, Burton Kyle August in the same car the rest of the season."
+    },
+    {
+      "from": "driver_stephen_barlow",
+      "to": "driver_steve_barlow",
+      "kind": "same_driver",
+      "reason": "Formula Ford car 30, Ray GR09, 2019 and 2020 Festivals and the 2020 Walter Hayes Trophy."
+    },
+    {
+      "from": "driver_cam_jackson",
+      "to": "driver_cameron_jackson",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 66, Van Diemen JL15, at Silverstone and the Walter Hayes Trophy."
+    },
+    {
+      "from": "driver_matt_hayes",
+      "to": "driver_matthew_hayes",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 60, Jamun M97, at the Champion of Brands meetings and the Festival."
+    },
+    {
+      "from": "driver_stephen_bracegirdle",
+      "to": "driver_steve_bracegirdle",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 car 84, Van Diemen RF89, at Castle Combe and the Walter Hayes Trophy."
+    },
+    {
+      "from": "driver_f_russell_strate_jr",
+      "to": "driver_russell_strate_jr",
+      "kind": "same_driver",
+      "reason": "SCCA Super Tour 2019 car 9, Scorpion S1, F500: Homestead and Sebring as Russell Strate Jr., COTA and Road Atlanta as F Russell Strate Jr."
+    },
+    {
+      "from": "driver_jack_walbran",
+      "to": "driver_john_w_walbran",
+      "kind": "same_driver",
+      "reason": "SCCA Super Tour 2019 car 67, Scorpion F500 (2009): Homestead and Sebring as Jack Walbran, COTA and Road Atlanta as John W. Walbran; Jack is his short name."
+    },
+    {
+      "from": "driver_phil_attwood",
+      "to": "driver_philip_attwood",
+      "kind": "same_driver",
+      "reason": "Formula Ford Crossle 32F, a rare car on these grids: Philip Attwood in car 177 at the 2019 and 2020 Festivals, Phil Attwood in car 77 at the 2020 Champion of Brands."
+    },
+    {
+      "from": "driver_phil_hart",
+      "to": "driver_philip_hart",
+      "kind": "same_driver",
+      "reason": "Formula Ford 2020 Mallock Mk11B: Philip Hart in car 11 at the Champion of Brands, Phil Hart in car 71 at the Walter Hayes Trophy."
+    },
+    {
+      "from": "driver_david_h_livingston_jr",
+      "to": "driver_david_livingston",
+      "kind": "same_driver",
+      "reason": "SCCA Super Tour 2019 car 85, Spectrum 14H, Formula F: Homestead and Sebring as David Livingston, Road Atlanta as David H. Livingston, Jr."
+    },
+    {
+      "from": "driver_milan_de_lart",
+      "to": "driver_milan_de_laet",
+      "kind": "misspelling",
+      "reason": "Formula Ford 2020 car 2, Van Diemen JL13, Oulton Park qualifying: the Oulton Park book spells him DE LART three times and DE LAET elsewhere; every other sheet says Milan DE LAET."
+    }
+  ],
+  "heldApart": [
+    {
+      "ids": [
+        "driver_josh_smith",
+        "driver_joshua_smith"
+      ],
+      "reason": "Van Diemen JL13 both, a common car, in different numbers (1 in 2019; 20 and 59 in 2020). Nothing on the sheets ties them."
+    },
+    {
+      "ids": [
+        "driver_tom_ward",
+        "driver_thomas_ward"
+      ],
+      "reason": "Medina Sport BH20 in car 24 all 2020, a BH21 in car 124 at the Walter Hayes Trophy: possibly one driver in a new car, not shown by the sheets."
+    },
+    {
+      "ids": [
+        "driver_tom_mcarthur",
+        "driver_thomas_mcarthur"
+      ],
+      "reason": "Different cars (Medina JL18 car 17 in 2019, Van Diemen LA10 car 317 in 2020) in a family of McArthur drivers."
+    },
+    {
+      "ids": [
+        "driver_mikhail_goikhberg",
+        "driver_misha_goikhberg"
+      ],
+      "reason": "Both in Mygales in 2019, but in cars 06 and 13/18; Misha is a short form of Mikhail, and no sheet ties them."
+    }
+  ],
+  "spelling": [
+    {
+      "id": "driver_michaeol_neylon",
+      "decision": "kept",
+      "reason": "The only source, the Right Coast Formula F 2019 Mid-Ohio results (a DNS row, car 27A), spells it Michaeol; no primary source gives another spelling."
+    }
+  ]
+}

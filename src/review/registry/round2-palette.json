@@ -35,7 +35,7 @@
       "title": "The odometer: colour and a read on every tile",
       "switch": null,
       "noswitch": "new reads on tiles that had none; nothing to switch back to",
-      "look": "Career → the odometer. Point at (or tap) each: a series segment on On track; a bar on Distance (it thickens and reads its miles); a part of Time (timed, untimed, other sessions); any of the 624 dots on Other drivers (the shared card: series and year, name, races together), or a colour chip under them to light one series; a country on Places (its most-raced track pictured, races and years) or a track dot (that track); a cell on When it went wrong (the shared race card: P19 of 21, how it ended; a second tap opens the race).",
+      "look": "Career → the odometer. Point at (or tap) each: a series segment on On track; a bar on Distance (it thickens and reads its miles); a part of Time (timed, untimed, other sessions); any of the 610 dots on Other drivers (the shared card: series and year, name, races together), or a colour chip under them to light one series; a country on Places (its most-raced track pictured, races and years) or a track dot (that track); a cell on When it went wrong (the shared race card: P19 of 21, how it ended; a second tap opens the race).",
       "anchor": "#career-odometer-title",
       "added": "2026-11-18T01:30",
       "reviewed": false

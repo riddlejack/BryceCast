@@ -280,7 +280,7 @@ def build_career_figures(
     all_people = people(race_ids)
     single_seater_people = people(race_ids - {daytona_session})
 
-    # The odometer's 619 dots, one per driver record (round 2, November 17):
+    # The odometer's dots, one per driver (round 2, November 17; duplicate records folded by scripts/backfill-driver-identities.mjs):
     # single-seater rivals first, in the order he first raced them, each with
     # the series of that first race; then the drivers met only at Daytona.
     def session_start(session_id: str) -> str:
