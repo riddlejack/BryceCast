@@ -20,7 +20,8 @@ import {
   type SectionObservationSet
 } from '../data/sectionObservations';
 import { TrackModelSlot } from '../three/TrackModelSlot';
-import { TrackWeatherProvider } from '../three/weather/sceneWeather';
+import { TrackWeatherProvider, sceneWeatherFor } from '../three/weather/sceneWeather';
+import { wetDryCall } from '../app/wetDry';
 import type { TrackModelSection } from '../three/TrackModel3D';
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
@@ -42,7 +43,8 @@ import { displayRaceLabel, loadDebriefBySessionId, roundIndexOf, type ArchiveEnt
 import { loadRaceStory, type RaceStoryPack, type RaceStoryLapDriver } from '../data/raceStory';
 import { getVenueBySessionId, pastVisits } from '../data/venueDossier';
 import { FactDelta } from '../app/weatherGlyphs';
-import type { UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
+import type { UiRaceWeather, UiVenueDossierVenue, UiVenueDossierVisit } from '../data/uiDataPackage';
+import { windCardinal } from '../app/format';
 import {
   isBryceCastCaptureTier,
   watchableCaptureForRace,
@@ -626,17 +628,30 @@ const DayTile = ({ label, value, note }: { label: string; value: ReactNode; note
 const YoYConditionsStrip = ({
   venue,
   visit,
-  shown
+  shown,
+  raceWindow = null
 }: {
   venue: UiVenueDossierVenue;
   visit: UiVenueDossierVisit;
   /** What the tiles above already print, for the de-duplication. */
   shown: { tempF: number | null; humidityPct: number | null; windMph: number | null };
+  /** Both races' weather over their race windows (careerLab.raceWeather), the tiles' own source: when given, the
+   *  strip compares those, so the page reads one window and one source throughout (no humidity: that source has none). */
+  raceWindow?: { here: UiRaceWeather; prior: UiRaceWeather } | null;
 }) => {
   const prior = venue.visits.find((candidate) => candidate.sessionId === visit.deltaVsPrior?.priorSessionId) ?? null;
-  const here = visit.conditions;
-  const d = visit.deltaVsPrior;
-  if (!d || !here) return null;
+  const dossierHere = visit.conditions;
+  const dossierDelta = visit.deltaVsPrior;
+  if (!dossierDelta || (!dossierHere && !raceWindow)) return null;
+  const fOf = (c: number | null) => (c === null ? null : Math.round((c * 9) / 5 + 32));
+  const mphOf = (k: number | null) => (k === null ? null : Math.round(k / 1.609344));
+  const diff = (a: number | null, b: number | null) => (a === null || b === null ? null : a - b);
+  const here = raceWindow
+    ? { ambientTempF: fOf(raceWindow.here.tempC), humidityPct: null, windSpeedMph: mphOf(raceWindow.here.windKph), windCardinal: windCardinal(raceWindow.here.windFromDeg) }
+    : dossierHere!;
+  const d = raceWindow
+    ? { ...dossierDelta, tempDeltaF: diff(fOf(raceWindow.here.tempC), fOf(raceWindow.prior.tempC)), humidityDeltaPct: null, windSpeedDeltaMph: diff(mphOf(raceWindow.here.windKph), mphOf(raceWindow.prior.windKph)) }
+    : dossierDelta;
 
   const segments: ReactNode[] = [];
   if (here.ambientTempF !== null) {
@@ -712,7 +727,25 @@ const YoYConditionsStrip = ({
 };
 
 const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: ArchiveEntry['pack']; venue: UiVenueDossierVenue | null; visit: UiVenueDossierVisit | null }) => {
-  const weather = story.weather;
+  /* The weather tiles read the race window (careerLab.raceWeather, its official start to its end), the same window
+     and source as the 3D track's caption, so the page gives one reading; the race-hour story weather only where the
+     block has no row for this race. */
+  const raceWeather = uiDataPackage.screens.careerLab.raceWeather ?? {};
+  const rw: UiRaceWeather | null = raceWeather[story.sessionId] ?? null;
+  const scene = rw ? sceneWeatherFor(story.sessionId) : null;
+  const call = rw ? wetDryCall(rw) : null;
+  const weather = rw
+    ? {
+        ambientTempC: rw.tempC,
+        windSpeedKph: rw.windKph,
+        windGustKph: rw.gustKph,
+        humidityPct: null as number | null,
+        precipitationMm: rw.rainMm,
+        conditionRaw: scene ? (scene.skyWords ?? { clear: 'clear', partly: 'partly cloudy', overcast: 'overcast', rain: 'rain', storm: 'thunderstorm' }[scene.sky]) : null,
+        source: rw.source.name,
+        caveat: `Modelled ambient weather over the race window (${rw.window.start.slice(11)} to ${rw.window.end.slice(11)} local), not track temperature.${call && call.tier !== 'modelled' ? ` Wet or dry: ${call.tierWords}.${rw.observed?.summary ? ` ${rw.observed.summary}` : ''}` : ''}`
+      }
+    : story.weather;
   const context = pack.raceContext;
   const leader = asString(context?.topLeader);
   const leaderShare = asNumber(context?.topLeaderShare);
@@ -759,8 +792,8 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
           title="Race-day conditions and character"
           entries={[
             {
-              label: 'Near-track weather · race hour',
-              path: 'data/career/career.dataset.json',
+              label: rw ? 'Near-track weather · over the race' : 'Near-track weather · race hour',
+              path: rw ? 'data/career/reports/career-race-weather-report.json' : 'data/career/career.dataset.json',
               note: weather?.source ?? 'Modeled near-track weather.'
             },
             {
@@ -807,7 +840,7 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
           <DayTile
             label="Air temperature"
             value={`${tempF}°F`}
-            note={weather?.humidityPct != null ? `${Math.round(weather.humidityPct)}% humidity` : 'race-hour reading'}
+            note={weather?.humidityPct != null ? `${Math.round(weather.humidityPct)}% humidity` : rw ? 'over the race' : 'race-hour reading'}
           />
         ) : null}
         {windMph !== null ? (
@@ -817,17 +850,29 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
             note={windMph <= 0 ? 'still air' : gustMph !== null && gustMph > windMph + 4 ? `gusts to ${gustMph}` : 'steady all race'}
           />
         ) : null}
-        {rainMm !== null && rainMm > 0 ? (
+        {rw ? (
+          // a report or the stations that call the race dry outrank the model's trace of rain: the sky, not a rain total
+          rainMm !== null && rainMm > 0 && (!call || call.rainMayFall) ? (
+            <DayTile label="Rain over the race, modelled" value={`${formatNumber(rainMm)} mm`} note={call ? `${call.words} (${call.tierWords})` : sky} />
+          ) : sky ? (
+            <DayTile label="Sky" value={sky} note={call ? `${call.words} (${call.tierWords})` : 'over the race'} />
+          ) : null
+        ) : rainMm !== null && rainMm > 0 ? (
           <DayTile label="Rain in the race hour" value={`${formatNumber(rainMm)} mm`} note={sky ?? 'race-hour reading'} />
         ) : sky ? (
           <DayTile label="Sky" value={sky} note="during the race hour" />
         ) : null}
       </div>
-      {venue && venue.visits.length >= 2 && visit ? (
+      {venue && venue.visits.length >= 2 && visit && (!rw || (visit.deltaVsPrior?.priorSessionId && raceWeather[visit.deltaVsPrior.priorSessionId])) ? (
         <YoYConditionsStrip
           venue={venue}
           visit={visit}
           shown={{ tempF, humidityPct: weather?.humidityPct ?? null, windMph }}
+          raceWindow={
+            rw && visit.deltaVsPrior?.priorSessionId && raceWeather[visit.deltaVsPrior.priorSessionId]
+              ? { here: rw, prior: raceWeather[visit.deltaVsPrior.priorSessionId] }
+              : null
+          }
         />
       ) : null}
     </Card>

@@ -121,7 +121,7 @@ export function createWeather(ctx) {
         float spec = pow(max(dot(R, uSun), 0.0), uSharp);
         float fres = pow(1.0 - clamp(V.y, 0.0, 1.0), 1.5);
         float pud = smoothstep(0.5, 0.85, n(vW.xz * 0.045) * 0.65 + n(vW.xz * 0.17) * 0.35);
-        float a = uAmt * (0.55 * spec + 0.3 * fres + 0.28 * pud * (0.5 + spec));
+        float a = uAmt * (0.6 * spec + 0.45 * fres + 0.32 * pud * (0.5 + spec));
         gl_FragColor = vec4(uSky * a, 1.0);
       }`,
     // screen blending: the sheen lifts the dark asphalt and the dark heat steps, and all but leaves the pale ones be,
@@ -130,11 +130,15 @@ export function createWeather(ctx) {
     blendSrc: THREE.OneMinusDstColorFactor, blendDst: THREE.OneFactor, toneMapped: false,
     polygonOffset: true, polygonOffsetFactor: -12, polygonOffsetUnits: -12, side: THREE.DoubleSide,
   });
-  let sheen = null;
+  // as wide as the band drawn over the track (wider than the track itself far off, so the sheen reads at the opening
+  // view as well as up close); rebuilt when the band is
+  let sheen = null, sheenHalf = 0;
   function ensureSheen() {
-    if (sheen) return;
-    sheen = new THREE.Mesh(ribbon(0, 1, model.half, model.half, model.bandDy + 0.16), sheenMat);
-    sheen.renderOrder = 8; scene.add(sheen);
+    const half = Math.max(model.half, ctx.bandHalf ? ctx.bandHalf() : model.half);
+    if (sheen && Math.abs(half - sheenHalf) < 1e-3) return;
+    if (sheen) { sheen.geometry.dispose(); sheen.geometry = ribbon(0, 1, half, half, model.bandDy + 0.16); }
+    else { sheen = new THREE.Mesh(ribbon(0, 1, half, half, model.bandDy + 0.16), sheenMat); sheen.renderOrder = 8; scene.add(sheen); }
+    sheenHalf = half;
   }
 
   // ---------- wind markers ----------
@@ -174,19 +178,31 @@ export function createWeather(ctx) {
       }`,
     transparent: true, depthWrite: false, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -6, polygonOffsetUnits: -6,
   });
+  const plateMat = new THREE.MeshBasicMaterial({ color: hex(KIT.bg), transparent: true, opacity: 0.9, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, toneMapped: false });
   function buildArrow(w) {
     const g = new THREE.Group();
     const quad = new THREE.Mesh(new THREE.PlaneGeometry(1, 0.4).rotateX(-Math.PI / 2), arrowMat);
     quad.renderOrder = 6; g.add(quad);
-    let text = null;
+    // the words in three lengths, longest first: where the paper beside the model is tight (a phone, a stage framed
+    // close) a shorter one still sits by the arrow; the caption under the stage always has them in full
+    const texts = [];
     const mph = w.windKph !== null ? Math.round(w.windKph / 1.609344) : null;
     const gust = w.gustKph !== null ? Math.round(w.gustKph / 1.609344) : null;
     if (mph !== null) {
-      const words = gust !== null && gust > mph + 4 ? `Wind ${mph} mph, gusts ${gust}` : `Wind ${mph} mph`;
-      text = T.groundText(words, { size: 1, color: KIT.muted, weight: 450 });
-      text.renderOrder = 6; g.add(text);
+      const gusty = gust !== null && gust > mph + 4;
+      const all = gusty ? [`Wind ${mph} mph, gusts ${gust}`, `${mph} mph, gusts ${gust}`, `${mph} mph`] : [`Wind ${mph} mph`, `${mph} mph`];
+      for (const words of all) {
+        const t = T.groundText(words, { size: 1, color: KIT.muted, weight: 450 });
+        t.renderOrder = 6; t.visible = false; g.add(t); texts.push(t);
+        // the type's own width, without the side room the kit leaves on its texture (0.8 of its pixel size, in caps)
+        t.userData.ink = t.userData.width - 1.11;
+        // where no paper is free beside the model (a phone's tight stage), the words lie on a small paper plate over
+        // its edge, so they still read beside their arrow
+        const plate = new THREE.Mesh(new THREE.PlaneGeometry(t.userData.ink + 1.1, 2).rotateX(-Math.PI / 2), plateMat);
+        plate.position.y = -0.02; plate.renderOrder = 5; plate.visible = false; t.add(plate); t.userData.plate = plate;
+      }
     }
-    return { group: g, quad, text };
+    return { group: g, quad, texts };
   }
 
   // the windsock: a pole and a striped sock by the start/finish line, at the model's scale (the trees are drawn
@@ -210,6 +226,7 @@ export function createWeather(ctx) {
   let weather = null, take = 'arrow', reduced = false, flow = 0, disposed = false;
   const downWorld = new THREE.Vector2(1, 0);
   let hasDir = false;
+  let lastPlace = [];   // the placement's tries, for headless checks
 
   // ---------- where the arrow lies: free paper in the home framing, clear of the slab and of the stage's buttons ----------
   const v3 = new THREE.Vector3(), scratch = new THREE.PerspectiveCamera(25, 1, 0.1, 1e6);
@@ -225,31 +242,60 @@ export function createWeather(ctx) {
     const inPoly = (x, y, P) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; } return c; };
     const mpp = (2 * home.D * Math.tan((25 * Math.PI) / 360)) / Hh;
     const phone = W < 560;
-    // try the arrow with its words, then the arrow alone, then a shorter arrow: the first that sits on clear paper
-    const tries = [{ text: !phone && Boolean(markerParts.text), k: 1 }, { text: false, k: 1 }, { text: false, k: 0.72 }];
-    const capPx = 11.5;
-    let best = null, showText = false, lenPx = 0, reach = 0, textW = 0, textDy = 0;
+    // how the downwind direction lies on screen in this view: the arrow's height on screen per pixel of its length,
+    // so the words sit just under its lowest point whichever way it points
+    const c0 = proj([ctx.centre[0], 0.3, ctx.centre[2]]), c1 = proj([ctx.centre[0] + downWorld.x * 100, 0.3, ctx.centre[2] + downWorld.y * 100]);
+    const sy = Math.abs(c1[1] - c0[1]) * mpp / 100, sx = Math.abs(c1[0] - c0[0]) * mpp / 100;
+    const top = Math.max(22, Hh * 0.06);
+    // the arrow with its words (a little shorter if it must be), and only where no words fit at all, the arrow alone;
+    // on a phone the words are smaller but never under 12 px type
+    const capPx = phone ? 9 : 11.5;
+    const tries = [];
+    for (const tx of markerParts.texts) tries.push({ text: tx, k: 1 }, { text: tx, k: 0.72 });
+    for (const tx of markerParts.texts) tries.push({ text: tx, k: 0.72, plate: true });
+    tries.push({ text: null, k: 1 }, { text: null, k: 0.72 });
+    let best = null, showText = null, showPlate = false, lenPx = 0;
+    lastPlace = [];
     for (const t of tries) {
-      const len = clamp(W * 0.085, 54, 128) * t.k * (0.62 + 0.38 * clamp((weather?.windKph ?? 0) / 30, 0, 1)), rch = len * 0.56, tw = t.text ? markerParts.text.userData.width * capPx + 16 : 0, tdy = rch + capPx * 1.5;
+      const len = clamp(W * 0.085, phone ? 40 : 54, 128) * t.k * (0.62 + 0.38 * clamp((weather?.windKph ?? 0) / 30, 0, 1)), rch = len * 0.56;
+      // (with a little to spare: the head is wider than the shaft and the near end is drawn larger)
+      const halfH = 1.15 * (0.5 * len * sy + 0.11 * len * Math.max(0.3, sx)), halfX = 1.15 * (0.5 * len * sx + 0.11 * len);
+      const tw = t.text ? t.text.userData.ink * capPx + (t.plate ? 14 : 10) : 0;
+      // the words under the arrow, else above it, else beside it: always next to it, never across the picture
+      // (under or above: centred on it, or flush with its left or right end where a corner is tight)
+      const below = halfH + 5 + capPx * 0.75, flush = Math.max(0, tw / 2 - halfX);
+      const offs = t.text
+        ? [[0, below, 0], [-flush, below, 0.2], [flush, below, 0.2], [0, -below, 0.4], [-flush, -below, 0.5], [flush, -below, 0.5],
+          [halfX + 8 + tw / 2, 0, 0.8], [-(halfX + 8 + tw / 2), 0, 0.8]]
+        : [[0, 0, 0]];
       let found = null;
       for (let gy = 0; gy <= 14; gy++) for (let gx = 0; gx <= 18; gx++) {
         const x = W * (0.04 + 0.92 * gx / 18), y = Hh * (0.06 + 0.86 * gy / 14);
-        const halfW = Math.max(rch, tw / 2);
-        if (x + halfW > W - 8 || x - halfW < 8 || y - rch < 6 || y + (t.text ? tdy + capPx : rch) > Hh - 6) continue;
-        // the buttons sit in the bottom right corner
-        if (x + halfW > W - 230 && y + (t.text ? tdy + capPx : rch) > Hh - 64) continue;
-        let clash = 0;
+        let ring = 0;
         for (let k = 0; k < 16; k++) {
           const a = (k / 16) * Math.PI * 2, px = x + Math.cos(a) * rch, py = y + Math.sin(a) * rch;
-          for (const P of polys) if (inPoly(px, py, P)) clash++;
+          for (const P of polys) if (inPoly(px, py, P)) ring++;
         }
-        if (t.text) for (let k = -4; k <= 4; k++) for (const dy of [-0.7, 0.7]) for (const P of polys) if (inPoly(x + (k * tw) / 8, y + tdy + dy * capPx, P)) clash += 2;
-        for (const P of polys) if (inPoly(x, y, P)) clash += 6;
-        // the top right first (where a map keeps its north arrow), then nearer the model
-        const score = clash * 10 + (1 - x / W) * 0.6 + (y / Hh) * 0.8;
-        if (!found || score < found.score) found = { score, x, y, clash };
+        for (const P of polys) if (inPoly(x, y, P)) ring += 6;
+        for (const [ox, oy, pref] of offs) {
+          const cx = x + ox, cy = y + oy, th = t.text ? capPx * 0.8 : 0;
+          const x0 = Math.min(x - halfX, cx - tw / 2), x1 = Math.max(x + halfX, cx + tw / 2);
+          const y0 = Math.min(y - halfH, cy - th), y1 = Math.max(y + halfH, cy + th);
+          if (x1 > W - 12 || x0 < 12 || y0 < top || y1 > Hh - 10) continue;
+          // the buttons sit in the bottom right corner
+          if (x1 > W - (phone ? 150 : 230) && y1 > Hh - 64) continue;
+          let clash = ring;
+          // words on a plate may lie over the model's edge; it still costs a little, so the plate covers as little as it can
+          let over = 0;
+          if (t.text) for (let k = -4; k <= 4; k++) for (const dy of [-0.7, 0, 0.7]) for (const P of polys) if (inPoly(cx + (k * tw) / 8, cy + dy * capPx, P)) over++;
+          if (t.plate) { if (over > 40) continue; } else clash += 2 * over;
+          // the top right first (where a map keeps its north arrow), then nearer the model; words under the arrow first
+          const score = clash * 10 + (t.plate ? over * 0.05 : 0) + (1 - x / W) * 0.6 + (y / Hh) * 0.8 + pref;
+          if (!found || score < found.score) found = { score, x, y, clash, ox, oy };
+        }
       }
-      if (found && (!best || found.score < best.score)) { best = found; showText = t.text; lenPx = len; reach = rch; textW = tw; textDy = tdy; }
+      lastPlace.push(found ? { text: t.text?.userData.width ?? 0, plate: Boolean(t.plate), k: t.k, x: Math.round(found.x), y: Math.round(found.y), clash: found.clash, ox: Math.round(found.ox), oy: Math.round(found.oy) } : { text: t.text?.userData.width ?? 0, k: t.k, none: true });
+      if (found && (!best || found.score < best.score - (best.clash === 0 ? 0 : 5))) { best = found; showText = t.text; showPlate = Boolean(t.plate); lenPx = len; }
       if (found && found.clash === 0) break;
     }
     if (!best || (strict && best.clash > 0)) { if (strict) markerParts.group.visible = false; return; }
@@ -264,14 +310,17 @@ export function createWeather(ctx) {
     const L = lenPx * local;
     markerParts.quad.scale.set(L, 1, L);
     markerParts.quad.rotation.y = Math.atan2(-downWorld.y, downWorld.x);   // the quad's +x onto the downwind direction
-    if (markerParts.text) {
-      const under = hit(best.x, best.y + textDy);
-      markerParts.text.visible = showText && Boolean(under);
+    for (const tx of markerParts.texts) { tx.visible = false; tx.userData.plate.visible = false; }
+    if (showText) {
+      const under = hit(best.x + best.ox, best.y + best.oy);
+      showText.visible = Boolean(under); showText.userData.plate.visible = showPlate;
+      // on its plate the words lie over the model's edge: drawn over the slab's rim and trees, never cut by them
+      for (const m of [showText.material, plateMat]) if (m.depthTest === showPlate) { m.depthTest = !showPlate; m.needsUpdate = true; }
       if (under) {
         // upright on screen wherever it lies: the baseline along the camera's right (level on screen everywhere), and
         // the letters' up along the ground line that the camera sees as vertical at that point, so they never lean
         // like italics toward the middle of the picture
-        const s = capPx * mpp * (scratch.position.distanceTo(under) / home.D);
+        const s = capPx * mpp * (scratch.position.distanceTo(under) / home.D);   // capPx: chosen above with the spot
         const right = new THREE.Vector3(Math.cos(az), 0, -Math.sin(az));
         const fwd = new THREE.Vector3(-Math.sin(az), 0, -Math.cos(az));
         const camUp = new THREE.Vector3().setFromMatrixColumn(scratch.matrixWorld, 1);
@@ -282,7 +331,7 @@ export function createWeather(ctx) {
         // from the opening view (part way: turned to look straight down, it is never much stretched)
         const tall = Math.pow(1 / Math.max(0.35, -rayDir.y), 0.6);
         const up = Math.abs(along) > 1e-3 ? g.multiplyScalar(tall / along) : fwd.clone().multiplyScalar(tall);
-        const t = markerParts.text;
+        const t = showText;
         t.matrixAutoUpdate = false;
         t.matrix.makeBasis(right.multiplyScalar(s), new THREE.Vector3(0, 1, 0), up.multiplyScalar(-s));
         t.matrix.setPosition(under.x - at.x, 0, under.z - at.z);
@@ -302,7 +351,7 @@ export function createWeather(ctx) {
 
   function clearMarker() {
     if (!markerParts) return;
-    markerParts.group.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material && o.material !== arrowMat) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } });
+    markerParts.group.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material && o.material !== arrowMat && o.material !== plateMat) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } });
     marker.remove(markerParts.group); markerParts = null; markerKind = null;
   }
 
@@ -365,7 +414,7 @@ export function createWeather(ctx) {
       // lies on the far stretches at first and slides along the track as the camera turns
       const h = getHome(), az = (h.azim * Math.PI) / 180, el = (Math.min(h.elev + 6, 80) * Math.PI) / 180;
       sheenMat.uniforms.uSun.value.set(-Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)).normalize();
-      sheenMat.uniforms.uAmt.value = 0.22 + 0.18 * wetK; sheenMat.uniforms.uSharp.value = 7;
+      sheenMat.uniforms.uAmt.value = 0.3 + 0.2 * wetK; sheenMat.uniforms.uSharp.value = 5;
     }
     else if (sheen) sheen.visible = false;
     // wind
@@ -421,6 +470,8 @@ export function createWeather(ctx) {
       return [dx / l, dy / l];
     },
     relayout() { if (markerKind === 'arrow') placeArrow(); },
+    // the band over the track changed width (zoom): the sheen follows it
+    bandChanged() { if (sheen && sheen.visible) { ensureSheen(); invalidate(); } },
     // after the camera settles: keep the arrow in view, on clear paper (it stays where it lies while it is)
     settled(pose, atHome) {
       if (markerKind !== 'arrow' || !markerParts) return;
@@ -437,9 +488,9 @@ export function createWeather(ctx) {
       if (!clear) placeArrow(pose, true);
     },
     dispose() {
-      disposed = true; clearMarker(); arrowMat.dispose(); sheenMat.dispose(); if (sheen) sheen.geometry.dispose();
+      disposed = true; clearMarker(); arrowMat.dispose(); plateMat.dispose(); sheenMat.dispose(); if (sheen) sheen.geometry.dispose();
     },
-    info: () => ({ sun: sunNow, sky: weather?.sky ?? null, wet: Boolean(weather?.wet), marker: markerKind, down: hasDir ? [downWorld.x, downWorld.y] : null,
+    info: () => ({ place: lastPlace, sun: sunNow, sky: weather?.sky ?? null, wet: Boolean(weather?.wet), marker: markerKind, down: hasDir ? [downWorld.x, downWorld.y] : null,
       markerAt: markerParts ? markerParts.group.position.toArray() : null, crowns: crowns.length, asphalt: asphalt.length }),
   };
 }

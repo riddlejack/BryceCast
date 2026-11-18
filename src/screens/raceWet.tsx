@@ -3,20 +3,24 @@
  * colour) | off).
  *
  * One read of "was it wet?" per race, shared by every chart that marks it:
- * careerLab.raceWeather first (the official series condition report where one
- * exists, else the reanalysis rain over the race window), then the older
- * resultConversion.wetDry for any race raceWeather lacks. A dry or unknown race
- * gets no mark. A reanalysis read says "(modelled)" wherever it is put in words. */
+ * careerLab.raceWeather first, read through app/wetDry.ts (the series' report,
+ * else the stations and race reports, else the reanalysis rain over the race
+ * window), then the older resultConversion.wetDry for any race raceWeather
+ * lacks. A dry or unknown race gets no mark. Words name their tier: "(observed)"
+ * for stations or race reports, "(modelled)" for the reanalysis. */
 
 import { uiDataPackage } from '../data/uiDataPackage';
+import { wetDryCall, type WetTier } from '../app/wetDry';
 import { switchValue } from '../review/switches';
 import './rainMarks.css';
 
 export interface WetRead {
   state: 'wet' | 'mixed';
-  /** True when the call comes from the weather model, not an official report. */
+  /** True when the call comes from the weather model, not a report or observations. */
   modelled: boolean;
-  /** For a card: "wet track", "wet track (modelled)", "damp track", "drying track". */
+  /** Who made the call: the series' report, observations (stations, race reports), or the model. */
+  tier: WetTier;
+  /** For a card: "wet track", "wet, drying track", "damp track", "wet track (observed)", "wet track (modelled)". */
   words: string;
 }
 
@@ -32,10 +36,10 @@ const build = (): Map<string, WetRead> => {
   const lab = uiDataPackage.screens.careerLab;
   const weather = lab.raceWeather ?? {};
   for (const [sessionId, row] of Object.entries(weather)) {
-    if (row.wetDry !== 'wet' && row.wetDry !== 'mixed') continue;
-    const modelled = row.wetDrySource !== 'series_report';
-    const base = row.wetDry === 'wet' ? 'wet' : mixedWord(row.seriesReport?.conditionRaw);
-    map.set(sessionId, { state: row.wetDry, modelled, words: `${base} track${modelled ? ' (modelled)' : ''}` });
+    const call = wetDryCall(row);
+    if (!call || call.state === 'dry') continue;
+    const tag = call.tier === 'modelled' ? ' (modelled)' : call.tier === 'observed' ? ' (observed)' : '';
+    map.set(sessionId, { state: call.state, modelled: call.tier === 'modelled', tier: call.tier, words: `${call.words}${tag}` });
   }
   for (const entry of lab.resultConversion ?? []) {
     const sessionId = typeof entry.sessionId === 'string' ? entry.sessionId : null;
@@ -44,7 +48,7 @@ const build = (): Map<string, WetRead> => {
     if (!wetDry || wetDry === 'dry') continue;
     const modelled = entry.weatherConfidence !== 'official';
     const state: WetRead['state'] = wetDry === 'wet' ? 'wet' : 'mixed';
-    map.set(sessionId, { state, modelled, words: `${state === 'wet' ? 'wet' : mixedWord(wetDry)} track${modelled ? ' (modelled)' : ''}` });
+    map.set(sessionId, { state, modelled, tier: modelled ? 'modelled' : 'series', words: `${state === 'wet' ? 'wet' : mixedWord(wetDry)} track${modelled ? ' (modelled)' : ''}` });
   }
   return map;
 };

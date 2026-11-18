@@ -153,7 +153,11 @@ export const TrackModel3D = ({
         }
         sceneRef.current = scene;
         setAspect(scene.naturalAspect);
-        if (import.meta.env.DEV) (window as unknown as { __track3d?: TrackScene }).__track3d = scene;
+        if (import.meta.env.DEV) {
+          const w = window as unknown as { __track3d?: TrackScene; __track3dAll?: TrackScene[] };
+          w.__track3d = scene;
+          w.__track3dAll = [...(w.__track3dAll ?? []).slice(-7), scene];   // for headless checks: every model on the page
+        }
         scene.setSections(sectionsRef.current.map(({ key, spans, color, dashed }) => ({ key, spans, color, dashed })));
         setAtHome(true);
         setStatus('ready');
@@ -199,6 +203,8 @@ export const TrackModel3D = ({
     const kph = weather?.windKph ?? 0;
     return dir ? dir[0] * Math.min(1, kph / 40) * 0.55 : 0;
   }, [weather]);
+  // the rain falls over the model only, never on the paper round it
+  const rainClip = useCallback(() => sceneRef.current?.screenSilhouette() ?? null, []);
 
   /* Cross-highlight from the bars: their hover lights the section on the model. */
   useEffect(() => {
@@ -298,7 +304,7 @@ export const TrackModel3D = ({
           role="img"
         />
         {weather && weather.rainIntensity > 0 && status === 'ready' ? (
-          <WeatherRain intensity={weather.rainIntensity} drift={windDrift} reduced={reduced} scale={coarse ? 0.8 : 1} className="track3d__rain" />
+          <WeatherRain intensity={weather.rainIntensity} drift={windDrift} reduced={reduced} scale={coarse ? 0.8 : 1} clip={rainClip} className="track3d__rain" />
         ) : null}
         {overlay && status === 'ready' && sceneRef.current ? (
           <div className="track3d__overlay">
