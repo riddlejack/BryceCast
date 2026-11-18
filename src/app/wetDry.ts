@@ -10,7 +10,7 @@
  * modelled one. A call from 1 or 2 also decides whether rain falls in a picture: an observed or reported dry race
  * shows no rain, whatever the model's sky says. (Nov 18 2026, proxy review 2.) */
 
-import type { UiRaceWeather } from '../data/uiDataPackage';
+import { uiDataPackage, type UiRaceWeather } from '../data/uiDataPackage';
 
 export type WetTier = 'series' | 'observed' | 'modelled';
 
@@ -68,4 +68,28 @@ export const wetDryCall = (row: Partial<UiRaceWeather> | null | undefined): WetD
     words = said ? (/track|rain|start|end/.test(said) ? said : `${said} track`) : 'wet for part of the race';
   }
   return { state, tier, words, tierWords: tierWordsOf(tier, row), rainMayFall: tier === 'modelled' || state !== 'dry' };
+};
+
+/** The call for one race by its session id; where careerLab.raceWeather has no row, the older per-race wet/dry
+ *  (`raw`: 'wet' | 'mixed' | 'damp' | 'drying' | 'dry') in plain words, with no tier to name. */
+export const wetCallFor = (sessionId: string | null | undefined, raw?: string | null): WetDryCall | null => {
+  const row = sessionId ? uiDataPackage.screens.careerLab.raceWeather?.[sessionId] : undefined;
+  const call = wetDryCall(row);
+  if (call) return call;
+  const r = (raw ?? '').trim().toLowerCase();
+  if (!r) return null;
+  if (r === 'dry') return { state: 'dry', tier: 'modelled', words: 'dry track', tierWords: '', rainMayFall: true };
+  if (r === 'wet') return { state: 'wet', tier: 'modelled', words: 'wet track', tierWords: '', rainMayFall: true };
+  const said = reportWords(r);
+  return { state: 'mixed', tier: 'modelled', words: said ? `${said} track` : 'wet for part of the race', tierWords: '', rainMayFall: true };
+};
+
+/** "damp track (series report)", "dry at the start, then rain (observed, NOAA)", "wet track (modelled, Open-Meteo)":
+ *  the words every card and tip puts a race's track in. */
+export const wetPhrase = (call: WetDryCall): string => (call.tierWords ? `${call.words} (${call.tierWords})` : call.words);
+
+/** The phrase for a wet or partly wet race; null for a dry or unknown one (cards name only the wet ones). */
+export const wetPhraseFor = (sessionId: string | null | undefined, raw?: string | null): string | null => {
+  const call = wetCallFor(sessionId, raw);
+  return call && call.state !== 'dry' ? wetPhrase(call) : null;
 };

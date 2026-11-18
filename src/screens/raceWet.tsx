@@ -10,7 +10,7 @@
  * for stations or race reports, "(modelled)" for the reanalysis. */
 
 import { uiDataPackage } from '../data/uiDataPackage';
-import { wetDryCall, type WetTier } from '../app/wetDry';
+import { wetCallFor, wetDryCall, wetPhrase, type WetTier } from '../app/wetDry';
 import { switchValue } from '../review/switches';
 import './rainMarks.css';
 
@@ -20,16 +20,15 @@ export interface WetRead {
   modelled: boolean;
   /** Who made the call: the series' report, observations (stations, race reports), or the model. */
   tier: WetTier;
-  /** For a card: "wet track", "wet, drying track", "damp track", "wet track (observed)", "wet track (modelled)". */
+  /** For a card, the track and who called it: "damp track (series report)", "wet track (observed, NOAA)",
+   *  "wet track (modelled, Open-Meteo)" (app/wetDry.ts wetPhrase). */
   words: string;
+  /** The track alone ("damp track", "dry at the start, then rain") and who called it ("series report"). */
+  track: string;
+  tierWords: string;
 }
 
 let cache: Map<string, WetRead> | null = null;
-
-const mixedWord = (raw: string | null | undefined): string => {
-  const last = (raw ?? '').split('/').pop()?.trim().toLowerCase() ?? '';
-  return last === 'damp' || last === 'drying' ? last : 'mixed';
-};
 
 const build = (): Map<string, WetRead> => {
   const map = new Map<string, WetRead>();
@@ -38,8 +37,7 @@ const build = (): Map<string, WetRead> => {
   for (const [sessionId, row] of Object.entries(weather)) {
     const call = wetDryCall(row);
     if (!call || call.state === 'dry') continue;
-    const tag = call.tier === 'modelled' ? ' (modelled)' : call.tier === 'observed' ? ' (observed)' : '';
-    map.set(sessionId, { state: call.state, modelled: call.tier === 'modelled', tier: call.tier, words: `${call.words}${tag}` });
+    map.set(sessionId, { state: call.state, modelled: call.tier === 'modelled', tier: call.tier, words: wetPhrase(call), track: call.words, tierWords: call.tierWords });
   }
   for (const entry of lab.resultConversion ?? []) {
     const sessionId = typeof entry.sessionId === 'string' ? entry.sessionId : null;
@@ -47,8 +45,10 @@ const build = (): Map<string, WetRead> => {
     const wetDry = typeof entry.wetDry === 'string' ? entry.wetDry : null;
     if (!wetDry || wetDry === 'dry') continue;
     const modelled = entry.weatherConfidence !== 'official';
-    const state: WetRead['state'] = wetDry === 'wet' ? 'wet' : 'mixed';
-    map.set(sessionId, { state, modelled, tier: modelled ? 'modelled' : 'series', words: `${state === 'wet' ? 'wet' : mixedWord(wetDry)} track${modelled ? ' (modelled)' : ''}` });
+    const call = wetCallFor(null, wetDry);
+    if (!call || call.state === 'dry') continue;
+    const tierWords = modelled ? 'modelled' : 'series report';
+    map.set(sessionId, { state: call.state, modelled, tier: modelled ? 'modelled' : 'series', words: `${call.words} (${tierWords})`, track: call.words, tierWords });
   }
   return map;
 };
