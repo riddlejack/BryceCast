@@ -534,6 +534,38 @@ def car85_result(data: dict[str, Any], idx: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def build_car85_spells(observations: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One row per unbroken run of one driver in car 85, in lap order, placed on
+    the race clock by the running sum of car 85's own lap times (elapsed from
+    the start of lap 1). A new spell starts whenever the driver changes."""
+    laps = sorted((row for row in observations if str(row["carNumber"]) == "85"), key=lambda row: row["lapNumber"])
+    numbers = [row["lapNumber"] for row in laps]
+    if numbers != list(range(1, len(numbers) + 1)):
+        raise SystemExit("car 85 laps are not a contiguous run from lap 1; spells would misplace the race clock")
+    spells: list[dict[str, Any]] = []
+    elapsed = 0.0
+    for row in laps:
+        lap_time = row["lapTimeSeconds"]
+        if lap_time is None:
+            raise SystemExit(f"car 85 lap {row['lapNumber']} has no lap time; spells would misplace the race clock")
+        if not spells or spells[-1]["driverId"] != row["driverId"]:
+            spells.append({
+                "driverName": row["driverName"],
+                "driverId": row["driverId"],
+                "startLap": row["lapNumber"],
+                "endLap": row["lapNumber"],
+                "laps": 0,
+                "startElapsedSeconds": round(elapsed, 3),
+                "endElapsedSeconds": None,
+            })
+        elapsed += float(lap_time)
+        spell = spells[-1]
+        spell["endLap"] = row["lapNumber"]
+        spell["laps"] += 1
+        spell["endElapsedSeconds"] = round(elapsed, 3)
+    return spells
+
+
 def build_context_pack(
     generated_at: str,
     source_hash: str,
@@ -543,6 +575,7 @@ def build_context_pack(
     car85_rows: list[dict[str, Any]],
     bryce_stints: list[dict[str, Any]],
     hourly_rows: list[dict[str, Any]],
+    car85_spells: list[dict[str, Any]],
 ) -> dict[str, Any]:
     bryce_hours = stint_hours(bryce_stints)
     relevant_hourly = [
@@ -572,11 +605,13 @@ def build_context_pack(
         "car85CodriverPace": car85_rows,
         "bryceStintContext": bryce_stints,
         "gtpClassHoursDuringBryceStints": relevant_hourly,
+        "car85Spells": car85_spells,
         "displayRules": [
             "Use these artifacts for descriptive Daytona stint, co-driver, class, and hour-of-race pace context.",
             "Do not present lap-time pace as live telemetry, strategy root cause, or future race forecast.",
             "Use class-hour deltas before cross-class comparison because IMSA classes have different performance envelopes.",
             "Rows labeled validNonPitLap exclude Al Kamel invalid and pit laps but do not prove green-flag traffic-free conditions.",
+            "car85Spells elapsed seconds are the running sum of car 85's own time-card lap times from the start of lap 1, not wall-clock timestamps; pit and caution laps are included.",
         ],
     }
 
@@ -698,7 +733,7 @@ def main() -> int:
             "Class-hour deltas are descriptive and source-bounded, not predictive.",
         ],
     }
-    pack = build_context_pack(generated_at, source_hash, counts, weather, result_context, car85_rows, bryce_stints, hourly_rows)
+    pack = build_context_pack(generated_at, source_hash, counts, weather, result_context, car85_rows, bryce_stints, hourly_rows, build_car85_spells(observations))
 
     write_csv(
         OUTPUT_DIR / "imsa_lap_observations.csv",
