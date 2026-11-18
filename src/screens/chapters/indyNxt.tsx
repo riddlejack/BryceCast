@@ -7,7 +7,7 @@
 import { useMemo } from 'react';
 import { PointerWord, useMeasuredWidth } from '../../app/charts';
 import { useCareerRows, type CareerRow } from '../careerExplorer';
-import { openOf, rowTip, Signature, tintOf, useEntrance, useRaceCard, EASE } from './common';
+import { openOf, rowTip, Signature, swarmRow, tintOf, useEntrance, useRaceCard, EASE } from './common';
 
 const SERIES = 'series_indy_nxt';
 
@@ -37,24 +37,13 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
   const height = top + rowH * seasons.length + 26;
   const r = 3.6;
   const x = (share: number) => left + r + Math.min(1, Math.max(0, share)) * (width - left - right - 2 * r);
-  /* Beeswarm within the row: a race whose dot would land on another's moves across the row (up, then down,
-   * further each time), never along the share scale, so every race keeps its own dot and its own tap. */
-  const spacing = phone ? 13 : 10;
-  const reach = rowH / 2 - 6;
-  const swarm = (list: CareerRow[]) => {
-    const placed: Array<{ row: CareerRow; cx: number; dy: number }> = [];
-    for (const row of [...list].sort((a, b) => a.percentile - b.percentile || a.date.localeCompare(b.date))) {
-      const cx = x(row.percentile);
-      const offsets = [0, -0.5, 0.5, -1, 1, -1.5, 1.5, -2, 2].map((k) => k * spacing).filter((dy) => Math.abs(dy) <= reach);
-      const dy = offsets.find((o) => placed.every((p) => Math.hypot(p.cx - cx, p.dy - o) >= spacing)) ?? offsets[offsets.length - 1];
-      placed.push({ row, cx, dy });
-    }
-    /* Each race's tap reaches halfway to its nearest neighbour, so no target covers another's dot. */
-    return placed.map((p) => {
-      const nearest = Math.min(...placed.filter((q) => q !== p).map((q) => Math.hypot(q.cx - p.cx, q.dy - p.dy)), 40);
-      return { ...p, hit: Math.max(r + 1, Math.min(phone ? 12 : 9, nearest / 2)) };
-    });
-  };
+  /* Races that tie step across the row, never along the share scale (swarmRow in common). */
+  const swarm = (list: CareerRow[]) =>
+    swarmRow(
+      [...list].sort((a, b) => a.percentile - b.percentile || a.date.localeCompare(b.date)),
+      (row) => x(row.percentile),
+      { spacing: phone ? 13 : 10, reach: rowH / 2 - 6, maxHit: phone ? 12 : 9 }
+    ).map(({ item, ...rest }) => ({ row: item, ...rest }));
 
   return (
     <>

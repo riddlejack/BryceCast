@@ -3,7 +3,12 @@
  * their steps, all three results in race order underneath, so the season
  * reads as the podiums filling up: empty early, crowded by the end. Counts
  * and places from the career rows and unclassifiedRaces; the championship
- * place from seasonCampaigns. */
+ * place from seasonCampaigns.
+ *
+ * Two podium drawings (switch `chapters`): the default draws each podium as
+ * one ink outline, the real 2-1-3 profile with its numerals on the faces, and
+ * fills the steps he reached that weekend in the series colour; `boxes` keeps
+ * the three plain grey steps. */
 
 import { useMemo } from 'react';
 import { PointerWord, useMeasuredWidth } from '../../app/charts';
@@ -21,7 +26,7 @@ const STEPS: Array<{ place: number; rise: number }> = [
   { place: 3, rise: 1 }
 ];
 
-export const F1600Podiums = () => {
+export const F1600Podiums = ({ steps = 'drawn' }: { steps?: 'drawn' | 'boxes' }) => {
   const rows = useSeriesRows(SERIES);
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [stageRef, settled, reduced] = useEntrance<HTMLDivElement>();
@@ -63,7 +68,8 @@ export const F1600Podiums = () => {
   const colW = width / Math.max(rounds.length, 1);
   const pw = Math.min(colW * 0.8, 96);
   const sw = pw / 3;
-  const unit = phone ? 12 : 16;
+  const drawn = steps === 'drawn';
+  const unit = phone ? (drawn ? 14 : 12) : 16;
   const dotR = phone ? 3.8 : 4.4;
   const dotGap = dotR * 2 + 3;
   const top = 10 + stack * dotGap;
@@ -90,7 +96,7 @@ export const F1600Podiums = () => {
             venues={() => rows.map((row) => ({ sessionId: row.sessionId, trackName: row.trackName }))}
             foot={
               <>
-                A podium for each weekend, his top-three finishes on their steps; under it, the weekend’s three results in race order.{' '}
+                A podium for each weekend, his top-three finishes on their steps{drawn ? ', the steps he reached in colour' : ''}; under it, the weekend’s three results in race order.{' '}
                 <PointerWord mouse="Hover" touch="Tap" /> a race for its track.
               </>
             }
@@ -104,26 +110,76 @@ export const F1600Podiums = () => {
                   const stepX = (k: number) => cx - pw / 2 + sw * k;
                   return (
                     <g key={round.track + r}>
-                      {STEPS.map((step, k) => (
-                        <rect
-                          key={step.place}
-                          x={stepX(k) + 0.5}
-                          y={floorY - unit * step.rise}
-                          width={sw - 1}
-                          height={unit * step.rise}
-                          fill="var(--ink)"
-                          fillOpacity={0.045}
-                          stroke="var(--ink)"
-                          strokeOpacity={0.22}
-                          strokeWidth={1}
-                          style={{ opacity: settled ? 1 : 0, transition: `opacity 300ms ease ${delay}ms` }}
-                        />
-                      ))}
+                      {drawn ? (
+                        (() => {
+                          /* The podium's profile in one stroke: up to second, up to first, down to third, down to the floor. */
+                          const y = (rise: number) => floorY - unit * rise;
+                          const outline = `M${stepX(0)},${floorY} V${y(2)} H${stepX(1)} V${y(3)} H${stepX(2)} V${y(1)} H${stepX(3)} V${floorY}`;
+                          const reached = (place: number) => round.slots.some((slot) => slot.kind === 'race' && slot.row.finish === place);
+                          return (
+                            <>
+                              {STEPS.map((step, k) =>
+                                reached(step.place) ? (
+                                  <g key={step.place} style={{ opacity: settled ? 1 : 0, transition: `opacity 360ms ease ${delay + 300}ms` }}>
+                                    <rect x={stepX(k)} y={y(step.rise)} width={sw} height={unit * step.rise} fill={tint} fillOpacity={0.14} />
+                                    <line x1={stepX(k)} x2={stepX(k + 1)} y1={y(step.rise)} y2={y(step.rise)} stroke={tint} strokeWidth={2} />
+                                  </g>
+                                ) : null
+                              )}
+                              {STEPS.slice(0, 2).map((step, k) => (
+                                <line key={`d${k}`} x1={stepX(k + 1)} x2={stepX(k + 1)} y1={y(Math.min(step.rise, STEPS[k + 1].rise))} y2={floorY} stroke="var(--ink)" strokeOpacity={0.2} strokeWidth={1} style={{ opacity: settled ? 1 : 0, transition: `opacity 300ms ease ${delay + 240}ms` }} />
+                              ))}
+                              <path
+                                d={outline}
+                                fill="none"
+                                stroke="var(--ink)"
+                                strokeOpacity={0.62}
+                                strokeWidth={1.2}
+                                strokeLinejoin="miter"
+                                pathLength={1}
+                                strokeDasharray={1}
+                                strokeDashoffset={settled ? 0 : 1}
+                                style={{ transition: `stroke-dashoffset ${reduced ? 0 : 520}ms ${EASE} ${delay}ms` }}
+                              />
+                              {STEPS.map((step, k) => (
+                                <text
+                                  key={`n${step.place}`}
+                                  x={stepX(k) + sw / 2}
+                                  y={floorY - (unit * step.rise) / 2 + 3.5}
+                                  textAnchor="middle"
+                                  className="chs-podiums__numeral"
+                                  fill={reached(step.place) ? tint : 'var(--ink)'}
+                                  fillOpacity={reached(step.place) ? 1 : 0.42}
+                                  style={{ opacity: settled ? 1 : 0, transition: `opacity 300ms ease ${delay + 320}ms` }}
+                                >
+                                  {step.place}
+                                </text>
+                              ))}
+                            </>
+                          );
+                        })()
+                      ) : (
+                        STEPS.map((step, k) => (
+                          <rect
+                            key={step.place}
+                            x={stepX(k) + 0.5}
+                            y={floorY - unit * step.rise}
+                            width={sw - 1}
+                            height={unit * step.rise}
+                            fill="var(--ink)"
+                            fillOpacity={0.045}
+                            stroke="var(--ink)"
+                            strokeOpacity={0.22}
+                            strokeWidth={1}
+                            style={{ opacity: settled ? 1 : 0, transition: `opacity 300ms ease ${delay}ms` }}
+                          />
+                        ))
+                      )}
                       {STEPS.map((step, k) => {
                         const on = round.slots.filter((slot): slot is { kind: 'race'; row: CareerRow } => slot.kind === 'race' && slot.row.finish === step.place);
                         return on.map((slot, j) => {
                           const x = stepX(k) + sw / 2;
-                          const y = floorY - unit * step.rise - dotR - 2 - j * dotGap;
+                          const y = floorY - unit * step.rise - dotR - (drawn ? 3 : 2) - j * dotGap;
                           const hot = card.hot === slot.row.sessionId;
                           return (
                             <circle

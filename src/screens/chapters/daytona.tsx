@@ -72,11 +72,15 @@ export const DaytonaSignature = ({ narrative }: { narrative: string }) => {
   }, [race, CAR85_SPELLS]);
 
   if (!race || !model) {
-    /* The pack is still loading (hold the dial's room), or it failed (the chapter's own line only). */
+    /* The pack is still loading (hold the dial's room), or it failed (the chapter's own line only).
+     * The two measuring wrappers mount here too, with the same keys as below, so React keeps the same
+     * nodes when the pack lands: useMeasuredWidth and useEntrance attach once, on first mount. */
     return (
       <>
-        <p className="chapter-panel__narrative">{narrative}</p>
-        {pack === null ? <div className="chs-day__wait" aria-busy="true" /> : null}
+        <p key="lede" className="chapter-panel__narrative">{narrative}</p>
+        <div key="stage" ref={stageRef}>
+          <div ref={ref}>{pack === null ? <div className="chs-day__wait" aria-busy="true" /> : null}</div>
+        </div>
       </>
     );
   }
@@ -147,12 +151,12 @@ export const DaytonaSignature = ({ narrative }: { narrative: string }) => {
 
   return (
     <>
-      <p className="chapter-panel__narrative">
+      <p key="lede" className="chapter-panel__narrative">
         One race that lasted a day: the Rolex 24 at Daytona, {countWord(drivers)} drivers sharing the No. 85 {result?.vehicle ?? 'GTP car'} through the night.
         Bryce drove {countWord(bryce.length)} spells, in {parts[0]} after dark, in {parts[1]} and in {parts[2]}: {brycelaps} of the car’s{' '}
         {CAR85_SPELLS[CAR85_SPELLS.length - 1].endLap} laps{result?.classFinishPosition ? <>, to P{result.classFinishPosition} in GTP</> : null}.
       </p>
-      <div ref={stageRef}>
+      <div key="stage" ref={stageRef}>
         <div ref={ref}>
           <Signature
             className="chs-day"

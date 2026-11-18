@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 import { PointerWord, useMeasuredWidth } from '../../app/charts';
 import { placeLine } from '../../app/raceFacts';
 import { useCareerRows } from '../careerExplorer';
-import { countWord, dayLabel, dayNumber, fieldOf, monthShort, openOf, placeName, rowTip, Signature, tintOf, useEntrance, useRaceCard, EASE } from './common';
+import { countWord, dayLabel, dayNumber, fieldOf, monthShort, openOf, placeName, rowTip, Signature, swarmRow, tintOf, useEntrance, useRaceCard, EASE } from './common';
 
 const SERIES = 'series_usf_pro_2000';
 
@@ -45,7 +45,7 @@ export const UsfSignature = () => {
   const labelW = phone ? 0 : 108;
   const left = labelW + 8;
   const right = 10;
-  const laneH = phone ? 46 : 42;
+  const laneH = phone ? 60 : 48;
   const top = phone ? 30 : 34;
   const height = top + laneH * lanes.length + 30;
   const d0 = dayNumber(`${year}-01-01`);
@@ -56,6 +56,9 @@ export const UsfSignature = () => {
   const rx = x(race.date);
   const ry = laneY(raceIndex);
   const labelRight = rx < width * 0.62;
+  /* A weekend's races (FR Oceania's three, INDY NXT's doubleheaders) fall on one pixel at a year's scale:
+   * they step up and down the lane, never along the date (swarmRow in common). */
+  const swarmOpts = { spacing: phone ? 14 : 12, reach: laneH / 2 - 8, maxHit: phone ? 12 : 9 };
 
   return (
     <>
@@ -75,7 +78,7 @@ export const UsfSignature = () => {
             venues={() => rows.map((row) => ({ sessionId: row.sessionId, trackName: row.trackName }))}
             foot={
               <>
-                Every race of his {year}, by date; a ring marks an oval. <PointerWord mouse="Hover" touch="Tap" /> a race for its track.
+                Every race of his {year}, by date (a weekend’s races step up or down the lane); a ring marks an oval. <PointerWord mouse="Hover" touch="Tap" /> a race for its track.
               </>
             }
           >
@@ -101,7 +104,8 @@ export const UsfSignature = () => {
                     <g key={lane.seriesId}>
                       <line x1={left} x2={width - right} y1={ly} y2={ly} className="chs-hair" strokeOpacity={0.12} />
                       {phone ? (
-                        <text x={left} y={ly - 13} className="chs-axis">
+                        /* On phone the label sits at the lane's empty end (no race after September), clear of a tall weekend. */
+                        <text x={width - right} y={ly - 8} textAnchor="end" className="chs-axis">
                           {lane.short}
                         </text>
                       ) : (
@@ -109,25 +113,29 @@ export const UsfSignature = () => {
                           {lane.short}
                         </text>
                       )}
-                      {lane.rows.map((row) => {
-                        const cx = x(row.date);
+                      {swarmRow(
+                        [...lane.rows].sort((a, b) => a.date.localeCompare(b.date) || a.sessionId.localeCompare(b.sessionId)),
+                        (row) => x(row.date),
+                        swarmOpts
+                      ).map(({ item: row, cx, dy, hit }) => {
+                        const cy = ly + dy;
                         const hot = card.hot === row.sessionId;
                         const star = row.sessionId === race.sessionId;
                         const delay = reduced ? 0 : (dayNumber(row.date) - d0) * 3.2;
                         return (
                           <g key={row.sessionId} style={{ opacity: card.hot !== null && !hot ? 0.45 : 1, transition: 'opacity 160ms ease' }}>
                             <g style={{ opacity: settled ? 1 : 0, transition: `opacity 280ms ${EASE} ${delay}ms` }}>
-                              {row.trackType === 'oval' ? <circle cx={cx} cy={ly} r={star ? 9.5 : 7.5} fill="none" stroke="var(--ink)" strokeOpacity={0.55} strokeWidth={1} /> : null}
-                              <circle cx={cx} cy={ly} r={star ? (hot ? 6.2 : 5.4) : hot ? 4.8 : 3.8} fill={tint} />
+                              {row.trackType === 'oval' ? <circle cx={cx} cy={cy} r={star ? 9.5 : 6.5} fill="none" stroke="var(--ink)" strokeOpacity={0.55} strokeWidth={1} /> : null}
+                              <circle cx={cx} cy={cy} r={star ? (hot ? 6.2 : 5.4) : hot ? 4.8 : 3.8} fill={tint} />
                             </g>
-                            <rect
-                              x={cx - 5}
-                              y={ly - laneH / 2 + 4}
-                              width={10}
-                              height={laneH - 8}
+                            <circle
+                              cx={cx}
+                              cy={cy}
+                              r={star ? Math.max(hit, 10) : hit}
                               fill="transparent"
+                              data-race={row.sessionId}
                               style={{ cursor: 'pointer' }}
-                              {...card.bind(row.sessionId, () => rowTip(row, cx, ly - 10, ly + 10, row.trackType === 'oval' ? { note: 'oval' } : {}), openOf(row))}
+                              {...card.bind(row.sessionId, () => rowTip(row, cx, cy - 10, cy + 10, row.trackType === 'oval' ? { note: 'oval' } : {}), openOf(row))}
                             />
                           </g>
                         );

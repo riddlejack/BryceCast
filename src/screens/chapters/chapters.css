@@ -6,6 +6,7 @@
 .chs__stage svg { display: block; overflow: visible; }
 .chs__foot { margin: 10px 0 0; font-size: 13px; line-height: 1.45; color: var(--ink-muted); max-width: 70ch; }
 
+.chs-podiums__numeral { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .chs-axis { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 12px; fill: var(--ink-muted); font-variant-numeric: tabular-nums; }
 .chs-label { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 13px; fill: var(--ink); font-weight: 520; }
 .chs-note { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 12px; fill: var(--ink-secondary); }

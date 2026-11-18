@@ -79,7 +79,7 @@ const SHORT_PLACES: Array<[RegExp, string]> = [
   [/^Oulton Park/i, 'Oulton Park'],
   [/^Cadwell Park/i, 'Cadwell Park'],
   [/^Silverstone/i, 'Silverstone'],
-  [/^Donington/i, 'Donington'],
+  [/^Donington/i, 'Donington Park'],
   [/^Snetterton/i, 'Snetterton'],
   [/Spa-Francorchamps/i, 'Spa'],
   [/do Algarve|Portim/i, 'Portimão'],
@@ -166,6 +166,31 @@ export const useEntrance = <T extends Element>() => {
   const [ref, inView] = useInViewOnce<T>(0.25);
   const reduced = useReducedMotion();
   return [ref, inView || reduced, reduced] as const;
+};
+
+/** Beeswarm within a row: marks are taken in `order`, and one whose dot would land on another's moves
+ *  across the row (up, then down, further each time), never along the scale, so every race keeps its own
+ *  dot and its own tap. Each mark's hit radius reaches halfway to its nearest neighbour, at most `maxHit`,
+ *  so no target covers another's dot. */
+export const swarmRow = <T,>(items: T[], xOf: (item: T) => number, opts: { spacing: number; reach: number; maxHit: number }) => {
+  const { spacing, reach, maxHit } = opts;
+  const offsets = [0, -0.5, 0.5, -1, 1, -1.5, 1.5, -2, 2, -2.5, 2.5].map((k) => k * spacing).filter((dy) => Math.abs(dy) <= reach);
+  /* When a cluster leaves no slot a full step clear, the race takes the spot across the row farthest from its neighbours. */
+  const fine = Array.from({ length: Math.floor((2 * reach) / (spacing / 4)) + 1 }, (_, k) => -reach + (k * spacing) / 4);
+  const placed: Array<{ item: T; cx: number; dy: number }> = [];
+  const clearance = (cx: number, dy: number) => Math.min(Infinity, ...placed.map((p) => Math.hypot(p.cx - cx, p.dy - dy)));
+  for (const item of items) {
+    const cx = xOf(item);
+    const dy =
+      offsets.find((o) => clearance(cx, o) >= spacing) ??
+      fine.reduce((best, o) => (clearance(cx, o) > clearance(cx, best) + 0.01 ? o : best), fine[0]);
+    placed.push({ item, cx, dy });
+  }
+  return placed.map((p) => {
+    const nearest = Math.min(...placed.filter((q) => q !== p).map((q) => Math.hypot(q.cx - p.cx, q.dy - p.dy)), 40);
+    /* Never past halfway to the nearest neighbour: a smaller target beats one that covers another race. */
+    return { ...p, hit: Math.min(maxHit, nearest / 2) };
+  });
 };
 
 /** The house race card for a chart: hover reads, click opens; on touch the
