@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-11-18T04:33:34Z",
+  "generatedAt": "2026-11-18T07:43:27Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -1054,14 +1054,14 @@
       "finishPercentile": "0.5238",
       "finishPosition": "11.0",
       "points": "",
-      "positionGain": "14.0",
+      "positionGain": "5.0",
       "raceLabel": "2019 BRSCC Formula Ford Festival 2019",
       "seasonYear": "2019",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
       "sourceState": "official_or_source_backed_result",
-      "startPosition": "25.0",
+      "startPosition": "16.0",
       "status": "running",
       "teamName": "",
       "trackName": "Brands Hatch Circuit",
@@ -1216,14 +1216,14 @@
       "finishPercentile": "0.92",
       "finishPosition": "3.0",
       "points": "",
-      "positionGain": "2.0",
+      "positionGain": "1.0",
       "raceLabel": "2020 Champion of Brands 2020",
       "seasonYear": "2020",
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sessionId": "session_formula_ford_2020_champion_brands_race_5",
       "sourceState": "official_or_source_backed_result",
-      "startPosition": "5.0",
+      "startPosition": "4.0",
       "status": "running",
       "teamName": "",
       "trackName": "Brands Hatch Circuit",
@@ -3780,7 +3780,7 @@
     {
       "avgFinish": "4.391304347826087",
       "avgFinishPercentile": "0.8644391304347826",
-      "avgGain": "1.4782608695652173",
+      "avgGain": "1.0434782608695652",
       "issueLikeStatusRate": "0.0",
       "medianFinish": "3.0",
       "raceRows": "23",
@@ -3881,13 +3881,13 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a",
+  "sourceHash": "256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c",
   "sourceRefs": [
     {
       "bytes": 1204,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "1ff1bdc32aedb6b87e3aac7b20fd833fe847180bb36c07b3f1c92a4c240d664a"
+      "sha256": "2c33200ae5265221faed090315e2f649a73ecabe78c113cdd048afd45a037d4f"
     },
     {
       "bytes": 17442,
@@ -3896,16 +3896,16 @@
       "sha256": "133faac8a137abe25e349c866a37b0215090db3fd3e1259df29777ea62ce2f37"
     },
     {
-      "bytes": 43898,
+      "bytes": 43897,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "f58e150c7bf56fe04ca22432712c05b3ddd09051607d9054491509cd2b9b075c"
+      "sha256": "ee93400ba24d4a7cc9a8c3a0d19dc89421f55311165e4d831142a31a2899cee4"
     },
     {
       "bytes": 32717,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "de248e081bb7a7b1285f9f3d5ebe44132e601e459981b5e36865f3f1d4c4c514"
+      "sha256": "00201fc866dd4c774d70d28982689aed2729b890eb9c7b8ae361ba5c6848f455"
     }
   ],
   "topCareerStories": [

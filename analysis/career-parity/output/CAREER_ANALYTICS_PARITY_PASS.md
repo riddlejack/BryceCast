@@ -1,6 +1,6 @@
 # Career Analytics Parity Pass
 
-Generated from canonical career dataset updated `2026-11-18T04:15:23.386Z`.
+Generated from canonical career dataset updated `2026-11-18T07:35:39.711Z`.
 
 ## Series Result Summary
 
@@ -8,7 +8,7 @@ Generated from canonical career dataset updated `2026-11-18T04:15:23.386Z`.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | GB3 Championship | 45 | 10.644 | 0.348 | 0.502 | 0.111 | 0.444 | 0 |
 | INDY NXT | 45 | 12.222 | -0.733 | 0.473 | 0.089 | 0.489 | 0.111 |
-| Formula Ford | 23 | 4.391 | 1.478 | 0.864 | 0.826 | 0.957 | 0 |
+| Formula Ford | 23 | 4.391 | 1.043 | 0.864 | 0.826 | 0.957 | 0 |
 | F1600 Championship Series | 20 | 4.75 |  | 0.745 | 0.7 | 0.95 | 0 |
 | Euroformula Open | 17 | 4.176 | -0.588 | 0.631 | 0.706 | 1 | 0 |
 | SCCA U.S. Majors Tour | 8 | 8.75 | -2.5 | 0.676 | 0.375 | 0.75 | 0 |

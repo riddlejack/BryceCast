@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-11-18T04:15:32.620Z",
+  "generatedAt": "2026-11-18T07:41:41.125Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-11-18T04:15:30.912Z",
+    "checkedAt": "2026-11-18T07:41:38.527Z",
     "errors": [],
     "warnings": [
       {
@@ -59679,11 +59679,6 @@
       "description": "The supplied Euroformula classification PDF URL now serves a 2026 document, so that mutable S3 key is preserved as source-broken evidence. RFEDA 2023 final classifications PDF is the stable official standings source used for Bryce Aron P4 and 238 European F. Open points."
     },
     {
-      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
-      "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 1148 race/heat rows. The remaining 12 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically."
-    },
-    {
       "id": "gap_froc_2024_round_4_date_conflict",
       "status": "open",
       "description": "Toyota Round 4 results page title says 16-18 February 2024, while Toyota 2024 dates announcement places Euromarque Motorsport Park on 9-11 February 2024. Normalized event dates use 9-11 February and preserve the page-title conflict in event raw data."
@@ -59714,11 +59709,6 @@
       "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs import 37,422 official lap-by-lap position samples from 45 completed Race Lap Chart PDFs: 33 charts fully validate against official completed-lap counts and 12 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import 179 practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import 178 practice, qualifying, and race lap-by-lap section metrics; continuation pages are merged by car/lap/section and 2670 source-proven post-limit terminal rows are excluded from completed-lap facts. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
-      "id": "gap_remaining_career_rows_after_track_metadata",
-      "status": "open",
-      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
-    },
-    {
       "id": "gap_career_race_euroformula_2023_mugello_race_1_reported_only",
       "status": "open",
       "description": "Mugello, September 30, 2023, Euroformula Open Round 7 Race 1: reported 5th from 5th by Formula Scout and Speedsport Magazine. The official classification was not found. Counted in no career figure."
@@ -59727,6 +59717,16 @@
       "id": "gap_career_race_euroformula_2023_mugello_race_2_reported_only",
       "status": "open",
       "description": "Mugello, October 1, 2023, Euroformula Open Round 7 Race 2 (reverse grid): reported 8th from 2nd, one lap down. The official classification was not found. Counted in no career figure."
+    },
+    {
+      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+      "status": "open",
+      "description": "Formula Ford 2020 official grid/start import is complete for 1148 race/heat rows. The remaining 12 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically."
+    },
+    {
+      "id": "gap_remaining_career_rows_after_track_metadata",
+      "status": "open",
+      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
     }
   ],
   "canceledSessionEvidence": [

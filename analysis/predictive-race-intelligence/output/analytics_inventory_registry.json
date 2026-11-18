@@ -1,6 +1,6 @@
 {
   "asOfDate": "2026-09-19",
-  "generatedAt": "2026-11-18T04:33:26Z",
+  "generatedAt": "2026-11-18T07:43:19Z",
   "items": [
     {
       "availability": "partial",
@@ -968,7 +968,7 @@
     },
     {
       "availability": "context_pack_ready",
-      "bytes": 43898,
+      "bytes": 43897,
       "caveat": null,
       "columns": 16,
       "confidence": "high",
@@ -978,7 +978,7 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 167,
-      "sha256": "f58e150c7bf56fe04ca22432712c05b3ddd09051607d9054491509cd2b9b075c",
+      "sha256": "ee93400ba24d4a7cc9a8c3a0d19dc89421f55311165e4d831142a31a2899cee4",
       "sourcePath": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "surface": "career_lab"
     },
@@ -1010,7 +1010,7 @@
       "productizationStatus": "context_pack_ready",
       "recommendedAction": "Promote through context packs with source refs, caveats, and denominator rules.",
       "rows": 10,
-      "sha256": "1ff1bdc32aedb6b87e3aac7b20fd833fe847180bb36c07b3f1c92a4c240d664a",
+      "sha256": "2c33200ae5265221faed090315e2f649a73ecabe78c113cdd048afd45a037d4f",
       "sourcePath": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "surface": "career_lab"
     },
@@ -1080,7 +1080,7 @@
       "label": "indySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "9ce754a65b01e6252b1f48905bfb43b7fe4bc95e892e8a500626ee3cb26750e7",
+      "sha256": "cbe532a103f2262a35012b19dedb0081362276ee64f47f696ef513f733449be1",
       "sourcePath": "analysis/indy-nxt-discovery/output/summary.json",
       "surface": "governance"
     },
@@ -1094,7 +1094,7 @@
       "label": "indyDeepSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "1e2bf7d4d451a9e9cb49a306933c8cbd2f39326e03ad40e20d2567336c052727",
+      "sha256": "9a3b8f0f7be810f9b4b8b1b781283b2a3c93686b131699f1973794e8b0ba76ae",
       "sourcePath": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "surface": "governance"
     },
@@ -1108,7 +1108,7 @@
       "label": "careerParitySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "12e2dab8ac27727732db591d45cd05055eded34ee2b8cc6f6a496073c4dde2cf",
+      "sha256": "28326a514f06f6825d26fbb6c591f8e4239033e5e6340f41f1b0b32496a0a3be",
       "sourcePath": "analysis/career-parity/output/summary.json",
       "surface": "governance"
     },
@@ -1122,7 +1122,7 @@
       "label": "careerCoverage",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "be664828a9ce7230dc4e196c434e96232e6fa871bfe13b222104becb97619992",
+      "sha256": "a0249b16a16236c737f278eb687aa37ca31ea88d280c54725d7b6216899571f5",
       "sourcePath": "data/career/reports/career-coverage-matrix.json",
       "surface": "governance"
     },
@@ -1136,7 +1136,7 @@
       "label": "ingestionSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "958b34704d880d4c9774bd931b944ad8641e4f24d0f29588652edd940494a7c1",
+      "sha256": "dc187b89049f379618e3462f17d658fac2fe976031f1865498216cb2bab0a545",
       "sourcePath": "data/career/reports/ingestion-summary.json",
       "surface": "governance"
     },
@@ -1150,14 +1150,14 @@
       "label": "validationReport",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "57aeca3ab7403ad45f3c49d82314a8f647d1ee146c28680e918ca46d852dfed6",
+      "sha256": "34cabda782bc7436229ca01d643bf7031369dd59050fea42d2e916e38409f66e",
       "sourcePath": "data/career/reports/validation-report.json",
       "surface": "governance"
     }
   ],
-  "repoHead": "8ec5bd1",
+  "repoHead": "d970bd5",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.inventory.v1",
-  "sourceHash": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a",
+  "sourceHash": "256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c",
   "sourceRefs": [
     {
       "bytes": 39320,
@@ -1187,37 +1187,37 @@
       "bytes": 1805,
       "path": "analysis/indy-nxt-discovery/output/summary.json",
       "role": "indySummary",
-      "sha256": "9ce754a65b01e6252b1f48905bfb43b7fe4bc95e892e8a500626ee3cb26750e7"
+      "sha256": "cbe532a103f2262a35012b19dedb0081362276ee64f47f696ef513f733449be1"
     },
     {
       "bytes": 1461,
       "path": "analysis/indy-nxt-discovery/output/deep_dive/summary.json",
       "role": "indyDeepSummary",
-      "sha256": "1e2bf7d4d451a9e9cb49a306933c8cbd2f39326e03ad40e20d2567336c052727"
+      "sha256": "9a3b8f0f7be810f9b4b8b1b781283b2a3c93686b131699f1973794e8b0ba76ae"
     },
     {
       "bytes": 364,
       "path": "analysis/career-parity/output/summary.json",
       "role": "careerParitySummary",
-      "sha256": "12e2dab8ac27727732db591d45cd05055eded34ee2b8cc6f6a496073c4dde2cf"
+      "sha256": "28326a514f06f6825d26fbb6c591f8e4239033e5e6340f41f1b0b32496a0a3be"
     },
     {
       "bytes": 1501685,
       "path": "data/career/reports/career-coverage-matrix.json",
       "role": "careerCoverage",
-      "sha256": "be664828a9ce7230dc4e196c434e96232e6fa871bfe13b222104becb97619992"
+      "sha256": "a0249b16a16236c737f278eb687aa37ca31ea88d280c54725d7b6216899571f5"
     },
     {
       "bytes": 48755,
       "path": "data/career/reports/ingestion-summary.json",
       "role": "ingestionSummary",
-      "sha256": "958b34704d880d4c9774bd931b944ad8641e4f24d0f29588652edd940494a7c1"
+      "sha256": "dc187b89049f379618e3462f17d658fac2fe976031f1865498216cb2bab0a545"
     },
     {
       "bytes": 1167,
       "path": "data/career/reports/validation-report.json",
       "role": "validationReport",
-      "sha256": "57aeca3ab7403ad45f3c49d82314a8f647d1ee146c28680e918ca46d852dfed6"
+      "sha256": "34cabda782bc7436229ca01d643bf7031369dd59050fea42d2e916e38409f66e"
     }
   ],
   "statusCounts": {

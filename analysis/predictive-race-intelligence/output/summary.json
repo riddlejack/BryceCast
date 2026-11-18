@@ -7,15 +7,15 @@
     "analysis/predictive-race-intelligence/output/charts/career_track_type_priors.svg",
     "analysis/predictive-race-intelligence/output/charts/upcoming_track_indy_nxt_history.svg"
   ],
-  "generatedAt": "2026-11-18T04:33:35Z",
+  "generatedAt": "2026-11-18T07:43:28Z",
   "indyNxtRaceRows": 45,
   "inventoryItems": 77,
   "liveRaceDayPacks": 1,
   "modelRows": 14,
   "raceDebriefPacks": 45,
-  "repoHead": "8ec5bd1",
+  "repoHead": "d970bd5",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.summary.v1",
-  "sourceHash": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a",
+  "sourceHash": "256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c",
   "upcomingEventPacks": 0,
   "upstreamCoverage": {
     "asOfDate": "2026-09-19",
@@ -72,7 +72,7 @@
         "rows": 167
       }
     ],
-    "datasetSourceHash": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a",
+    "datasetSourceHash": "256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c",
     "refreshedBy": [
       {
         "bytes": 58341,
@@ -113,10 +113,10 @@
         "sha256": "b7826829585197df69d797231dc0c018c331514b26123a9b998f0245eae27a8e"
       },
       {
-        "bytes": 43898,
+        "bytes": 43897,
         "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
         "role": "career finished-race coverage",
-        "sha256": "f58e150c7bf56fe04ca22432712c05b3ddd09051607d9054491509cd2b9b075c"
+        "sha256": "ee93400ba24d4a7cc9a8c3a0d19dc89421f55311165e4d831142a31a2899cee4"
       }
     ]
   },
