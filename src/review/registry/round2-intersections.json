@@ -64,6 +64,26 @@
       "anchor": "",
       "added": "2026-11-18T01:00",
       "reviewed": false
+    },
+    {
+      "id": "r2-field-floor",
+      "page": "/races",
+      "title": "The field's floor on each INDY NXT season chart: a short dash per round at last place in that day's field, so P20 of 21 and P20 of 24 read apart",
+      "switch": "fieldfloor",
+      "values": [
+        {
+          "value": null,
+          "label": "on (default): a quiet dash at each round's field size; the hovered round's dash darkens; the axis runs to the biggest field"
+        },
+        {
+          "value": "off",
+          "label": "off: the chart as before"
+        }
+      ],
+      "look": "Races \u2192 2024 season: the field shrinks from 21 cars to 18\u201319 mid-season, so his P19 at St. Petersburg sits on the floor. 2026: 24 cars almost every round, so his P22 and P23 sit just above it.",
+      "anchor": "",
+      "added": "2026-11-18T01:20",
+      "reviewed": false
     }
   ]
 }

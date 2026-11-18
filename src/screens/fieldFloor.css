@@ -1,0 +1,10 @@
+/* The field's floor on the Races season chart (round 2, intersections lane;
+ * switch `fieldfloor`): a short dash at last place in each round's field. */
+.field-floor {
+  stroke: var(--ink-muted);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0.5;
+  transition: opacity 150ms ease;
+}
+.field-floor--on { opacity: 1; }

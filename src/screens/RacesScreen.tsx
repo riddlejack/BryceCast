@@ -18,6 +18,8 @@ import { beatLine, placeLine } from '../app/raceFacts';
 import { RaceStillCard, RowPicture } from './racesPeek';
 import { AlsoInYear, EarlierSeason } from './racesEarlier';
 import { anyWet, RainStreaks, wetFor } from './raceWet';
+import { switchValue } from '../review/switches';
+import './fieldFloor.css';
 import './race.css';
 
 /** Archive labels drop the series prefix (everything here is INDY NXT) and
@@ -100,7 +102,16 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const x = (index: number) => margin.left + (index / (n - 1)) * plotWidth;
 
   const finishes = ordered.map((row) => row.finishPosition ?? 0);
-  const worstFinish = Math.max(...finishes, ...ordered.map((row) => row.startPosition ?? 1));
+  /* The field's floor (round 2, intersections; switch fieldfloor: on | off): a
+   * short dash per round at last place that day, so P20 of 21 and P20 of 24 read
+   * apart. The axis runs to the biggest field so every floor fits. */
+  const floorOn = switchValue('fieldfloor') !== 'off';
+  const fields = ordered.map((row) => (floorOn ? fieldSizeFor(row.sessionId) : null));
+  const worstFinish = Math.max(
+    ...finishes,
+    ...ordered.map((row) => row.startPosition ?? 1),
+    ...fields.filter((value): value is number => value !== null)
+  );
   const yFinish = (position: number) => margin.top + ((position - 1) / Math.max(worstFinish, 2)) * finishPanelHeight;
 
   const standings = ordered.map((row) => row.standingRank).filter((value): value is number => value !== null);
@@ -110,7 +121,8 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const yStanding = (rank: number) =>
     standingTop + ((rank - standingMin) / Math.max(standingMax - standingMin, 1)) * standingPanelHeight;
 
-  const finishTicks = [1, 5, 10, 15, 20, 25].filter((tick) => tick <= worstFinish + 1);
+  const finishTicks = [1, 5, 10, 15, 20, 25].filter((tick) => tick <= worstFinish + (floorOn ? 0 : 1));
+  const floorHalf = Math.max(3, Math.min(8, (plotWidth / Math.max(n - 1, 1)) * 0.28));
   const standingTicks = [...new Set([standingMin + 1, standingMax - 1])].filter(
     (tick) => tick >= standingMin && tick <= standingMax
   );
@@ -228,6 +240,19 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
               strokeDasharray="3 3"
             />
           ) : null}
+
+          {fields.map((field, index) =>
+            field !== null ? (
+              <line
+                key={`floor-${ordered[index].sessionId}`}
+                className={`field-floor${hovered === index ? ' field-floor--on' : ''}`}
+                x1={x(index) - floorHalf}
+                x2={x(index) + floorHalf}
+                y1={yFinish(field)}
+                y2={yFinish(field)}
+              />
+            ) : null
+          )}
 
           {/* QoL 2 (proxy review 1): the season line in INDY NXT's own gold, so
               gold means one thing site-wide; a top 5 is ringed, as a win is
@@ -603,7 +628,8 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
                 one timeline — future at the top, past running down. */}
             <p className="caption caption--secondary races-index__legend">
               A ring marks a top-5 finish · a hollow dot a day that ended early
-              {anyWet(rows.map((row) => row.sessionId)) ? ' · rain streaks a wet track' : ''} · the quiet line is his championship position ·{' '}
+              {anyWet(rows.map((row) => row.sessionId)) ? ' · rain streaks a wet track' : ''}
+              {switchValue('fieldfloor') !== 'off' ? ' · a short dash marks last place in that day’s field' : ''} · the quiet line is his championship position ·{' '}
               <PointerOpen what="any round" />
             </p>
             <SeasonSpine rows={rows} />
