@@ -70,6 +70,8 @@ export interface TrackScene {
   /** The downwind ground direction on screen now, as a unit [dx, dy] in CSS px axes; null in still air or no bearing. */
   windScreen(): [number, number] | null;
   weatherInfo(): Record<string, unknown>;
+  /** The slab's outline on screen now (CSS px): its top and bottom rings; `key` changes with the view. */
+  screenSilhouette(): { key: string; top: [number, number][]; bottom: [number, number][] };
 }
 export function webglAvailable(): boolean;
 export function createTrackScene(options: {

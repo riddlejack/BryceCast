@@ -349,6 +349,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     edge.geometry.dispose(); edge.geometry = ribbonGeometry(0, 1, want + wantEdge, want + wantEdge, model.bandDy * 0.4);
     base.geometry.dispose(); base.geometry = ribbonGeometry(0, 1, want, want, model.bandDy * 0.5);
     if (bandMoved && sections.length) setSections(sections, true); else invalidate();
+    if (bandMoved) wx?.bandChanged?.();
   }
   let settleTimer = 0;
   function changed() {
@@ -546,6 +547,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
       return [top, bottom];
     },
     shadowsDirty: () => { renderer.shadowMap.needsUpdate = true; },
+    bandHalf: () => bandHalfNow,
   });
   renderer.shadowMap.needsUpdate = true;
   renderer.compile(scene, camera);
@@ -588,5 +590,14 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
       return [(v3.x * 0.5 + 0.5) * cssW(), (-v3.y * 0.5 + 0.5) * cssH()];
     },
     orbitBy(dAzim, dElev) { pose.azim += dAzim; pose.elev += dElev; changed(); },
+    // the slab's outline on screen now (CSS px), for clipping the rain to the model: its top and bottom rings; `key`
+    // changes whenever the view or the stage's size does
+    screenSilhouette() {
+      const W = cssW(), Hh = cssH(), e = camera.matrixWorld.elements;
+      const key = `${W}x${Hh}:${e[0].toFixed(4)},${e[2].toFixed(4)},${e[9].toFixed(4)},${e[12].toFixed(2)},${e[13].toFixed(2)},${e[14].toFixed(2)}`;
+      const n = model.slab.length / 2;
+      const proj = (p) => { v3.set(p[0], p[1], p[2]).project(camera); return [(v3.x * 0.5 + 0.5) * W, (-v3.y * 0.5 + 0.5) * Hh]; };
+      return { key, top: model.slab.slice(0, n).map(proj), bottom: model.slab.slice(n).map(proj) };
+    },
   };
 }

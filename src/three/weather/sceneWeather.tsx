@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo, type ReactNode } from 'react';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { formatWind, windCardinal } from '../../app/format';
 import { REVIEW_HOST, switchValue } from '../../review/switches';
+import { wetDryCall, type WetDryCall } from '../../app/wetDry';
 
 /* ============================================================================
  * The race hour's weather, as the 3D model and its stills draw it (career
@@ -10,9 +11,10 @@ import { REVIEW_HOST, switchValue } from '../../review/switches';
  *  1. careerLab.raceWeather (the data lane's block, all 175 races, keyed by
  *     sessionId: the official start-to-finish window, sky, wetDry and where it
  *     came from, rainMm, cloudPct, wind, gust, bearing, tempC, source). The
- *     source of truth. Wet or dry from an official series report wins over the
- *     reanalysis: an officially dry race under modelled rain is drawn dry, under
- *     cloud, with no rain falling; an officially wet one is drawn wet.
+ *     source of truth. Wet or dry is read through app/wetDry.ts (series report
+ *     > stations and race reports > reanalysis): a race reported or observed
+ *     dry under modelled rain is drawn dry, its sky from the model's cloud, with
+ *     no rain falling; a reported or observed wet one is drawn wet.
  *  2. The venue dossier's per-visit conditions (INDY NXT, Open-Meteo hourly
  *     archive for the race hour): only for a race the block lacks.
  *
@@ -41,8 +43,8 @@ export interface SceneWeather {
   /** The race hour as a moment, for the sun's position: the source's local hour in the venue's time zone, as UTC
    *  milliseconds. Null where the source gives no hour or no zone is known (the model keeps the kit's own sun). */
   raceAt: { utcMs: number; local: string; zone: string | null } | null;
-  /** The track's condition where an official series report gives it ("Wet", "Damp", "Dry"); null otherwise. */
-  officialTrack: string | null;
+  /** Wet or dry and who called it (app/wetDry.ts: series report > observed > modelled); null from the dossier. */
+  track: WetDryCall | null;
   /** What the figures cover: the race from its official start to its end, the race hour, or race day 09:00-18:00. */
   span: 'race' | 'hour' | 'day';
 }
@@ -130,17 +132,19 @@ const rainIntensityOf = (sky: Sky, words: string | null, rainMm: number | null, 
 const fromRaceWeather = (row: Row, zone: string | null, fallbackAt: SceneWeather['raceAt']): SceneWeather | null => {
   const sessionId = str(row.sessionId);
   if (!sessionId) return null;
-  const wetDry = str(row.wetDry);
-  const official = str(row.wetDrySource) === 'series_report';
-  const report = (row.seriesReport ?? null) as Row | null;
+  const call = wetDryCall(row as never);
+  const wetDry = call?.state ?? null;
   const wet = wetDry === 'wet' || wetDry === 'mixed';
   const rawSky = str(row.sky);
   let sky = (['clear', 'partly', 'overcast', 'rain', 'storm'] as const).find((s) => s === rawSky) ?? skyOf(rawSky, wet);
   if (!sky) return null;
-  // the official report, or a weather station's observation, says the track was dry: no rain falls in the picture (the reanalysis's rain stays in the words)
-  const modelRainOfficiallyDry = (official || str(row.wetDrySource) === 'observed') && wetDry === 'dry' && (sky === 'rain' || sky === 'storm');
-  const modelSky = sky;
-  if (modelRainOfficiallyDry) sky = 'overcast';
+  // a report or the stations say the track stayed dry: no rain falls in the picture, whatever the model's sky; the
+  // sky is drawn from the model's own cloud cover instead
+  const dryOverModelRain = Boolean(call && !call.rainMayFall && (sky === 'rain' || sky === 'storm'));
+  if (dryOverModelRain) {
+    const cloud = num(row.cloudPct);
+    sky = cloud === null || cloud >= 70 ? 'overcast' : cloud >= 25 ? 'partly' : 'clear';
+  }
   const source = (row.source ?? {}) as Row;
   const rainMm = num(row.rainMm);
   // the window's start is the official start on the venue's clocks; its zone is the one the source asked for
@@ -151,7 +155,8 @@ const fromRaceWeather = (row: Row, zone: string | null, fallbackAt: SceneWeather
   return {
     sessionId,
     sky,
-    skyWords: modelRainOfficiallyDry ? (modelSky === 'storm' ? 'thunderstorm in the model' : 'rain in the model') : str(row.skyWords) ?? null,
+    // the model's own words would say rain over a race the stations or a report call dry: the cloud's category instead
+    skyWords: dryOverModelRain ? null : str(row.skyWords) ?? null,
     wet,
     rainIntensity: rainIntensityOf(sky, str(row.skyWords), rainMm, wet) * (wetDry === 'mixed' ? 0.7 : 1),
     rainMm,
@@ -163,7 +168,7 @@ const fromRaceWeather = (row: Row, zone: string | null, fallbackAt: SceneWeather
     source: { name: str(source.name) ?? 'Race-hour weather', tier: source.tier === 'observed' ? 'observed' : 'modelled', url: str(source.url) },
     raceAt,
     span: window && str(window.basis) === 'race_day' ? 'day' : window ? 'race' : 'hour',
-    officialTrack: official ? str(report?.conditionRaw) ?? (wetDry ? wetDry[0].toUpperCase() + wetDry.slice(1) : null) : null
+    track: call
   };
 };
 
@@ -192,7 +197,7 @@ const fromDossier = (sessionId: string, c: Row, zone: string | null): SceneWeath
     },
     raceAt: raceAtOf(c.observedAt, zone),
     span: 'hour',
-    officialTrack: null
+    track: null
   };
 };
 
@@ -230,12 +235,12 @@ const weatherTable = (): Map<string, SceneWeather> => {
 
 /* A small local fixture for checks (review copy only): ?wxfixture=rain|overcast|sun|wind|storm|calm */
 const FIXTURE: Record<string, Omit<SceneWeather, 'sessionId'>> = {
-  sun: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 5, windKph: 9, gustKph: 18, windFromDeg: 225, tempC: 27, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, officialTrack: null, span: 'hour' },
-  overcast: { sky: 'overcast', skyWords: 'overcast', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 100, windKph: 14, gustKph: 26, windFromDeg: 300, tempC: 16, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, officialTrack: null, span: 'hour' },
-  rain: { sky: 'rain', skyWords: 'moderate rain', wet: true, rainIntensity: 0.6, rainMm: 2.2, cloudPct: 100, windKph: 16, gustKph: 34, windFromDeg: 200, tempC: 14, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, officialTrack: null, span: 'hour' },
-  storm: { sky: 'storm', skyWords: 'thunderstorm', wet: true, rainIntensity: 1, rainMm: 7, cloudPct: 100, windKph: 30, gustKph: 62, windFromDeg: 250, tempC: 22, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, officialTrack: null, span: 'hour' },
-  wind: { sky: 'partly', skyWords: 'partly cloudy', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 45, windKph: 38, gustKph: 64, windFromDeg: 270, tempC: 19, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, officialTrack: null, span: 'hour' },
-  calm: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 0, windKph: 0, gustKph: 4, windFromDeg: null, tempC: 24, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, officialTrack: null, span: 'hour' }
+  sun: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 5, windKph: 9, gustKph: 18, windFromDeg: 225, tempC: 27, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, track: null, span: 'hour' },
+  overcast: { sky: 'overcast', skyWords: 'overcast', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 100, windKph: 14, gustKph: 26, windFromDeg: 300, tempC: 16, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, track: null, span: 'hour' },
+  rain: { sky: 'rain', skyWords: 'moderate rain', wet: true, rainIntensity: 0.6, rainMm: 2.2, cloudPct: 100, windKph: 16, gustKph: 34, windFromDeg: 200, tempC: 14, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, track: null, span: 'hour' },
+  storm: { sky: 'storm', skyWords: 'thunderstorm', wet: true, rainIntensity: 1, rainMm: 7, cloudPct: 100, windKph: 30, gustKph: 62, windFromDeg: 250, tempC: 22, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, track: null, span: 'hour' },
+  wind: { sky: 'partly', skyWords: 'partly cloudy', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 45, windKph: 38, gustKph: 64, windFromDeg: 270, tempC: 19, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, track: null, span: 'hour' },
+  calm: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 0, windKph: 0, gustKph: 4, windFromDeg: null, tempC: 24, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null, track: null, span: 'hour' }
 };
 
 /** The weather for a race, or null where no source has it. */
@@ -259,11 +264,12 @@ export const weatherTake = (search?: URLSearchParams): WeatherTake => {
 /** The sun review switch: 'race' (default), the sun where it stood at the race hour; 'fixed', the kit's own sun. */
 export const sunTake = (search?: URLSearchParams): 'race' | 'fixed' => (switchValue('wxsun', search) === 'fixed' ? 'fixed' : 'race');
 
-/** "light drizzle, wind 8 mph WSW, gusts 27" in the house wind grammar. */
+/** "light drizzle, wind 8 mph WSW, gusts 27" in the house wind grammar (the model's sky and wind; a modelled wet
+ *  track joins them, a reported or observed one is named apart by weatherCaption). */
 export const weatherWords = (w: SceneWeather): string => {
   const sky = w.skyWords ?? { clear: 'clear', partly: 'partly cloudy', overcast: 'overcast', rain: 'rain', storm: 'thunderstorm' }[w.sky];
-  const track = w.officialTrack ? `track ${w.officialTrack.toLowerCase()} (official)` : null;
-  const parts = [track ? `${sky}, ${track}` : w.wet && w.sky !== 'rain' && w.sky !== 'storm' ? `${sky}, a wet track` : sky];
+  const modelTrack = w.track ? (w.track.tier === 'modelled' && w.track.state !== 'dry' ? w.track.words : null) : w.wet && w.sky !== 'rain' && w.sky !== 'storm' ? 'a wet track' : null;
+  const parts = [modelTrack ? `${sky}, ${modelTrack}` : sky];
   if (w.windKph !== null) {
     const mph = Math.round(w.windKph / 1.609344);
     const wind = formatWind(mph, mph > 0 ? windCardinal(w.windFromDeg) : null);
@@ -273,11 +279,13 @@ export const weatherWords = (w: SceneWeather): string => {
   return parts.join(', ');
 };
 
-/** One clause for the model's caption: "During the race: light drizzle, wind 8 mph WSW (modelled, Open-Meteo)." */
+/** One clause for the model's caption, each part naming its source:
+ *  "During the race: overcast, wind 8 mph W (modelled, Open-Meteo); dry track (observed, NOAA)." */
 export const weatherCaption = (w: SceneWeather): string => {
   const who = /open-meteo/i.test(w.source.name) ? 'Open-Meteo' : w.source.name;
   const when = w.span === 'race' ? 'During the race' : w.span === 'day' ? 'On race day' : 'Race hour';
-  return `${when}: ${weatherWords(w)} (${w.source.tier}, ${who}).`;
+  const track = w.track && w.track.tier !== 'modelled' ? `; ${w.track.words} (${w.track.tierWords})` : '';
+  return `${when}: ${weatherWords(w)} (${w.source.tier}, ${who})${track}.`;
 };
 
 /* ---------- the page says which race the models below it show ---------- */

@@ -8,12 +8,16 @@ import { useEffect, useRef } from 'react';
 
 interface Drop { x: number; y: number; len: number; speed: number; alpha: number }
 
+/** The model's outline on screen, in the canvas's CSS pixels: the slab's top and bottom rings. */
+export interface RainClip { key: string; top: [number, number][]; bottom: [number, number][] }
+
 export const WeatherRain = ({
   intensity,
   drift = () => 0,
   reduced = false,
   scale = 1,
   density = 1,
+  clip,
   className = 'wx-rain'
 }: {
   /** 0..1: how hard it rains (drizzle about 0.3, moderate rain 0.6). */
@@ -25,11 +29,15 @@ export const WeatherRain = ({
   scale?: number;
   /** Streaks per area against the full-size stage (a small still: about 2, so a card's few square inches still read as rain). */
   density?: number;
+  /** The model's outline now (read every frame): rain falls only over the model, not on the paper round it. */
+  clip?: () => RainClip | null | undefined;
   className?: string;
 }) => {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const driftRef = useRef(drift);
   driftRef.current = drift;
+  const clipRef = useRef(clip);
+  clipRef.current = clip;
 
   useEffect(() => {
     const canvas = ref.current;
@@ -42,6 +50,39 @@ export const WeatherRain = ({
     let raf = 0;
     let last = 0;
     let onScreen = true;
+    // the mask: the slab's outline filled (top face, bottom face and each side between them), rebuilt when the view moves
+    const mask = document.createElement('canvas');
+    const mg = mask.getContext('2d');
+    let maskKey = '';
+    const clipNow = () => {
+      const c = clipRef.current?.();
+      if (!c || !mg) return false;
+      const key = `${c.key}|${W}x${H}x${dpr}`;
+      if (key !== maskKey) {
+        maskKey = key;
+        mask.width = canvas.width;
+        mask.height = canvas.height;
+        mg.setTransform(dpr, 0, 0, dpr, 0, 0);
+        mg.clearRect(0, 0, W, H);
+        mg.fillStyle = '#000';
+        const poly = (pts: [number, number][]) => {
+          if (pts.length < 3) return;
+          mg.beginPath();
+          mg.moveTo(pts[0][0], pts[0][1]);
+          for (let i = 1; i < pts.length; i += 1) mg.lineTo(pts[i][0], pts[i][1]);
+          mg.closePath();
+          mg.fill();
+        };
+        poly(c.top);
+        poly(c.bottom);
+        const n = Math.min(c.top.length, c.bottom.length);
+        for (let i = 0; i < n; i += 1) {
+          const j = (i + 1) % n;
+          poly([c.top[i], c.top[j], c.bottom[j], c.bottom[i]]);
+        }
+      }
+      return true;
+    };
     const seed = (fromTop: boolean): Drop => ({
       x: Math.random() * (W + 120) - 60,
       y: fromTop ? -Math.random() * 40 : Math.random() * H,
@@ -56,7 +97,9 @@ export const WeatherRain = ({
       H = canvas.clientHeight;
       canvas.width = Math.max(1, Math.round(W * dpr));
       canvas.height = Math.max(1, Math.round(H * dpr));
-      const count = Math.round(((W * H) / (1600 * scale * scale)) * (0.25 + intensity * 0.75) * density);
+      // clipped to the model, the streaks that would have fallen on the paper are gone: more of them, so the rain over
+      // the model reads as it did
+      const count = Math.round(((W * H) / (1600 * scale * scale)) * (0.25 + intensity * 0.75) * density * (clipRef.current ? 1.7 : 1));
       drops = Array.from({ length: Math.min(900, count) }, () => seed(false));
     };
     const draw = () => {
@@ -71,6 +114,12 @@ export const WeatherRain = ({
         g.moveTo(drop.x, drop.y);
         g.lineTo(drop.x - d * drop.len, drop.y - drop.len);
         g.stroke();
+      }
+      if (clipNow()) {
+        g.setTransform(1, 0, 0, 1, 0, 0);
+        g.globalCompositeOperation = 'destination-in';
+        g.drawImage(mask, 0, 0);
+        g.globalCompositeOperation = 'source-over';
       }
     };
     const step = (now: number) => {
@@ -88,6 +137,11 @@ export const WeatherRain = ({
       draw();
       raf = requestAnimationFrame(step);
     };
+    // reduced motion: one still frame, redrawn only when the model is turned (its outline moves)
+    const still = reduced && clipRef.current ? window.setInterval(() => {
+      const c = clipRef.current?.();
+      if (c && `${c.key}|${W}x${H}x${dpr}` !== maskKey) draw();
+    }, 500) : 0;
     const start = () => {
       if (reduced || raf || !onScreen || document.hidden) return;
       last = 0;
@@ -110,6 +164,7 @@ export const WeatherRain = ({
     start();
     return () => {
       if (raf) cancelAnimationFrame(raf);
+      if (still) window.clearInterval(still);
       resize.disconnect();
       seen.disconnect();
       document.removeEventListener('visibilitychange', vis);
