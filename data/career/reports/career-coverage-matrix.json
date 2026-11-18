@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-11-18T03:46:06.711Z",
+  "generatedAt": "2026-11-18T04:15:32.620Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-11-18T03:46:04.931Z",
+    "checkedAt": "2026-11-18T04:15:30.912Z",
     "errors": [],
     "warnings": [
       {
@@ -883,157 +883,6 @@
       "priorityGaps": []
     },
     {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "years": [
-        2019
-      ],
-      "events": 4,
-      "sessions": 8,
-      "policyNote": null,
-      "canceledOfficialSessionIds": [],
-      "openGapIds": [],
-      "sourceFamilyPriorityExclusions": {},
-      "categories": [
-        {
-          "id": "events_sessions",
-          "label": "Events and sessions",
-          "status": "out_of_scope",
-          "covered": 8,
-          "total": 8,
-          "coverage": 1,
-          "notes": "4 events, 8 sessions."
-        },
-        {
-          "id": "race_results",
-          "label": "Race/heat classifications",
-          "status": "out_of_scope",
-          "covered": 8,
-          "total": 8,
-          "coverage": 1,
-          "notes": "192 race/heat result rows across 8 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
-        },
-        {
-          "id": "qualifying_classifications",
-          "label": "Qualifying classifications",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0,
-          "coverage": null,
-          "notes": "0 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
-        },
-        {
-          "id": "grid_start_positions",
-          "label": "Grid/start positions",
-          "status": "out_of_scope",
-          "covered": 151,
-          "total": 192,
-          "coverage": 0.7865,
-          "notes": "151/192 race/heat rows have gridPosition or startPosition."
-        },
-        {
-          "id": "exact_session_windows",
-          "label": "Exact session windows",
-          "status": "complete",
-          "covered": 8,
-          "total": 8,
-          "coverage": 1,
-          "notes": "8/8 physical sessions have clock-time starts; 8/8 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
-        },
-        {
-          "id": "track_metadata",
-          "label": "Track metadata",
-          "status": "out_of_scope",
-          "covered": 4,
-          "total": 4,
-          "coverage": 1,
-          "notes": "4/4 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
-        },
-        {
-          "id": "official_weather_conditions",
-          "label": "Official weather/track conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0/8 sessions have official weather/track-condition observations."
-        },
-        {
-          "id": "lap_samples",
-          "label": "Lap samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 sessions have lap samples."
-        },
-        {
-          "id": "indy_section_data",
-          "label": "INDY NXT section data",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0,
-          "coverage": null,
-          "notes": null
-        },
-        {
-          "id": "penalties_decisions",
-          "label": "Penalties/decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 sessions have official penalty/decision rows."
-        },
-        {
-          "id": "incidents_cautions",
-          "label": "Incidents/cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 sessions have official incident/caution rows."
-        },
-        {
-          "id": "racecraft_summary",
-          "label": "Racecraft summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 race sessions have official most-improved/racecraft summary rows."
-        },
-        {
-          "id": "pit_stop_counts",
-          "label": "Pit-stop counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 192,
-          "coverage": 0,
-          "notes": "0/192 race/heat result rows have pit-stop counts."
-        },
-        {
-          "id": "detailed_pit_context",
-          "label": "Detailed pit context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": null
-        },
-        {
-          "id": "derived_benchmarks",
-          "label": "Derived benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 4,
-          "coverage": 0,
-          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
-        }
-      ],
-      "priorityGaps": []
-    },
-    {
       "seriesId": "series_imsa_weathertech",
       "seriesName": "IMSA WeatherTech SportsCar Championship",
       "years": [
@@ -1492,6 +1341,157 @@
           "status": "blocked",
           "covered": 0,
           "total": 1,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": []
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "years": [
+        2019
+      ],
+      "events": 4,
+      "sessions": 8,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [],
+      "sourceFamilyPriorityExclusions": {},
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "4 events, 8 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "192 race/heat result rows across 8 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 151,
+          "total": 192,
+          "coverage": 0.7865,
+          "notes": "151/192 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "8/8 physical sessions have clock-time starts; 8/8 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "notes": "4/4 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0/8 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 192,
+          "coverage": 0,
+          "notes": "0/192 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 4,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
         }
@@ -2734,160 +2734,6 @@
       ]
     },
     {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "events": 4,
-      "sessions": 8,
-      "raceSessions": 8,
-      "raceRows": 192,
-      "qualifyingSessions": 0,
-      "exactWindowSessions": 8,
-      "physicalSessions": 8,
-      "raceRowsWithGridOrStart": 151,
-      "raceRowsWithPitStops": 0,
-      "lapSampleSessions": 0,
-      "weatherSessions": 0,
-      "priorityGaps": [],
-      "categories": [
-        {
-          "id": "events_sessions",
-          "label": "Events and sessions",
-          "status": "out_of_scope",
-          "covered": 8,
-          "total": 8,
-          "coverage": 1,
-          "notes": "4 events, 8 sessions."
-        },
-        {
-          "id": "race_results",
-          "label": "Race/heat classifications",
-          "status": "out_of_scope",
-          "covered": 8,
-          "total": 8,
-          "coverage": 1,
-          "notes": "192 race/heat result rows across 8 result-bearing race/heat sessions."
-        },
-        {
-          "id": "qualifying_classifications",
-          "label": "Qualifying classifications",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0,
-          "coverage": null,
-          "notes": "0 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
-        },
-        {
-          "id": "grid_start_positions",
-          "label": "Grid/start positions",
-          "status": "out_of_scope",
-          "covered": 151,
-          "total": 192,
-          "coverage": 0.7865,
-          "notes": "151/192 race/heat rows have gridPosition or startPosition."
-        },
-        {
-          "id": "exact_session_windows",
-          "label": "Exact session windows",
-          "status": "complete",
-          "covered": 8,
-          "total": 8,
-          "coverage": 1,
-          "notes": "8/8 physical sessions have clock-time starts; 8/8 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
-        },
-        {
-          "id": "track_metadata",
-          "label": "Track metadata",
-          "status": "out_of_scope",
-          "covered": 4,
-          "total": 4,
-          "coverage": 1,
-          "notes": "4/4 referenced tracks have complete metadata."
-        },
-        {
-          "id": "official_weather_conditions",
-          "label": "Official weather/track conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0/8 sessions have official weather/track-condition observations."
-        },
-        {
-          "id": "lap_samples",
-          "label": "Lap samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 sessions have lap samples."
-        },
-        {
-          "id": "indy_section_data",
-          "label": "INDY NXT section data",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0,
-          "coverage": null,
-          "notes": null
-        },
-        {
-          "id": "penalties_decisions",
-          "label": "Penalties/decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 sessions have official penalty/decision rows."
-        },
-        {
-          "id": "incidents_cautions",
-          "label": "Incidents/cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 sessions have official incident/caution rows."
-        },
-        {
-          "id": "racecraft_summary",
-          "label": "Racecraft summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": "0 race sessions have official most-improved/racecraft summary rows."
-        },
-        {
-          "id": "pit_stop_counts",
-          "label": "Pit-stop counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 192,
-          "coverage": 0,
-          "notes": "0/192 race/heat result rows have pit-stop counts."
-        },
-        {
-          "id": "detailed_pit_context",
-          "label": "Detailed pit context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 8,
-          "coverage": 0,
-          "notes": null
-        },
-        {
-          "id": "derived_benchmarks",
-          "label": "Derived benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 4,
-          "coverage": 0,
-          "notes": "0 non-report derived metrics exist for this season."
-        }
-      ]
-    },
-    {
       "seriesId": "series_imsa_weathertech",
       "seriesName": "IMSA WeatherTech SportsCar Championship",
       "year": 2025,
@@ -3652,6 +3498,160 @@
           "status": "blocked",
           "covered": 0,
           "total": 1,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this season."
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "events": 4,
+      "sessions": 8,
+      "raceSessions": 8,
+      "raceRows": 192,
+      "qualifyingSessions": 0,
+      "exactWindowSessions": 8,
+      "physicalSessions": 8,
+      "raceRowsWithGridOrStart": 151,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0,
+      "priorityGaps": [],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "4 events, 8 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "192 race/heat result rows across 8 result-bearing race/heat sessions."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 151,
+          "total": 192,
+          "coverage": 0.7865,
+          "notes": "151/192 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "8/8 physical sessions have clock-time starts; 8/8 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "notes": "4/4 referenced tracks have complete metadata."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0/8 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 192,
+          "coverage": 0,
+          "notes": "0/192 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 4,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this season."
         }
@@ -36252,838 +36252,6 @@
       ]
     },
     {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
-      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
-      "sessionId": "session_scca_super_tour_2019_cota_saturday_race",
-      "sessionName": "Group 7 Saturday Race",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 18,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 18,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 18,
-          "total": 18
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 18
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
-      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
-      "sessionId": "session_scca_super_tour_2019_cota_sunday_race",
-      "sessionName": "Group 7 Sunday Race",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 18,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 18,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 18,
-          "total": 18
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 18
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_homestead",
-      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
-      "sessionId": "session_scca_super_tour_2019_homestead_race_1",
-      "sessionName": "Group 7 Race 1",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 20,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 20,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 20
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 20
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_homestead",
-      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
-      "sessionId": "session_scca_super_tour_2019_homestead_race_2",
-      "sessionName": "Group 7 Race 2",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 20,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 20,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 20
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 20
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_road_atlanta",
-      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
-      "sessionId": "session_scca_super_tour_2019_road_atlanta_saturday_race",
-      "sessionName": "Group 3 Saturday Race",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 32,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 32,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 32,
-          "total": 32
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 32
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_road_atlanta",
-      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
-      "sessionId": "session_scca_super_tour_2019_road_atlanta_sunday_race",
-      "sessionName": "Group 3 Sunday Race",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 32,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 32,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 31,
-          "total": 32
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 32
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_sebring",
-      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
-      "sessionId": "session_scca_super_tour_2019_sebring_race_1",
-      "sessionName": "Group 7 Race 1",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 26,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 26,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 26,
-          "total": 26
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 26
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "year": 2019,
-      "eventId": "event_scca_super_tour_2019_sebring",
-      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
-      "sessionId": "session_scca_super_tour_2019_sebring_race_2",
-      "sessionName": "Group 7 Race 2",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 26,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 26,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "out_of_scope",
-          "covered": 26,
-          "total": 26
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "lap_samples",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 26
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "out_of_scope",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
       "seriesId": "series_imsa_weathertech",
       "seriesName": "IMSA WeatherTech SportsCar Championship",
       "year": 2025,
@@ -59428,6 +58596,838 @@
           "status": "out_of_scope",
           "covered": 0,
           "total": 28
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "sessionId": "session_scca_super_tour_2019_cota_saturday_race",
+      "sessionName": "Group 7 Saturday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "sessionId": "session_scca_super_tour_2019_cota_sunday_race",
+      "sessionName": "Group 7 Sunday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_homestead",
+      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "sessionId": "session_scca_super_tour_2019_homestead_race_1",
+      "sessionName": "Group 7 Race 1",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_homestead",
+      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "sessionId": "session_scca_super_tour_2019_homestead_race_2",
+      "sessionName": "Group 7 Race 2",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_road_atlanta",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "sessionId": "session_scca_super_tour_2019_road_atlanta_saturday_race",
+      "sessionName": "Group 3 Saturday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 32,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 32,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 32,
+          "total": 32
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 32
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_road_atlanta",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "sessionId": "session_scca_super_tour_2019_road_atlanta_sunday_race",
+      "sessionName": "Group 3 Sunday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 32,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 32,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 31,
+          "total": 32
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 32
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_sebring",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "sessionId": "session_scca_super_tour_2019_sebring_race_1",
+      "sessionName": "Group 7 Race 1",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 26,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 26
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 26
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_sebring",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "sessionId": "session_scca_super_tour_2019_sebring_race_2",
+      "sessionName": "Group 7 Race 2",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 26,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 26
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 26
         },
         {
           "id": "detailed_pit_context",

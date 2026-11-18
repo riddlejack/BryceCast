@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T03:58:52.400Z",
+  "generatedAt": "2026-11-18T04:13:59.073Z",
   "source": "Open-Meteo Historical Weather API (ERA5 / ERA5-Land reanalysis, hourly)",
   "refresh": false,
   "races": 175,
@@ -9,8 +9,9 @@
     "session_sheet": 175
   },
   "byWetDrySource": {
-    "reanalysis": 124,
-    "series_report": 51
+    "reanalysis": 117,
+    "series_report": 51,
+    "observed": 7
   },
   "bySky": {
     "overcast": 57,

@@ -1,6 +1,6 @@
 # Career Analytics Parity Pass
 
-Generated from canonical career dataset updated `2026-11-18T03:45:57.310Z`.
+Generated from canonical career dataset updated `2026-11-18T04:15:23.386Z`.
 
 ## Series Result Summary
 
@@ -11,7 +11,7 @@ Generated from canonical career dataset updated `2026-11-18T03:45:57.310Z`.
 | Formula Ford | 23 | 4.391 | 1.478 | 0.864 | 0.826 | 0.957 | 0 |
 | F1600 Championship Series | 20 | 4.75 |  | 0.745 | 0.7 | 0.95 | 0 |
 | Euroformula Open | 17 | 4.176 | -0.588 | 0.631 | 0.706 | 1 | 0 |
-| Hoosier SCCA Super Tour | 8 | 8.75 | -2.5 | 0.676 | 0.375 | 0.75 | 0 |
+| SCCA U.S. Majors Tour | 8 | 8.75 | -2.5 | 0.676 | 0.375 | 0.75 | 0 |
 | Castrol Toyota Formula Regional Oceania Championship | 6 | 6.167 | -0.5 | 0.676 | 0.333 | 1 | 0 |
 | IMSA WeatherTech SportsCar Championship | 1 | 6 |  | 0.918 | 0 | 1 | 0 |
 | Right Coast Formula F Series | 1 | 1 |  | 1 | 1 | 1 | 0 |
@@ -77,10 +77,10 @@ Generated from canonical career dataset updated `2026-11-18T03:45:57.310Z`.
 | Right Coast Formula F Series | lap_shape | 0 | unavailable | Show unavailable or omit from comparison charts. | No lap-sample rows currently available for Bryce in this series. |
 | Right Coast Formula F Series | team_teammate_context | 27 | source_bounded_partial | Use with coverage badge and denominators. | Full-field results support descriptive team/teammate context, not engineering root-cause attribution. |
 | Right Coast Formula F Series | section_pace | 0 | unavailable | Show unavailable or omit from comparison charts. | No official section-metric rows currently available for this series. |
-| Hoosier SCCA Super Tour | result_conversion | 8 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
-| Hoosier SCCA Super Tour | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
-| Hoosier SCCA Super Tour | track_venue_history | 4 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
-| Hoosier SCCA Super Tour | weather_context | 0 | unavailable | Show unavailable or omit from comparison charts. | No trustworthy source-backed weather rows currently available for this series. |
+| SCCA U.S. Majors Tour | result_conversion | 8 | production_safe | Use in Career Analytics Lab. | Use percentiles alongside raw finish because field sizes and formats vary by series. |
+| SCCA U.S. Majors Tour | qualifying_conversion | 0 | unavailable_without_guessing | Show unavailable or omit from comparison charts. | No qualifying rows currently support a start-to-race conversion model for this series. |
+| SCCA U.S. Majors Tour | track_venue_history | 4 | production_safe | Use in Career Analytics Lab. | Venue and track-type coverage comes from canonical event and track metadata. |
+| SCCA U.S. Majors Tour | weather_context | 0 | unavailable | Show unavailable or omit from comparison charts. | No trustworthy source-backed weather rows currently available for this series. |
 
 ## Modeling Priority
 
@@ -92,7 +92,7 @@ Generated from canonical career dataset updated `2026-11-18T03:45:57.310Z`.
 | Euroformula Open | 17 | 12.7 | result_conversion_pass |
 | IMSA WeatherTech SportsCar Championship | 1 | 12.1 | standalone_daytona_feature |
 | F1600 Championship Series | 20 | 10 | result_conversion_pass |
-| Hoosier SCCA Super Tour | 8 | 8.8 | lightweight_context_only |
+| SCCA U.S. Majors Tour | 8 | 8.8 | lightweight_context_only |
 | Castrol Toyota Formula Regional Oceania Championship | 6 | 8.6 | lightweight_context_only |
 | Right Coast Formula F Series | 1 | 8.1 | lightweight_context_only |
 | USF Pro 2000 Championship | 1 | 8.1 | lightweight_context_only |

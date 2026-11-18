@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-11-18T04:01:32Z
-Source hash: `53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161`
+Generated: 2026-11-18T04:28:29Z
+Source hash: `79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a`
 
 ## Source Scope
 
@@ -97,7 +97,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | F1600 Championship Series | 2019 | 39 | 0 | 2 | 0 | 0 | 37 |
 | Castrol Toyota Formula Regional Oceania Championship | 2024 | 32 | 0 | 0 | 0 | 0 | 32 |
 | Euroformula Open | 2023 | 28 | 0 | 0 | 0 | 0 | 28 |
-| Hoosier SCCA Super Tour | 2019 | 8 | 0 | 0 | 0 | 0 | 8 |
+| SCCA U.S. Majors Tour | 2019 | 8 | 0 | 0 | 0 | 0 | 8 |
 | Global / career context |  | 5 | 0 | 0 | 0 | 0 | 5 |
 | IMSA WeatherTech SportsCar Championship | 2025 | 5 | 0 | 0 | 0 | 1 | 4 |
 | USF Pro 2000 Championship | 2024 | 2 | 0 | 0 | 0 | 0 | 2 |

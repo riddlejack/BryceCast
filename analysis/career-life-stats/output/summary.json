@@ -11,7 +11,7 @@
     "miles": 11997.4,
     "toTrackName": "Euromarque Motorsport Park"
   },
-  "generatedAt": "2026-11-18T03:45:57.310Z",
+  "generatedAt": "2026-11-18T04:15:23.386Z",
   "longestLeg": {
     "fromTrackName": "Autodromo Nazionale Monza",
     "miles": 11599.1,
@@ -69,7 +69,7 @@
     {
       "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
       "path": "data/career/career.dataset.json",
-      "sha256": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
+      "sha256": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a"
     },
     {
       "note": "Curated track lengths and coordinates with named sources.",
@@ -79,7 +79,7 @@
     {
       "note": "Al Kamel-derived Bryce driver stints used for Daytona attribution.",
       "path": "analysis/imsa-daytona-stint-class-pace/output/bryce_imsa_stint_context.csv",
-      "sha256": "0495ece5531ca435ea699c0d3b73498fc07090fa422bbc3457b35a6bcdb45210"
+      "sha256": "4b36f6b8908b446b7349a4a505b2e9227d317d3ca022af092066e8ff97ebf33f"
     },
     {
       "note": "Explicit low/base/high fuel and tire model assumptions with source URLs.",
@@ -109,7 +109,7 @@
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/session_mileage_ledger.csv",
-      "sha256": "5617885db5e65c05ed9e3e220f0fc4cbb0dbb3fd456810a69f3f5ac01d093746"
+      "sha256": "928d783c49d6e851a98fce680f476afe88b5f3fc8e1a13815f1a5a6480577ce6"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
@@ -134,12 +134,12 @@
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv",
-      "sha256": "5f3ca4951805f485c859182e64fc42b4e97e37b3822986e7e3ea15188b0de478"
+      "sha256": "641ab8254865a8ec9e2738e1699a1b7fe8c7c46f5241232deffdd203dd9a2e99"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv",
-      "sha256": "32e971acc5803cc8e58c4f90ea7bdbcb73f233140190dbd6eb59f00c7babcbb3"
+      "sha256": "a6cb631adedfb8e6c6c6afccd342de7d8aa1c0c20eddc86a6cf00ed0de13171b"
     }
   ],
   "travel": {
