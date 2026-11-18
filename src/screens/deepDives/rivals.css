@@ -108,3 +108,76 @@
   .rv-tiles__grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 16px 12px; }
   .rv-tile__name { font-size: 12.5px; }
 }
+
+/* ---------- round 2: the tyres (default) and ?ddrivals=grid ---------- */
+
+.rv-ty__key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 18px;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  margin: 0 0 14px;
+}
+.rv-ty__key span { display: inline-flex; align-items: center; gap: 6px; }
+.rv-ty__keynote { color: var(--ink-muted); }
+.rv-ty__icon { display: block; flex: none; }
+
+.rv-ty__tyre { transition: opacity 140ms ease; }
+.rv-ty__roll { transform-box: fill-box; transform-origin: center; will-change: transform; }
+.rv__name--hot { font-weight: 650; }
+
+.rv-grid__season { font-size: 12.5px; font-weight: 620; fill: var(--ink); font-variant-numeric: tabular-nums; }
+.rv-grid__count { font-weight: 450; fill: var(--ink-muted); }
+.rv-grid__rule { stroke: var(--axis-baseline); stroke-width: 1; }
+.rv-grid__slot { fill: var(--ink-muted); opacity: 0.28; }
+.rv-grid__band { fill: var(--fill-quiet); }
+
+/* the card: the race and its track, or a rival's record */
+.rvc {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: var(--surface-0);
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(30, 28, 26, 0.12);
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+.rvc--below { transform: translate(-50%, 0); }
+.rvc--touch {
+  transform: none;
+  pointer-events: auto;
+  max-width: calc(100vw - 16px);
+  box-shadow: 0 8px 24px rgba(30, 28, 26, 0.14);
+  -webkit-tap-highlight-color: transparent;
+}
+.rvc__still { display: block; width: 100%; height: auto; background: var(--grey-fill); border-bottom: 1px solid var(--divider); }
+.rvc__body { display: flex; flex-direction: column; gap: 3px; padding: 9px 12px 10px; }
+.rvc__meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.rvc__meta i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.rvc__title { font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+.rvc__line { color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+.rvc__line b { color: var(--ink); font-weight: 650; }
+.rvc__duel { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+.rvc__duel b { font-weight: 650; color: var(--ink); }
+.rvc__vs { color: var(--ink-muted); }
+.rvc__win { color: var(--link); font-weight: 560; }
+.rvc__win b { color: var(--link); }
+.rvc__win--rival, .rvc__win--rival b { color: var(--ink); }
+.rvc__record { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 2px; font-variant-numeric: tabular-nums; }
+.rvc__record b { font-size: 14px; font-weight: 650; }
+.rvc__dash { color: var(--ink-muted); }
+.rvc__words { margin-left: 8px; color: var(--ink-secondary); }
+.rvc__note { color: var(--ink-muted); }
+.rvc__action { color: var(--link); font-size: 12px; margin-top: 2px; }
+.rvc__tap { margin: 0 -12px -10px; padding: 0 12px; }
+.rvc__tap .tap-card__open { margin-top: 6px; }
+.rv-ty__note { font-size: 12px; fill: var(--ink-muted); }
+/* The phone gets the tyre board, which labels its own two rows. */
+@media (max-width: 639px) { .rv-ty__key--wide { display: none; } }
