@@ -38,9 +38,6 @@
 .rr__dot--early { fill: var(--paper) !important; stroke-width: 1.4; }
 .rr__dot--early.rr__dot--wet { stroke: var(--rr-wet); }
 .rr__dot--early.rr__dot--dry { stroke: var(--rr-dry); }
-.rr__tier-ring { fill: none; stroke-width: 1; }
-.rr__tier-ring--wet { stroke: var(--rr-wet); }
-.rr__tier-ring--dry { stroke: var(--rr-dry); }
 .rr__hover-ring { fill: var(--paper); stroke: var(--ink); stroke-width: 1.5; }
 .rr__guide { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 1 3; opacity: 0.55; pointer-events: none; }
 
@@ -89,7 +86,6 @@
 .rr-key__dry { fill: var(--rr-dry); }
 .rr-key__ink { fill: var(--rr-dry); }
 .rr-key__soft { fill: var(--rr-dry-soft); }
-.rr-key__ring { fill: none; stroke: var(--rr-dry); stroke-width: 1; }
 .rr-key__hollow { fill: var(--paper); stroke: var(--rr-dry); stroke-width: 1.4; }
 @media (max-width: 560px) { .rr-key { white-space: normal; } }
 

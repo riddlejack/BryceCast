@@ -7,11 +7,20 @@
       "title": "Rain days redone: one row per series, wet in rain blue over dry in grey, an arrow from his typical dry race to his typical wet one",
       "switch": "ddrain",
       "values": [
-        { "value": null, "label": "rows (default): each series its own ruled row, wet races in a light rain lane over dry races, arrow dry → wet; worse ← → better written across the top" },
-        { "value": "bands", "label": "bands: the dry races become his usual range (the middle half, a grey band) with the wet races falling onto it; dry races as a quiet rug beneath" },
-        { "value": "old", "label": "round 2: all 167 dots in every series colour, All races / By series toggle" }
+        {
+          "value": null,
+          "label": "rows (default): each series its own ruled row, wet races in a light rain lane over dry races, arrow dry → wet; worse ← → better written across the top"
+        },
+        {
+          "value": "bands",
+          "label": "bands: the dry races become his usual range (the middle half, a grey band) with the wet races falling onto it; dry races as a quiet rug beneath"
+        },
+        {
+          "value": "old",
+          "label": "round 2: all 167 dots in every series colour, All races / By series toggle"
+        }
       ],
-      "look": "Career → More from the archive → Rain days. Watch the races fall into their rows, then the arrows draw: All 167 races points right (82% wet vs 63% dry), Formula Ford and GB3 point left. Point at any dot: it is ringed, a guide runs up to the scale, and the card shows the track still, the finish and the weather with how sure it is (series report, observed, modelled). Solid, ringed and soft dots are those three tiers.",
+      "look": "Career → More from the archive → Rain days. Watch the races fall into their rows, then the arrows draw: All 167 races points right (82% wet vs 63% dry), Formula Ford and GB3 point left. Point at any dot: it is ringed, a guide runs up to the scale, and the card shows the track still, the finish and the weather in the site's words with its source (\"damp track (series report)\", \"dry track (modelled, Open-Meteo)\"). A solid dot is a reported or observed call, a light one modelled.",
       "anchor": "#archive-rain",
       "added": "2026-11-18T01:00",
       "reviewed": false
@@ -19,14 +28,27 @@
     {
       "id": "r3-explorer",
       "page": "/career",
-      "title": "The explorer's dots redone: same motion, dots as small beads on an even lattice, every row on one rhythm, better → on the scale",
+      "title": "The explorer's dots redone: same motion, the site's flat dot in soft ink on an even lattice; a series takes its hue only when pointed at or followed",
       "switch": "ddxdots",
       "values": [
-        { "value": null, "label": "beads (default): each dot lit from the top left in its series colour, paper rim, soft shadow; columns one dot wide" },
-        { "value": "flat", "label": "flat: the same even lattice with flat, quieter dots" },
-        { "value": "old", "label": "round 2: the free beeswarm with flat full-colour dots" }
+        {
+          "value": null,
+          "label": "ink (default): flat soft-ink dots at rest; point at a dot or a series name (or follow one) and that series lights in its hue while the rest step back; wins gold with an amber ring"
+        },
+        {
+          "value": "beads",
+          "label": "beads: each dot a small bead in its series colour, lit from the top left, soft shadow"
+        },
+        {
+          "value": "flat",
+          "label": "flat: flat dots in every series colour at once, a little quieter"
+        },
+        {
+          "value": "old",
+          "label": "round 2: the free beeswarm with flat full-colour dots"
+        }
       ],
-      "look": "Career → More from the archive → The explorer. Watch the pile split into series, then flip Series / Season / Track / Weather: the dots travel as before. The dots now stack in even columns and rows share one rhythm. Point at any dot for its race card; flip ?ddxdots=flat and ?ddxdots=old to compare.",
+      "look": "Career → More from the archive → The explorer. At rest every race is a soft-ink dot. Point at any dot (or a series name in the Series view) and its series lights in its own colour; click a name to follow it and it stays lit. Flip Series / Season / Track / Weather: the dots travel as before. ?ddxdots=beads, flat and old to compare.",
       "anchor": "#archive-explorer",
       "added": "2026-11-18T01:00",
       "reviewed": false
