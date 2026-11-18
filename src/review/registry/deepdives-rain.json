@@ -7,13 +7,20 @@
       "title": "Rain days: the days fall into a wet sky and a dry lane",
       "switch": "ddrain",
       "values": [
-        { "value": null, "label": "default: opens on all 92 races, wet against dry (76% vs 58%); By series is one tap" },
-        { "value": "series", "label": "opens already split by series (Formula Ford, GB3, INDY NXT, IMSA)" }
+        {
+          "value": null,
+          "label": "default: opens on all 92 races, wet against dry (76% vs 58%); By series is one tap"
+        },
+        {
+          "value": "series",
+          "label": "opens already split by series (Formula Ford, GB3, INDY NXT, IMSA)"
+        }
       ],
       "look": "Open More from the archive → Rain days: every race falls like rain, the wet ones stop in the blue-grey sky, the dry ones fall through; then the two medians and the step between them draw in. Tap By series to watch the same dots sort into each series' wet and dry strips.",
       "anchor": "#archive-rain",
       "added": "2026-11-17T18:00",
-      "reviewed": false
+      "reviewed": false,
+      "replacedBy": "Rain days redone: one row per series, wet in rain blue over dry in grey, an arrow from his typical dry race to his typical wet one"
     }
   ]
 }

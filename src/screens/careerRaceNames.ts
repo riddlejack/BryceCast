@@ -93,6 +93,9 @@ const raceOf = (sessionId: string, raceInRound: number | null | undefined): stri
 export const raceName = ({ eventName, sessionId, trackName, raceInRound, racesInRound }: RaceNameInput): RaceName => {
   /* A trailing parenthesis is the organiser's note: "(Central Florida Region, Winter Vacation)". */
   let event0 = eventName.trim().replace(/\s*\([^)]*\)\s*$/, '');
+  /* "INDY NXT by Firestone at the Milwaukee Mile": the series' sponsor prefix, spelt three ways
+   *  across seasons. The Races page and the race cards drop it; so does every chart. */
+  event0 = event0.replace(/^INDY NXT by Firestone at (the )?/i, '').trim() || event0;
   /* "Grand Prix of Monterey Race 1": the event name already says which race. */
   const named = event0.match(/^(.*\S)\s+Race\s+(\d+)$/i);
   if (named) event0 = named[1];

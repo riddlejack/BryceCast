@@ -8,6 +8,7 @@ import { useTapPreview, type TapPreview } from '../app/tapPreview';
 import { uiDataPackage, type UiSeasonCampaign } from '../data/uiDataPackage';
 import { useImsaDaytonaStint } from '../data/imsaDaytonaStint';
 import { beatLine } from '../app/raceFacts';
+import { wetDryCall } from '../app/wetDry';
 import { raceFieldOf } from './raceCardFacts';
 
 export interface CareerRow {
@@ -133,13 +134,21 @@ export const useCareerRows = (): CareerRow[] => {
   }, []);
 };
 
+/** "wet track (observed, NOAA)", "drying track (series report)"; null for a dry or unknown race.
+ *  Read through app/wetDry.ts, the same call the 3D scene, the rain marks and the race pages make. */
+const explorerWetWords = (row: CareerRow): string | null => {
+  const call = wetDryCall(uiDataPackage.screens.careerLab.raceWeather?.[row.sessionId]);
+  if (call) return call.state === 'dry' ? null : `${call.words} (${call.tierWords})`;
+  return row.wetDry && row.wetDry !== 'dry' ? `${row.wetDry === 'wet' ? 'wet track' : 'wet for part of the race'}` : null;
+};
+
 export const tipFor = (row: CareerRow): Omit<ChartTip, 'x' | 'y'> => ({
   title: row.raceLabel,
   detail: [
     row.seriesShort,
     row.start !== null ? `P${row.start} → P${row.finish}` : `finished P${row.finish}`,
     row.status !== 'running' ? row.status : null,
-    row.wetDry && row.wetDry !== 'dry' ? `${row.wetDry} track` : null,
+    explorerWetWords(row),
     beatLine(row.finish, raceFieldOf(row.sessionId))
   ]
     .filter(Boolean)

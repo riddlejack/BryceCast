@@ -19,7 +19,8 @@
       "look": "Races. Use the year links under the title to jump; point at (or tap) any dot in any season for the track card; open 2019 and click a race; open a DNF/DNS race (2019 Watkins Glen Race 3) to see its own page.",
       "anchor": "#season-2019",
       "added": "2026-11-17T23:30",
-      "reviewed": false
+      "reviewed": false,
+      "replacedBy": "2023 and earlier behind one disclosure under the INDY NXT seasons: closed by default, opens in place (nothing above it moves), keyboard and touch; a year link or an address ending #season-2019 opens it at that year"
     },
     {
       "id": "races-row-picture",
