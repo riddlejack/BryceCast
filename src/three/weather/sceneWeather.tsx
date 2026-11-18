@@ -137,8 +137,8 @@ const fromRaceWeather = (row: Row, zone: string | null, fallbackAt: SceneWeather
   const rawSky = str(row.sky);
   let sky = (['clear', 'partly', 'overcast', 'rain', 'storm'] as const).find((s) => s === rawSky) ?? skyOf(rawSky, wet);
   if (!sky) return null;
-  // the official report says the track was dry: no rain falls in the picture (the reanalysis's rain stays in the words)
-  const modelRainOfficiallyDry = official && wetDry === 'dry' && (sky === 'rain' || sky === 'storm');
+  // the official report, or a weather station's observation, says the track was dry: no rain falls in the picture (the reanalysis's rain stays in the words)
+  const modelRainOfficiallyDry = (official || str(row.wetDrySource) === 'observed') && wetDry === 'dry' && (sky === 'rain' || sky === 'storm');
   const modelSky = sky;
   if (modelRainOfficiallyDry) sky = 'overcast';
   const source = (row.source ?? {}) as Row;

@@ -4,6 +4,7 @@ import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
 import { chapterTint, raceHref } from '../careerExplorer';
 import { ClimbCard } from './card';
+import { useSlide, type Slide } from './slide';
 import { clamp, ease, type ClimbModel, type ClimbRace } from './model';
 
 /* ============================================================================
@@ -58,6 +59,7 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
   const coarse = useCoarsePointer();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hover, setHover] = useState<number | null>(null);
+  const slideRef = useRef<Slide | null>(null);
   const n = races.length;
   const phone = width < 640;
 
@@ -155,13 +157,18 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
     if (!box) return null;
     const mx = event.clientX - box.left;
     const my = event.clientY - box.top;
+    /* A finger sliding sideways walks race by race: nearest by x, any height. */
+    const byX = slideRef.current?.sliding() ?? false;
+    /* A finger gets the same reach every way (at least 24 px round each dot);
+       a mouse keeps the reach stretched along the row. */
+    const finger = coarse || tap.armed !== null;
     let best: { i: number; d: number } | null = null;
     for (const race of races) {
       const cy = race.finish === null ? floor(race.step) + 8 : markY(race);
-      const d = Math.hypot((x(race.index) - mx) * 1.4, cy - my);
+      const d = byX ? Math.abs(x(race.index) - mx) : Math.hypot((x(race.index) - mx) * (finger ? 1 : 1.4), cy - my);
       if (!best || d < best.d) best = { i: race.index, d };
     }
-    const reach = coarse || tap.armed !== null ? 30 : 26;
+    const reach = byX ? Infinity : finger ? 30 : 26;
     if (!best || best.d > reach) {
       setHover(null);
       return null;
@@ -169,6 +176,12 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
     setHover(best.i);
     return best.i;
   };
+
+  const slide = useSlide(tap, find, () => setHover(null), (key) => {
+    const race = races[key as number];
+    return race?.hasPage ? () => navigate(raceHref(race.sessionId)) : null;
+  });
+  slideRef.current = slide;
 
   const drawn = (s: number) => {
     /* how far the tread of step s has run, 0..1 */
@@ -201,14 +214,7 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
         role="img"
         aria-label={`The climb: ${model.total} races on ${steps.length} steps, ${steps.map((step) => `${step.name} ${step.years}, ${step.count} races`).join('; ')}.`}
         data-hovering={hover !== null ? '' : undefined}
-        {...tap.surface({
-          find,
-          clear: () => setHover(null),
-          open: (key) => {
-            const race = races[key as number];
-            return race?.hasPage ? () => navigate(raceHref(race.sessionId)) : null;
-          }
-        })}
+        {...slide.handlers}
       >
         {/* the count, ticking up as the stairs build */}
         <g className="climb-figure" aria-hidden fontFamily={chartFont}>

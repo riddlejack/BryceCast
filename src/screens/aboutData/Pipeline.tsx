@@ -13,7 +13,7 @@ const SOURCES: Array<Node & { to: string; row: number; tag: string }> = [
   { key: 'live', label: 'Live timing', note: ['INDY NXT Race Control,', 'every second'], kind: 'source', to: 'capture', row: 0, tag: 'into the capture' },
   { key: 'sheets', label: 'Official results', note: ['and timing sheets,', '10 series, 2019 to 2026'], kind: 'source', to: 'archive', row: 1, tag: 'into the archive' },
   { key: 'captures', label: 'Permissioned captures', note: ['RaceTools track shapes,', 'Timing71 for 2026 replays'], kind: 'source', to: 'archive', row: 2, tag: 'into the archive' },
-  { key: 'weather', label: 'Near-track weather', note: ['modeled, from NWS'], kind: 'source', to: 'analysis', row: 3, tag: 'joined in the analysis' }
+  { key: 'weather', label: 'Race weather', note: ['Open-Meteo reanalysis,', 'checked by NOAA stations'], kind: 'source', to: 'analysis', row: 3, tag: 'joined in the analysis' }
 ];
 
 const CHAIN: Node[] = [

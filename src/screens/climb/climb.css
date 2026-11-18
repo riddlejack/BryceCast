@@ -6,7 +6,7 @@
 .climb-svg {
   display: block;
   overflow: visible;
-  touch-action: manipulation;
+  touch-action: pan-y pinch-zoom;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -55,3 +55,7 @@
 @media (max-width: 639px) {
   .climb-moment__annotation { display: none; }
 }
+
+/* A sideways finger walks the races (./slide.ts); up and down stays the page's.
+ * Specific enough to beat tapPreview.css's coarse-pointer svg[role='img'] rule. */
+.climb-stage svg.climb-svg { touch-action: pan-y pinch-zoom; }

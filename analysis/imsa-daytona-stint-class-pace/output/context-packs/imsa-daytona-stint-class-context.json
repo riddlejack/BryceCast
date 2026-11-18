@@ -492,6 +492,152 @@
     "teamName": "JDC Miller MotorSports",
     "vehicle": "Porsche 963"
   },
+  "car85Spells": [
+    {
+      "driverId": "driver_gianmaria_bruni",
+      "driverName": "Gianmaria Bruni",
+      "endElapsedSeconds": 5910.453,
+      "endLap": 58,
+      "laps": 58,
+      "startElapsedSeconds": 0.0,
+      "startLap": 1
+    },
+    {
+      "driverId": "driver_tijmen_van_der_helm",
+      "driverName": "Tijmen van der Helm",
+      "endElapsedSeconds": 11738.84,
+      "endLap": 109,
+      "laps": 51,
+      "startElapsedSeconds": 5910.453,
+      "startLap": 59
+    },
+    {
+      "driverId": "driver_pascal_wehrlein",
+      "driverName": "Pascal Wehrlein",
+      "endElapsedSeconds": 18553.57,
+      "endLap": 171,
+      "laps": 62,
+      "startElapsedSeconds": 11738.84,
+      "startLap": 110
+    },
+    {
+      "driverId": "driver_bryce_aron",
+      "driverName": "Bryce Aron",
+      "endElapsedSeconds": 24021.097,
+      "endLap": 220,
+      "laps": 49,
+      "startElapsedSeconds": 18553.57,
+      "startLap": 172
+    },
+    {
+      "driverId": "driver_gianmaria_bruni",
+      "driverName": "Gianmaria Bruni",
+      "endElapsedSeconds": 30528.837,
+      "endLap": 273,
+      "laps": 53,
+      "startElapsedSeconds": 24021.097,
+      "startLap": 221
+    },
+    {
+      "driverId": "driver_tijmen_van_der_helm",
+      "driverName": "Tijmen van der Helm",
+      "endElapsedSeconds": 35039.472,
+      "endLap": 315,
+      "laps": 42,
+      "startElapsedSeconds": 30528.837,
+      "startLap": 274
+    },
+    {
+      "driverId": "driver_pascal_wehrlein",
+      "driverName": "Pascal Wehrlein",
+      "endElapsedSeconds": 43257.275,
+      "endLap": 387,
+      "laps": 72,
+      "startElapsedSeconds": 35039.472,
+      "startLap": 316
+    },
+    {
+      "driverId": "driver_bryce_aron",
+      "driverName": "Bryce Aron",
+      "endElapsedSeconds": 50493.216,
+      "endLap": 446,
+      "laps": 59,
+      "startElapsedSeconds": 43257.275,
+      "startLap": 388
+    },
+    {
+      "driverId": "driver_gianmaria_bruni",
+      "driverName": "Gianmaria Bruni",
+      "endElapsedSeconds": 56501.899,
+      "endLap": 503,
+      "laps": 57,
+      "startElapsedSeconds": 50493.216,
+      "startLap": 447
+    },
+    {
+      "driverId": "driver_tijmen_van_der_helm",
+      "driverName": "Tijmen van der Helm",
+      "endElapsedSeconds": 62153.515,
+      "endLap": 558,
+      "laps": 55,
+      "startElapsedSeconds": 56501.899,
+      "startLap": 504
+    },
+    {
+      "driverId": "driver_pascal_wehrlein",
+      "driverName": "Pascal Wehrlein",
+      "endElapsedSeconds": 66475.899,
+      "endLap": 598,
+      "laps": 40,
+      "startElapsedSeconds": 62153.515,
+      "startLap": 559
+    },
+    {
+      "driverId": "driver_bryce_aron",
+      "driverName": "Bryce Aron",
+      "endElapsedSeconds": 70506.608,
+      "endLap": 632,
+      "laps": 34,
+      "startElapsedSeconds": 66475.899,
+      "startLap": 599
+    },
+    {
+      "driverId": "driver_gianmaria_bruni",
+      "driverName": "Gianmaria Bruni",
+      "endElapsedSeconds": 73377.48,
+      "endLap": 660,
+      "laps": 28,
+      "startElapsedSeconds": 70506.608,
+      "startLap": 633
+    },
+    {
+      "driverId": "driver_tijmen_van_der_helm",
+      "driverName": "Tijmen van der Helm",
+      "endElapsedSeconds": 78302.333,
+      "endLap": 708,
+      "laps": 48,
+      "startElapsedSeconds": 73377.48,
+      "startLap": 661
+    },
+    {
+      "driverId": "driver_pascal_wehrlein",
+      "driverName": "Pascal Wehrlein",
+      "endElapsedSeconds": 81846.9,
+      "endLap": 738,
+      "laps": 30,
+      "startElapsedSeconds": 78302.333,
+      "startLap": 709
+    },
+    {
+      "driverId": "driver_gianmaria_bruni",
+      "driverName": "Gianmaria Bruni",
+      "endElapsedSeconds": 86507.096,
+      "endLap": 780,
+      "laps": 42,
+      "startElapsedSeconds": 81846.9,
+      "startLap": 739
+    }
+  ],
   "claimStrength": "source_bounded_descriptive_stint_class_pace",
   "counts": {
     "bryceStints": 10,
@@ -505,9 +651,10 @@
     "Use these artifacts for descriptive Daytona stint, co-driver, class, and hour-of-race pace context.",
     "Do not present lap-time pace as live telemetry, strategy root cause, or future race forecast.",
     "Use class-hour deltas before cross-class comparison because IMSA classes have different performance envelopes.",
-    "Rows labeled validNonPitLap exclude Al Kamel invalid and pit laps but do not prove green-flag traffic-free conditions."
+    "Rows labeled validNonPitLap exclude Al Kamel invalid and pit laps but do not prove green-flag traffic-free conditions.",
+    "car85Spells elapsed seconds are the running sum of car 85's own time-card lap times from the start of lap 1, not wall-clock timestamps; pit and caution laps are included."
   ],
-  "generatedAt": "2026-11-18T04:22:31Z",
+  "generatedAt": "2026-11-18T05:07:34Z",
   "gtpClassHoursDuringBryceStints": [
     {
       "bestLapSeconds": 96.914,

@@ -207,10 +207,11 @@ export const useClimbModel = (): ClimbModel | null => {
       seenInEvent.set(meeting, k);
       const { step, oneOff } = stepIndexOf(draft.seriesName);
       const sameEvent = drafts.filter((other) => other.eventName === draft.eventName && other.seasonYear === draft.seasonYear).length;
-      const name = raceName({ eventName: draft.eventName, sessionId: draft.sessionId, trackName: draft.trackName, raceInRound: sameEvent > 1 ? k : null });
+      /* One name shape everywhere: "<event> · Race N", or the plain event for a round of one race. */
+      const name = raceName({ eventName: draft.eventName, sessionId: draft.sessionId, trackName: draft.trackName, raceInRound: k, racesInRound: sameEvent });
       const { eventName: _e, order: _o, ...rest } = draft;
       const share = draft.finish === null ? null : beatShare(draft.finish, draft.field) ?? (draft.field === 1 ? 1 : draft.percentile);
-      return { ...rest, share, title: named.get(draft.sessionId)?.title ?? name.title, step, oneOff, index };
+      return { ...rest, share, title: name.title, step, oneOff, index };
     });
 
     const steps: ClimbStep[] = STEPS.map((def, s) => {

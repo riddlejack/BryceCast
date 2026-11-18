@@ -14,7 +14,7 @@ export const COVERAGE_COLUMNS: Column[] = [
   { key: 'quali', label: 'Qualifying', family: 'qualifying_conversion', title: 'qualifying results tied to the race grid' },
   { key: 'laps', label: 'Lap times', family: 'lap_shape', title: 'his lap times, lap by lap' },
   { key: 'sections', label: 'Sections', family: 'section_pace', title: 'times through each named stretch of track' },
-  { key: 'wet', label: 'Wet or dry', family: 'weather_context', title: 'wet, dry or mixed, or near-track weather' },
+  { key: 'wet', label: 'Wet or dry', family: 'weather_context', title: 'wet, dry or mixed: the series’ own call, or the modelled weather' },
   { key: 'live', label: 'Live timing', title: 'the series’ live timing, recorded as it ran' }
 ];
 

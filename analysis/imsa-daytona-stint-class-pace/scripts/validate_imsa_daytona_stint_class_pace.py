@@ -374,6 +374,30 @@ def validate_hourly_and_context(expected_hash: str, counts: dict[str, Any]) -> N
     missing_hours = expected_hours - observed_hours
     if missing_hours:
         fail(f"context pack missing GTP class-hour rows for Bryce stint hours: {sorted(missing_hours)}")
+    car85_laps = sorted(
+        (row for row in read_csv(OUTPUT_DIR / "imsa_lap_observations.csv") if row.get("carNumber") == "85"),
+        key=lambda row: int(row["lapNumber"]),
+    )
+    expected_spells: list[dict] = []
+    elapsed = 0.0
+    for row in car85_laps:
+        if not expected_spells or expected_spells[-1]["driverId"] != row["driverId"]:
+            expected_spells.append({"driverId": row["driverId"], "startLap": int(row["lapNumber"]), "laps": 0, "start": elapsed})
+        elapsed += float(row["lapTimeSeconds"])
+        expected_spells[-1].update(endLap=int(row["lapNumber"]), end=elapsed)
+        expected_spells[-1]["laps"] += 1
+    spells = pack.get("car85Spells") or []
+    if len(spells) != len(expected_spells):
+        fail(f"context pack car85Spells has {len(spells)} spells; the lap observations give {len(expected_spells)}")
+    for spell, expected in zip(spells, expected_spells):
+        if (spell.get("driverId"), spell.get("startLap"), spell.get("endLap"), spell.get("laps")) != (
+            expected["driverId"], expected["startLap"], expected["endLap"], expected["laps"]
+        ):
+            fail(f"context pack car85Spells row for laps {spell.get('startLap')}-{spell.get('endLap')} does not match the lap observations")
+        if abs(spell["startElapsedSeconds"] - expected["start"]) > 0.01 or abs(spell["endElapsedSeconds"] - expected["end"]) > 0.01:
+            fail(f"context pack car85Spells elapsed times for laps {spell.get('startLap')}-{spell.get('endLap')} do not match the lap-time running sum")
+    if sum(spell["laps"] for spell in spells) != len(car85_laps):
+        fail("context pack car85Spells must cover every car 85 lap")
     text = json.dumps(pack).lower()
     forbidden = ["win probability", "predicted finish", "expected finish", "position trace", "running order by lap"]
     hits = [phrase for phrase in forbidden if phrase in text]

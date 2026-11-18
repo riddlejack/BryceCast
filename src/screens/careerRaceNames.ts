@@ -9,8 +9,14 @@
  * invents a fact: the place comes from the event string (or the track name
  * where the event string carries only a date), the race from the session id,
  * or, for GB3 2022 whose ids carry no race number, from the race's place in
- * its round in the season campaign. Pure functions, so every row can be
- * checked in one pass. */
+ * its round in the season campaign. INDY NXT event names already carry
+ * "Race N" where a weekend ran two ("Grand Prix of Monterey Race 1"), so that
+ * becomes the race, said once: "Grand Prix of Monterey · Race 1". A race that
+ * was the only one of its round in the season campaign is the plain event:
+ * "Music City Grand Prix". The functions are pure apart from that one
+ * lookup in the package, so every row can be checked in one pass. */
+
+import { uiDataPackage } from '../data/uiDataPackage';
 
 /** Long venue names cut to the name people use. Everything else stays as the source spells it. */
 const shortPlaces: Record<string, string> = {
@@ -36,6 +42,9 @@ export interface RaceNameInput {
   trackName: string;
   /** The race's place within its round (1-based), where the session id carries no number. */
   raceInRound?: number | null;
+  /** How many races its round held. Read from the season campaigns when not given;
+   *  a round of one race is the plain event. */
+  racesInRound?: number | null;
 }
 
 export interface RaceName {
@@ -48,6 +57,23 @@ export interface RaceName {
   /** event · race */
   title: string;
 }
+
+/** How many races each session's round held, from the season campaigns (built once). */
+let roundSizes: Map<string, number> | null = null;
+const racesInRoundOf = (sessionId: string): number | null => {
+  if (!roundSizes) {
+    roundSizes = new Map();
+    for (const campaign of uiDataPackage.screens.careerLab.seasonCampaigns?.campaigns ?? []) {
+      const byRound = new Map<number, string[]>();
+      for (const race of campaign.races) {
+        if (race.roundIndex == null) continue;
+        byRound.set(race.roundIndex, [...(byRound.get(race.roundIndex) ?? []), race.sessionId]);
+      }
+      for (const ids of byRound.values()) for (const id of ids) roundSizes.set(id, ids.length);
+    }
+  }
+  return roundSizes.get(sessionId) ?? null;
+};
 
 /** Which race of the meeting, read from the session id (the source's own race naming). */
 const raceOf = (sessionId: string, raceInRound: number | null | undefined): string | null => {
@@ -64,9 +90,12 @@ const raceOf = (sessionId: string, raceInRound: number | null | undefined): stri
   return null;
 };
 
-export const raceName = ({ eventName, sessionId, trackName, raceInRound }: RaceNameInput): RaceName => {
+export const raceName = ({ eventName, sessionId, trackName, raceInRound, racesInRound }: RaceNameInput): RaceName => {
   /* A trailing parenthesis is the organiser's note: "(Central Florida Region, Winter Vacation)". */
-  const event0 = eventName.trim().replace(/\s*\([^)]*\)\s*$/, '');
+  let event0 = eventName.trim().replace(/\s*\([^)]*\)\s*$/, '');
+  /* "Grand Prix of Monterey Race 1": the event name already says which race. */
+  const named = event0.match(/^(.*\S)\s+Race\s+(\d+)$/i);
+  if (named) event0 = named[1];
   let round: number | null = null;
   let event: string;
   /* "<series> <season>[ Round <n>] - <rest>" */
@@ -87,6 +116,7 @@ export const raceName = ({ eventName, sessionId, trackName, raceInRound }: RaceN
       .trim();
   }
   if (!event) event = shortPlace(trackName);
-  const race = raceOf(sessionId, raceInRound);
+  const inRound = (racesInRound ?? racesInRoundOf(sessionId)) === 1 ? null : raceInRound;
+  const race = named ? `Race ${Number(named[2])}` : raceOf(sessionId, inRound);
   return { event, race, round, title: race ? `${event} · ${race}` : event };
 };

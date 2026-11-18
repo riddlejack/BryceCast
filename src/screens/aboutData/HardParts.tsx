@@ -139,7 +139,7 @@ const PARTS: Part[] = [
   },
   {
     title: 'Wind that points the right way',
-    body: 'Weather reports give wind as where it comes from, so the live map turns the arrow round to show where the air is going. Weather is joined only to sessions whose start time is known.',
+    body: 'Weather reports give wind as where it comes from, so the live map turns the arrow round to show where the air is going. The live weather is the National Weather Service’s nearest station.',
     to: '/live',
     label: 'Live',
     visual: <WindMini />
