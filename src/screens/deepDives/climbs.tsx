@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
 import { SourcePill } from '../../app/components';
 import {
   PointerOpen,
@@ -10,7 +10,7 @@ import {
 } from '../../app/charts';
 import type { VenueTip } from '../../app/venueCard';
 import { useRouter } from '../../app/router';
-import { useTapPreview, type TapPreview } from '../../app/tapPreview';
+import { TAP_CARD, useTapPreview, type TapPreview } from '../../app/tapPreview';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { getVenueDossier } from '../../data/venueDossier';
 import { useGb3DeepDive } from '../../data/gb3DeepDive';
@@ -18,6 +18,7 @@ import { switchValue } from '../../review/switches';
 import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
+import { finishLine, raceFieldOf } from '../raceCardFacts';
 import './climbs.css';
 
 /* ============================================================================
@@ -173,7 +174,7 @@ const progressOf = (elapsed: number, index: number) => ease(Math.min(Math.max((e
 
 const tipWords = (climb: Climb): Omit<VenueTip, 'x' | 'y'> =>
   raceTipOf(climb.row, {
-    detail: `P${climb.start} → P${climb.finish} · ${climb.gain} places${climb.field !== null ? ` · ${climb.field} classified` : ''}`
+    detail: [finishLine(climb.start, climb.finish, climb.field ?? raceFieldOf(climb.row.sessionId)), `${climb.gain} places gained`].filter(Boolean).join(' · ')
   });
 
 const ariaFor = (climb: Climb) =>
@@ -206,7 +207,11 @@ const useClimbHandlers = (climbs: Climb[], tap: TapPreview, setFocus: (index: nu
         if (event.key === 'Enter') open();
       },
       onFocus: read,
-      onBlur: () => setFocus(null)
+      /* A tap on the card's "Open the race" moves focus to it: keep the card for that click. */
+      onBlur: (event: FocusEvent) => {
+        if (event.relatedTarget instanceof Element && event.relatedTarget.closest(`[${TAP_CARD}]`)) return;
+        setFocus(null);
+      }
     };
   };
 };

@@ -13,6 +13,7 @@ import type { UiCitedSource, UiOriginMilestone, UiSourceRef } from '../../data/u
 import { switchValue } from '../../review/switches';
 import { seriesMetaById } from '../careerAtlas';
 import { venueBetween } from '../venueOfDates';
+import { meetingNameOf } from '../raceCardFacts';
 import type { VenueTip } from '../../app/venueCard';
 import { DeepDive, DeepTip } from './frame';
 import './before.css';
@@ -90,6 +91,8 @@ const CAPTIONS: Record<string, [string, string?]> = {
 interface MonthRace {
   seriesId: string;
   place: string;
+  /** The source's event string, for the card's clean meeting name. */
+  eventName: string;
   n: number;
 }
 interface Month {
@@ -160,7 +163,7 @@ const useModel = (): Model | null =>
         if (race.raceCount <= 0) continue;
         if (!firstEvent) firstEvent = race;
         const month = byMonth.get(key) ?? { t: key, t1: Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1), races: [], total: 0 };
-        month.races.push({ seriesId: race.seriesId, place: placeOf(race.eventName), n: race.raceCount });
+        month.races.push({ seriesId: race.seriesId, place: placeOf(race.eventName), eventName: race.eventName, n: race.raceCount });
         month.total += race.raceCount;
         byMonth.set(key, month);
       }
@@ -240,22 +243,27 @@ const factTip = (fact: Fact, x: number, y: number, under?: number): ChartTip => 
 });
 
 const monthTip = (month: Month, x: number, y: number, under?: number): VenueTip => {
-  const groups = new Map<string, { short: string; places: string[]; n: number }>();
+  /* One row per meeting, in the order they ran: "SCCA · Road Atlanta  2". */
+  const rows = new Map<string, { label: string; tint: string; n: number }>();
   for (const race of month.races) {
+    if (race.n <= 0) continue;
     const meta = seriesMetaById(race.seriesId);
-    const group = groups.get(race.seriesId) ?? { short: meta.short, places: [], n: 0 };
-    if (!group.places.includes(race.place)) group.places.push(race.place);
-    group.n += race.n;
-    groups.set(race.seriesId, group);
+    const name = meetingNameOf(race.eventName);
+    const key = `${race.seriesId}|${name}`;
+    const row = rows.get(key) ?? { label: `${meta.short} · ${name}`, tint: meta.tint, n: 0 };
+    row.n += race.n;
+    rows.set(key, row);
   }
   return {
     x,
     y,
     over: y,
     under,
-    venue: month.total > 0 ? venueBetween(month.t, month.t1) : null,
-    title: `${monthYear(month.t)} · ${month.total === 0 ? 'no races' : month.total === 1 ? '1 race' : `${month.total} races`}`,
-    detail: month.total === 0 ? null : [...groups.values()].map((g) => `${g.short} at ${g.places.join(' and ')} (${g.n})`).join(', ')
+    /* A still only for a month at one meeting: a list of several has no one track. */
+    venue: rows.size === 1 ? venueBetween(month.t, month.t1) : null,
+    title: monthYear(month.t),
+    detail: month.total === 0 ? 'no races' : month.total === 1 ? '1 race' : `${month.total} races`,
+    lines: [...rows.values()].map((row) => ({ label: row.label, tint: row.tint, value: String(row.n) }))
   };
 };
 

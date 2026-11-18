@@ -18,6 +18,13 @@ import { Link, useRouter } from '../app/router';
 import { useTapPreview } from '../app/tapPreview';
 import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext, type Gb3EventSummary } from '../data/gb3DeepDive';
 import { chapterTint, raceHref } from './careerExplorer';
+import { finishLine, placeNameOf, raceFieldOf, raceTitleOf } from './raceCardFacts';
+import { placeLine } from '../app/raceFacts';
+
+/* The card's series line and clean race name (one grammar across the site's race cards). */
+const gb3Meta = (row: { seasonYear: number }) => ({ meta: `GB3 · ${row.seasonYear}`, tint: chapterTint('GB3 Championship') });
+const gb3Title = (row: { sessionId: string; seasonYear: number; eventName: string; trackName: string; sessionName: string }) =>
+  raceTitleOf(row.sessionId, raceLabel(row));
 
 const GB3_TINT = chapterTint('GB3 Championship');
 
@@ -90,9 +97,10 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const rankPhrase = (row: Gb3TeamContext): string => {
     const rank = row.bryceWithinTeamRank;
     if (rank === null) return 'no classified result';
-    const pos = row.bryceFinishPosition !== null ? `P${row.bryceFinishPosition} · ` : '';
+    const place = placeLine(row.bryceFinishPosition, raceFieldOf(row.sessionId));
+    const pos = place ? `${place} · ` : '';
     if (rank === 1) return `${pos}led the team`;
-    return `${pos}${ordinal(rank)} of ${row.teamRaceDriverCount}`;
+    return `${pos}${ordinal(rank)} of ${row.teamRaceDriverCount} in the team`;
   };
 
   const laneLabels = ['Led the team', '2nd in team', '3rd in team'];
@@ -149,7 +157,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     strokeWidth={1.2}
                     style={{ cursor: 'default' }}
                     {...tap.target(row.sessionId, {
-                      show: () => setTip({ x: cx, y: missY - 8, under: missY + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, title: raceLabel(row), detail: statusWord }),
+                      show: () => setTip({ x: cx, y: missY - 8, under: missY + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, ...gb3Meta(row), title: gb3Title(row), detail: statusWord }),
                       hide: () => setTip(null)
                     })}
                   />
@@ -169,7 +177,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   {...tap.target(row.sessionId, {
                     show: () => {
                       setHoveredId(row.sessionId);
-                      setTip({ x: cx, y: cy - 8, under: cy + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, title: raceLabel(row), detail: rankPhrase(row), action: 'open the race' });
+                      setTip({ x: cx, y: cy - 8, under: cy + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, ...gb3Meta(row), title: gb3Title(row), detail: rankPhrase(row), action: 'open the race' });
                     },
                     hide: () => {
                       setHoveredId(null);
@@ -224,15 +232,16 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
 
   const tipFor = (row: Gb3RaceResult): VenueTip => {
     const gain = row.positionGain ?? 0;
-    const move = gain > 0 ? `+${gain} gained` : gain < 0 ? `${gain} places` : 'held station';
+    const move = gain > 0 ? `${gain} place${gain === 1 ? '' : 's'} gained` : gain < 0 ? `${-gain} place${gain === -1 ? '' : 's'} lost` : 'held station';
     return {
       x: (leftX + rightX) / 2,
       y: (y(row.startPosition ?? 1) + y(row.finishPosition ?? 1)) / 2 - 6,
       over: Math.min(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) - 6,
       under: Math.max(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) + 6,
       venue: { sessionId: row.sessionId, trackName: row.trackName },
-      title: raceLabel(row),
-      detail: `P${row.startPosition} → P${row.finishPosition} · ${move}`,
+      ...gb3Meta(row),
+      title: gb3Title(row),
+      detail: [finishLine(row.startPosition, row.finishPosition, raceFieldOf(row.sessionId)), move].filter(Boolean).join(' · '),
       action: 'Open the race'
     };
   };
@@ -590,7 +599,8 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
               over: Math.min(fy ?? Infinity, qy ?? Infinity, fy ?? qy ?? panel.yTop) - PODIUM_R - 4,
               under: Math.max(fy ?? -Infinity, qy ?? -Infinity, fy ?? qy ?? panel.yTop) + PODIUM_R + 4,
               venue: { sessionId: race?.sessionId ?? null, trackName: row.trackName },
-              title: `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName}`,
+              ...gb3Meta(row),
+              title: `Round ${roundOf(row.eventName)} · ${placeNameOf(row.trackName)}`,
               detail: `${q} · ${f} · ${row.raceRows} ${row.raceRows === 1 ? 'race' : 'races'}`,
               action: race ? 'Open the round’s best race' : undefined
             });

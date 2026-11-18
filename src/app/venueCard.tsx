@@ -40,7 +40,18 @@ export interface VenueTip extends ChartTip {
   note?: string | null;
   /** A line worth a glance, in the accent ("best in the field that day"). */
   flag?: string | null;
+  /** A short list under the title, one row per meeting ("SCCA · Road Atlanta  2"). */
+  lines?: VenueTipLine[] | null;
 }
+
+export interface VenueTipLine {
+  label: string;
+  /** Right-aligned figure, "2". */
+  value?: string | null;
+  tint?: string | null;
+}
+
+const LIST_MAX = 5;
 
 type PeekSize = 'large' | 'small' | 'off';
 const peekSize = (): PeekSize => {
@@ -115,7 +126,7 @@ export const VenueTipCard = ({ tip, tap }: { tip: VenueTip; width?: number; tap?
     tip.x,
     tip.over ?? tip.y,
     tip.under ?? tip.y + 16,
-    `${tip.title}|${tip.detail ?? ''}|${tip.note ?? ''}|${tip.flag ?? ''}|${still?.src600 ?? ''}|${touch ? 1 : 0}|${tap?.openArmed ? 1 : 0}`
+    `${tip.title}|${tip.detail ?? ''}|${tip.note ?? ''}|${tip.flag ?? ''}|${tip.lines?.length ?? 0}|${still?.src600 ?? ''}|${touch ? 1 : 0}|${tap?.openArmed ? 1 : 0}`
   );
   const kind = still ? `vcard--still vcard--${size}` : outline ? 'vcard--outline' : 'vcard--text';
   const words = (
@@ -128,6 +139,23 @@ export const VenueTipCard = ({ tip, tap }: { tip: VenueTip; width?: number; tap?
       ) : null}
       <strong className="vcard__title">{tip.title}</strong>
       {tip.detail ? <span className="vcard__detail">{tip.detail}</span> : null}
+      {tip.lines && tip.lines.length ? (
+        <ul className="vcard__list">
+          {tip.lines.slice(0, tip.lines.length > LIST_MAX ? LIST_MAX - 1 : LIST_MAX).map((line, i) => (
+            <li key={i}>
+              {line.tint ? <i style={{ background: line.tint }} aria-hidden /> : <i aria-hidden />}
+              <span>{line.label}</span>
+              {line.value ? <b>{line.value}</b> : null}
+            </li>
+          ))}
+          {tip.lines.length > LIST_MAX ? (
+            <li className="vcard__more">
+              <i aria-hidden />
+              <span>{`and ${tip.lines.length - (LIST_MAX - 1)} more`}</span>
+            </li>
+          ) : null}
+        </ul>
+      ) : null}
       {tip.note ? <span className="vcard__note">{tip.note}</span> : null}
       {tip.flag ? <span className="vcard__flag">{tip.flag}</span> : null}
     </>

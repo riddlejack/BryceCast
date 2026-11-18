@@ -44,6 +44,12 @@
 .vcard__detail { color: var(--ink-secondary); }
 .vcard__note { color: var(--ink-muted); }
 .vcard__flag { color: var(--amber); font-weight: 560; }
+.vcard__list { list-style: none; margin: 3px 0 1px; padding: 0; display: flex; flex-direction: column; gap: 2px; min-width: 196px; }
+.vcard__list li { display: flex; align-items: center; gap: 7px; color: var(--ink-secondary); }
+.vcard__list i { flex: none; width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.vcard__list span { flex: 1 1 auto; min-width: 0; }
+.vcard__list b { flex: none; font-weight: 560; color: var(--ink); padding-left: 10px; }
+.vcard__list .vcard__more { color: var(--ink-muted); }
 .vcard__action { margin-top: 2px; color: var(--link); font-size: 12px; }
 
 /* On a touch screen: a touch more type, and the tap's thumb-sized row. */

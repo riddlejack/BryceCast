@@ -10,6 +10,7 @@ import { uiDataPackage, type UiRestartByRace } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
 import { chapterTintForShort, raceHref } from '../careerExplorer';
 import { DeepDive } from './frame';
+import { raceTitleOf } from '../raceCardFacts';
 import './restarts.css';
 
 /* ============================================================================
@@ -97,7 +98,7 @@ const tipLines = (race: Race) => {
     venue: { sessionId: row.sessionId, trackName: row.trackName },
     meta: ['INDY NXT', row.seasonYear ? String(row.seasonYear) : null].filter(Boolean).join(' · '),
     tint: chapterTintForShort('INDY NXT'),
-    title: row.raceLabel,
+    title: raceTitleOf(row.sessionId, row.raceLabel),
     detail: [`${counted} restart${counted === 1 ? '' : 's'}: ${parts.join(', ')}`, netWords, rank].filter(Boolean).join(' · '),
     flag: row.soleBestInField ? 'best in the field that day' : row.bryceBeatFieldTypical ? "beat the field's typical move" : null
   };

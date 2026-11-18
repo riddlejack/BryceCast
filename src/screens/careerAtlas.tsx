@@ -10,9 +10,10 @@ import worldLandTextureUrl from '../../analysis/career-atlas/output/world_land_t
 import { SourcePill, Unavailable } from '../app/components';
 import { focusFade, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen } from '../app/charts';
 import { useRouter } from '../app/router';
-import { useTapPreview } from '../app/tapPreview';
+import { TAP_CARD, useTapPreview } from '../app/tapPreview';
 import { VenueTipCard, type VenueTip } from '../app/venueCard';
 import { useVenuePreload } from '../app/venuePeek';
+import { placeNameOf } from './raceCardFacts';
 import {
   uiDataPackage,
   type UiCareerAtlasSeriesSpan,
@@ -622,7 +623,7 @@ const venueTip = (view: VenueView, point: ProjectedVenue, seriesFiltered: boolea
   venue: { sessionId: view.latestRace.sessionId, trackName: view.venue.trackName, trackId: view.venue.trackIds[0] ?? null, plain: true },
   meta: view.venue.country,
   tint: chapterTint(view.chapter.seriesName),
-  title: view.venue.trackName,
+  title: placeNameOf(view.venue.trackName),
   detail: (seriesFiltered ? [view.chapter] : view.venue.seriesSpans).map(chapterLine).join(' · '),
   note: [`${formatCount.format(view.raceCount)} ${view.raceCount === 1 ? 'race' : 'races'}`, view.bestFinish === null ? null : `best P${view.bestFinish}`]
     .filter(Boolean)
@@ -1303,7 +1304,11 @@ export const CareerAtlas = () => {
                         tabIndex={0}
                         aria-label={venueAccessibleLabel(view, seriesFilter !== null)}
                         onFocus={() => setActiveVenueId(view.venue.venueId)}
-                        onBlur={() => setActiveVenueId(null)}
+                        onBlur={(event) => {
+                          /* A tap on the card's "Open his latest race here" moves focus to it: keep the card for that click. */
+                          if (event.relatedTarget instanceof Element && event.relatedTarget.closest(`[${TAP_CARD}]`)) return;
+                          setActiveVenueId(null);
+                        }}
                         onKeyDown={(event) => {
                           if (event.key === 'Enter' || event.key === ' ') {
                             event.preventDefault();

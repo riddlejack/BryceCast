@@ -20,6 +20,8 @@ import { useTapPreview } from '../app/tapPreview';
 import { Link } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { chapterTint, raceHref, useCareerRows } from './careerExplorer';
+import { placeLine } from '../app/raceFacts';
+import { raceFieldOf, raceTitleOf } from './raceCardFacts';
 
 const EURO_SERIES = 'Euroformula Open';
 const EURO_TINT = chapterTint(EURO_SERIES);
@@ -146,8 +148,10 @@ const QualiToRace = () => {
                           over: Math.min(y1, y2) - 6,
                           under: Math.max(y1, y2) + 6,
                           venue: { sessionId: row.raceSessionId, trackName: trackOf.get(row.raceSessionId) ?? null },
-                          title: `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`,
-                          detail: `qualified P${row.qualiRank} → finished P${row.finish} · ${outcome}`,
+                          meta: `Euroformula · ${row.eventName.match(/(?:19|20)\d{2}/)?.[0] ?? ''}`.replace(/ · $/, ''),
+                          tint: chapterTint('Euroformula Open'),
+                          title: raceTitleOf(row.raceSessionId, `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`),
+                          detail: `qualified P${row.qualiRank} · finished ${placeLine(row.finish, raceFieldOf(row.raceSessionId)) ?? `P${row.finish}`} · ${outcome}`,
                           action: 'Open the race'
                         });
                       },

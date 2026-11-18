@@ -7,6 +7,8 @@ import { Link, useRouter } from '../app/router';
 import { useTapPreview, type TapPreview } from '../app/tapPreview';
 import { uiDataPackage, type UiSeasonCampaign } from '../data/uiDataPackage';
 import { useImsaDaytonaStint } from '../data/imsaDaytonaStint';
+import { beatLine } from '../app/raceFacts';
+import { raceFieldOf } from './raceCardFacts';
 
 export interface CareerRow {
   raceLabel: string;
@@ -120,7 +122,7 @@ export const tipFor = (row: CareerRow): Omit<ChartTip, 'x' | 'y'> => ({
     row.start !== null ? `P${row.start} → P${row.finish}` : `finished P${row.finish}`,
     row.status !== 'running' ? row.status : null,
     row.wetDry && row.wetDry !== 'dry' ? `${row.wetDry} track` : null,
-    `beat ${Math.round(row.percentile * 100)}% of the field`
+    beatLine(row.finish, raceFieldOf(row.sessionId))
   ]
     .filter(Boolean)
     .join(' · '),
