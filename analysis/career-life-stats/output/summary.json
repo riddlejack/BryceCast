@@ -11,7 +11,7 @@
     "miles": 11997.4,
     "toTrackName": "Euromarque Motorsport Park"
   },
-  "generatedAt": "2026-11-16T17:29:58.816Z",
+  "generatedAt": "2026-11-18T03:45:57.310Z",
   "longestLeg": {
     "fromTrackName": "Autodromo Nazionale Monza",
     "miles": 11599.1,
@@ -19,24 +19,24 @@
   },
   "personalRaceMileage": {
     "confidenceClass": "observed_exact",
-    "coveredRaceRows": 172,
-    "laps": 3566,
+    "coveredRaceRows": 174,
+    "laps": 3588,
     "metricGrain": "driver_physical_race",
-    "miles": 7899.9,
-    "raceRows": 173
+    "miles": 7950.5,
+    "raceRows": 175
   },
   "physicalSessionMileage": {
     "exact": {
       "confidenceClass": "observed_exact",
-      "laps": 6556,
-      "miles": 14542.0,
-      "sessions": 345
+      "laps": 6578,
+      "miles": 14592.6,
+      "sessions": 347
     },
     "excludedAggregateSessions": 44,
     "floor": {
       "confidenceClass": "observed_lower_bound",
-      "laps": 6705,
-      "miles": 14902.5
+      "laps": 6727,
+      "miles": 14953.1
     },
     "lowerBound": {
       "confidenceClass": "observed_lower_bound",
@@ -46,7 +46,7 @@
     },
     "metricGrain": "driver_physical_session",
     "remeasuredLayoutSessions": 4,
-    "sessionRows": 387,
+    "sessionRows": 389,
     "unknown": {
       "confidenceClass": "unknown",
       "sessions": 28
@@ -69,17 +69,17 @@
     {
       "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
       "path": "data/career/career.dataset.json",
-      "sha256": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sha256": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "note": "Curated track lengths and coordinates with named sources.",
       "path": "analysis/career-life-stats/data/venue_facts.csv",
-      "sha256": "4b8eb66640ea2a04a673230460e63659d101ad8d04094ee94d98ffee892f681a"
+      "sha256": "309a1b8388f4e0f0b191f2c16dd8a6acae55794a71ac38c0d978cf8d17636bb4"
     },
     {
       "note": "Al Kamel-derived Bryce driver stints used for Daytona attribution.",
       "path": "analysis/imsa-daytona-stint-class-pace/output/bryce_imsa_stint_context.csv",
-      "sha256": "6ae3b3b9167355507357239c46d99f6e59c9020b1b8223d638b7bd82c9497cb1"
+      "sha256": "0495ece5531ca435ea699c0d3b73498fc07090fa422bbc3457b35a6bcdb45210"
     },
     {
       "note": "Explicit low/base/high fuel and tire model assumptions with source URLs.",
@@ -99,17 +99,17 @@
     {
       "note": "Career page figures, share of his life, weeks grid and ordered travel legs.",
       "path": "analysis/career-life-stats/output/career_figures.json",
-      "sha256": "42bf24af15d38201888f2c6404fabc2f49a976e42cd9421e26392c58bc0427a8"
+      "sha256": "32f4d3700ca56d66c801a248b9a1310a1bea42ccd1e175f3410d09e6c7b620be"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "cc9b78a452623854d079084081c4ccf1ad3cede192a4f51e9214b1e7ff970995"
+      "sha256": "5225d8a649c59ad7fc924525931a58ae1f7f5705467a1b4cca1a5623bff05b0b"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/session_mileage_ledger.csv",
-      "sha256": "581a4938a5af63a6daace51387c86f8219150410852d02e1e4447521cfaf2f39"
+      "sha256": "5617885db5e65c05ed9e3e220f0fc4cbb0dbb3fd456810a69f3f5ac01d093746"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
@@ -119,27 +119,27 @@
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_legs.csv",
-      "sha256": "2dfc0e8329646dac9d76426a81a5f5bcd5aea80a17fa77bafeec017184aff197"
+      "sha256": "07be60815269f25257825ff78f33d18d11e5f3db34fc28c0cdb5eb5850a23c12"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/mileage_breakdowns.csv",
-      "sha256": "cdc3f060b5ce977a2087e27a66ddf78a1ac7780dda31c0698ae88b41f6f20afd"
+      "sha256": "cf95a5c0a06ef0c9811a7d862b8a3b3352f6ee2c553e40e189ec48293fe33b4b"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_mode_breakdown.csv",
-      "sha256": "49e1e56228f55357266413df14b1cfab691ca84cbe50b6875f4587c904670fcc"
+      "sha256": "e2df688a51cc619e11167412e51ed9a1d859b272f7c62e674938fd7b01198b9c"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv",
-      "sha256": "470427b2d17f07880e48ef8c87fb9e93d4810cc0eaebc83a411aba4c143d5f13"
+      "sha256": "5f3ca4951805f485c859182e64fc42b4e97e37b3822986e7e3ea15188b0de478"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv",
-      "sha256": "0e5cd652f77038895de32a404b6bdb731710bbd7dba52e6c11f54ea7e9aaaccf"
+      "sha256": "32e971acc5803cc8e58c4f90ea7bdbcb73f233140190dbd6eb59f00c7babcbb3"
     }
   ],
   "travel": {
@@ -153,17 +153,17 @@
     "greatCircleMinimum": {
       "confidenceClass": "observed_exact",
       "label": "minimum venue-to-venue displacement between consecutive race events",
-      "miles": 63216.2
+      "miles": 63366.4
     },
     "routeAdjustedMinimum": {
       "assumptions": {
         "driveProxy": "same-country and <=750 great-circle miles; factor 1.12/1.18/1.28",
         "flightProxy": "all other non-zero legs; factor 1.03/1.08/1.15"
       },
-      "baseMiles": 69774.6,
+      "baseMiles": 69951.8,
       "confidenceClass": "modeled_range",
-      "highMiles": 74649.5,
-      "lowMiles": 66463.7
+      "highMiles": 74841.7,
+      "lowMiles": 66631.9
     }
   },
   "venueSources": [
@@ -352,6 +352,18 @@
         "track_highlands_motorsport_park"
       ],
       "trackName": "Highlands Motorsport Park"
+    },
+    {
+      "coordsSources": [
+        "Wikipedia circuit infobox | https://en.wikipedia.org/wiki/Homestead%E2%80%93Miami_Speedway"
+      ],
+      "lengthSources": [
+        "Official SCCA 2019 Palm Tree Winter Majors results (Homestead-Miami Speedway 2.300 miles) | https://www.scca.com/wp-content/uploads/2026/06/2019_0105_M_Homestead_Results.pdf"
+      ],
+      "trackIds": [
+        "track_homestead_miami_speedway_road_course"
+      ],
+      "trackName": "Homestead-Miami Speedway"
     },
     {
       "coordsSources": [
@@ -633,5 +645,5 @@
       "trackName": "World Wide Technology Raceway"
     }
   ],
-  "venues": 38
+  "venues": 39
 }

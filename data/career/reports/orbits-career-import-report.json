@@ -1,11 +1,11 @@
 {
-  "checkedAt": "2026-11-16T17:29:43.063Z",
+  "checkedAt": "2026-11-18T03:45:39.685Z",
   "refresh": false,
   "fetched": 0,
-  "cached": 19,
-  "sessionsImported": 9,
-  "resultRowsImported": 217,
-  "bryceResultRowsImported": 9,
+  "cached": 23,
+  "sessionsImported": 11,
+  "resultRowsImported": 257,
+  "bryceResultRowsImported": 11,
   "gridRowsImported": 151,
   "gridRowsUnmatched": [
     {
@@ -16,6 +16,12 @@
     }
   ],
   "rawArtifacts": [
+    "data/career/raw/scca-2019/event-pages/homestead-1992798.html",
+    "data/career/raw/scca-2019/pdf/2019-southeast-conference-report.pdf",
+    "data/career/raw/scca-2019/pdf/homestead-palm-tree-winter-majors-results.pdf",
+    "data/career/raw/scca-2019/text/homestead-group-7-race-1.txt",
+    "data/career/raw/scca-2019/pdf/homestead-palm-tree-winter-majors-results.pdf",
+    "data/career/raw/scca-2019/text/homestead-group-7-race-2.txt",
     "data/career/raw/scca-2019/event-pages/sebring-1992799.html",
     "data/career/raw/scca-2019/pdf/sebring-group-7-race-1.pdf",
     "data/career/raw/scca-2019/text/sebring-group-7-race-1.txt",
@@ -52,6 +58,26 @@
     "data/career/raw/usf-pro-2000-2024/text/lor-race-official.txt"
   ],
   "bryce": [
+    {
+      "sessionId": "session_scca_super_tour_2019_homestead_race_1",
+      "carNumber": "81",
+      "startPosition": null,
+      "finishPosition": 6,
+      "classPosition": 4,
+      "laps": 15,
+      "totalTime": "23:10.047",
+      "status": "running"
+    },
+    {
+      "sessionId": "session_scca_super_tour_2019_homestead_race_2",
+      "carNumber": "81",
+      "startPosition": null,
+      "finishPosition": 14,
+      "classPosition": 8,
+      "laps": 7,
+      "totalTime": "10:25.556",
+      "status": "running"
+    },
     {
       "sessionId": "session_scca_super_tour_2019_sebring_race_1",
       "carNumber": "7",

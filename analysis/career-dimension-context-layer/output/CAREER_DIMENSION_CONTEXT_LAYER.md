@@ -1,11 +1,11 @@
 # Career Dimension Context Layer
 
-Generated: 2026-11-16T17:56:55Z
-Source hash: `b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5`
+Generated: 2026-11-18T03:48:16Z
+Source hash: `53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161`
 
 ## Source Scope
 
-This lane covers 9826 result rows, 1967 qualifying rows, 84 team rows, 46 tracks, 683 drivers, and 698 cars from the canonical dataset.
+This lane covers 9866 result rows, 1967 qualifying rows, 84 team rows, 47 tracks, 688 drivers, and 706 cars from the canonical dataset.
 
 ## What Became Productized
 
@@ -20,7 +20,7 @@ This lane covers 9826 result rows, 1967 qualifying rows, 84 team rows, 46 tracks
 
 - One-to-one same-event race-result joins: 1622 of 1967 qualifying rows.
 - Ambiguous multi-race same-event joins: 341 qualifying rows.
-- Full-field result context rows: 9826.
+- Full-field result context rows: 9866.
 
 | seriesName | seasonYear | eventName | sessionName | fieldSize | sameEventRaceJoinRows | bryceBestQualifyingPosition |
 | --- | --- | --- | --- | --- | --- | --- |

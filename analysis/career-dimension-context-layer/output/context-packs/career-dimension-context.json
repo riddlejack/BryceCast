@@ -19,7 +19,7 @@
         "seriesId": "series_froc",
         "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
         "sessionCount": 20,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -43,7 +43,7 @@
         "seriesId": "series_euroformula_open",
         "seriesName": "Euroformula Open",
         "sessionCount": 24,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "team_team_motopark",
         "teamName": "Team Motopark",
@@ -67,7 +67,7 @@
         "seriesId": "series_frp_f1600",
         "seriesName": "F1600 Championship Series",
         "sessionCount": 31,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "team_k_hill_motorsports",
         "teamName": "K-Hill Motorsports",
@@ -91,7 +91,7 @@
         "seriesId": "series_frp_f1600",
         "seriesName": "F1600 Championship Series",
         "sessionCount": 6,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "team_k_hill_motorsports",
         "teamName": "K-Hill Motorsports",
@@ -115,7 +115,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 4,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -139,7 +139,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 3,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -163,7 +163,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 9,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -187,7 +187,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 8,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -211,7 +211,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 8,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -235,7 +235,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 3,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -259,7 +259,7 @@
         "seriesId": "series_formula_ford",
         "seriesName": "Formula Ford",
         "sessionCount": 7,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -283,7 +283,7 @@
         "seriesId": "series_gb3",
         "seriesName": "GB3 Championship",
         "sessionCount": 44,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "team_carlin",
         "teamName": "Carlin",
@@ -307,7 +307,7 @@
         "seriesId": "series_gb3",
         "seriesName": "GB3 Championship",
         "sessionCount": 76,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "team_hitech_pulse_eight",
         "teamName": "Hitech Pulse-Eight",
@@ -331,7 +331,7 @@
         "seriesId": "series_scca_super_tour",
         "seriesName": "Hoosier SCCA Super Tour",
         "sessionCount": 2,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -339,7 +339,7 @@
       },
       {
         "bryceObserved": "yes",
-        "bryceObservedRows": 4,
+        "bryceObservedRows": 6,
         "carId": "car_scca_super_tour_2019_bryce_aron_81",
         "carNumber": "81",
         "chassis": "2016 Mygale FF",
@@ -348,14 +348,14 @@
         "engine": "",
         "entrant": "",
         "lapRows": 0,
-        "provenanceRefCount": 4,
+        "provenanceRefCount": 6,
         "qualifyingRows": 0,
-        "resultRows": 4,
+        "resultRows": 6,
         "seasonYear": 2019,
         "seriesId": "series_scca_super_tour",
         "seriesName": "Hoosier SCCA Super Tour",
-        "sessionCount": 4,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sessionCount": 6,
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "",
         "teamName": "",
@@ -379,7 +379,7 @@
         "seriesId": "series_imsa_weathertech",
         "seriesName": "IMSA WeatherTech SportsCar Championship",
         "sessionCount": 1,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_car_dimension_with_entrant_and_observed_usage_context",
         "teamId": "team_jdc_miller_motorsports",
         "teamName": "JDC Miller MotorSports",
@@ -392,12 +392,12 @@
         "label": "Formula Ford"
       },
       {
-        "count": 68,
-        "label": "INDY NXT"
+        "count": 74,
+        "label": "Hoosier SCCA Super Tour"
       },
       {
-        "count": 66,
-        "label": "Hoosier SCCA Super Tour"
+        "count": 68,
+        "label": "INDY NXT"
       },
       {
         "count": 61,
@@ -440,7 +440,7 @@
   "driverCohorts": {
     "cohortCounts": [
       {
-        "count": 595,
+        "count": 600,
         "label": "shared_race_field"
       },
       {
@@ -476,7 +476,7 @@
         "seriesIds": "series_indy_nxt",
         "sessionCount": 112,
         "sharedRaceSessionWithBryceCount": 28,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -499,7 +499,7 @@
         "seriesIds": "series_indy_nxt",
         "sessionCount": 65,
         "sharedRaceSessionWithBryceCount": 17,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -522,7 +522,7 @@
         "seriesIds": "series_froc;series_gb3",
         "sessionCount": 63,
         "sharedRaceSessionWithBryceCount": 24,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -545,7 +545,7 @@
         "seriesIds": "series_euroformula_open;series_gb3",
         "sessionCount": 104,
         "sharedRaceSessionWithBryceCount": 42,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 2
       },
@@ -568,7 +568,7 @@
         "seriesIds": "series_usf_pro_2000",
         "sessionCount": 2,
         "sharedRaceSessionWithBryceCount": 1,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -591,7 +591,7 @@
         "seriesIds": "series_imsa_weathertech",
         "sessionCount": 1,
         "sharedRaceSessionWithBryceCount": 1,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -614,7 +614,7 @@
         "seriesIds": "series_indy_nxt",
         "sessionCount": 55,
         "sharedRaceSessionWithBryceCount": 14,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -637,7 +637,7 @@
         "seriesIds": "series_euroformula_open",
         "sessionCount": 24,
         "sharedRaceSessionWithBryceCount": 15,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 2
       },
@@ -660,7 +660,7 @@
         "seriesIds": "series_imsa_weathertech;series_indy_nxt",
         "sessionCount": 177,
         "sharedRaceSessionWithBryceCount": 46,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 3
       },
@@ -683,7 +683,7 @@
         "seriesIds": "series_indy_nxt",
         "sessionCount": 57,
         "sharedRaceSessionWithBryceCount": 14,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       },
@@ -706,7 +706,7 @@
         "seriesIds": "series_froc;series_indy_nxt",
         "sessionCount": 177,
         "sharedRaceSessionWithBryceCount": 45,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 2
       },
@@ -729,13 +729,13 @@
         "seriesIds": "series_euroformula_open",
         "sessionCount": 8,
         "sharedRaceSessionWithBryceCount": 3,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_driver_dimension_with_observed_cohort_context",
         "teamCount": 1
       }
     ]
   },
-  "generatedAt": "2026-11-16T17:56:55Z",
+  "generatedAt": "2026-11-18T03:48:16Z",
   "publicPointPrediction": false,
   "qualifyingConversion": {
     "ambiguousSameEventRaceJoinRows": 341,
@@ -964,10 +964,10 @@
         "status": "running"
       }
     ],
-    "bryceResultRows": 425,
+    "bryceResultRows": 427,
     "resultGrainCounts": [
       {
-        "count": 9590,
+        "count": 9630,
         "label": "driver"
       },
       {
@@ -975,7 +975,7 @@
         "label": "car_driver"
       }
     ],
-    "rows": 9826,
+    "rows": 9866,
     "seriesCounts": [
       {
         "count": 3735,
@@ -1002,12 +1002,12 @@
         "label": "IMSA WeatherTech SportsCar Championship"
       },
       {
-        "count": 178,
-        "label": "Euroformula Open"
+        "count": 192,
+        "label": "Hoosier SCCA Super Tour"
       },
       {
-        "count": 152,
-        "label": "Hoosier SCCA Super Tour"
+        "count": 178,
+        "label": "Euroformula Open"
       },
       {
         "count": 37,
@@ -1019,18 +1019,18 @@
       }
     ]
   },
-  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+  "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
   "sourceScope": {
-    "carRows": 698,
-    "driverRows": 683,
+    "carRows": 706,
+    "driverRows": 688,
     "qualifyingRows": 1967,
     "qualifyingSessionRows": 133,
     "qualifyingSessions": 133,
-    "resultRows": 9826,
+    "resultRows": 9866,
     "teamEraRows": 99,
     "teamRows": 84,
-    "trackAnalogRows": 230,
-    "trackRows": 46
+    "trackAnalogRows": 235,
+    "trackRows": 47
   },
   "teamAndEntrantContext": {
     "bryceTeams": [],
@@ -1051,7 +1051,7 @@
         "qualifyingRows": 513,
         "resultRows": 1218,
         "seasonYears": "2024;2025;2026",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_hmd_motorsports",
         "teamName": "HMD Motorsports"
@@ -1072,7 +1072,7 @@
         "qualifyingRows": 305,
         "resultRows": 707,
         "seasonYears": "2024;2025;2026",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_andretti_global",
         "teamName": "Andretti Global"
@@ -1093,7 +1093,7 @@
         "qualifyingRows": 253,
         "resultRows": 582,
         "seasonYears": "2024;2025;2026",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_abel_motorsports",
         "teamName": "Abel Motorsports"
@@ -1114,7 +1114,7 @@
         "qualifyingRows": 168,
         "resultRows": 370,
         "seasonYears": "2025;2026",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_chip_ganassi_racing",
         "teamName": "Chip Ganassi Racing"
@@ -1135,7 +1135,7 @@
         "qualifyingRows": 44,
         "resultRows": 332,
         "seasonYears": "2021;2022",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_fortec_motorsports",
         "teamName": "Fortec Motorsports"
@@ -1156,7 +1156,7 @@
         "qualifyingRows": 46,
         "resultRows": 328,
         "seasonYears": "2021;2022",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_elite_motorsport",
         "teamName": "Elite Motorsport"
@@ -1177,7 +1177,7 @@
         "qualifyingRows": 128,
         "resultRows": 308,
         "seasonYears": "2024;2025;2026",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_cape_motorsports_powered_by_ecr",
         "teamName": "Cape Motorsports powered by ECR"
@@ -1198,7 +1198,7 @@
         "qualifyingRows": 26,
         "resultRows": 277,
         "seasonYears": "2021;2022",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_douglas_motorsport",
         "teamName": "Douglas Motorsport"
@@ -1219,7 +1219,7 @@
         "qualifyingRows": 0,
         "resultRows": 228,
         "seasonYears": "2022",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_rodin_carlin",
         "teamName": "Rodin Carlin"
@@ -1240,7 +1240,7 @@
         "qualifyingRows": 0,
         "resultRows": 227,
         "seasonYears": "2022",
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "canonical_team_dimension_with_observed_result_qualifying_car_context",
         "teamId": "team_hitech_pulse_eight",
         "teamName": "Hitech Pulse-Eight"
@@ -1250,7 +1250,7 @@
   "trackArchetypes": {
     "archetypeCounts": [
       {
-        "count": 15,
+        "count": 16,
         "label": "road_medium_medium_corner_count"
       },
       {
@@ -1290,7 +1290,7 @@
         "sharedFeatures": "trackType=road;temporary=False;direction=clockwise;surface=asphalt;similar_lengthKm;similar_cornerCount",
         "similarityRank": 1,
         "similarityScore": 0.9675083141468407,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "metadata_archetype_similarity_not_setup_or_performance_causality",
         "targetArchetype": "road_long_medium_corner_count",
         "targetTrackId": "track_road_america",
@@ -1303,7 +1303,7 @@
         "sharedFeatures": "trackType=road;temporary=False;direction=clockwise;surface=asphalt;similar_lengthKm",
         "similarityRank": 2,
         "similarityScore": 0.9562298987044997,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "metadata_archetype_similarity_not_setup_or_performance_causality",
         "targetArchetype": "road_long_medium_corner_count",
         "targetTrackId": "track_road_america",
@@ -1316,7 +1316,7 @@
         "sharedFeatures": "trackType=road;temporary=False;direction=clockwise;surface=asphalt;similar_lengthKm",
         "similarityRank": 3,
         "similarityScore": 0.9562298987044997,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "metadata_archetype_similarity_not_setup_or_performance_causality",
         "targetArchetype": "road_long_medium_corner_count",
         "targetTrackId": "track_road_america",
@@ -1329,7 +1329,7 @@
         "sharedFeatures": "trackType=road;temporary=False;direction=clockwise;surface=asphalt;similar_lengthKm;similar_cornerCount",
         "similarityRank": 4,
         "similarityScore": 0.9555646310711545,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "metadata_archetype_similarity_not_setup_or_performance_causality",
         "targetArchetype": "road_long_medium_corner_count",
         "targetTrackId": "track_road_america",
@@ -1342,7 +1342,7 @@
         "sharedFeatures": "trackType=road;temporary=False;direction=clockwise;surface=asphalt;similar_lengthKm",
         "similarityRank": 5,
         "similarityScore": 0.9538330348767802,
-        "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+        "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
         "sourceState": "metadata_archetype_similarity_not_setup_or_performance_causality",
         "targetArchetype": "road_long_medium_corner_count",
         "targetTrackId": "track_road_america",

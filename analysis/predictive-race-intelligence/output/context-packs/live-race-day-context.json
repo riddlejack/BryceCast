@@ -21,7 +21,7 @@
     "teamRadioAudio": false,
     "tireStrategy": false
   },
-  "generatedAt": "2026-11-18T00:18:59Z",
+  "generatedAt": "2026-11-18T03:58:14Z",
   "id": "live_race_day_context",
   "replayQuality": {
     "archiveState": "runtime_only",
@@ -39,7 +39,7 @@
     "/api/history/bryce?compact=1"
   ],
   "schemaVersion": "brycecast.liveRaceDayContextPack.v1",
-  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+  "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
   "sourceRefs": [
     {
       "bytes": 22303,

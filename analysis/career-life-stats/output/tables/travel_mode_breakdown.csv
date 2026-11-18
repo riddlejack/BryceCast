@@ -1,4 +1,4 @@
 travelModeProxy,legCount,greatCircleMiles,routeAdjustedLowMiles,routeAdjustedBaseMiles,routeAdjustedHighMiles,confidenceClass
 same_venue,13,0.0,0.0,0.0,0.0,observed_exact
-drive_proxy,56,15008.4,16809.7,17710.3,19210.9,modeled_range
+drive_proxy,57,15158.6,16977.9,17887.5,19403.1,modeled_range
 flight_proxy,25,48207.8,49654.0,52064.3,55438.6,modeled_range

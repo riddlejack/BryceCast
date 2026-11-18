@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-11-17T22:23:36Z
-Source hash: `b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5`
+Generated: 2026-11-18T03:57:56Z
+Source hash: `53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161`
 
 ## Source Scope
 
@@ -9,7 +9,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | collection | rows |
 | --- | --- |
-| media | 1128 |
+| media | 1130 |
 | penalty | 94 |
 | weather | 252 |
 | incident | 166 |
@@ -45,9 +45,9 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | sourceType | rows |
 | --- | --- |
-| official_pdf | 902 |
+| official_pdf | 904 |
 | official_api | 304 |
-| official_page | 130 |
+| official_page | 132 |
 | weather_api | 94 |
 | official_html | 17 |
 | official_image | 5 |
@@ -61,7 +61,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | status | rows |
 | --- | --- |
-| open | 10 |
+| open | 8 |
 | partial | 2 |
 | source_broken_preserved | 1 |
 
@@ -82,9 +82,9 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 ## Weather And Media
 
 - Weather/condition rows: 252.
-- Media index rows: 1128.
-- Source-evidence rows: 1463.
-- Source-boundary gap rows: 13.
+- Media index rows: 1130.
+- Source-evidence rows: 1467.
+- Source-boundary gap rows: 11.
 - Derived metric rows: 453.
 
 ## Series Coverage
@@ -97,7 +97,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | F1600 Championship Series | 2019 | 39 | 0 | 2 | 0 | 0 | 37 |
 | Castrol Toyota Formula Regional Oceania Championship | 2024 | 32 | 0 | 0 | 0 | 0 | 32 |
 | Euroformula Open | 2023 | 28 | 0 | 0 | 0 | 0 | 28 |
-| Hoosier SCCA Super Tour | 2019 | 6 | 0 | 0 | 0 | 0 | 6 |
+| Hoosier SCCA Super Tour | 2019 | 8 | 0 | 0 | 0 | 0 | 8 |
 | Global / career context |  | 5 | 0 | 0 | 0 | 0 | 5 |
 | IMSA WeatherTech SportsCar Championship | 2025 | 5 | 0 | 0 | 0 | 1 | 4 |
 | USF Pro 2000 Championship | 2024 | 2 | 0 | 0 | 0 | 0 | 2 |

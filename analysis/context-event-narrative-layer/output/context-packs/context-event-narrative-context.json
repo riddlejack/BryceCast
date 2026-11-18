@@ -110,7 +110,7 @@
   "claimStrength": "source_bounded_context_narrative_not_telemetry",
   "contextTypeCounts": [
     {
-      "count": 1128,
+      "count": 1130,
       "label": "media"
     },
     {
@@ -170,7 +170,7 @@
   ],
   "gapStatusCounts": [
     {
-      "count": 10,
+      "count": 8,
       "label": "open"
     },
     {
@@ -182,7 +182,7 @@
       "label": "source_broken_preserved"
     }
   ],
-  "generatedAt": "2026-11-17T22:23:36Z",
+  "generatedAt": "2026-11-18T03:57:56Z",
   "highestContextSessions": [
     {
       "bryceContextCount": 1,
@@ -199,7 +199,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2025_6450",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:8; official_penalty_context:6; official_racecraft_context:1",
       "totalContextRows": 23,
       "weatherCount": 1,
@@ -220,7 +220,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6749",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:6; official_penalty_context:6; official_racecraft_context:1",
       "totalContextRows": 20,
       "weatherCount": 1,
@@ -241,7 +241,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6326",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:7; official_penalty_context:4; official_racecraft_context:1",
       "totalContextRows": 19,
       "weatherCount": 1,
@@ -262,7 +262,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2025_6455",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:7; official_penalty_context:4; official_racecraft_context:1",
       "totalContextRows": 19,
       "weatherCount": 1,
@@ -283,7 +283,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6751",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:8; official_penalty_context:2; official_racecraft_context:1",
       "totalContextRows": 19,
       "weatherCount": 1,
@@ -304,7 +304,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6320",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:8; official_penalty_context:1; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -325,7 +325,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2025_6446",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:8; official_penalty_context:1; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -346,7 +346,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6753",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:4; official_penalty_context:4; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -367,7 +367,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6759",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:6; modeled_weather_context:1; official_incident_context:6; official_penalty_context:3; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -388,7 +388,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2026_6765",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:1; official_penalty_context:7; official_racecraft_context:1",
       "totalContextRows": 17,
       "weatherCount": 1,
@@ -409,7 +409,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6315",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:2; official_penalty_context:5; official_racecraft_context:1",
       "totalContextRows": 16,
       "weatherCount": 1,
@@ -430,7 +430,7 @@
       "seriesName": "INDY NXT",
       "sessionId": "session_indy_nxt_2024_6324",
       "sessionType": "race",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "sourceStateCounts": "media_narrative_context:7; modeled_weather_context:1; official_incident_context:5; official_penalty_context:2; official_racecraft_context:1",
       "totalContextRows": 16,
       "weatherCount": 1,
@@ -592,7 +592,7 @@
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sessionCount": 203,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 1273,
       "weatherCount": 135
     },
@@ -608,7 +608,7 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "sessionCount": 118,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 194,
       "weatherCount": 44
     },
@@ -624,7 +624,7 @@
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sessionCount": 72,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 99,
       "weatherCount": 72
     },
@@ -640,7 +640,7 @@
       "seriesId": "series_frp_f1600",
       "seriesName": "F1600 Championship Series",
       "sessionCount": 37,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 39,
       "weatherCount": 0
     },
@@ -656,7 +656,7 @@
       "seriesId": "series_froc",
       "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
       "sessionCount": 11,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 32,
       "weatherCount": 0
     },
@@ -672,24 +672,24 @@
       "seriesId": "series_euroformula_open",
       "seriesName": "Euroformula Open",
       "sessionCount": 28,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 28,
       "weatherCount": 0
     },
     {
       "bryceContextCount": 0,
-      "eventCount": 3,
+      "eventCount": 4,
       "incidentCount": 0,
-      "mediaCount": 6,
+      "mediaCount": 8,
       "officialContextShare": 0.0,
       "penaltyCount": 0,
       "racecraftCount": 0,
       "seasonYears": "2019",
       "seriesId": "series_scca_super_tour",
       "seriesName": "Hoosier SCCA Super Tour",
-      "sessionCount": 6,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
-      "totalContextRows": 6,
+      "sessionCount": 8,
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
+      "totalContextRows": 8,
       "weatherCount": 0
     },
     {
@@ -704,7 +704,7 @@
       "seriesId": "global_context",
       "seriesName": "Global / career context",
       "sessionCount": 0,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 5,
       "weatherCount": 0
     },
@@ -720,7 +720,7 @@
       "seriesId": "series_imsa_weathertech",
       "seriesName": "IMSA WeatherTech SportsCar Championship",
       "sessionCount": 1,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 5,
       "weatherCount": 1
     },
@@ -736,13 +736,13 @@
       "seriesId": "series_usf_pro_2000",
       "seriesName": "USF Pro 2000 Championship",
       "sessionCount": 2,
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
       "totalContextRows": 2,
       "weatherCount": 0
     }
   ],
   "sourceBoundaryGaps": {
-    "count": 13,
+    "count": 11,
     "displayPolicy": "Gaps are source-boundary facts. They should drive unavailable/deferred states, not inferred metrics.",
     "examples": [
       {
@@ -762,20 +762,6 @@
       {
         "description": "Mugello, October 1, 2023, Euroformula Open Round 7 Race 2 (reverse grid): reported 8th from 2nd, one lap down. The official classification was not found. Counted in no career figure.",
         "gapId": "gap_career_race_euroformula_2023_mugello_race_2_reported_only",
-        "scope": "career_dataset:races_without_official_classification",
-        "sourceState": "open_gap_context",
-        "status": "open"
-      },
-      {
-        "description": "Homestead-Miami, January 2019, race 1 of the weekend: the official SCCA Southeast Conference report lists Bryce 5th on the Formula F grid and 4th in class at the finish (\"(5) 4\"). No race sheet was found, so laps, time, overall finish and field size are unknown. Counted in no career figure.",
-        "gapId": "gap_career_race_scca_2019_homestead_race_1_no_sheet",
-        "scope": "career_dataset:races_without_official_classification",
-        "sourceState": "open_gap_context",
-        "status": "open"
-      },
-      {
-        "description": "Homestead-Miami, January 2019, race 2: the official SCCA Southeast Conference report lists Bryce 4th on the Formula F grid and 8th in class, with no points (\"(4) 8*\"). No race sheet was found. Counted in no career figure.",
-        "gapId": "gap_career_race_scca_2019_homestead_race_2_no_sheet",
         "scope": "career_dataset:races_without_official_classification",
         "sourceState": "open_gap_context",
         "status": "open"
@@ -807,13 +793,27 @@
         "scope": "indy_nxt_official",
         "sourceState": "open_gap_context",
         "status": "open"
+      },
+      {
+        "description": "Formula Ford 2020 official grid/start import is complete for 1148 race/heat rows. The remaining 12 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
+        "gapId": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+        "scope": "series_formula_ford:2020:grid_start_positions",
+        "sourceState": "open_gap_context",
+        "status": "open"
+      },
+      {
+        "description": "Official Toyota schedule images backfill practice, qualifying, and race starts for FROC 2024, and official Round 2 timing PDFs backfill Test 1 and Test 2. Official Toyota test-day articles are cached as date-level context for the other nine FROC test sessions, but those sessions remain unavailable for production session-hour weather joins because the official Toyota round pages expose test result tabs and article context but no official test timing PDF links or equivalent exact clock-time source for those sessions.",
+        "gapId": "gap_froc_2024_session_times_missing",
+        "scope": "froc_2024",
+        "sourceState": "partial_gap_context",
+        "status": "partial"
       }
     ],
     "rowsPath": "analysis/context-event-narrative-layer/output/gap_source_boundary_context.csv"
   },
   "sourceEvidenceTypeCounts": [
     {
-      "count": 902,
+      "count": 904,
       "label": "official_pdf"
     },
     {
@@ -821,7 +821,7 @@
       "label": "official_api"
     },
     {
-      "count": 130,
+      "count": 132,
       "label": "official_page"
     },
     {
@@ -857,14 +857,14 @@
       "label": "press_article"
     }
   ],
-  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+  "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
   "sourceScope": {
     "derivedMetricRows": 453,
-    "gapRows": 13,
-    "mediaRows": 1128,
+    "gapRows": 11,
+    "mediaRows": 1130,
     "seriesCoverageRows": 11,
-    "sessionRollupRows": 479,
-    "sourceEvidenceRows": 1463,
+    "sessionRollupRows": 481,
+    "sourceEvidenceRows": 1467,
     "timelineCollections": [
       "racecraftEvents",
       "penalties",
@@ -872,7 +872,7 @@
       "weatherObservations",
       "mediaAssets"
     ],
-    "timelineRows": 1684,
+    "timelineRows": 1686,
     "weatherRows": 252
   }
 }
