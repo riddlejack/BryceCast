@@ -1,5 +1,5 @@
-/* F1600, 2019: his first full season, and the only one built on triple-
- * headers. Seven weekends, three races each. The visual is the seven
+/* F1600, 2019: his first season built on triple-headers (GB3, Euroformula
+ * and FR Oceania ran in threes later). Seven weekends, three races each. The visual is the seven
  * weekends side by side, each weekend's three finishes joined, with the
  * podium as a quiet band at the top: the season reads as climbing into it. */
 
@@ -62,7 +62,7 @@ export const F1600Signature = () => {
   return (
     <>
       <p className="chapter-panel__narrative">
-        His first full season, and the only one run in threes: {countWord(rounds.length)} weekends of {countWord(racesPerRound)} races. He reached
+        His first season run in threes: {countWord(rounds.length)} weekends of {countWord(racesPerRound)} races. He reached
         the podium {podiums} times, {lastFour} of them in the last four rounds{rank ? <>, and finished {ordinalPlace(rank)} in the championship</> : null}.
       </p>
       <div ref={stageRef}>

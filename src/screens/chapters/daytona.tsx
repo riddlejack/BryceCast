@@ -8,10 +8,9 @@
 import { useMemo } from 'react';
 import { PointerWord, useMeasuredWidth } from '../../app/charts';
 import type { VenueTip } from '../../app/venueCard';
-import { useImsaDaytonaStint } from '../../data/imsaDaytonaStint';
+import { useImsaDaytonaStint, type ImsaCar85Spell } from '../../data/imsaDaytonaStint';
 import { useCareerRows } from '../careerExplorer';
 import { clockLabel, countWord, lab, minutesOf, openOf, Signature, tintOf, useEntrance, useRaceCard, EASE } from './common';
-import { CAR85_SPELLS as FALLBACK_SPELLS, type CarSpell } from './daytonaSpells';
 
 const SERIES = 'series_imsa_weathertech';
 const DAY = 86_400;
@@ -40,15 +39,18 @@ const partOfDay = (localMinutes: number): string => {
   return 'the evening';
 };
 
-export const DaytonaSignature = () => {
+type CarSpell = ImsaCar85Spell;
+const NO_SPELLS: CarSpell[] = [];
+
+export const DaytonaSignature = ({ narrative }: { narrative: string }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [stageRef, settled, reduced] = useEntrance<HTMLDivElement>();
   const card = useRaceCard();
   const pack = useImsaDaytonaStint();
-  /* The pack's own `car85Spells` (r2-data, ae1fe12) once that branch is in
-   * this base; until then the same derivation, kept as a constant. */
-  const packSpells = pack && pack !== 'failed' ? (pack as { car85Spells?: CarSpell[] }).car85Spells : undefined;
-  const CAR85_SPELLS: CarSpell[] = packSpells && packSpells.length > 0 ? packSpells : FALLBACK_SPELLS;
+  /* Car 85's driver spells from the stint pack (`car85Spells`: the official
+   * time card's laps, a spell per unbroken run of one driver, elapsed time the
+   * car's own lap-time sum). */
+  const CAR85_SPELLS: CarSpell[] = (pack && pack !== 'failed' ? pack.car85Spells : null) ?? NO_SPELLS;
   const rows = useCareerRows();
   const race = rows.find((row) => row.seriesId === SERIES) ?? null;
   const tint = tintOf(SERIES);
@@ -63,12 +65,21 @@ export const DaytonaSignature = () => {
     const day1 = venue ? sunEvents(venue.lat, venue.lon, clock, -5) : null;
     const day2 = venue ? sunEvents(venue.lat, venue.lon, nextDay(clock), -5) : null;
     const night = day1 && day2 ? { from: (day1.sunset - startLocal) * 60, to: (day2.sunrise + 1440 - startLocal) * 60 } : null;
+    if (CAR85_SPELLS.length === 0) return null;
     const total = CAR85_SPELLS[CAR85_SPELLS.length - 1].endElapsedSeconds;
     const bryce = CAR85_SPELLS.filter((spell) => spell.driverId === BRYCE);
     return { clock, startLocal, night, total, bryce };
   }, [race, CAR85_SPELLS]);
 
-  if (!race || !model) return null;
+  if (!race || !model) {
+    /* The pack is still loading (hold the dial's room), or it failed (the chapter's own line only). */
+    return (
+      <>
+        <p className="chapter-panel__narrative">{narrative}</p>
+        {pack === null ? <div className="chs-day__wait" aria-busy="true" /> : null}
+      </>
+    );
+  }
   const { startLocal, night, total, bryce } = model;
   const result = pack && pack !== 'failed' ? pack.car85Result : null;
   const brycelaps = bryce.reduce((sum, spell) => sum + spell.laps, 0);

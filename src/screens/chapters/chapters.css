@@ -53,3 +53,8 @@
   .chs-day__layout { justify-content: center; }
   .chs-day__list { max-width: none; width: 100%; }
 }
+
+/* Daytona: hold the dial's room while the stint pack loads. */
+.chs-day__wait {
+  min-height: 400px;
+}
