@@ -10,6 +10,7 @@ import { TrackArt } from '../app/trackArt';
 import { TrackStill, useStillIndex } from '../app/trackStill';
 import { venueSlugFor } from '../app/venuePeek';
 import { TrackModelSlot } from '../three/TrackModelSlot';
+import { sceneWeatherFor } from '../three/weather/sceneWeather';
 import { loadIndex } from '../three/trackModelLoad';
 import { trackOutlineFor } from '../assets/tracks';
 import { switchValue } from '../review/switches';
@@ -672,6 +673,8 @@ interface SheetTrackInfo {
   kind: 'model' | 'still' | 'line' | 'none' | 'wait';
   /** The picture is the layout he raced that day (a per-session alias). */
   raced: boolean;
+  /** The race, for its race-hour weather on the model and the still. */
+  sessionId: string;
 }
 
 const useSheetTrack = (sessionId: string, trackName: string): SheetTrackInfo => {
@@ -681,9 +684,9 @@ const useSheetTrack = (sessionId: string, trackName: string): SheetTrackInfo => 
   const slug = venueSlugFor(stillIndex, { sessionId, trackName }) ?? outline?.slug ?? null;
   const raced = Boolean(stillIndex && (stillIndex as { bySession?: Record<string, string> }).bySession?.[sessionId]);
   const name = outline?.name ?? trackName;
-  if (stillIndex === undefined || models === undefined) return { slug, name, kind: 'wait', raced };
+  if (stillIndex === undefined || models === undefined) return { slug, name, kind: 'wait', raced, sessionId };
   const kind = slug && models?.has(slug) ? 'model' : slug && stillIndex?.venues[slug] ? 'still' : outline ? 'line' : 'none';
-  return { slug, name, kind, raced };
+  return { slug, name, kind, raced, sessionId };
 };
 
 const layoutWords = (track: SheetTrackInfo, seriesShort: string, year: number | null): string =>
@@ -703,6 +706,7 @@ const SheetModel = ({ track, words }: { track: SheetTrackInfo; words: string }) 
       name={track.name}
       sections={[]}
       caption={words}
+      weather={sceneWeatherFor(track.sessionId)}
       hint={coarse ? 'Drag sideways to turn it, pinch to zoom.' : 'Drag to turn it, hold ⌘ or Ctrl and scroll to zoom.'}
       fallback={<TrackStill slug={track.slug} interactive={false} alt={`${track.name}: the 3D track.`} sizes="100vw" />}
     />
@@ -721,6 +725,7 @@ const SheetStill = ({ track, words, trackName }: { track: SheetTrackInfo; words:
         interactive={false}
         alt={`${track.name}: the 3D track.`}
         sizes="(max-width: 900px) 100vw, 420px"
+        weather={sceneWeatherFor(track.sessionId)}
         fallback={outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={260} /> : null}
       />
       <figcaption>{words}</figcaption>

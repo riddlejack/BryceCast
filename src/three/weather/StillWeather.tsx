@@ -111,7 +111,7 @@ export const StillWeather = ({
   return (
     <span className={`wx-still wx-still--${weather.sky}${weather.wet ? ' wx-still--wet' : ''}`} aria-hidden data-wx-still={weather.sky}>
       <span className="wx-still__sky" />
-      {weather.rainIntensity > 0 ? <WeatherRain intensity={weather.rainIntensity * 0.8} drift={() => (arrow ? (arrow.along[0] / (Math.hypot(...arrow.along) || 1)) * k * 0.5 : 0)} reduced={reduced} scale={0.6} className="wx-still__rain" /> : null}
+      {weather.rainIntensity > 0 ? <WeatherRain intensity={Math.max(0.45, weather.rainIntensity)} drift={() => (arrow ? (arrow.along[0] / (Math.hypot(...arrow.along) || 1)) * k * 0.5 : 0)} reduced={reduced} scale={0.7} density={2.2} className="wx-still__rain" /> : null}
       {path ? (
         <svg className="wx-still__arrow" viewBox={`0 0 100 ${H.toFixed(2)}`} preserveAspectRatio="none">
           <path d={path} vectorEffect="non-scaling-stroke" />

@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState, type CSSProperties, type RefObject }
 import type { TrackOutline } from '../assets/tracks';
 import { useCoarsePointer, type ChartTip } from './charts';
 import { TAP_CARD, TapAction, type TapPreview } from './tapPreview';
-import { useVenuePicture, venueOutlineFor, type VenueRef } from './venuePeek';
+import { CardStill, useVenuePicture, venueOutlineFor, type VenueRef } from './venuePeek';
 import { switchValue } from '../review/switches';
 import './venueCard.css';
 
@@ -169,15 +169,7 @@ export const VenueTipCard = ({ tip, tap }: { tip: VenueTip; width?: number; tap?
       {...(touch ? { [TAP_CARD]: '' } : {})}
     >
       {still ? (
-        <img
-          className="vcard__still"
-          src={still.src600}
-          width={still.width}
-          height={still.height}
-          alt=""
-          decoding="async"
-          draggable={false}
-        />
+        <CardStill className="vcard__still" venue={tip.venue ?? {}} picture={still} />
       ) : null}
       <div className="vcard__body">
         {outline ? (
