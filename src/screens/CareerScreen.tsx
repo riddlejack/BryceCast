@@ -108,6 +108,13 @@ const classWord: Record<UiCareerFigureClass, string> = {
   modelled_range: 'Modelled'
 };
 
+/** Review switch `odocolour` (round 3): the odometer in one colour set (ink, a
+ *  soft and a faint ink step, series hues only for series, amber only for "at
+ *  least"); `old` puts round 2's six colour schemes back. */
+const odoColourOld = (): boolean => switchValue('odocolour') === 'old';
+/** `odocolour=series`: the same set, but the other drivers keep their series hues at rest. */
+const odoPeopleInSeries = (): boolean => switchValue('odocolour') === 'series';
+
 /* ============================================================
  * Rolling numbers: each digit is a wheel, like a car's odometer.
  * The ones wheel turns continuously; a higher wheel turns only as the
@@ -359,12 +366,6 @@ const OdometerLive = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live:
 };
 
 /* ---------- the drawings, one per group ---------- */
-
-const ordinal = (n: number): string => {
-  const mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 13) return `${n}th`;
-  return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
-};
 
 /** Races by series, from the weeks grid (every race sits in exactly one week). */
 const racesBySeries = (lifeStats: UiCareerLifeStats): Array<{ seriesId: string; races: number }> => {
@@ -781,7 +782,7 @@ const PlacesVisual = () => {
         ))}
       </div>
       <figcaption className="odo-legend">
-        <span className="odo-legend__note">One dot is one track, coloured by country</span>
+        <span className="odo-legend__note">{odoColourOld() ? 'One dot is one track, coloured by country' : 'One dot is one track, grouped by country'}</span>
       </figcaption>
       {hot && shown ? (
         <VenueTipCard
@@ -792,7 +793,7 @@ const PlacesVisual = () => {
             under: hot.under,
             venue: { trackName: shown.trackName, trackId: shown.trackIds[0] ?? null },
             meta: hot.venue ? hot.country : plural(hotList.length, 'track'),
-            tint: countryTint(hot.country),
+            tint: odoColourOld() ? countryTint(hot.country) : null,
             title: hot.venue ? shown.trackName : hot.country,
             detail: hot.venue
               ? `${plural(shown.raceCount, 'race')}, ${yearsOf(shown.firstYear, shown.lastYear)} · ${shown.seriesSpans.map((span) => span.seriesShort).join(', ')}`
@@ -826,7 +827,9 @@ const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers
   const cols = Math.max(20, Math.floor(width / pitch));
   const rows = Math.ceil(all / cols);
   const rowsData = drivers?.rows ?? [];
-  const tint = (index: number) => {
+  const old = odoColourOld();
+  const inSeries = odoPeopleInSeries();
+  const seriesTint = (index: number) => {
     const row = rowsData[index];
     return row ? seriesMetaById(drivers!.series[row[1]]).tint : 'var(--ink)';
   };
@@ -859,6 +862,16 @@ const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers
       : null;
   const firstSeries = drivers ? seriesOrder.filter((id) => drivers.series.includes(id) && id !== 'series_imsa_weathertech') : [];
   const seriesOf = (index: number) => (rowsData[index] ? drivers!.series[rowsData[index][1]] : null);
+  /* Round 3: ink at rest (the soft step for the names met only at Daytona). A
+   * chip, or the dot under the pointer, lights one series in its own hue and
+   * steps every other name back to the faint step. */
+  const lit = old ? null : focus ?? (hot !== null ? seriesOf(hot) : null);
+  const tint = (index: number) => {
+    if (old) return seriesTint(index);
+    if (lit) return seriesOf(index) === lit ? seriesTint(index) : 'var(--odo-faint)';
+    if (index >= single) return 'var(--odo-soft)';
+    return inSeries ? seriesTint(index) : 'var(--ink)';
+  };
   const metHere = (id: string) => rowsData.filter((row, index) => index < single && drivers!.series[row[1]] === id).length;
   return (
     <figure
@@ -887,7 +900,7 @@ const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers
                 cy={at(index).cy}
                 r={2.4}
                 fill={tint(index)}
-                className={`odo-people__dot${index < single ? '' : ' odo-people__dot--daytona'}${focus && seriesOf(index) !== focus ? ' odo-people__dot--off' : ''}`}
+                className={`odo-people__dot${index < single ? '' : ' odo-people__dot--daytona'}${old && focus && seriesOf(index) !== focus ? ' odo-people__dot--off' : ''}`}
               />
             ))}
             {hot !== null ? (
@@ -1253,7 +1266,7 @@ const Odometer = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live: Liv
   ]);
 
   return (
-    <section className="career-odometer" aria-labelledby="career-odometer-title">
+    <section className={`career-odometer${odoColourOld() ? ' career-odometer--r2' : ''}`} aria-labelledby="career-odometer-title">
       <div className="career-section-head">
         <h2 id="career-odometer-title" className="career-section-title">
           The odometer
@@ -1343,7 +1356,7 @@ const ageOn = (birth: number, time: number): number => {
 
 type GridRace = UiCareerWeeksGrid['weeks'][number]['races'][number];
 type LifeEvent = { eventId: string; seriesId: string; trackName: string; country: string; start: number };
-type RaceResult = { label: string; finish: number | null; status: string };
+type RaceResult = { label: string; finish: number | null; field: number | null; status: string };
 
 type LifeWeek = {
   index: number;
@@ -1412,7 +1425,7 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
       const wet = wetFor(asString(row.sessionId) ?? '');
       if (wet) wetByEvent.set(eventId, [...(wetByEvent.get(eventId) ?? []), wet]);
       const list = results.get(eventId) ?? [];
-      list.push({ label: asString(row.raceLabel) ?? '', finish: asNumber(row.finishPosition), status: asString(row.status) ?? 'running' });
+      list.push({ label: asString(row.raceLabel) ?? '', finish: asNumber(row.finishPosition), field: asNumber(row.fieldSize), status: asString(row.status) ?? 'running' });
       results.set(eventId, list);
     }
     for (const list of results.values()) list.sort((a, b) => a.label.localeCompare(b.label, 'en', { numeric: true }));
@@ -1469,10 +1482,15 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
 
 type LifeModel = ReturnType<typeof useLifeModel>;
 
-const resultWord = (result: RaceResult): string => {
-  if (result.status === 'contact') return `${result.finish ? `${ordinal(result.finish)}, ` : ''}out after contact`;
-  if (result.status === 'mechanical') return `${result.finish ? `${ordinal(result.finish)}, ` : ''}out with a mechanical failure`;
-  return result.finish ? ordinal(result.finish) : 'finished';
+/* Round 3 (proxy review 2): the site's one finish grammar, "P8 of 23"
+ * (raceFacts.ts), not ordinals. One race in the line also says who he beat. */
+const resultWord = (result: RaceResult, alone = false): string => {
+  const place = placeLine(result.finish, result.field);
+  if (result.status === 'contact') return `${place ? `${place}, ` : ''}out after contact`;
+  if (result.status === 'mechanical') return `${place ? `${place}, ` : ''}out with a mechanical failure`;
+  if (!place) return 'finished';
+  const beat = alone ? beatLine(result.finish, result.field) : null;
+  return beat ? `${place} · ${beat}` : place;
 };
 
 /** One line per venue and series in the week: an INDY NXT doubleheader is two
@@ -1490,12 +1508,12 @@ const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }
   if (inWeek === 0) {
     outcome = 'Days of this meeting; its races fell in another week';
   } else if (first.seriesId === 'series_imsa_weathertech') {
-    outcome = `The 24-hour race: ${results[0]?.finish ? ordinal(results[0].finish) : 'finished'} overall, in a car shared with three co-drivers`;
+    outcome = `The 24-hour race: ${placeLine(results[0]?.finish, results[0]?.field) ?? 'finished'} overall, in a car shared with three co-drivers`;
   } else if (inWeek === total && results.length > 0) {
     const missing = total - results.length;
-    outcome = `${counted(total)}: ${results.map(resultWord).join(', ')}${missing > 0 ? `; ${missing} not classified` : ''}`;
+    outcome = `${counted(total)}: ${results.map((result) => resultWord(result, results.length === 1)).join(', ')}${missing > 0 ? `; ${missing} not classified` : ''}`;
   } else {
-    outcome = `${inWeek} of this meeting's ${total} races fell this week${results.length ? `. The meeting: ${results.map(resultWord).join(', ')}` : ''}`;
+    outcome = `${inWeek} of this meeting's ${total} races fell this week${results.length ? `. The meeting: ${results.map((result) => resultWord(result)).join(', ')}` : ''}`;
   }
   return (
     <span className="life-tip__race">
@@ -1630,7 +1648,7 @@ const weekLabel = (model: LifeModel, week: LifeWeek): string => {
     return `${base}: ${week.races
       .map((race) => {
         const event = model.events.get(race.eventId);
-        return `${seriesMetaById(race.seriesId).short} at ${event?.trackName ?? race.eventName}${race.bestFinish ? `, best ${ordinal(race.bestFinish)}` : ''}`;
+        return `${seriesMetaById(race.seriesId).short} at ${event?.trackName ?? race.eventName}${race.bestFinish ? `, best P${race.bestFinish}` : ''}`;
       })
       .join('; ')}.`;
   }
@@ -1638,7 +1656,46 @@ const weekLabel = (model: LifeModel, week: LifeWeek): string => {
   return `${base}: no recorded racing.`;
 };
 
-const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeStats; model: LifeModel; focus?: string | null }) => {
+/* Round 3 colour (Jack: the life-in-weeks colours "don't fit the clean
+ * aesthetic of the site"). Switch `lifecolour`:
+ * - ink (default): every race week in ink on paper. A series' own colour
+ *   shows only when asked for: point at (or tap) a series in the key, or any
+ *   race week, and that series' weeks light in its hue while the other race
+ *   weeks step back to a faint ink.
+ * - muted: each series in its hue taken halfway to grey, quiet at rest; the
+ *   same lighting on hover.
+ * - old: round 2, every series in full colour; the key dims the others. */
+type LifeColour = 'ink' | 'tone' | 'muted' | 'old';
+const lifeColour = (): LifeColour => {
+  const value = switchValue('lifecolour');
+  return value === 'tone' || value === 'muted' || value === 'old' ? value : 'ink';
+};
+const mutedTint = (tint: string): string => `color-mix(in oklab, ${tint} 52%, var(--grey-ink3))`;
+/** tone: one ink, lightest for the first series he raced and darkest for INDY NXT,
+ *  so the grid darkens as he climbs. `order` is the series' place among those raced. */
+const toneTint = (order: number, count: number): string =>
+  `color-mix(in srgb, var(--ink) ${Math.round(34 + (66 * order) / Math.max(1, count - 1))}%, var(--paper))`;
+/** The tone of a series among those in the grid (seriesOrder is the order he raced them). */
+const toneOf = (seriesId: string, inGrid: string[]): string => toneTint(Math.max(0, inGrid.indexOf(seriesId)), inGrid.length);
+/** The swatch a series wears in a version at rest. */
+const lifeSwatch = (colour: LifeColour, seriesId: string, inGrid: string[]): string => {
+  const tint = seriesMetaById(seriesId).tint;
+  if (colour === 'muted') return mutedTint(tint);
+  if (colour === 'tone') return toneOf(seriesId, inGrid);
+  return tint;
+};
+
+const LifeGrid = ({
+  lifeStats,
+  model,
+  focus = null,
+  colour = 'ink'
+}: {
+  lifeStats: UiCareerLifeStats;
+  model: LifeModel;
+  focus?: string | null;
+  colour?: LifeColour;
+}) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const coarse = useCoarsePointer();
   const [active, setActive] = useState<number | null>(null);
@@ -1712,6 +1769,18 @@ const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeS
 
   const activeWeek = active === null ? null : weeks[active];
   const activePos = activeWeek ? pos(activeWeek) : null;
+  /* The series in hand: the key's, else the race week under the pointer's. */
+  const inGrid = useMemo(
+    () => seriesOrder.filter((id) => weeks.some((week) => week.races.some((race) => race.seriesId === id))),
+    [weeks]
+  );
+  const lit = colour === 'old' ? null : focus ?? (activeWeek?.kind === 'race' ? activeWeek.races[0]?.seriesId ?? null : null);
+  const weekFill = (seriesId: string): string => {
+    const tint = seriesMetaById(seriesId).tint;
+    if (colour === 'old') return tint;
+    if (lit) return seriesId === lit ? tint : 'var(--life-unlit)';
+    return colour === 'ink' ? 'var(--life-race)' : lifeSwatch(colour, seriesId, inGrid);
+  };
   /* The note sits beside the week, above it when there is room. */
   const tipW = Math.min(360, Math.max(240, width - 16));
   const tipLeft = activePos ? Math.max(0, Math.min(activePos.x + cellW / 2 - tipW / 2, width - tipW)) : 0;
@@ -1733,7 +1802,7 @@ const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeS
             height={svgH}
             tabIndex={0}
             role="img"
-            aria-label={`Every week of his life, ${weeks.length} from ${monthYear(isoOf(model.birth))} to ${monthYear(isoOf(model.end))}. The ${raceIndexes.length} weeks with a race meeting are coloured by series. Use the arrow keys to move week by week, Page Up and Page Down to jump between race weeks.`}
+            aria-label={`Every week of his life, ${weeks.length} from ${monthYear(isoOf(model.birth))} to ${monthYear(isoOf(model.end))}. The ${raceIndexes.length} weeks with a race meeting are ${colour === 'ink' ? 'filled in' : 'coloured by series'}. Use the arrow keys to move week by week, Page Up and Page Down to jump between race weeks.`}
             onPointerMove={(event) => {
               if (event.pointerType === 'touch') return;
               const index = pick(event.clientX, event.clientY, event.currentTarget);
@@ -1778,15 +1847,20 @@ const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeS
               if (week.kind === 'race') {
                 const ids = [...new Set(week.races.map((race) => race.seriesId))];
                 return (
-                  <g key={week.index} opacity={focus && !ids.includes(focus) ? 0.18 : 1} style={{ transition: 'opacity 160ms ease' }}>
-                    <rect x={x} y={y} width={cellW} height={cellH} fill={seriesMetaById(ids[0]).tint} />
+                  <g
+                    key={week.index}
+                    opacity={colour === 'old' && focus && !ids.includes(focus) ? 0.18 : 1}
+                    style={{ transition: 'opacity 160ms ease' }}
+                  >
+                    <rect x={x} y={y} width={cellW} height={cellH} className="life-grid__race" style={{ fill: weekFill(ids[0]) }} />
                     {ids.length > 1 ? (
                       <rect
                         x={vertical ? x + cellW / 2 : x}
                         y={vertical ? y : y + cellH / 2}
                         width={vertical ? cellW / 2 : cellW}
                         height={vertical ? cellH : cellH / 2}
-                        fill={seriesMetaById(ids[1]).tint}
+                        className="life-grid__race"
+                        style={{ fill: weekFill(ids[1]) }}
                       />
                     ) : null}
                     {week.races.some((race) => model.wetByEvent.has(race.eventId)) ? (
@@ -1856,10 +1930,12 @@ const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeS
       {vertical ? null : (
         <p className="life-grid__firstrace">
           First race, {firstRace ? monthYear(isoOf(firstRace.monday + 4 * dayMs)) : ''}, age {ageFirst?.display ?? ''}.{' '}
-          {coarse ? 'Tap' : 'Point at'} any week to see what he was doing.
+          {coarse ? 'Tap' : 'Point at'} any week to see what he was doing{colour === 'old' ? '' : ', or a series below to light its weeks'}.
         </p>
       )}
-      {vertical ? <p className="life-grid__firstrace">Tap any week to see what he was doing.</p> : null}
+      {vertical ? (
+        <p className="life-grid__firstrace">Tap any week to see what he was doing{colour === 'old' ? '' : ', or a series below to light its weeks'}.</p>
+      ) : null}
     </div>
   );
 };
@@ -1871,6 +1947,7 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
   /* Pointing at (or tapping) a series in the key lights only its weeks. */
   const [focus, setFocus] = useState<string | null>(null);
   const keyTap = useTapPreview();
+  const colour = lifeColour();
   const f = (id: string) => figureById(share.figures, id);
   const eventDays = figureById(lifeStats.figures, 'eventDays');
   const raceWeeks = figureById(share.figures, 'raceWeeksShareOfLife') ?? figureById(lifeStats.figures, 'raceWeeks');
@@ -1890,6 +1967,19 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
   }
   const seriesInGrid = seriesOrder.filter((id) => model.weeks.some((week) => week.races.some((race) => race.seriesId === id)));
   const hasMilestones = model.weeks.some((week) => week.kind === 'milestone');
+  const seriesKeyItems = seriesInGrid.map((id) => {
+    const meta = seriesMetaById(id);
+    return (
+      <span
+        key={id}
+        className={`series-key__series${focus === id ? ' series-key__series--on' : ''}`}
+        {...keyTap.target(id, { show: () => setFocus(id), hide: () => setFocus(null) })}
+      >
+        <i aria-hidden style={{ background: lifeSwatch(colour, id, seriesInGrid) }} />
+        {meta.short}
+      </span>
+    );
+  });
   const facts: Array<{ value: string; label: ReactNode }> = [
     { value: raceWeeks.display, label: <>of the {weeksLived.display} weeks he has lived held a race meeting</> },
     {
@@ -1919,21 +2009,15 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
       </div>
       <div className="life-layout">
         <div className="life-layout__grid">
-          <LifeGrid lifeStats={lifeStats} model={model} focus={focus} />
-          <div className={`series-key${focus ? ' series-key--focus' : ''}`} aria-label="What the squares mean">
-            {seriesInGrid.map((id) => {
-              const meta = seriesMetaById(id);
-              return (
-                <span
-                  key={id}
-                  className={`series-key__series${focus === id ? ' series-key__series--on' : ''}`}
-                  {...keyTap.target(id, { show: () => setFocus(id), hide: () => setFocus(null) })}
-                >
-                  <i aria-hidden style={{ background: meta.tint }} />
-                  {meta.short}
-                </span>
-              );
-            })}
+          <LifeGrid lifeStats={lifeStats} model={model} focus={focus} colour={colour} />
+          <div className={`series-key series-key--${colour}${focus ? ' series-key--focus' : ''}`} aria-label="What the squares mean">
+            {colour === 'ink' ? (
+              <span>
+                <i aria-hidden className="series-key__race" />
+                a race meeting
+              </span>
+            ) : null}
+            {colour === 'ink' ? null : seriesKeyItems}
             <span>
               <i aria-hidden className="series-key__empty" />
               racing years, no meeting
@@ -1953,6 +2037,9 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
                 <i aria-hidden className="series-key__wet" />
                 a race on a wet track
               </span>
+            ) : null}
+            {colour === 'ink' ? (
+              <span className="series-key__light">{seriesKeyItems}</span>
             ) : null}
           </div>
         </div>
@@ -1977,8 +2064,10 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
             <div id="life-how" className="life-how">
               <p>
                 One square is one week, Monday to Sunday, from the week he was born to the week of his latest race. A week is lit when it
-                holds at least one day of an official race meeting, from the first to the last day the series lists, in that series' colour.
-                A week split in two colours held meetings in two series.
+                holds at least one day of an official race meeting, from the first to the last day the series lists
+                {colour === 'ink'
+                  ? '. Pointing at a series, or at any race week, lights that series’ weeks in its colour.'
+                  : ", in that series' colour. A week split in two colours held meetings in two series."}
               </p>
               <p>
                 An unlit week only means no racing is recorded. Travel, testing, the simulator and karting before 2019 are not in the data;

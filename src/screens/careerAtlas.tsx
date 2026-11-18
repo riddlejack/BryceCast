@@ -1072,6 +1072,8 @@ export const CareerAtlas = () => {
     { drive: 0, flight: 0, same_venue: 0 } as Record<TravelLeg['modeProxy'], number>
   );
   const milesFigure = uiDataPackage.screens.careerLab.lifeStats?.figures.find((figure) => figure.id === 'milesBetweenTracks') ?? null;
+  /* "same country and under 750 miles", read from the package's own method line. */
+  const driveRule = travel?.how.match(/\(([^)]*?)\s+counts as a drive\)/)?.[1] ?? null;
 
   return (
     <section className="career-travel career-atlas" aria-labelledby="career-travel-title">
@@ -1140,8 +1142,11 @@ export const CareerAtlas = () => {
               </div>
             ) : null
           ) : null}
+          {/* Round 3 (proxy review 2: a wall of text on a phone): two short
+           * sentences here; the package's full method and caveat stay in Sources. */}
           <p className="career-travel__how">
-            {travel?.how ?? ''} {milesFigure?.caveat ?? ''}
+            Straight lines from track to track, in date order: the least anyone could travel between his races, not his real trips.
+            {legMode === 'arc' && driveRule ? ` ${driveRule.charAt(0).toUpperCase()}${driveRule.slice(1)} counts as a drive.` : ''}
           </p>
           {!reducedMotion && travel ? (
             <div className="career-travel__controls">

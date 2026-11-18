@@ -266,6 +266,32 @@
 /* ---------- the drawings ---------- */
 
 .odo-visual { position: relative; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+/* Round 3 colour (Jack: "six distinct color palettes on the odometer, which is
+ * way too much"): one set for all six drawings. Series hues only where a mark
+ * is a series (On track; a lit series among the other drivers); everything
+ * else is ink, one soft ink step for "everything around the racing" (the
+ * travel, the other sessions, the Daytona-only names), a faint step for the
+ * races that ran to the flag, and the site's amber as the one accent, only
+ * for "at least" (the + and the dashed run past a floor). Switch `odocolour`;
+ * `old` (.career-odometer--r2) puts round 2's colours back. */
+.career-odometer {
+  --odo-race: var(--ink);
+  --odo-soft: color-mix(in srgb, var(--ink) 30%, var(--paper));
+  --odo-faint: color-mix(in srgb, var(--ink) 11%, var(--paper));
+  --odo-travel-mark: var(--odo-soft);
+  --odo-place-mark: var(--ink);
+  --odo-out: var(--ink);
+  --odo-finished: var(--odo-faint);
+  --odo-floor: var(--amber);
+}
+.career-odometer--r2 {
+  --odo-soft: color-mix(in srgb, var(--odo-race) 32%, var(--paper));
+  --odo-travel-mark: var(--odo-travel);
+  --odo-out: var(--status-bad);
+  --odo-finished: color-mix(in srgb, var(--chapter-indy) 30%, var(--paper));
+  --odo-floor: var(--grey-ink3);
+}
 /* A tile whose card is open sits above its neighbours (each tile is a size
  * container, so its own stacking context). */
 .odo-group:has(.vcard, .tap-card, [data-tap-card]) { position: relative; z-index: 6; }
@@ -295,11 +321,13 @@
  * the INDY NXT races that ended early in the status red. */
 .odo-key--race { background: var(--odo-race); }
 .odo-key--race-hatch { background: repeating-linear-gradient(135deg, var(--odo-race) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--odo-race); }
-.odo-key--race-soft { background: color-mix(in srgb, var(--odo-race) 32%, var(--paper)); }
-.odo-key--travel { background: var(--odo-travel); }
-.odo-key--out { background: var(--status-bad); }
-.odo-key--out-hatch { background: repeating-linear-gradient(135deg, var(--status-bad) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--status-bad); }
-.odo-key--dot-daytona { background: var(--chapter-imsa); opacity: 0.45; border-radius: 50%; width: 8px; height: 8px; }
+.odo-key--race-soft { background: var(--odo-soft); }
+.odo-key--travel { background: var(--odo-travel-mark); }
+.odo-key--out { background: var(--odo-out); }
+.odo-key--out-hatch { background: repeating-linear-gradient(135deg, var(--odo-out) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--odo-out); }
+.odo-key--finished { background: var(--odo-finished); }
+.odo-key--dot-daytona { background: var(--odo-soft); border-radius: 50%; width: 8px; height: 8px; }
+.career-odometer--r2 .odo-key--dot-daytona { background: var(--chapter-imsa); opacity: 0.45; }
 
 /* A drawing's key line doubles as its readout: the hovered (or tapped) mark
  * reads here, in text ink, its swatch beside it. */
@@ -337,8 +365,8 @@
   background: repeating-linear-gradient(135deg, var(--odo-race) 0 1.5px, var(--paper) 1.5px 4px);
   box-shadow: inset 0 0 0 1px var(--odo-race);
 }
-.odo-scale__part--race-soft { background: color-mix(in srgb, var(--odo-race) 32%, var(--paper)); }
-.odo-scale__part--travel { background: var(--odo-travel); }
+.odo-scale__part--race-soft { background: var(--odo-soft); }
+.odo-scale__part--travel { background: var(--odo-travel-mark); }
 /* Hover: the bar in hand goes bolder, its part (or the whole bar from its
  * label) stays full, everything else steps back. */
 .odo-scale__fill { transform-origin: left center; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
@@ -352,7 +380,7 @@
   top: 50%;
   width: 7%;
   height: 0;
-  border-top: 1.5px dashed var(--grey-ink3);
+  border-top: 1.5px dashed var(--odo-floor);
 }
 .odo-scale { --label-w: 7.5em; }
 /* The marks sit on the bars' own scale, which starts after the label column. */
@@ -382,10 +410,11 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--place, var(--ink));
+  background: var(--odo-place-mark, var(--ink));
   cursor: default;
   transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), opacity 140ms ease;
 }
+.career-odometer--r2 .odo-places__dots i { background: var(--place, var(--ink)); }
 .odo-places__name { font-size: 13px; color: var(--ink-secondary); white-space: nowrap; cursor: default; }
 .odo-places--hot .odo-places__country { opacity: 0.35; transition: opacity 140ms ease; }
 .odo-places--hot .odo-places__country--hot { opacity: 1; }
@@ -395,12 +424,13 @@
 /* The other drivers: a dot per name. */
 .odo-people svg { display: block; }
 .odo-people svg { cursor: default; touch-action: manipulation; }
-.odo-people__dot { fill-opacity: 0.9; }
-/* Daytona-only drivers: the IMSA colour, stepped back, so the single-seater
- * rivals lead. */
-.odo-people__dot--daytona { fill-opacity: 0.4; }
-.odo-people__dot { transition: fill-opacity 140ms ease; }
-.odo-people--focus .odo-people__dot--off { fill-opacity: 0.08; }
+/* Round 3: the fill comes from the drawing (ink, the soft step for the
+ * Daytona-only names, a series hue only for the series in hand). Round 2
+ * (`odocolour=old`): every dot in its series hue, Daytona stepped back. */
+.odo-people__dot { transition: fill 140ms ease, fill-opacity 140ms ease; }
+.career-odometer--r2 .odo-people__dot { fill-opacity: 0.9; }
+.career-odometer--r2 .odo-people__dot--daytona { fill-opacity: 0.4; }
+.career-odometer--r2 .odo-people--focus .odo-people__dot--off { fill-opacity: 0.08; }
 .odo-chips { display: inline-flex; gap: 2px; align-items: center; }
 .odo-chip { display: block; width: 14px; height: 12px; border-radius: 2px; cursor: default; transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1); }
 .odo-chip--on { transform: scale(1.25); box-shadow: 0 0 0 1px var(--paper), 0 0 0 2px var(--ink); }
@@ -418,14 +448,14 @@
   width: 8px;
   height: 22px;
   border-radius: 2px;
-  background: color-mix(in srgb, var(--chapter-indy) 30%, var(--paper));
+  background: var(--odo-finished);
   cursor: pointer;
   transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), opacity 140ms ease;
 }
-.odo-races__cell--contact { background: var(--status-bad); }
+.odo-races__cell--contact { background: var(--odo-out); }
 .odo-races__cell--mechanical {
-  background: repeating-linear-gradient(135deg, var(--status-bad) 0 1.5px, var(--paper) 1.5px 4px);
-  box-shadow: inset 0 0 0 1px var(--status-bad);
+  background: repeating-linear-gradient(135deg, var(--odo-out) 0 1.5px, var(--paper) 1.5px 4px);
+  box-shadow: inset 0 0 0 1px var(--odo-out);
 }
 .odo-races--hot .odo-races__cell { opacity: 0.45; }
 .odo-races--hot .odo-races__cell--hot { opacity: 1; transform: scale(1.35, 1.4); box-shadow: 0 0 0 1px var(--paper), 0 0 0 2px var(--ink); }
@@ -497,7 +527,15 @@
 .life-how-toggle { align-self: flex-start; justify-self: start; }
 .life-how p { margin: 0 0 10px; font-size: 14.5px; line-height: 1.55; color: var(--ink-secondary); text-wrap: pretty; }
 
-.life-grid { position: relative; width: 100%; }
+.life-grid {
+  position: relative;
+  width: 100%;
+  /* Round 3 (switch `lifecolour`): a race week in ink; while a series is lit,
+   * the other race weeks step back to this faint ink. */
+  --life-race: var(--ink);
+  --life-unlit: color-mix(in srgb, var(--ink) 17%, var(--paper));
+}
+.life-grid__race { transition: fill 160ms ease; }
 .life-grid svg { display: block; outline: none; touch-action: manipulation; overflow: visible; }
 .life-grid svg:focus-visible { outline: 2px solid var(--amber); outline-offset: 8px; }
 .life-grid__axis { font-size: 12.5px; fill: var(--ink-muted); }
@@ -561,6 +599,12 @@
   vertical-align: -1px;
 }
 .series-key__empty { box-shadow: inset 0 0 0 1px var(--grey-line); }
+.series-key__race { background: var(--ink); }
+/* ink: the series sit on their own line, named, each with a small dot of its
+ * hue; pointing at one lights its weeks. */
+.series-key__light { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 15px; }
+.series-key--ink .series-key__series i { width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+
 
 
 /* ---------- 4. the travel map ---------- */

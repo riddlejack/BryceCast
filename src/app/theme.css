@@ -99,9 +99,13 @@
    * The other versions sit under the `palette` switch after this block.
    * Series colour comes only from these tokens (chapterTint() in
    * careerExplorer.tsx maps series to them). */
-  --chapter-scca: #5633a3;
-  --chapter-f1600: #8266d2;
-  --chapter-rcffs: #a59ff6;
+  /* Round 3 (proxy review 2: SCCA and F1600 hard to tell apart on the 2019
+   * charts): the violet steps spread wider in lightness, SCCA deep, F1600 mid,
+   * RCFFS light. SCCA/F1600 dE 17 -> 26 normal and 26+ in all three CVD
+   * simulations; F1600 against GB3 stays above the old site floor (deutan 8.7). */
+  --chapter-scca: #3a1d78;
+  --chapter-f1600: #8f68cf;
+  --chapter-rcffs: #b3abf6;
   --chapter-ff: #016a9f;
   --chapter-gb3: #349fc2;
   --chapter-euro: #057d55;
