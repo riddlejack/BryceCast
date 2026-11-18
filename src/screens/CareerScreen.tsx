@@ -1041,8 +1041,11 @@ const IncidentsVisual = () => {
 const figureFacts = (figure: UiCareerFigure): string[] => {
   const facts: string[] = [];
   if (figure.denominator) facts.push(`Out of ${wholeNumber.format(figure.denominator.value)} ${figure.denominator.unit}.`);
+  /* The range, unless the caveat already says it ("between 378 and 380 people"). */
   if (figure.id.startsWith('otherDriverRecords') && figure.range) {
-    facts.push(`${wholeNumber.format(figure.range.low)} to ${wholeNumber.format(figure.range.high)} people.`);
+    const low = wholeNumber.format(figure.range.low);
+    const high = wholeNumber.format(figure.range.high);
+    if (!(figure.caveat?.includes(low) && figure.caveat.includes(high))) facts.push(`${low} to ${high} people.`);
   }
   if (figure.class === 'modelled_range' && figure.range?.base) {
     facts.push(`Middle estimate ${wholeNumber.format(figure.range.base)} ${figure.unit}.`);
@@ -1526,7 +1529,9 @@ const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }
       {(() => {
         const reads = races.flatMap((race) => model.wetByEvent.get(race.eventId) ?? []);
         if (reads.length === 0) return null;
-        const of = (n: number) => (n === total ? (total === 1 ? 'the race' : `all ${total} races`) : `${n} of ${total} races`);
+        /* "in the race", "in both races", "in all 3 races", "in 1 of 3 races" */
+        const of = (n: number) =>
+          n === total ? (total === 1 ? 'the race' : total === 2 ? 'both races' : `all ${total} races`) : `${n} of ${total} races`;
         // each race's track in the source's words with who called it (app/wetDry.ts), alike ones counted together
         const counts = new Map<string, number>();
         for (const read of reads) counts.set(read.words, (counts.get(read.words) ?? 0) + 1);
