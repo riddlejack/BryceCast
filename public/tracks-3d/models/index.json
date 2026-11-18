@@ -441,6 +441,45 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from LINZ (CC BY 4.0), SRTM and others. ESA WorldCover 2021 (CC BY 4.0).",
    "career": true
+  },
+  "monza-gp": {
+   "file": "/tracks-3d/models/monza-gp.json",
+   "kind": "venue",
+   "bytes": 570083,
+   "gzipBytes": 181313,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/monza-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "summit-point-main": {
+   "file": "/tracks-3d/models/summit-point-main.json",
+   "kind": "venue",
+   "bytes": 187752,
+   "gzipBytes": 63469,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/summit-point-main-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "njmp-thunderbolt": {
+   "file": "/tracks-3d/models/njmp-thunderbolt.json",
+   "kind": "venue",
+   "bytes": 147513,
+   "gzipBytes": 49415,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/njmp-thunderbolt-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",

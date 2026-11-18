@@ -7926,6 +7926,78 @@
      "track_highlands_motorsport_park"
     ],
     "call": "Full circuit, 22 turns, 4.1 km, clockwise: Castrol Toyota FR Oceania, February 2024 (research notes item 3; the career data's 4.0 km is kept on the site). OSM's main line with the bridge crossover (4146 m, +1.1%), not its short cut-throughs; the crossover is drawn flat, both roads at ground level."
+   },
+   "monza-gp": {
+    "camera": {
+     "azim": 245,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -231.97675997257792,
+      -55.5771617798111,
+      -113.44404453137552
+     ],
+     "D": 3612.40761113798,
+     "elev": 40,
+     "azim": 245
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.9988546628855217,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_autodromo_nazionale_monza"
+    ],
+    "call": "Grand Prix circuit (5.793 km): Euroformula Open, September 2023. August 2024 resurface, kerbs and gravel strips came after his race; the centreline is not reported changed (research notes table). OSM loop through the full Variante del Rettifilo, not its two escape roads."
+   },
+   "summit-point-main": {
+    "camera": {
+     "azim": 95,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      48.16876964129162,
+      -66.48525390147842,
+      -47.50295846202875
+     ],
+     "D": 1971.9543331212897,
+     "elev": 40,
+     "azim": 95
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.2489715395252814,
+    "layout": "Main Circuit",
+    "trackIds": [
+     "track_summit_point_motorsports_park"
+    ],
+    "call": "Main circuit, 10 turns, 2.0 mi (3.219 km): F1600 Championship Series, August 2019. Repaved October 2017, before (research notes table). OSM loop 3222 m; the other loops are the Shenandoah circuit."
+   },
+   "njmp-thunderbolt": {
+    "camera": {
+     "azim": 330,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      6.016208965590748,
+      -9.740017254397625,
+      2.697116778891099
+     ],
+     "D": 2187.426430596199,
+     "elev": 40,
+     "azim": 330
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 3.5300894614021803,
+    "layout": "Thunderbolt",
+    "trackIds": [
+     "track_new_jersey_motorsports_park_thunderbolt"
+    ],
+    "call": "Thunderbolt, 2019 Classic route with both chicanes (2.25 mi, 3.621 km): F1600 Championship Series, September 2019. The 2023-24 repave widened the Turn 1 entry by an unconfirmed amount and the 2025-26 'Devil's Pass' branch came after; this model is today's OSM line along the Classic route, so the Turn 1 entry width is approximate (research notes table). OSM's loop measures 3504 m, 3.2% under the published length."
    }
   },
   "generated": "2026-11-17",
