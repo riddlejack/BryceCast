@@ -1148,7 +1148,9 @@ for (const [field, sourceField] of [
   ['figures', 'figures'],
   ['lifeShare', 'lifeShare'],
   ['weeksGrid', 'weeksGrid'],
-  ['travelLegs', 'travelLegs']
+  ['travelLegs', 'travelLegs'],
+  ['otherDrivers', 'otherDrivers'],
+  ['timeBreakdown', 'timeBreakdown']
 ]) {
   if (JSON.stringify(lifeStats[field]) !== JSON.stringify(careerFiguresSource[sourceField])) {
     fail(`careerLab.lifeStats.${field} must mirror the validated career_figures.json.`);
@@ -1181,6 +1183,22 @@ for (const [field, sourceField] of [
   }
   if (lifeStats.travelLegs.totalMiles !== lifeStats.travel.greatCircleMinimum.miles) {
     fail('careerLab.lifeStats.travelLegs must add up to the great-circle minimum.');
+  }
+  if (
+    lifeStats.otherDrivers.rows.length !== byId.otherDriverRecords.value ||
+    lifeStats.otherDrivers.singleSeaterCount !== byId.otherDriverRecordsSingleSeater.value
+  ) {
+    fail('careerLab.lifeStats.otherDrivers must carry one row per counted driver record.');
+  }
+  {
+    const time = lifeStats.timeBreakdown;
+    if (
+      time.timedRaces.hours !== byId.raceTimeTimed.value ||
+      Math.abs(time.timedRaces.hours + time.untimedRaces.hours - byId.raceTimeAll.value) > 0.011 ||
+      time.timedRaces.count + time.untimedRaces.count + time.racesWithoutLaps !== byId.races.value
+    ) {
+      fail('careerLab.lifeStats.timeBreakdown must add up to the time-racing figures.');
+    }
   }
 }
 // A race whose official sheet lists no laps (a disqualification) stays a race

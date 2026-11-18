@@ -3776,6 +3776,10 @@ const buildPackage = () => {
           lifeShare: careerFigures.lifeShare,
           weeksGrid: careerFigures.weeksGrid,
           travelLegs: careerFigures.travelLegs,
+          /* The odometer's hover layers (round 2): a name for each of the other
+             drivers' dots, and the parts behind the time-in-the-car bars. */
+          otherDrivers: careerFigures.otherDrivers,
+          timeBreakdown: careerFigures.timeBreakdown,
           caveats: [
             'Every canonical Bryce race row counts. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
             'The physical-session number is a floor: exact observations and F1600 lower bounds stay separate; FROC and private-test gaps remain unknown.',
