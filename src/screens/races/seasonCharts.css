@@ -1,0 +1,69 @@
+/* The Races page's season charts and the "2023 and earlier" drawer
+ * (career round 3, Nov 18 2026). Scoped under the page or the chart. */
+
+.fseason svg text { user-select: none; }
+.fseason__note text { pointer-events: none; }
+
+/* ---------- 2023 and earlier, behind one disclosure ---------- */
+
+.races-index .races-earlier {
+  border-top: 1px solid var(--grid-hairline);
+  border-bottom: 1px solid var(--grid-hairline);
+}
+.races-index .races-earlier__toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 20px;
+  width: 100%;
+  min-height: 76px;
+  padding: 18px 2px;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.races-index .races-earlier__toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+.races-index .races-earlier__head { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.races-index .races-earlier__title { font-size: clamp(22px, 1.8vw, 32px); font-weight: 620; letter-spacing: -0.02em; line-height: 1.1; }
+.races-index .races-earlier__sub { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; font-size: 15px; color: var(--ink-secondary); }
+.races-index .races-earlier__series { display: inline-flex; flex-wrap: wrap; gap: 4px 12px; }
+.races-index .races-earlier__series span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.races-index .races-earlier__series i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.races-index .races-earlier__count { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.races-index .races-earlier__cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 15px;
+  color: var(--link);
+  white-space: nowrap;
+}
+@media (hover: hover) { .races-index .races-earlier__toggle:hover .races-earlier__cue span { text-decoration: underline; text-underline-offset: 3px; } }
+.races-index .races-earlier__cue svg { transition: transform 220ms ease; }
+.races-index .races-earlier[data-open] .races-earlier__cue svg { transform: rotate(180deg); }
+
+/* The body grows from nothing to its height: nothing above it moves, and it
+ * holds no space while closed. Once open it stops clipping, so a chart's
+ * card can rise over the year's heading. */
+.races-index .races-earlier__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.races-index .races-earlier[data-open] .races-earlier__body { grid-template-rows: 1fr; }
+.races-index .races-earlier__inner { min-height: 0; overflow: hidden; }
+.races-index .races-earlier[data-settled] .races-earlier__inner { overflow: visible; }
+.races-index .races-earlier__seasons { display: flex; flex-direction: column; gap: var(--section-gap); padding: 8px 0 clamp(28px, 2.6vw, 44px); }
+@media (prefers-reduced-motion: reduce) {
+  .races-index .races-earlier__body { transition: none; }
+}
+@media (max-width: 639px) {
+  .races-index .races-earlier__toggle { grid-template-columns: minmax(0, 1fr); padding: 16px 0 6px; }
+  .races-index .races-earlier__cue { padding: 0; }
+}

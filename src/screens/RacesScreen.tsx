@@ -1,11 +1,10 @@
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { chartFont, useMeasuredWidth, PointerOpen } from '../app/charts';
 import { useTapPreview } from '../app/tapPreview';
 import { formatDate, formatGain, formatNumber, formatPosition } from '../app/format';
 import { Link, useRouter } from '../app/router';
-import { displayRaceLabelText } from '../data/debriefArchive';
 import { getSeasonIndex } from '../data/seasons';
 import { getUpcomingEvents, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
 import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRaceShellModel';
@@ -19,16 +18,11 @@ import { RaceStillCard, RowPicture } from './racesPeek';
 import { AlsoInYear, EarlierSeason } from './racesEarlier';
 import { anyWet, RainStreaks, wetFor } from './raceWet';
 import { switchValue } from '../review/switches';
+import { FieldSeason, seasonLook } from './races/fieldSeason';
+import { archiveLabel, firstWinsOf, indyMarks } from './races/seasonMarks';
+import { EarlierDrawer, type EarlierSummary } from './races/earlierDrawer';
 import './fieldFloor.css';
 import './race.css';
-
-/** Archive labels drop the series prefix (everything here is INDY NXT) and
- *  write a doubleheader the way the rest of the site does: "Grand Prix of
- *  Monterey, Race 2". */
-const archiveLabel = (raceLabel: string): string =>
-  displayRaceLabelText(raceLabel)
-    .replace(/^INDY NXT by Firestone at (the )?/i, '')
-    .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
 
 /* ---------- the row's track ----------
  * Career round 2 (Jack, Nov 17: "change the 2D track shape on the races page
@@ -314,6 +308,13 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   );
 };
 
+/* Round 3: the INDY NXT season in the same picture as the years before it
+ * (races/fieldSeason.tsx), with its championship standing underneath. */
+const IndySeason = ({ rows, season, look }: { rows: UiSeasonIndexRow[]; season: number; look: 'field' | 'share' }) => {
+  const marks = useMemo(() => indyMarks(rows), [rows]);
+  return <FieldSeason marks={marks} look={look} label={`${season} season: ${rows.length} rounds by weekend, each his finish in that day's field, and his championship standing`} />;
+};
+
 /* ---------- list rows: the index under the spine ---------- */
 
 const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
@@ -344,7 +345,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
           </span>
         ) : null}
       </span>
-      <span className={`stat__delta ${gain?.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`} style={{ textAlign: 'right' }}>
+      <span className={`stat__delta stat__delta--${gain?.direction ?? 'flat'}`} style={{ textAlign: 'right' }}>
         {gain ? gain.text : ''}
       </span>
       <span className="tower__gap tnum">{row.points !== null ? `${row.points} pts` : ''}</span>
@@ -473,10 +474,46 @@ const RemainingSeason = ({
   </div>
 );
 
+/* Scroll to a season and keep it there while the page above it settles (a
+ * drawer year's charts measure and draw after it opens). Any wheel, touch or
+ * key from the reader lets go at once. */
+const pinToSeason = (id: string, smooth: boolean) => {
+  const node = () => document.getElementById(id);
+  node()?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+  let stop = false;
+  const cancel = () => {
+    stop = true;
+  };
+  const events = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const;
+  events.forEach((name) => window.addEventListener(name, cancel, { passive: true }));
+  const done = () => events.forEach((name) => window.removeEventListener(name, cancel));
+  const t0 = performance.now();
+  let last = Number.NaN;
+  const check = () => {
+    const el = node();
+    if (stop || !el) return done();
+    const top = el.getBoundingClientRect().top;
+    const want = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+    /* once a smooth scroll has come to rest, put it right if the page moved under it */
+    if (Math.abs(top - last) < 0.5 && Math.abs(top - want) > 2) el.scrollIntoView({ block: 'start' });
+    last = top;
+    if (performance.now() - t0 < 1800) requestAnimationFrame(check);
+    else done();
+  };
+  requestAnimationFrame(check);
+};
+
 /* ---------- the years, as one line of jump links ----------
  * Eight seasons, newest first: the year, how many races, a swatch per series.
  * A link scrolls to its season card. */
-const YearIndex = ({ years }: { years: Array<{ year: number; count: number; series: string[] }> }) => (
+const YearIndex = ({
+  years,
+  beforeOpen
+}: {
+  years: Array<{ year: number; count: number; series: string[] }>;
+  /** Opens the 2023-and-earlier drawer when a year inside it is picked. */
+  beforeOpen: (year: number) => boolean;
+}) => (
   <nav className="races-years" aria-label="Seasons">
     {years.map(({ year, count, series }) => (
       <a
@@ -485,10 +522,11 @@ const YearIndex = ({ years }: { years: Array<{ year: number; count: number; seri
         className="races-years__year"
         onClick={(event) => {
           if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-          const target = document.getElementById(`season-${year}`);
-          if (!target) return;
           event.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const waited = beforeOpen(year);
+          /* a year in the drawer exists once the drawer has rendered open */
+          if (waited) window.setTimeout(() => pinToSeason(`season-${year}`, true), 60);
+          else pinToSeason(`season-${year}`, true);
         }}
       >
         <span className="races-years__label">{year}</span>
@@ -554,6 +592,51 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
     const indyCount = seasons.find(([season]) => season === year)?.[1].length ?? 0;
     return { year, count: indyCount + others.length, series };
   });
+  const firstWins = useMemo(() => firstWinsOf(archive), [archive]);
+  const look = seasonLook();
+
+  /* Round 3 (Jack, Nov 18): the years before INDY NXT sit behind one
+   * disclosure, "2023 and earlier"; the INDY NXT seasons stay as they are. */
+  const firstIndy = indyYears.size ? Math.min(...indyYears) : Infinity;
+  const earlierYears = allYears.filter((year) => year < firstIndy && !indyYears.has(year));
+  const laterYears = allYears.filter((year) => !earlierYears.includes(year));
+  const earlierSummary = useMemo((): EarlierSummary | null => {
+    if (!earlierYears.length) return null;
+    const races = earlierYears.flatMap((year) => archiveByYear.get(year) ?? []);
+    const series = new Map<string, string>();
+    for (const race of [...races].sort((a, b) => a.day.localeCompare(b.day))) if (!series.has(race.seriesName)) series.set(race.seriesName, race.seriesShort);
+    return {
+      first: Math.min(...earlierYears),
+      last: Math.max(...earlierYears),
+      races: races.length,
+      series: [...series.entries()].map(([name, short]) => ({ name, short }))
+    };
+    // earlierYears is derived from archiveByYear and the index
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [archiveByYear, earlierYears.join(',')]);
+
+  const [drawer, setDrawer] = useState<{ open: boolean; instant: boolean }>(() => {
+    const hash = typeof window === 'undefined' ? '' : window.location.hash;
+    const year = Number(hash.replace('#season-', ''));
+    return { open: switchValue('racesyears') === 'open' || (hash.startsWith('#season-') && year < firstIndy), instant: true };
+  });
+  const openFor = useCallback(
+    (year: number): boolean => {
+      if (year >= firstIndy || drawer.open) return false;
+      setDrawer({ open: true, instant: true });
+      return true;
+    },
+    [firstIndy, drawer.open]
+  );
+  /* An address that ends #season-2019 lands on that year once it has drawn. */
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.startsWith('#season-') || Number(hash.slice(8)) >= firstIndy) return;
+    const timer = window.setTimeout(() => pinToSeason(hash.slice(1), false), 60);
+    return () => window.clearTimeout(timer);
+    // once, on arrival
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="page stack races-index">
@@ -567,16 +650,17 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
         }
       />
       <DataFreshness />
-      {years.length > 1 ? <YearIndex years={years} /> : null}
+      {years.length > 1 ? <YearIndex years={years} beforeOpen={openFor} /> : null}
       {total === 0 ? (
         <Card>
           <Unavailable>No completed races in the package yet.</Unavailable>
         </Card>
       ) : (
-        allYears.map((season) => {
+        <>
+        {laterYears.map((season) => {
           const rows = seasons.find(([year]) => year === season)?.[1] ?? null;
           const others = archiveByYear.get(season) ?? [];
-          if (!rows) return <EarlierSeason key={season} year={season} races={others} />;
+          if (!rows) return <EarlierSeason key={season} year={season} races={others} firstWins={firstWins} />;
           const remaining = remainingRoundsFor(rows, upcomingBySeason.get(season) ?? []);
           return (
           <div key={season} id={`season-${season}`} className="races-season">
@@ -626,24 +710,43 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
             {/* The season's shape leads the card; the rounds still to run sit
                 between it and the completed rows, so the whole card reads as
                 one timeline — future at the top, past running down. */}
-            <p className="caption caption--secondary races-index__legend">
-              A ring marks a top-5 finish · a hollow dot a day that ended early
-              {anyWet(rows.map((row) => row.sessionId)) ? ' · rain streaks a wet track' : ''}
-              {switchValue('fieldfloor') !== 'off' ? ' · a short dash marks last place in that day’s field' : ''} · the quiet line is his championship position ·{' '}
-              <PointerOpen what="any round" />
-            </p>
-            <SeasonSpine rows={rows} />
+            {look === 'old' ? (
+              <p className="caption caption--secondary races-index__legend">
+                A ring marks a top-5 finish · a hollow dot a day that ended early
+                {anyWet(rows.map((row) => row.sessionId)) ? ' · rain streaks a wet track' : ''}
+                {switchValue('fieldfloor') !== 'off' ? ' · a short dash marks last place in that day’s field' : ''} · the quiet line is his championship position ·{' '}
+                <PointerOpen what="any round" />
+              </p>
+            ) : (
+              <p className="caption caption--secondary races-index__legend">
+                {look === 'share' ? 'Dot: the share of the field he beat, a win at the top' : 'Dot: his finish, P1 at the top · line below it: the cars he beat'} · grey line:
+                his weekend average · ring: a top 5 · hollow: ended early
+                {anyWet(rows.map((row) => row.sessionId)) ? ' · streaks: a wet track' : ''} · <PointerOpen what="any round" />
+              </p>
+            )}
+            {look === 'old' ? <SeasonSpine rows={rows} /> : <IndySeason rows={rows} season={season} look={look} />}
             {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}
             <div className="tower" style={{ margin: '10px -12px 0' }}>
               {[...rows].reverse().map((row) => (
                 <RaceRow key={row.sessionId} row={row} />
               ))}
             </div>
-            {others.length > 0 ? <AlsoInYear year={season} races={others} /> : null}
+            {others.length > 0 ? <AlsoInYear year={season} races={others} firstWins={firstWins} /> : null}
           </Card>
           </div>
           );
-        })
+        })}
+        {earlierSummary ? (
+          <EarlierDrawer
+            open={drawer.open}
+            instant={drawer.instant}
+            onToggle={() => setDrawer((value) => ({ open: !value.open, instant: false }))}
+            summary={earlierSummary}
+          >
+            {() => earlierYears.map((season) => <EarlierSeason key={season} year={season} races={archiveByYear.get(season) ?? []} firstWins={firstWins} />)}
+          </EarlierDrawer>
+        ) : null}
+        </>
       )}
     </div>
   );

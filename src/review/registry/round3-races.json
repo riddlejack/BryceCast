@@ -1,0 +1,49 @@
+{
+  "lane": "races",
+  "entries": [
+    {
+      "id": "races-season-charts",
+      "page": "/races",
+      "title": "The season charts on the Races page, redrawn for his seasons: each race a dot at his finish with a hairline down to the back of that race's field (the cars he beat), races grouped by weekend with the venue named, a thin grey line through each weekend's average; 2019-2023 and 2024-2026 in one language",
+      "switch": "racescharts",
+      "values": [
+        {
+          "value": null,
+          "label": "field (default): P1 at the top, each dot his finish with a hairline down to the back of that race's field and a tick at the back, so P3 of 11 and P3 of 32 read apart; dots rise from the back of the field to their place as the season draws in; venue under each weekend; first win in a series named over its dot; INDY NXT keeps its championship-standing line underneath"
+        },
+        {
+          "value": "share",
+          "label": "share: every race the same height, from last (bottom) through half (dotted) to won (top), the dot the share of the other cars he beat, as the Career climb measures it; reads fields of 7 and 35 on one scale"
+        },
+        {
+          "value": "old",
+          "label": "old (round 2): one dot per race by date coloured by series, a coloured line per series (2019-2023); the gold season line with field-floor dashes and the round axis (2024-2026)"
+        }
+      ],
+      "look": "Races: point at (or tap) every dot in 2026, 2025 and 2024 and in Also in 2024; open 2023 and earlier and do the same in 2019 (four series, one win), 2020 (fields up to 35) and 2022 (two no-finishes). Flip to share and to old and compare.",
+      "anchor": "#season-2020",
+      "added": "2026-11-18T00:30",
+      "reviewed": false
+    },
+    {
+      "id": "races-earlier-drawer",
+      "page": "/races",
+      "title": "2023 and earlier behind one disclosure under the INDY NXT seasons: closed by default, opens in place (nothing above it moves), keyboard and touch; a year link or an address ending #season-2019 opens it at that year",
+      "switch": "racesyears",
+      "values": [
+        {
+          "value": null,
+          "label": "closed (default): '2023 and earlier · 2019 to 2023, before INDY NXT · 122 races' with the series it holds; 'Show these seasons' opens the five years, each with its chart and its 'Show the N races' rows"
+        },
+        {
+          "value": "open",
+          "label": "open: the drawer and every year's rows open at load (round 2's 'open' value, kept for review)"
+        }
+      ],
+      "look": "Races: scroll past 2024 to '2023 and earlier'; open and close it by click, by Tab + Enter, and by tap on the phone; click 2019 in the year links at the top and land on 2019.",
+      "anchor": "",
+      "added": "2026-11-18T00:30",
+      "reviewed": false
+    }
+  ]
+}
