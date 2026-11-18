@@ -8046,6 +8046,54 @@
      "track_euromarque_motorsport_park"
     ],
     "call": "Full circuit, 11 turns, 3.330 km, anticlockwise: Castrol Toyota FR Oceania, February 2024. Euromarque became Ruapuna's naming sponsor in February 2023; this is Ruapuna Park, Christchurch, not Pukekohe (research notes item 2). OSM loop: the three 'Raceway Ruapuna Park' ways (3286 m, 1.3% under), not the short connector that multiplies OSM's loops."
+   },
+   "sebring-full": {
+    "camera": {
+     "azim": 20,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      6.732256714933261,
+      -84.50925018105549,
+      141.30896292767028
+     ],
+     "D": 2236.7589046014073,
+     "elev": 40,
+     "azim": 20
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.6705861711118004,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_sebring_international_raceway"
+    ],
+    "call": "Full course, 17 turns, 3.74 mi (6.019 km): SCCA Hoosier Super Tour, January 2019 (research notes item 6; Sebring has not been repaved since). OSM loop through every named corner (Sunset Bend, Ullman Straight, Le Mans Curve, Gendebien, Bishop, Tower, Collier, Cunningham, Fangio, Hairpin, Gurney); it measures 5872 m, 2.4% under the published length, OSM's line being drawn with few nodes."
+   },
+   "daytona-road-course": {
+    "camera": {
+     "azim": 55,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -33.643774447166706,
+      -16.198985381143284,
+      -14.997410896680627
+     ],
+     "D": 2767.037634188392,
+     "elev": 40,
+     "azim": 55
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.7932860984962797,
+    "layout": "Sports car road course",
+    "trackIds": [
+     "track_daytona_international_speedway"
+    ],
+    "call": "Sports-car road course, 12 turns, 3.56 mi (5.729 km), counterclockwise: 2025 Rolex 24 (research notes item 10). OSM loop through the International and West Horseshoes and the Le Mans (Bus Stop) chicane, not the '2021 NASCAR chicane' (5768 m). One OSM link way is tagged oneway=alternating, so this layout searches every kept way, not only oneway ones. Post-2023 kerb and paving changes at the Bus Stop left the layout unchanged. Pit lane: the main pit road along the tri-oval (OSM way 352067003), not the infield road-course pit lane; start/finish beside its middle (approximate: OSM has no start/finish node)."
    }
   },
   "generated": "2026-11-17",
