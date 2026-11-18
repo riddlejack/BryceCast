@@ -2151,6 +2151,33 @@ const compareCareerMomentChronology = (left, right) =>
   String(left?.eventStartDate ?? '').localeCompare(String(right?.eventStartDate ?? '')) ||
   String(left?.sessionId ?? '').localeCompare(String(right?.sessionId ?? ''));
 
+/** Every ledger race the conversion table leaves out (no classified finish),
+ *  with the event name the weeks grid gives its event and the series name the
+ *  conversion rows give its series. Chronological; nothing is invented: a field
+ *  the ledger lacks stays null. */
+const buildUnclassifiedRaces = ({ ledger, conversion, weeks }) => {
+  const classified = new Set(conversion.map((row) => String(row.sessionId ?? '')));
+  const seriesNames = new Map(conversion.map((row) => [String(row.seriesId ?? ''), String(row.seriesName ?? '')]));
+  const eventNames = new Map();
+  for (const week of weeks) for (const race of week.races ?? []) if (race.eventId) eventNames.set(race.eventId, race.eventName ?? null);
+  return ledger
+    .filter((row) => row.sessionId && !classified.has(String(row.sessionId)))
+    .map((row) => ({
+      sessionId: String(row.sessionId),
+      eventId: row.eventId || null,
+      eventName: eventNames.get(row.eventId) ?? null,
+      eventStartDate: row.eventStartDate || null,
+      seriesId: row.seriesId || null,
+      seriesName: seriesNames.get(String(row.seriesId)) || null,
+      seasonYear: numberOrNull(row.seasonYear),
+      trackId: row.trackId || null,
+      trackName: row.trackName || null,
+      country: row.country || null,
+      status: row.status || null
+    }))
+    .sort((a, b) => String(a.eventStartDate).localeCompare(String(b.eventStartDate)) || a.sessionId.localeCompare(b.sessionId));
+};
+
 const buildCareerMoments = ({ resultConversion, seasonIndex }) => {
   const chronologicalRows = resultConversion
     .filter((row) => row.sessionId && row.eventStartDate)
@@ -3668,6 +3695,14 @@ const buildPackage = () => {
         resultConversionRows: careerLabPayload.resultConversionRows,
         resultConversion: careerConversionEnriched,
         resultConversionSample: careerConversionEnriched.slice(0, 25),
+        // The races he entered with no classified finish (DNS, DNF, DSQ), which
+        // the conversion table leaves out, from the A2 miles ledger (every
+        // canonical race row), so the Races page can list all of his races.
+        unclassifiedRaces: buildUnclassifiedRaces({
+          ledger: careerLifeStatsMilesRaced,
+          conversion: careerConversionEnriched,
+          weeks: careerFigures.weeksGrid?.weeks ?? []
+        }),
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
