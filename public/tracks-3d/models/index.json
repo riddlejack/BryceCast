@@ -311,6 +311,58 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
+  },
+  "cadwell-park-full": {
+   "file": "/tracks-3d/models/cadwell-park-full.json",
+   "kind": "venue",
+   "bytes": 153613,
+   "gzipBytes": 53350,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/cadwell-park-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "algarve-gp": {
+   "file": "/tracks-3d/models/algarve-gp.json",
+   "kind": "venue",
+   "bytes": 163619,
+   "gzipBytes": 57942,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/algarve-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "road-atlanta-full": {
+   "file": "/tracks-3d/models/road-atlanta-full.json",
+   "kind": "venue",
+   "bytes": 299263,
+   "gzipBytes": 104143,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/road-atlanta-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0).",
+   "career": true
+  },
+  "watkins-glen-long": {
+   "file": "/tracks-3d/models/watkins-glen-long.json",
+   "kind": "venue",
+   "bytes": 267751,
+   "gzipBytes": 90903,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/watkins-glen-long-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",

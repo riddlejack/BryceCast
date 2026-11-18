@@ -7686,6 +7686,102 @@
      "track_circuit_of_the_americas"
     ],
     "call": "Grand Prix circuit, 20 turns (5.513 km): SCCA Hoosier Super Tour, February 2019. 2022-24 repaving, concrete slabs and verge changes moved no corner (research notes table). OSM loop without the MotoGP long-lap loop and the short-course links. Start/finish at OSM's 'finish' node (the timing line), as at the Algarve; OSM also has an older 'start-finish' node about 300 m away."
+   },
+   "cadwell-park-full": {
+    "camera": {
+     "azim": 60,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      98.60319738213958,
+      3.843428351195447,
+      -24.201144496376706
+     ],
+     "D": 1790.3246326398437,
+     "elev": 40,
+     "azim": 60
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.7141646764773,
+    "layout": "Full Circuit",
+    "trackIds": [
+     "track_cadwell_park_full"
+    ],
+    "call": "Full circuit (3.520 km): Formula Ford 1600, August 2020. No layout change found since the mid-2000s resurfacing (research notes table). OSM's smooth line onto the start straight, not the unnamed 92 m spur beside it that ends in a square corner."
+   },
+   "algarve-gp": {
+    "camera": {
+     "azim": 285,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      3.556283492848864,
+      13.34928210456169,
+      -10.603414861437368
+     ],
+     "D": 2146.5861523889735,
+     "elev": 40,
+     "azim": 285
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.6489827003765485,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_autodromo_internacional_do_algarve"
+    ],
+    "call": "Grand Prix circuit (4.653 km): Euroformula Open, April 2023. 2024 kerb and run-off works (T4, T8, T14, T15) came after his race; no layout change (research notes table). OSM loop through the named Curva da Torre VIP and Curva Galp, not OSM's unnamed cut-throughs; 4652.9 m against 4653 m official. Start/finish at OSM's 'finish' node (the timing line); OSM's separate 'start' node marks the grid."
+   },
+   "road-atlanta-full": {
+    "camera": {
+     "azim": 75,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -102.3583856006073,
+      17.100245424676107,
+      15.727170931030114
+     ],
+     "D": 2656.885216868182,
+     "elev": 40,
+     "azim": 75
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.514335615641151,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_michelin_raceway_road_atlanta"
+    ],
+    "call": "Full course, 12 turns (4.088 km): SCCA Hoosier Super Tour and F1600 Championship Series, March and April 2019. The Turn 4 chicane went in 2017 and the last full repave was 2007, both before (research notes table). OSM's main line (4095 m), not its 'Motorcycle Turn 12' or two other unnamed bike-course ways."
+   },
+   "watkins-glen-long": {
+    "camera": {
+     "azim": 275,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -64.40892482707142,
+      45.85168485646564,
+      -24.884763209791753
+     ],
+     "D": 2889.288654592743,
+     "elev": 40,
+     "azim": 275
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.8627273290988704,
+    "layout": "Long course (Grand Prix)",
+    "trackIds": [
+     "track_watkins_glen_international"
+    ],
+    "call": "Long course with the Boot, 3.370 mi (5.423 km), through the Inner Loop (Bus Stop): F1600 Championship Series, May 2019 (official timing sheet prints 3.370 mi; research notes item 5). The 2024 Bus Stop rework was kerbs and paving only."
    }
   },
   "generated": "2026-11-17",
