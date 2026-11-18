@@ -193,7 +193,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
-        Amber = races he led the team’s cars home · result order only: where he placed among his own cars, not a read on
+        Coloured = races he led the team’s cars home · result order only: where he placed among his own cars, not a read on
         machinery, setup, or strategy.
         {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} <PointerOpen start what="any race" then="to open it" />.
       </p>
@@ -313,7 +313,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
-        Each line is one race, grid to flag · amber marks a race he gained ground · P1 sits at the top. Grid data is unavailable
+        Each line is one race, grid to flag · colour marks a race he gained ground · P1 sits at the top. Grid data is unavailable
         for 2022’s official feed, so 2022 starts aren’t shown. <PointerOpen start what="a line" then="to open the race" />.
       </p>
     </div>
@@ -682,8 +682,8 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
         {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
-        Open marks = qualifying, filled = the round’s best finish; the amber line follows his best finish through each season, and
-        amber dots mark podium rounds. 2021 qualifying is official TSL grid; 2022 reads the qualifying-session order (no dedicated
+        Open marks = qualifying, filled = the round’s best finish; the coloured line follows his best finish through each season, and
+        coloured dots mark podium rounds. 2021 qualifying is official TSL grid; 2022 reads the qualifying-session order (no dedicated
         grid feed), so the two seasons stay side by side, never merged. <PointerOpen start what="a round" then="to open its best race" />.
       </p>
     </div>

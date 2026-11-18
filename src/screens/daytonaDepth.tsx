@@ -121,7 +121,7 @@ const StintTimeline = ({ pack }: { pack: ImsaDaytonaStintPack }) => {
         {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="imsa-caption">
-        Each blue block is one of his stints, placed by race distance across the car’s {totalLaps} laps; the gaps are his
+        Each coloured block is one of his stints, placed by race distance across the car’s {totalLaps} laps; the gaps are his
         co-drivers at the wheel. Stint boundaries come from pit in/out laps on the official time card. <PointerWord mouse="Hover" touch="Tap" /> a stint for its hour
         of the race, laps, and typical green pace.
       </p>
