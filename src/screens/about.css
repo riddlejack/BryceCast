@@ -1,112 +1,28 @@
-/* ---------- About screen: architecture strip and hard-parts cards ----------
- * Everything else on this page reuses existing theme.css classes (page/stack,
- * card, grid--2, panel--quiet, kicker, caption, section-title, doors/door).
- * This file only covers what theme.css has no equivalent for. */
+/* ---------- About (final pass, November 17, 2026) ----------
+ * The opener reuses the deep dives' frame (deepDives/frame.tsx); the pieces
+ * below it carry their own CSS in screens/aboutData/. This file covers the
+ * page's own head, section rhythm, links and credits. */
 
-.about-pipeline {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.about-head { margin-top: clamp(16px, 3vw, 40px); }
+.about-head .screen-head__title { max-width: 22ch; }
 
-.about-pipeline__step {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  border-top: 1px solid var(--rule-strong, var(--ink));
-  padding: 12px 0 4px;
-  text-align: left;
-  min-width: 0;
-}
+.about-record { margin-top: clamp(8px, 1.5vw, 20px); }
 
-.about-pipeline__step-label {
-  font-size: 14px;
-  font-weight: 580;
-  color: var(--ink-primary);
-}
+.about-section { display: flex; flex-direction: column; gap: clamp(18px, 2vw, 28px); }
+.about-section > .section-title { margin: 0; padding-bottom: 12px; border-bottom: 1px solid var(--grey-hair); }
 
-.about-pipeline__step-note {
-  font-size: 12px;
-  color: var(--ink-muted);
-  line-height: 1.35;
-}
+.about-inline-link { display: inline-flex; align-items: center; gap: 4px; padding: 0 2px; font-size: 14px; }
+.about-after { margin: 0; }
 
-.about-pipeline__arrow {
-  align-self: flex-start;
-  color: var(--ink-muted);
-  flex: none;
-  transform: rotate(90deg);
-}
-
+.about-credits { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 @media (min-width: 900px) {
-  .about-pipeline {
-    flex-direction: row;
-    align-items: stretch;
-    gap: 14px;
-  }
-  .about-pipeline__arrow {
-    transform: none;
-    margin-top: 14px;
-  }
+  .about-credits { grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(24px, 3vw, 56px); }
 }
 
-/* By the numbers: one grid, every figure hung from the same top line, so a
- * one-line note never drops its figure below its neighbours. */
-.about-stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px 24px;
-  align-items: start;
-}
-@media (min-width: 720px) {
-  .about-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-@media (min-width: 1200px) {
-  .about-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.about-credit { display: grid; align-content: start; gap: 6px; }
+@media (max-width: 899px) {
+  .about-credit + .about-credit { border-top: 1px solid var(--divider); padding-top: 14px; }
 }
 
-.about-hardpart {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.about-hardpart__body {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--ink-secondary);
-}
-
-.about-hardpart__link {
-  align-self: flex-start;
-  font-size: 13.5px;
-  padding: 0 2px;
-}
-
-.about-credit {
-  display: grid;
-  gap: 6px;
-  border-top: 1px solid var(--divider);
-  padding-top: 12px;
-}
-
-.about-credit:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-.about-credit__label {
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--ink-primary);
-}
-
-.about-credit__detail {
-  margin: 0;
-  font-size: 14px;
-  color: var(--ink-secondary);
-  line-height: 1.5;
-  max-width: 64ch;
-}
+.about-credit__label { font-size: 14.5px; font-weight: 600; color: var(--ink-primary); }
+.about-credit__detail { margin: 0; font-size: 14px; color: var(--ink-secondary); line-height: 1.5; max-width: 64ch; }

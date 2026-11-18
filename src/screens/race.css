@@ -156,53 +156,6 @@
 .race-page .race-hero__model .track3d__stage { max-height: min(70vh, 760px); }
 .race-page .race-hero__flat { display: flex; flex-direction: column; gap: 12px; }
 
-/* ---------- /career/race/:id ---------- */
-
-.career-race .career-race__sheet {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--section-gap) var(--card-gap);
-  align-items: start;
-}
-@media (min-width: 1000px) {
-  .career-race .career-race__sheet--art { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
-}
-
-.career-race .career-race__result {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px 36px;
-  align-items: flex-end;
-}
-
-.career-race .career-race__facts {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 10px 24px;
-  margin: 22px 0 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--grid-hairline);
-  font-size: 14px;
-}
-.career-race .career-race__facts dt { color: var(--ink-muted); }
-.career-race .career-race__facts dd { margin: 0; color: var(--ink-primary); }
-
-.career-race .career-race__art { min-width: 0; }
-.career-race .career-race__art-caption {
-  margin: 10px 0 0;
-  font-size: 12.5px;
-  color: var(--ink-muted);
-}
-
-.career-race .career-race__nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 10px 24px;
-  margin-top: 16px;
-}
-.career-race .career-race__nav .navlink { color: var(--link); padding: 4px 0; }
-
 /* ---------- /races ---------- */
 
 /* Round 5 (Jack, Nov 16: "a little bit too zoomed in", "not enough white space
@@ -275,5 +228,3 @@
   .races-index > [role='status'] > span:last-child { flex-basis: 100%; }
 }
 
-/* Facts in the right-hand column (no track drawing): no rule above them. */
-.career-race .career-race__facts--aside { margin-top: 0; padding-top: 22px; border-top: 0; }
