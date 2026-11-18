@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-11-18T07:46:39Z
-Source hash: `256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c`
+Generated: 2026-11-18T08:08:32Z
+Source hash: `5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600`
 
 ## Source Scope
 
@@ -55,6 +55,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | archived_official_page | 2 |
 | official_json | 2 |
 | press_results | 2 |
+| curated_identity_table | 1 |
 | press_article | 1 |
 
 ## Source Boundary Gaps
@@ -83,7 +84,7 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 - Weather/condition rows: 252.
 - Media index rows: 1130.
-- Source-evidence rows: 1467.
+- Source-evidence rows: 1468.
 - Source-boundary gap rows: 11.
 - Derived metric rows: 453.
 

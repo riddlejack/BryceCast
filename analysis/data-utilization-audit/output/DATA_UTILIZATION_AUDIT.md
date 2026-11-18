@@ -1,9 +1,9 @@
 # BryceCast Data Utilization Audit
 
-Generated: `2026-11-18T07:47:11Z`
-Canonical dataset hash: `256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c`
+Generated: `2026-11-18T08:09:43Z`
+Canonical dataset hash: `5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600`
 Canonical dataset updated: `2026-11-18T07:35:39.711Z`
-Ingestion summary generated: `2026-11-18T07:41:39.611Z`
+Ingestion summary generated: `2026-11-18T08:07:06.026Z`
 Validation: `ok=True`, errors `0`, warnings `1`
 
 ## Decision
@@ -14,7 +14,7 @@ The backend analytics layer still has 8 generated utilization backlog rows. Do n
 
 | Collection | Rows | Utilization status | Value score | Signal |
 | --- | ---: | --- | ---: | --- |
-| drivers | 688 | productized_context_pack | 7.0 | Driver identity is now queryable for cohorts, teammate overlap, shared fields, and source-bounded Career Lab filtering. |
+| drivers | 669 | productized_context_pack | 7.0 | Driver identity is now queryable for cohorts, teammate overlap, shared fields, and source-bounded Career Lab filtering. |
 | series | 10 | productized_context_pack | 4.0 | No major standalone series-dimension signal beyond routing and source-family labels. |
 | teams | 84 | productized_context_pack | 8.0 | Team/era context is now addressable for debrief and Career Lab stories with source-family guards. |
 | cars | 706 | productized_context_pack | 6.5 | Car number, entrant, class, and co-driver/usage context are now addressable across canonical cars. |
@@ -31,7 +31,7 @@ The backend analytics layer still has 8 generated utilization backlog rows. Do n
 | weatherObservations | 252 | productized_context_pack | 7.0 | Weather rows are now queryable by series/session/source family; future value is visual comparison, not additional backend extraction. |
 | mediaAssets | 1130 | productized_context_pack | 6.5 | Media rows are now source-indexed for narrative and source-drawer use; UI must still apply rights-status display rules. |
 | derivedMetrics | 453 | productized_context_pack | 10.0 | All canonical derivedMetric rows are now addressable; deeper interpretation remains in the specialized section/race-lap lanes. |
-| sourceEvidence | 1467 | productized_context_pack | 6.0 | Source-family quality is now queryable; remaining value is visual/source-ops presentation. |
+| sourceEvidence | 1468 | productized_context_pack | 6.0 | Source-family quality is now queryable; remaining value is visual/source-ops presentation. |
 | gaps | 11 | productized_context_pack | 5.0 | All canonical gap rows are now productized as explicit source-boundary truth with row-level IDs and source states preserved. |
 | broadcastRoutes | 0 | not_worth_analyzing_with_rationale | 2.0 | No current rows to analyze. |
 | notificationEvents | 0 | not_worth_analyzing_with_rationale | 2.0 | No current rows to analyze. |

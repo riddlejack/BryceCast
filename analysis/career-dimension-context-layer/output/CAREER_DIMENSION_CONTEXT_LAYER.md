@@ -1,11 +1,11 @@
 # Career Dimension Context Layer
 
-Generated: 2026-11-18T07:42:04Z
-Source hash: `256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c`
+Generated: 2026-11-18T08:07:23Z
+Source hash: `5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600`
 
 ## Source Scope
 
-This lane covers 9866 result rows, 1967 qualifying rows, 84 team rows, 47 tracks, 688 drivers, and 706 cars from the canonical dataset.
+This lane covers 9866 result rows, 1967 qualifying rows, 84 team rows, 47 tracks, 669 drivers, and 706 cars from the canonical dataset.
 
 ## What Became Productized
 
@@ -45,10 +45,10 @@ This lane covers 9866 result rows, 1967 qualifying rows, 84 team rows, 47 tracks
 | Andretti Global | series_indy_nxt | 2024;2025;2026 | 12 | 10 | 305 | 707 | no |
 | Abel Motorsports | series_indy_nxt | 2024;2025;2026 | 11 | 9 | 253 | 582 | no |
 | Chip Ganassi Racing | series_indy_nxt | 2025;2026 | 6 | 5 | 168 | 370 | no |
-| Fortec Motorsports | series_gb3 | 2021;2022 | 8 | 9 | 44 | 332 | no |
+| Fortec Motorsports | series_gb3 | 2021;2022 | 8 | 8 | 44 | 332 | no |
 | Elite Motorsport | series_gb3 | 2021;2022 | 8 | 6 | 46 | 328 | no |
 | Cape Motorsports powered by ECR | series_indy_nxt | 2024;2025;2026 | 6 | 6 | 128 | 308 | no |
-| Douglas Motorsport | series_gb3 | 2021;2022 | 5 | 6 | 26 | 277 | no |
+| Douglas Motorsport | series_gb3 | 2021;2022 | 5 | 5 | 26 | 277 | no |
 | Rodin Carlin | series_gb3 | 2022 | 3 | 3 | 0 | 228 | no |
 | Hitech Pulse-Eight | series_gb3 | 2022 | 3 | 3 | 0 | 227 | no |
 | Arden VRD | series_gb3 | 2022 | 3 | 3 | 0 | 201 | no |
@@ -83,7 +83,6 @@ This lane covers 9866 result rows, 1967 qualifying rows, 84 team rows, 47 tracks
 
 | driverName | cohortLabel | seriesIds | teamCount | resultRows | qualifyingRows | sharedRaceSessionWithBryceCount | sameTeamAsBryceEventCount |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | shared_race_field | series_formula_ford | 0 | 1 | 0 | 1 | 0 |
 | Aaron Telitz | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Adam Adelson | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 | Adam FATHERS | shared_race_field | series_formula_ford | 0 | 16 | 0 | 7 | 0 |
@@ -99,6 +98,7 @@ This lane covers 9866 result rows, 1967 qualifying rows, 84 team rows, 47 tracks
 | Alex Connor | shared_race_field | series_gb3 | 2 | 88 | 6 | 33 | 0 |
 | Alex Crosbie | shared_race_field | series_froc | 0 | 51 | 0 | 6 | 0 |
 | Alex FORES | shared_race_field | series_formula_ford;series_gb3 | 1 | 15 | 4 | 6 | 0 |
+| Alex Palou | shared_race_field | series_imsa_weathertech | 1 | 1 | 0 | 1 | 0 |
 
 ## Caveats
 

@@ -1,6 +1,6 @@
 {
   "asOfDate": "2026-09-19",
-  "generatedAt": "2026-11-18T07:43:19Z",
+  "generatedAt": "2026-11-18T08:08:43Z",
   "items": [
     {
       "availability": "partial",
@@ -1080,7 +1080,7 @@
       "label": "indySummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "cbe532a103f2262a35012b19dedb0081362276ee64f47f696ef513f733449be1",
+      "sha256": "dca3429c9f595d405f18ac739d1cfb4a0adedfa7365742cf86035dc02c49d916",
       "sourcePath": "analysis/indy-nxt-discovery/output/summary.json",
       "surface": "governance"
     },
@@ -1122,13 +1122,13 @@
       "label": "careerCoverage",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "a0249b16a16236c737f278eb687aa37ca31ea88d280c54725d7b6216899571f5",
+      "sha256": "74e2b69cdacaba761cfbf53a6d0a2efe9d1c163a43a6efcb679da185d9dd9f62",
       "sourcePath": "data/career/reports/career-coverage-matrix.json",
       "surface": "governance"
     },
     {
       "availability": "available",
-      "bytes": 48755,
+      "bytes": 48790,
       "caveat": null,
       "confidence": "high",
       "id": "governance:ingestionSummary",
@@ -1136,7 +1136,7 @@
       "label": "ingestionSummary",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "dc187b89049f379618e3462f17d658fac2fe976031f1865498216cb2bab0a545",
+      "sha256": "3bc311ae034f43b148c55ecfa6c3315c22215cc524d52c736618da614ebcdf11",
       "sourcePath": "data/career/reports/ingestion-summary.json",
       "surface": "governance"
     },
@@ -1150,14 +1150,14 @@
       "label": "validationReport",
       "productizationStatus": "productized",
       "recommendedAction": "Use as source precedence, caveat, or validation input.",
-      "sha256": "34cabda782bc7436229ca01d643bf7031369dd59050fea42d2e916e38409f66e",
+      "sha256": "8c22cb38c27c4ac868dff8c3f56d4a1788eec9d5fbb070388920e6869b239297",
       "sourcePath": "data/career/reports/validation-report.json",
       "surface": "governance"
     }
   ],
-  "repoHead": "d970bd5",
+  "repoHead": "642deb4",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.inventory.v1",
-  "sourceHash": "256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c",
+  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
   "sourceRefs": [
     {
       "bytes": 39320,
@@ -1187,7 +1187,7 @@
       "bytes": 1805,
       "path": "analysis/indy-nxt-discovery/output/summary.json",
       "role": "indySummary",
-      "sha256": "cbe532a103f2262a35012b19dedb0081362276ee64f47f696ef513f733449be1"
+      "sha256": "dca3429c9f595d405f18ac739d1cfb4a0adedfa7365742cf86035dc02c49d916"
     },
     {
       "bytes": 1461,
@@ -1205,19 +1205,19 @@
       "bytes": 1501685,
       "path": "data/career/reports/career-coverage-matrix.json",
       "role": "careerCoverage",
-      "sha256": "a0249b16a16236c737f278eb687aa37ca31ea88d280c54725d7b6216899571f5"
+      "sha256": "74e2b69cdacaba761cfbf53a6d0a2efe9d1c163a43a6efcb679da185d9dd9f62"
     },
     {
-      "bytes": 48755,
+      "bytes": 48790,
       "path": "data/career/reports/ingestion-summary.json",
       "role": "ingestionSummary",
-      "sha256": "dc187b89049f379618e3462f17d658fac2fe976031f1865498216cb2bab0a545"
+      "sha256": "3bc311ae034f43b148c55ecfa6c3315c22215cc524d52c736618da614ebcdf11"
     },
     {
       "bytes": 1167,
       "path": "data/career/reports/validation-report.json",
       "role": "validationReport",
-      "sha256": "34cabda782bc7436229ca01d643bf7031369dd59050fea42d2e916e38409f66e"
+      "sha256": "8c22cb38c27c4ac868dff8c3f56d4a1788eec9d5fbb070388920e6869b239297"
     }
   ],
   "statusCounts": {
