@@ -84,6 +84,26 @@
       "anchor": "",
       "added": "2026-11-18T01:20",
       "reviewed": false
+    },
+    {
+      "id": "r2-wet-weeks",
+      "page": "/career",
+      "title": "Wet weekends in his life in weeks: a fine paper-coloured diagonal across each race week that held a wet or damp race; the week's card says how many of the meeting's races were wet, '(modelled)' where the weather model made the call",
+      "switch": "wetweeks",
+      "values": [
+        {
+          "value": null,
+          "label": "on (default): 12 weeks marked, most of them UK Formula Ford and GB3 in 2020 and 2021; a key item 'a race on a wet track'"
+        },
+        {
+          "value": "off",
+          "label": "off: the grid as before"
+        }
+      ],
+      "look": "Career \u2192 His life in weeks. The 2020 Formula Ford autumn is where most of the diagonals sit; 2026 has two (Indianapolis in May, World Wide Technology Raceway in June). Point at a marked week.",
+      "anchor": "",
+      "added": "2026-11-18T01:40",
+      "reviewed": false
     }
   ]
 }

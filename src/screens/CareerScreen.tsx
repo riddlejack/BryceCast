@@ -48,6 +48,9 @@ import {
   raceHref
 } from './careerExplorer';
 import './career.css';
+import { wetFor, type WetRead } from './raceWet';
+import { switchValue } from '../review/switches';
+import './wetWeeks.css';
 
 type Row = Record<string, string | number | null>;
 
@@ -1391,6 +1394,11 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
       eventsByDate.set(key, [...(eventsByDate.get(key) ?? []), event.eventId]);
     }
     const results = new Map<string, RaceResult[]>();
+    const wetByEvent = new Map<string, WetRead[]>();
+    for (const race of uiDataPackage.screens.careerLab.unclassifiedRaces ?? []) {
+      const wet = race.eventId ? wetFor(race.sessionId) : null;
+      if (wet && race.eventId) wetByEvent.set(race.eventId, [...(wetByEvent.get(race.eventId) ?? []), wet]);
+    }
     for (const row of uiDataPackage.screens.careerLab.resultConversion as Row[]) {
       const name = asString(row.eventName) ?? '';
       const candidates = eventsByDate.get(asString(row.eventStartDate) ?? '') ?? [];
@@ -1400,6 +1408,9 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
           .filter((id) => name.startsWith(gridName.get(id) ?? '\u0000'))
           .sort((a, b) => (gridName.get(b)?.length ?? 0) - (gridName.get(a)?.length ?? 0))[0];
       if (!eventId) continue;
+      /* Wet weekends (round 2, intersections): each race's wet read, by meeting. */
+      const wet = wetFor(asString(row.sessionId) ?? '');
+      if (wet) wetByEvent.set(eventId, [...(wetByEvent.get(eventId) ?? []), wet]);
       const list = results.get(eventId) ?? [];
       list.push({ label: asString(row.raceLabel) ?? '', finish: asNumber(row.finishPosition), status: asString(row.status) ?? 'running' });
       results.set(eventId, list);
@@ -1452,7 +1463,8 @@ const useLifeModel = (lifeStats: UiCareerLifeStats) =>
     for (const leg of lifeStats.travelLegs.legs) legMiles.set(`${leg.from.eventId}>${leg.to.eventId}`, leg.greatCircleMiles);
 
     const years = [...new Set(weeks.map((week) => week.year))];
-    return { birth, end, weeks, years, events, raceTotals, results, prevRace, nextRace, legMiles };
+    const wetWeeksOn = switchValue('wetweeks') !== 'off';
+    return { birth, end, weeks, years, events, raceTotals, results, prevRace, nextRace, legMiles, wetByEvent: wetWeeksOn ? wetByEvent : new Map<string, WetRead[]>() };
   }, [lifeStats]);
 
 type LifeModel = ReturnType<typeof useLifeModel>;
@@ -1492,6 +1504,16 @@ const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }
         {meta.short} at {place}
       </span>
       <span className="life-tip__outcome">{outcome}</span>
+      {(() => {
+        const reads = races.flatMap((race) => model.wetByEvent.get(race.eventId) ?? []);
+        if (reads.length === 0) return null;
+        const of = (n: number) => (n === total ? (total === 1 ? 'the race' : `all ${total} races`) : `${n} of ${total} races`);
+        const wet = reads.filter((read) => read.state === 'wet').length;
+        const mixed = reads.length - wet;
+        const modelled = reads.every((read) => read.modelled) ? ' (modelled)' : reads.some((read) => read.modelled) ? ' (partly modelled)' : '';
+        const parts = [wet > 0 ? `wet track in ${of(wet)}` : null, mixed > 0 ? `damp or drying in ${of(mixed)}` : null].filter(Boolean).join('; ');
+        return <span className="life-tip__wet">{`${parts.charAt(0).toUpperCase()}${parts.slice(1)}${modelled}`}</span>;
+      })()}
     </span>
   );
 };
@@ -1767,6 +1789,9 @@ const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeS
                         fill={seriesMetaById(ids[1]).tint}
                       />
                     ) : null}
+                    {week.races.some((race) => model.wetByEvent.has(race.eventId)) ? (
+                      <line className="wet-week" x1={x + 1} y1={y + cellH - 1} x2={x + cellW - 1} y2={y + 1} />
+                    ) : null}
                   </g>
                 );
               }
@@ -1921,6 +1946,12 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
               <span>
                 <i aria-hidden className="series-key__milestone" />
                 karting milestone
+              </span>
+            ) : null}
+            {model.wetByEvent.size > 0 ? (
+              <span>
+                <i aria-hidden className="series-key__wet" />
+                a race on a wet track
               </span>
             ) : null}
           </div>
