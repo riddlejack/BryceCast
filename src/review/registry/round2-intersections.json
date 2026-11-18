@@ -1,0 +1,19 @@
+{
+  "lane": "round2-intersections",
+  "entries": [
+    {
+      "id": "r2-lap-yellow",
+      "page": "/races/session_indy_nxt_2024_6326",
+      "title": "Yellow flags on the lap chart: every full-course caution as a faint yellow band behind the field's lines, so you can see why the order shuffles where it does",
+      "switch": "lapyellow",
+      "values": [
+        { "value": null, "label": "on (default): a yellow wash from the lap the caution came out to its last lap under yellow, a flag tab above the chart, a hairline where the field went green" },
+        { "value": "off", "label": "off: the lap chart as it was" }
+      ],
+      "look": "Any INDY NXT race page → The race, lap by lap. Detroit 2024 has four cautions (14 of 45 laps under yellow). Point at a yellow tab (or tap it) to read the caution: its cause, its laps, the restart lap. Hover a line inside a band and the card says 'under yellow'.",
+      "anchor": "",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}

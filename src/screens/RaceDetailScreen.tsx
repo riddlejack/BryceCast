@@ -55,8 +55,10 @@ import { QualifyingRunByRunCard } from './qualifyingRunByRun';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
 import { useQualiLabForRace } from '../data/qualiLab';
 import { TimingCoverageCard } from './timingCoverageCard';
+import { switchValue } from '../review/switches';
 import './tracks.css';
 import './race.css';
+import './lapYellow.css';
 
 type Row = Record<string, unknown>;
 
@@ -95,7 +97,40 @@ const CheckeredTick = ({ x, y }: { x: number; y: number }) => (
 /** The lap-chart fields this chart reads — a structural subset of
  *  RaceStoryPack, so the live race page shell can feed the SAME chart its
  *  building running-order window without forking the grammar. */
-export type LapChartStory = Pick<RaceStoryPack, 'lapChart' | 'inflections'>;
+export type LapChartStory = Pick<RaceStoryPack, 'lapChart' | 'inflections'> & Partial<Pick<RaceStoryPack, 'cautions'>>;
+
+/* ---------- yellow flags on the lap chart (round 2, intersections) ----------
+ * Each full-course caution from the official Results-PDF caution summary, as a
+ * faint yellow band behind every car's line from the lap it came out to the
+ * last lap under yellow. The band's right edge is the restart, where the order
+ * shuffles. Switch `lapyellow`: on (default) | off. */
+
+export interface YellowSpan {
+  number: number;
+  fromLap: number;
+  toLap: number;
+  restartLap: number | null;
+  ranToFlag: boolean;
+  category: string;
+}
+
+export const yellowSpansFor = (story: LapChartStory, totalLaps: number): YellowSpan[] => {
+  if (switchValue('lapyellow') === 'off') return [];
+  const events = story.cautions?.events ?? [];
+  return events
+    .filter((event) => event.startLap !== null && event.endLap !== null && event.startLap >= 1 && event.startLap <= totalLaps)
+    .map((event, index) => ({
+      number: event.cautionNumber ?? index + 1,
+      fromLap: event.startLap as number,
+      toLap: Math.min(Math.max(event.endLap as number, event.startLap as number), totalLaps),
+      restartLap: event.restartLap,
+      ranToFlag: event.ranToFlag,
+      category: event.category
+    }));
+};
+
+const yellowLapsCopy = (span: YellowSpan) =>
+  span.fromLap === span.toLap ? `lap ${span.fromLap}` : `laps ${span.fromLap} to ${span.toLap}`;
 
 /** Live-shell layer for a race still running: caution spans shade as they
  *  happen and the checkered tick stays down until the flag. Absent (every
@@ -138,6 +173,13 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
   const bryce = drivers.find((driver) => driver.isBryce) ?? null;
   const winner = drivers.find((driver) => driver.finishPosition === 1) ?? null;
 
+  /* Archived races only: the live shell draws its own building spans. */
+  const yellows = useMemo(() => (building ? [] : yellowSpansFor(story, totalLaps)), [building, story, totalLaps]);
+  const [activeYellow, setActiveYellow] = useState<number | null>(null);
+  const yellowAt = (lap: number) => yellows.find((span) => lap >= span.fromLap && lap <= span.toLap) ?? null;
+  const yellowLeft = (span: YellowSpan) => Math.max(x(Math.max(span.fromLap - 0.5, 1)), margin.left);
+  const yellowRight = (span: YellowSpan) => Math.min(x(Math.min(span.toLap + 0.5, totalLaps)), width - margin.right);
+
   const xTicks = useMemo(() => {
     const step = width < 560 ? (totalLaps > 40 ? 15 : 10) : 5;
     const ticks = [1];
@@ -149,7 +191,24 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
 
   const clearHover = () => {
     setFocusedDriver(null);
+    setActiveYellow(null);
     if (!dotTipActive.current) setTip(null);
+  };
+
+  /* A caution reads like any mark: its number and cause, its laps, and the restart. */
+  const showYellow = (span: YellowSpan): string => {
+    setFocusedDriver(null);
+    setActiveYellow(span.number);
+    const cause = span.category ? span.category.toLowerCase() : null;
+    setTip({
+      x: (yellowLeft(span) + yellowRight(span)) / 2,
+      y: margin.top,
+      title: `Caution ${span.number}${cause ? `: ${cause}` : ''}`,
+      detail: `Under yellow ${yellowLapsCopy(span)} · ${
+        span.ranToFlag ? 'ran to the flag' : span.restartLap !== null ? `green again on lap ${span.restartLap}` : 'restart not recorded'
+      }`
+    });
+    return `yellow-${span.number}`;
   };
 
   const onMove = (event: React.MouseEvent<Element>): string | null => {
@@ -163,6 +222,9 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
       return null;
     }
     const lap = Math.min(Math.max(lapFromX(mouseX), 1), totalLaps);
+    /* Above the plot's top line is the flags' strip: there, a caution reads first. */
+    const yellowHere = yellowAt(lap);
+    if (yellowHere && mouseY < margin.top + 2) return showYellow(yellowHere);
     let best: { driver: RaceStoryLapDriver; position: number; distance: number } | null = null;
     for (const driver of drivers) {
       const position = positionAt.get(driver.driverId)?.get(lap);
@@ -171,10 +233,14 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
       if (!best || distance < best.distance) best = { driver, position, distance };
     }
     if (!best || best.distance > 26) {
+      /* Off every line but inside a yellow band: read the caution. */
+      if (yellowHere) return showYellow(yellowHere);
       clearHover();
       return null;
     }
     setFocusedDriver(best.driver.driverId);
+    setActiveYellow(null);
+    const underYellow = yellowAt(lap) !== null;
     const lastLap = best.driver.laps[best.driver.laps.length - 1]?.[0] ?? totalLaps;
     const statusText =
       best.driver.status && !['running', 'unknown'].includes(best.driver.status) ? best.driver.status : null;
@@ -188,7 +254,11 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
       x: x(lap),
       y: y(best.position),
       title: best.driver.driverName,
-      detail: [best.driver.carNumber ? `car ${best.driver.carNumber}` : null, `P${best.position} on lap ${lap}`, outcomeText]
+      detail: [
+        best.driver.carNumber ? `car ${best.driver.carNumber}` : null,
+        `P${best.position} on lap ${lap}${underYellow ? ', under yellow' : ''}`,
+        outcomeText
+      ]
         .filter(Boolean)
         .join(' · ')
     });
@@ -223,6 +293,23 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
                 fill="var(--status-warn-dot)"
                 opacity={0.1}
               />
+            );
+          })}
+          {/* Yellow flags (archived races): a wash from the lap the caution came
+              out to its last lap under yellow, a flag tab in the top margin, and
+              a hairline at the band's right edge where the field went green. */}
+          {yellows.map((span) => {
+            const left = yellowLeft(span);
+            const right = yellowRight(span);
+            const active = activeYellow === span.number;
+            return (
+              <g key={`yellow-${span.number}`} className={`lap-yellow${active ? ' lap-yellow--active' : ''}`} aria-hidden>
+                <rect className="lap-yellow__wash" x={left} y={margin.top} width={Math.max(right - left, 2)} height={plotHeight} />
+                <rect className="lap-yellow__tab" x={left} y={margin.top - 7} width={Math.max(right - left, 2)} height={4} rx={1} />
+                {span.ranToFlag ? null : (
+                  <line className="lap-yellow__green" x1={right} x2={right} y1={margin.top - 7} y2={margin.top + plotHeight} />
+                )}
+              </g>
             );
           })}
           {yTicks.map((tick) => (
@@ -407,6 +494,7 @@ const LapChartCard = ({
       ? ` · ${undrawn === 1 ? 'one car' : `${restartCountWord(undrawn)} cars`} of ${resultsFieldSize} never completed a lap, so ${undrawn === 1 ? 'it isn’t' : 'they aren’t'} drawn`
       : '';
   const hasBryceLine = story.bryce.inLapChart;
+  const yellowNote = yellowSpansFor(story, story.lapChart.totalLaps).length > 0 ? ' · yellow bands are full-course cautions' : '';
   const teammateCount = story.lapChart.drivers.filter((driver) => driver.isTeammate).length;
   /* Zero-lap day (lap-1 contact): with no Bryce line to draw, the legend itself
    * must lead with WHY, or the empty ink reads as "Bryce is missing" (Jack's
@@ -440,14 +528,14 @@ const LapChartCard = ({
       {hasBryceLine ? (
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
           Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
-          field in light gray · ○ marks a day that ended early{undrawnNote} · {coarse ? 'tap any line' : 'hover any line'}
+          field in light gray · ○ marks a day that ended early{yellowNote}{undrawnNote} · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       ) : (
         /* Fact first: the legend explains the missing ink so it never reads as
            "Bryce is missing." The hero already carries the official status. */
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
           {zeroLapReason} ended Bryce’s race on lap {endedOnLap}, so the chart shows the rest of the field’s day. ○ marks a car
-          that ended early · {coarse ? 'tap any line' : 'hover any line'}
+          that ended early{yellowNote} · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       )}
       {hasBryceLine ? (
