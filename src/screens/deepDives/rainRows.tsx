@@ -721,7 +721,7 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
                             <text x={11} y={nameY + 35} fontFamily={chartFont} className="rr__count">
                               <tspan>{`${group.dry.length} dry races in`}</tspan>
                               <tspan x={11} dy={15}>
-                                {group.members.slice(0, 3).join(', ')}
+                                {`${group.members.slice(0, 3).join(', ')}${group.members.length > 3 ? ',' : ''}`}
                               </tspan>
                               {group.members.length > 3 ? (
                                 <tspan x={11} dy={15}>
