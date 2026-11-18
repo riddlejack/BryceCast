@@ -97,7 +97,7 @@ const CheckeredTick = ({ x, y }: { x: number; y: number }) => (
 /** The lap-chart fields this chart reads — a structural subset of
  *  RaceStoryPack, so the live race page shell can feed the SAME chart its
  *  building running-order window without forking the grammar. */
-export type LapChartStory = Pick<RaceStoryPack, 'lapChart' | 'inflections'> & Partial<Pick<RaceStoryPack, 'cautions'>>;
+export type LapChartStory = Pick<RaceStoryPack, 'lapChart' | 'inflections'> & Partial<Pick<RaceStoryPack, 'cautions' | 'bryce'>>;
 
 /* ---------- yellow flags on the lap chart (round 2, intersections) ----------
  * Each full-course caution from the official Results-PDF caution summary, as a
@@ -403,19 +403,52 @@ export const LapChart = ({ story, building }: { story: LapChartStory; building?:
                 stroke="var(--surface-1)"
                 strokeWidth={1.5}
               />
-              <text
-                x={phone ? width - endLabelEdgePad : x(totalLaps) + 20}
-                y={y(bryce.laps[bryce.laps.length - 1][1])}
-                textAnchor={phone ? 'end' : 'start'}
-                dominantBaseline="middle"
-                fill="var(--ink-primary)"
-                fontFamily={chartFont}
-                fontSize={12}
-                fontWeight={650}
-                style={{ fontVariantNumeric: 'tabular-nums' }}
-              >
-                Bryce P{bryce.finishPosition ?? bryce.laps[bryce.laps.length - 1][1]}
-              </text>
+              {(() => {
+                const [endLap, endPosition] = bryce.laps[bryce.laps.length - 1];
+                const finishLabel = `Bryce P${bryce.finishPosition ?? endPosition}`;
+                if (endLap >= totalLaps || building) {
+                  return (
+                    <text
+                      x={phone ? width - endLabelEdgePad : x(totalLaps) + 20}
+                      y={y(endPosition)}
+                      textAnchor={phone ? 'end' : 'start'}
+                      dominantBaseline="middle"
+                      fill="var(--ink-primary)"
+                      fontFamily={chartFont}
+                      fontSize={12}
+                      fontWeight={650}
+                      style={{ fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {finishLabel}
+                    </text>
+                  );
+                }
+                /* A day that ended early: the label sits at the end of his line,
+                   not in the finish gutter, where it would read as his running
+                   place at the flag (Detroit 2024: out on lap 3, classified P20). */
+                const completed = story.bryce?.lapsCompleted ?? endLap;
+                const outLap = Math.min(completed + 1, totalLaps);
+                const flip = x(endLap) > margin.left + plotWidth * 0.6;
+                return (
+                  <text
+                    x={x(endLap) + (flip ? -10 : 10)}
+                    y={y(endPosition) - 13}
+                    textAnchor={flip ? 'end' : 'start'}
+                    dominantBaseline="middle"
+                    fill="var(--ink-primary)"
+                    stroke="var(--surface-1)"
+                    strokeWidth={4}
+                    paintOrder="stroke"
+                    strokeLinejoin="round"
+                    fontFamily={chartFont}
+                    fontSize={12}
+                    fontWeight={650}
+                    style={{ fontVariantNumeric: 'tabular-nums' }}
+                  >
+                    {finishLabel}, out on lap {outLap}
+                  </text>
+                );
+              })()}
             </>
           ) : null}
           {winner && !winner.isBryce && width >= 560 ? (
