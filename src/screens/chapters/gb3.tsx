@@ -105,7 +105,7 @@ export const Gb3Signature = () => {
       meta: `GB3 · ${y1}–${String(y2).slice(2)}`,
       tint,
       title: placeName(venue.track),
-      detail: `${y1}: best P${venue.bestA.finish} of ${venue.a.length} races · ${y2}: best P${venue.bestB.finish} of ${venue.b.length}`,
+      detail: `${y1}: best P${venue.bestA.finish} in ${venue.a.length} races · ${y2}: best P${venue.bestB.finish} in ${venue.b.length}`,
       note: null,
       action: 'open his best race there'
     };

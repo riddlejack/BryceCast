@@ -4,6 +4,7 @@
  * Switch `chapters`: default, the pictures below; `dots`, the first round-3
  * pictures for SCCA, F1600, Formula Ford and FR Oceania (finishes as dots on a
  * position axis, which proxy review 3 judged too close to a plain chart);
+ * `boxes`, the default but with F1600's podiums as three plain grey steps;
  * `old`, round 2's tiles and strip. */
 
 import type { ReactNode } from 'react';
@@ -34,7 +35,7 @@ const dots = (): boolean => switchValue('chapters') === 'dots';
 
 const SIGNATURES: Record<string, (context: Context) => ReactNode> = {
   scca: () => (dots() ? <SccaSignature /> : <SccaCircuits />),
-  f1600: () => (dots() ? <F1600Signature /> : <F1600Podiums />),
+  f1600: () => (dots() ? <F1600Signature /> : <F1600Podiums steps={switchValue('chapters') === 'boxes' ? 'boxes' : 'drawn'} />),
   rcffs: () => <RcffsSignature />,
   'formula-ford': () => (dots() ? <FormulaFordSignature /> : <FormulaFordRain />),
   gb3: () => <Gb3Signature />,
