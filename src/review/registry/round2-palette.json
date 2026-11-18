@@ -1,0 +1,31 @@
+{
+  "lane": "palette",
+  "entries": [
+    {
+      "id": "r2-palette",
+      "page": ["/career", "/about", "/data"],
+      "title": "One series palette for the whole site, and INDY NXT gets a colour",
+      "switch": "palette",
+      "values": [
+        { "value": null, "label": "the road (default): cool blues and greens for the junior years, warming to INDY NXT gold for the current chapter; every neighbouring pair passes the colour-blind check" },
+        { "value": "atlas", "label": "atlas: six evenly spread hues (blue, green, wine, teal, rust, violet), INDY NXT gold; livelier, less of a story" },
+        { "value": "old", "label": "before: the palette live now, INDY NXT in black" }
+      ],
+      "look": "Career → His life in weeks, the chapters (INDY NXT's dots), the odometer, the travel map; then About and Data. Flip the three and watch the same series keep one colour everywhere. On Life in weeks, point at (or tap) a series in the key to light only its weeks.",
+      "anchor": "#career-life-title",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    },
+    {
+      "id": "r2-odometer-hover",
+      "page": "/career",
+      "title": "The odometer: colour and a read on every tile",
+      "switch": null,
+      "noswitch": "new reads on tiles that had none; nothing to switch back to",
+      "look": "Career → the odometer. Point at (or tap) each: a series segment on On track; a bar on Distance (it thickens and reads its miles); a part of Time (timed, untimed, other sessions); any of the 619 dots on Other drivers (name, the series he first raced them in, races together); a country or a track dot on Places (the track still and every track there); a cell on When it went wrong (the race, its still, and on a second tap the race page).",
+      "anchor": "#career-odometer-title",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}

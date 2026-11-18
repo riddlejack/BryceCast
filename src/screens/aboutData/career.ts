@@ -32,7 +32,7 @@ const TINT: Record<string, string> = {
   series_froc: 'var(--chapter-fro)',
   series_usf_pro_2000: 'var(--chapter-fro)',
   series_imsa_weathertech: 'var(--chapter-imsa)',
-  series_indy_nxt: 'var(--ink-primary)'
+  series_indy_nxt: 'var(--chapter-indy)'
 };
 
 const names = new Map<string, { name: string; short: string }>();

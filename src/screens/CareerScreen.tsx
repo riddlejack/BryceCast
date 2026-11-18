@@ -1,12 +1,26 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { SourcePill, Stat, TickerValue, Unavailable } from '../app/components';
-import { PointerWord, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../app/charts';
+import {
+  ChartTipCard,
+  PointerWord,
+  sentence,
+  useCoarsePointer,
+  useInViewOnce,
+  useMeasuredWidth,
+  useReducedMotion,
+  type ChartTip
+} from '../app/charts';
+import { TAP_CARD, TapAction, useTapPreview, useTouchPlacement, type TapPreview } from '../app/tapPreview';
+import { useVenuePicture, type VenueRef } from '../app/venuePeek';
+import { useRouter } from '../app/router';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import {
   uiDataPackage,
   type UiCareerFigure,
   type UiCareerFigureClass,
   type UiCareerLifeStats,
+  type UiCareerOtherDrivers,
+  type UiCareerTimeBreakdown,
   type UiCareerWeeksGrid
 } from '../data/uiDataPackage';
 import { getVenueByTrackName } from '../data/venueDossier';
@@ -37,7 +51,8 @@ import {
   RainDays,
   RivalsCard,
   TheClimb,
-  chapterTint
+  chapterTint,
+  raceHref
 } from './careerExplorer';
 import './career.css';
 
@@ -364,36 +379,143 @@ const racesBySeries = (lifeStats: UiCareerLifeStats): Array<{ seriesId: string; 
   return seriesOrder.filter((id) => (counts.get(id) ?? 0) > 0).map((id) => ({ seriesId: id, races: counts.get(id) ?? 0 }));
 };
 
+/* Round 2 (November 17): every drawing reads on hover, and on a phone on the
+ * first tap (useTapPreview). A bar or segment reads in the drawing's own key
+ * line; a mark at a track opens a card with the track's 3D still (VenuePeek),
+ * as the Career explorer's INDY NXT dots do. Colour comes only from the theme
+ * tokens: the series tints, the INDY NXT gold for his own miles and hours,
+ * the travel colour, and one colour per country. */
+
+type Hot = string | null;
+
+/** The card a mark at a track opens: its still where one exists, then the words. */
+const OdoCard = ({
+  x,
+  y,
+  under,
+  tap,
+  venue,
+  swatch,
+  meta,
+  title,
+  action,
+  children
+}: {
+  x: number;
+  y: number;
+  under: number;
+  tap: TapPreview;
+  venue?: VenueRef;
+  swatch?: string;
+  meta?: ReactNode;
+  title: ReactNode;
+  action?: string;
+  children?: ReactNode;
+}) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const picture = useVenuePicture(venue ?? {});
+  const coarse = useCoarsePointer();
+  const touch = coarse || tap.armed !== null;
+  const place = useTouchPlacement(ref, x, y, under, `${String(title)}|${String(meta)}|${picture ? picture.src600 : String(picture)}|${tap.openArmed ? 1 : 0}`);
+  return (
+    <div
+      ref={ref}
+      className="odo-card"
+      style={{ ...place, pointerEvents: tap.armed !== null ? 'auto' : 'none' }}
+      {...{ [TAP_CARD]: '' }}
+      role="status"
+    >
+      {picture ? <img className="odo-card__still" src={picture.src600} width={picture.width} height={picture.height} alt="" decoding="async" /> : null}
+      <div className="odo-card__body">
+        {meta ? (
+          <span className="odo-card__meta">
+            {swatch ? <i aria-hidden style={{ background: swatch }} /> : null}
+            {meta}
+          </span>
+        ) : null}
+        <strong className="odo-card__title">{title}</strong>
+        {children}
+        {touch ? <TapAction tap={tap} label={null} fallback={action ?? 'open the race'} /> : action ? <span className="odo-card__action">Click to {action}</span> : null}
+      </div>
+    </div>
+  );
+};
+
+/** Where a mark sits inside the figure: its centre-top and its bottom. */
+const markBox = (mark: Element, figure: Element | null) => {
+  const box = mark.getBoundingClientRect();
+  const origin = figure?.getBoundingClientRect() ?? box;
+  return { x: box.left - origin.left + box.width / 2, y: box.top - origin.top, under: box.bottom - origin.top };
+};
+
+const yearsOf = (from: number, to: number): string => (from === to ? String(from) : `${from}–${to}`);
+
+/** Races by series with the years he raced each, from the weeks grid. */
+const seriesYears = (lifeStats: UiCareerLifeStats): Map<string, { from: number; to: number }> => {
+  const years = new Map<string, { from: number; to: number }>();
+  for (const week of lifeStats.weeksGrid.weeks) {
+    const year = Number(week.monday.slice(0, 4));
+    for (const race of week.races) {
+      const span = years.get(race.seriesId);
+      years.set(race.seriesId, span ? { from: Math.min(span.from, year), to: Math.max(span.to, year) } : { from: year, to: year });
+    }
+  }
+  return years;
+};
+
 const SeriesVisual = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
   const rows = racesBySeries(lifeStats);
   const total = rows.reduce((sum, row) => sum + row.races, 0);
+  const years = useMemo(() => seriesYears(lifeStats), [lifeStats]);
+  const [hot, setHot] = useState<Hot>(null);
+  const tap = useTapPreview();
+  const hotRow = rows.find((row) => row.seriesId === hot) ?? null;
+  const handlers = (seriesId: string) => tap.target(seriesId, { show: () => setHot(seriesId), hide: () => setHot(null) });
   return (
-    <figure className="odo-visual" aria-label={`Races by series: ${rows.map((row) => `${seriesMetaById(row.seriesId).short} ${row.races}`).join(', ')}.`}>
+    <figure
+      className={`odo-visual odo-series${hot ? ' odo-series--hot' : ''}`}
+      aria-label={`Races by series: ${rows.map((row) => `${seriesMetaById(row.seriesId).short} ${row.races}`).join(', ')}.`}
+    >
       <div className="odo-bar" aria-hidden>
         {rows.map((row) => (
           <span
             key={row.seriesId}
-            className="odo-bar__seg"
+            className={`odo-bar__seg${hot === row.seriesId ? ' odo-bar__seg--hot' : ''}`}
             style={{ flexGrow: row.races, background: seriesMetaById(row.seriesId).tint }}
-            title={`${seriesMetaById(row.seriesId).name}: ${row.races} ${row.races === 1 ? 'race' : 'races'}`}
+            {...handlers(row.seriesId)}
           />
         ))}
       </div>
       <figcaption className="odo-legend">
         {rows.map((row) => (
-          <span key={row.seriesId}>
+          <span
+            key={row.seriesId}
+            className={`odo-legend__item${hot === row.seriesId ? ' odo-legend__item--hot' : ''}`}
+            {...handlers(row.seriesId)}
+          >
             <i aria-hidden style={{ background: seriesMetaById(row.seriesId).tint }} />
             {seriesMetaById(row.seriesId).short} {row.races}
           </span>
         ))}
-        <span className="odo-legend__note">{total} races, in the order he raced the series</span>
+        {hotRow ? (
+          <span className="odo-read odo-legend__line">
+            <b>{seriesMetaById(hotRow.seriesId).name}</b>
+            {': '}
+            {hotRow.races} {hotRow.races === 1 ? 'race' : 'races'}
+            {years.get(hotRow.seriesId) ? `, ${yearsOf(years.get(hotRow.seriesId)!.from, years.get(hotRow.seriesId)!.to)}` : ''}
+          </span>
+        ) : (
+          <span className="odo-legend__note odo-legend__line">{total} races, in the order he raced the series</span>
+        )}
       </figcaption>
     </figure>
   );
 };
 
-/** Two or three bars on one scale. A floor ends in a dashed run: there is more. */
-type ScaleBar = { key: string; label: string; parts: Array<{ value: number; tone: 'ink' | 'soft' | 'hatch' }>; floor?: boolean };
+/** Two or three bars on one scale. A floor ends in a dashed run: there is
+ *  more. Each part reads on hover; a bar's label reads the whole bar. */
+type ScalePart = { key: string; value: number; tone: 'race' | 'race-hatch' | 'race-soft' | 'travel'; read: ReactNode };
+type ScaleBar = { key: string; label: string; parts: ScalePart[]; floor?: boolean; read?: ReactNode };
 
 const ScaleBars = ({
   bars,
@@ -407,41 +529,73 @@ const ScaleBars = ({
   marks?: Array<{ value: number; label: string }>;
   ariaLabel: string;
   note?: ReactNode;
-}) => (
-  <figure className="odo-visual" aria-label={ariaLabel}>
-    <div className="odo-scale" aria-hidden>
-      {marks?.map((mark) => (
-        <span key={mark.label} className="odo-scale__mark" style={{ ['--f' as string]: String(mark.value / max) }}>
-          <span className="odo-scale__mark-label">{mark.label}</span>
-        </span>
-      ))}
-      {bars.map((bar) => {
-        const total = bar.parts.reduce((sum, part) => sum + part.value, 0);
-        return (
-          <div key={bar.key} className="odo-scale__row">
-            <span className="odo-scale__label">{bar.label}</span>
-            <span className="odo-scale__track">
-              <span className="odo-scale__fill" style={{ width: `${(total / max) * 100}%` }}>
-                {bar.parts.map((part, index) => (
-                  <span key={index} className={`odo-scale__part odo-scale__part--${part.tone}`} style={{ flexGrow: part.value }} />
-                ))}
+}) => {
+  /* "bar:<key>" for a bar's label, "<bar>/<part>" for a part. */
+  const [hot, setHot] = useState<Hot>(null);
+  const tap = useTapPreview();
+  const hotBar = hot?.startsWith('bar:') ? hot.slice(4) : hot?.split('/')[0] ?? null;
+  const hotPart = hot && !hot.startsWith('bar:') ? hot.split('/')[1] : null;
+  const read = (() => {
+    if (!hot) return null;
+    const bar = bars.find((item) => item.key === hotBar);
+    if (!bar) return null;
+    if (hotPart === null) return bar.read ?? bar.parts[0]?.read ?? null;
+    return bar.parts.find((part) => part.key === hotPart)?.read ?? null;
+  })();
+  const on = (key: string) => tap.target(key, { show: () => setHot(key), hide: () => setHot(null) });
+  return (
+    <figure className={`odo-visual${hot ? ' odo-scale--hot' : ''}`} aria-label={ariaLabel}>
+      <div className="odo-scale" aria-hidden>
+        {marks?.map((mark) => (
+          <span key={mark.label} className="odo-scale__mark" style={{ ['--f' as string]: String(mark.value / max) }}>
+            <span className="odo-scale__mark-label">{mark.label}</span>
+          </span>
+        ))}
+        {bars.map((bar) => {
+          const total = bar.parts.reduce((sum, part) => sum + part.value, 0);
+          const barHot = hotBar === bar.key;
+          return (
+            <div key={bar.key} className={`odo-scale__row${barHot ? ' odo-scale__row--hot' : ''}`}>
+              <span className="odo-scale__label" {...(bar.read ? on(`bar:${bar.key}`) : on(`${bar.key}/${bar.parts[0].key}`))}>
+                {bar.label}
               </span>
-              {bar.floor ? <span className="odo-scale__more" style={{ left: `${(total / max) * 100}%` }} /> : null}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-    {note ? <figcaption className="odo-legend">{note}</figcaption> : null}
-  </figure>
-);
+              <span className="odo-scale__track">
+                <span className="odo-scale__fill" style={{ width: `${(total / max) * 100}%` }}>
+                  {bar.parts.map((part) => (
+                    <span
+                      key={part.key}
+                      className={`odo-scale__part odo-scale__part--${part.tone}${hotPart === part.key || (hotPart === null && barHot) ? ' odo-scale__part--hot' : ''}`}
+                      style={{ flexGrow: part.value }}
+                      {...on(`${bar.key}/${part.key}`)}
+                    />
+                  ))}
+                </span>
+                {bar.floor ? <span className="odo-scale__more" style={{ left: `${(total / max) * 100}%` }} /> : null}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      {read ? (
+        <figcaption className="odo-legend">
+          <span className="odo-read">{read}</span>
+        </figcaption>
+      ) : note ? (
+        <figcaption className="odo-legend">{note}</figcaption>
+      ) : null}
+    </figure>
+  );
+};
 
 const EQUATOR_MILES = 24_901;
 
 const DistanceVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
-  const raced = figureById(figures, 'raceMiles')?.value ?? 0;
-  const between = figureById(figures, 'milesBetweenTracks')?.value ?? 0;
-  if (!raced || !between) return <div className="odo-visual" />;
+  const racedFigure = figureById(figures, 'raceMiles');
+  const betweenFigure = figureById(figures, 'milesBetweenTracks');
+  const byRoad = figureById(figures, 'milesBetweenTracksByRoad');
+  const raced = racedFigure?.value ?? 0;
+  const between = betweenFigure?.value ?? 0;
+  if (!raced || !between || !racedFigure || !betweenFigure) return <div className="odo-visual" />;
   const max = between * 1.12;
   /* A floor, so the ratio rounds down to a whole number (8.28 is "8"). */
   const ratio = Math.floor(between / raced);
@@ -454,57 +608,134 @@ const DistanceVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
         { value: EQUATOR_MILES * 2, label: 'twice' }
       ]}
       bars={[
-        { key: 'raced', label: 'Raced', parts: [{ value: raced, tone: 'ink' }] },
-        { key: 'between', label: 'Between tracks', parts: [{ value: between, tone: 'soft' }], floor: true }
+        {
+          key: 'raced',
+          label: 'Raced',
+          parts: [
+            {
+              key: 'raced',
+              value: raced,
+              tone: 'race',
+              read: (
+                <>
+                  <i aria-hidden className="odo-key odo-key--race" />
+                  <b>{racedFigure.display} miles</b> raced{racedFigure.caveat ? `. ${racedFigure.caveat}` : ''}
+                </>
+              )
+            }
+          ]
+        },
+        {
+          key: 'between',
+          label: 'Between tracks',
+          parts: [
+            {
+              key: 'between',
+              value: between,
+              tone: 'travel',
+              read: (
+                <>
+                  <i aria-hidden className="odo-key odo-key--travel" />
+                  <b>{betweenFigure.display} miles</b> in straight lines from track to track
+                  {byRoad ? `; ${byRoad.display} by road` : ''}
+                </>
+              )
+            }
+          ],
+          floor: true
+        }
       ]}
       note={<span>At least {ratio} miles between tracks for every mile raced</span>}
     />
   );
 };
 
-const TimeVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
-  const timed = figureById(figures, 'raceTimeTimed')?.value ?? 0;
-  const racing = figureById(figures, 'raceTimeAll')?.value ?? 0;
-  const sessions = figureById(figures, 'sessionHours')?.value ?? 0;
-  if (!racing || !sessions) return <div className="odo-visual" />;
-  const untimed = Math.max(0, racing - timed);
+const TimeVisual = ({ figures, breakdown }: { figures: UiCareerFigure[]; breakdown: UiCareerTimeBreakdown | undefined }) => {
+  const racingFigure = figureById(figures, 'raceTimeAll');
+  const sessionsFigure = figureById(figures, 'sessionHours');
+  const racing = racingFigure?.value ?? 0;
+  const sessions = sessionsFigure?.value ?? 0;
+  if (!racing || !sessions || !racingFigure || !sessionsFigure || !breakdown) return <div className="odo-visual" />;
+  const { timedRaces: timed, untimedRaces: untimed, otherSessions: other } = breakdown;
+  const parts = (withOther: boolean): ScalePart[] => [
+    {
+      key: 'timed',
+      value: timed.hours,
+      tone: 'race',
+      read: (
+        <>
+          <i aria-hidden className="odo-key odo-key--race" />
+          <b>{timed.display}</b> of official race times, in {timed.count} of his {breakdown.raceCount} races
+        </>
+      )
+    },
+    {
+      key: 'untimed',
+      value: untimed.hours,
+      tone: 'race-hatch',
+      read: (
+        <>
+          <i aria-hidden className="odo-key odo-key--race-hatch" />
+          <b>{untimed.display}</b> in the {untimed.count} races with no official time: his laps × his best lap
+        </>
+      )
+    },
+    ...(withOther
+      ? [
+          {
+            key: 'other',
+            value: other.hours,
+            tone: 'race-soft' as const,
+            read: (
+              <>
+                <i aria-hidden className="odo-key odo-key--race-soft" />
+                <b>{other.display}</b> in {other.count} practice, qualifying and test sessions
+              </>
+            )
+          }
+        ]
+      : [])
+  ];
   return (
     <ScaleBars
-      ariaLabel={`Hours in the car on one scale: racing ${hoursText(racing)} or more, every official session ${hoursText(sessions)} or more.`}
+      ariaLabel={`Hours in the car on one scale: racing ${racingFigure.display}, every official session ${sessionsFigure.display}.`}
       max={sessions * 1.12}
       bars={[
         {
           key: 'racing',
           label: 'Racing',
-          parts: [
-            { value: timed, tone: 'ink' },
-            { value: untimed, tone: 'hatch' }
-          ],
-          floor: true
+          parts: parts(false),
+          floor: true,
+          read: (
+            <>
+              <b>{racingFigure.display}</b> racing: {timed.display} official, {untimed.display} with no official time
+            </>
+          )
         },
         {
           key: 'sessions',
           label: 'All sessions',
-          parts: [
-            { value: timed, tone: 'ink' },
-            { value: untimed, tone: 'hatch' },
-            { value: sessions - racing, tone: 'soft' }
-          ],
-          floor: true
+          parts: parts(true),
+          floor: true,
+          read: (
+            <>
+              <b>{sessionsFigure.display}</b> in all: {racingFigure.display} racing, {other.display} practice, qualifying, tests
+            </>
+          )
         }
       ]}
       note={
         <>
           <span>
-            <i aria-hidden className="odo-key odo-key--ink" />
+            <i aria-hidden className="odo-key odo-key--race" />
             official race times
           </span>
           <span>
-            <i aria-hidden className="odo-key odo-key--hatch" />
+            <i aria-hidden className="odo-key odo-key--race-hatch" />
             races with no official time
           </span>
           <span>
-            <i aria-hidden className="odo-key odo-key--soft" />
+            <i aria-hidden className="odo-key odo-key--race-soft" />
             practice, qualifying, tests
           </span>
         </>
@@ -512,8 +743,6 @@ const TimeVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
     />
   );
 };
-
-const hoursText = (hours: number): string => `${Math.floor(hours)} hours`;
 
 const countryCode: Record<string, string> = {
   'United States': 'US',
@@ -527,70 +756,197 @@ const countryCode: Record<string, string> = {
   Portugal: 'PT'
 };
 
+/** One colour per country: home, Britain, New Zealand, and the European season. */
+const countryTint = (country: string): string =>
+  country === 'United States'
+    ? 'var(--place-us)'
+    : country === 'United Kingdom'
+      ? 'var(--place-uk)'
+      : country === 'New Zealand'
+        ? 'var(--place-nz)'
+        : 'var(--place-eu)';
+
+type AtlasVenue = NonNullable<typeof uiDataPackage.screens.careerLab.atlas>['venues'][number];
+
 const PlacesVisual = () => {
   const venues = uiDataPackage.screens.careerLab.atlas?.venues ?? [];
-  const byCountry = new Map<string, number>();
-  for (const venue of venues) byCountry.set(venue.country, (byCountry.get(venue.country) ?? 0) + 1);
-  const countries = [...byCountry.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const countries = useMemo(() => {
+    const byCountry = new Map<string, AtlasVenue[]>();
+    for (const venue of venues) byCountry.set(venue.country, [...(byCountry.get(venue.country) ?? []), venue]);
+    return [...byCountry.entries()]
+      .map(([name, list]) => [name, [...list].sort((a, b) => a.firstYear - b.firstYear || a.trackName.localeCompare(b.trackName))] as const)
+      .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+  }, [venues]);
+  const figureRef = useRef<HTMLElement | null>(null);
+  const tap = useTapPreview();
+  /* The country in hand, the track under the pointer (null: the country's
+   * label), and where the card points. */
+  const [hot, setHot] = useState<{ country: string; venue: AtlasVenue | null; x: number; y: number; under: number } | null>(null);
+  const show = (country: string, venue: AtlasVenue | null) => (target: Element) => {
+    setHot({ country, venue, ...markBox(target, figureRef.current) });
+  };
+  const hotList = hot ? countries.find(([name]) => name === hot.country)?.[1] ?? [] : [];
+  const shown = hot ? hot.venue ?? hotList[0] ?? null : null;
   return (
-    <figure className="odo-visual" aria-label={`Tracks by country: ${countries.map(([name, count]) => `${name} ${count}`).join(', ')}.`}>
+    <figure
+      ref={figureRef}
+      className={`odo-visual odo-visual--cards${hot ? ' odo-places--hot' : ''}`}
+      aria-label={`Tracks by country: ${countries.map(([name, list]) => `${name} ${list.length}`).join(', ')}.`}
+    >
       <div className="odo-places" aria-hidden>
-        {countries.map(([name, count]) => (
-          <span key={name} className="odo-places__country">
+        {countries.map(([name, list]) => (
+          <span key={name} className={`odo-places__country${hot?.country === name ? ' odo-places__country--hot' : ''}`} style={{ ['--place' as string]: countryTint(name) }}>
             <span className="odo-places__dots">
-              {Array.from({ length: count }, (_, index) => (
-                <i key={index} />
-              ))}
+              {list.map((venue) => {
+                let el: HTMLElement | null = null;
+                return (
+                  <i
+                    key={venue.venueId}
+                    ref={(node) => {
+                      el = node;
+                    }}
+                    className={hot?.venue?.venueId === venue.venueId ? 'odo-places__dot--hot' : undefined}
+                    {...tap.target(venue.venueId, {
+                      show: () => el && show(name, venue)(el),
+                      hide: () => setHot(null)
+                    })}
+                  />
+                );
+              })}
             </span>
-            <span className="odo-places__name" title={name}>
+            <span
+              className="odo-places__name"
+              {...tap.target(`country:${name}`, {
+                show: () => {
+                  const label = figureRef.current?.querySelector(`[data-country="${name}"]`);
+                  if (label) show(name, null)(label);
+                },
+                hide: () => setHot(null)
+              })}
+              data-country={name}
+            >
               {countryCode[name] ?? name}
             </span>
           </span>
         ))}
       </div>
       <figcaption className="odo-legend">
-        <span className="odo-legend__note">One dot is one track, grouped by country</span>
+        <span className="odo-legend__note">One dot is one track, coloured by country</span>
       </figcaption>
+      {hot && shown ? (
+        <OdoCard
+          x={hot.x}
+          y={hot.y}
+          under={hot.under}
+          tap={tap}
+          venue={{ trackName: shown.trackName, trackId: shown.trackIds[0] ?? null }}
+          swatch={countryTint(hot.country)}
+          meta={`${hot.country} · ${hotList.length} ${hotList.length === 1 ? 'track' : 'tracks'}`}
+          title={shown.trackName}
+        >
+          <span className="odo-card__nums">
+            {shown.raceCount} {shown.raceCount === 1 ? 'race' : 'races'}, {yearsOf(shown.firstYear, shown.lastYear)} ·{' '}
+            {shown.seriesSpans.map((span) => span.seriesShort).join(', ')}
+          </span>
+          {hotList.length > 1 ? (
+            <span className="odo-card__list">
+              {hotList.map((venue) => (
+                <span key={venue.venueId} className={venue.venueId === shown.venueId ? 'odo-card__list-on' : undefined}>
+                  {venue.trackName}
+                </span>
+              ))}
+            </span>
+          ) : null}
+        </OdoCard>
+      ) : null}
     </figure>
   );
 };
 
-const PeopleVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
+const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers: UiCareerOtherDrivers | undefined }) => {
   const all = figureById(figures, 'otherDriverRecords')?.value ?? 0;
   const single = figureById(figures, 'otherDriverRecordsSingleSeater')?.value ?? 0;
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const tap = useTapPreview();
+  const [hot, setHot] = useState<number | null>(null);
   if (!all) return <div className="odo-visual" />;
   const daytonaOnly = all - single;
   const pitch = 7;
   const cols = Math.max(20, Math.floor(width / pitch));
   const rows = Math.ceil(all / cols);
+  const rowsData = drivers?.rows ?? [];
+  const tint = (index: number) => {
+    const row = rowsData[index];
+    return row ? seriesMetaById(drivers!.series[row[1]]).tint : 'var(--ink)';
+  };
+  const at = (index: number) => ({ cx: (index % cols) * pitch + pitch / 2, cy: Math.floor(index / cols) * pitch + pitch / 2 });
+  const find = (event: { clientX: number; clientY: number; currentTarget: Element }): number | null => {
+    const box = event.currentTarget.getBoundingClientRect();
+    const col = Math.floor((event.clientX - box.left) / pitch);
+    const row = Math.floor((event.clientY - box.top) / pitch);
+    const index = row * cols + col;
+    if (col < 0 || col >= cols || row < 0 || index >= all) return null;
+    return index;
+  };
+  const hotRow = hot !== null ? rowsData[hot] : undefined;
+  const tip: ChartTip | null =
+    hot !== null && hotRow
+      ? {
+          ...(({ cx, cy }) => ({ x: cx, y: cy - 4, under: cy + 6 }))(at(hot)),
+          title: hotRow[4] === 'artifact' ? `“${hotRow[0]}”` : hotRow[0],
+          detail:
+            hotRow[4] === 'artifact'
+              ? 'a misread line on one results sheet, not a person'
+              : `${hot < single ? 'first raced him' : 'only at'} ${hot < single ? `in ${seriesMetaById(drivers!.series[hotRow[1]]).short}, ${hotRow[2]}` : `Daytona, ${hotRow[2]}`}${
+                  hotRow[3] > 1 ? ` · ${hotRow[3]} races together` : ''
+                }${hotRow[4] === 'variant' ? ' · likely one driver under two spellings' : ''}`
+        }
+      : null;
+  const firstSeries = drivers ? seriesOrder.filter((id) => drivers.series.includes(id) && id !== 'series_imsa_weathertech') : [];
   return (
     <figure
       className="odo-visual"
       aria-label={`${all} other driver names: ${single} in his single-seater races, ${daytonaOnly} met only at the Daytona 24-hour race.`}
     >
-      <div ref={ref} className="odo-people" aria-hidden>
+      <div ref={ref} className="odo-people" style={{ position: 'relative' }}>
         {width > 0 ? (
-          <svg width={cols * pitch} height={rows * pitch}>
+          <svg
+            width={cols * pitch}
+            height={rows * pitch}
+            aria-hidden
+            {...tap.surface({
+              find: (event) => {
+                const index = find(event);
+                setHot(index);
+                return index;
+              },
+              clear: () => setHot(null)
+            })}
+          >
             {Array.from({ length: all }, (_, index) => (
               <circle
                 key={index}
-                cx={(index % cols) * pitch + pitch / 2}
-                cy={Math.floor(index / cols) * pitch + pitch / 2}
+                cx={at(index).cx}
+                cy={at(index).cy}
                 r={2.4}
+                fill={tint(index)}
                 className={index < single ? 'odo-people__dot' : 'odo-people__dot odo-people__dot--daytona'}
               />
             ))}
+            {hot !== null ? (
+              <circle cx={at(hot).cx} cy={at(hot).cy} r={4.6} fill={tint(hot)} stroke="var(--paper)" strokeWidth={1.5} pointerEvents="none" />
+            ) : null}
           </svg>
         ) : null}
+        {tip ? <ChartTipCard tip={tip} width={cols * pitch} tap={tap} /> : null}
       </div>
       <figcaption className="odo-legend">
-        <span>
-          <i aria-hidden className="odo-key odo-key--dot" />
-          single-seater races
+        <span title={firstSeries.map((id) => seriesMetaById(id).short).join(', ')}>
+          <i aria-hidden className="odo-key odo-key--spectrum" />
+          coloured by the series they first raced him in
         </span>
         <span>
-          <i aria-hidden className="odo-key odo-key--dot-soft" />
+          <i aria-hidden className="odo-key odo-key--dot-daytona" />
           only at Daytona ({daytonaOnly})
         </span>
       </figcaption>
@@ -599,36 +955,59 @@ const PeopleVisual = ({ figures }: { figures: UiCareerFigure[] }) => {
 };
 
 const IncidentsVisual = () => {
-  const rows = (uiDataPackage.screens.careerLab.resultConversion as Row[])
-    .filter((row) => row.seriesId === 'series_indy_nxt')
-    .map((row) => ({
-      date: asString(row.eventStartDate) ?? '',
-      label: asString(row.raceLabel) ?? '',
-      status: asString(row.status) ?? 'running',
-      finish: asNumber(row.finishPosition)
-    }))
-    .sort((a, b) => a.date.localeCompare(b.date) || a.label.localeCompare(b.label, 'en', { numeric: true }));
+  const { navigate } = useRouter();
+  const tap = useTapPreview();
+  const figureRef = useRef<HTMLElement | null>(null);
+  const rows = useMemo(
+    () =>
+      (uiDataPackage.screens.careerLab.resultConversion as Row[])
+        .filter((row) => row.seriesId === 'series_indy_nxt')
+        .map((row) => ({
+          sessionId: asString(row.sessionId) ?? '',
+          trackName: asString(row.trackName) ?? '',
+          date: asString(row.eventStartDate) ?? '',
+          label: asString(row.raceLabel) ?? '',
+          status: asString(row.status) ?? 'running',
+          finish: asNumber(row.finishPosition)
+        }))
+        .sort((a, b) => a.date.localeCompare(b.date) || a.label.localeCompare(b.label, 'en', { numeric: true })),
+    []
+  );
+  const [hot, setHot] = useState<{ index: number; x: number; y: number; under: number } | null>(null);
   const years = [...new Set(rows.map((row) => row.date.slice(0, 4)))];
   const contact = rows.filter((row) => row.status === 'contact').length;
   const mechanical = rows.filter((row) => row.status === 'mechanical').length;
+  const outcome = (row: (typeof rows)[number]) =>
+    row.status === 'running' ? (row.finish ? `finished ${ordinal(row.finish)}` : 'finished') : row.status === 'contact' ? 'out after contact' : 'out with a mechanical failure';
+  const hotRow = hot ? rows[hot.index] : null;
   return (
     <figure
-      className="odo-visual"
+      ref={figureRef}
+      className={`odo-visual odo-visual--cards${hot ? ' odo-races--hot' : ''}`}
       aria-label={`His ${rows.length} INDY NXT races in date order: ${contact} ended early after contact and ${mechanical} with a mechanical failure.`}
     >
       <div className="odo-races" aria-hidden>
         {years.map((year) => (
-          <span key={year} className="odo-races__year">
+          <span key={year} className="odo-races__year" style={{ ['--n' as string]: String(rows.filter((row) => row.date.startsWith(year)).length) }}>
             <span className="odo-races__cells">
-              {rows
-                .filter((row) => row.date.startsWith(year))
-                .map((row) => (
+              {rows.map((row, index) => {
+                if (!row.date.startsWith(year)) return null;
+                let el: HTMLElement | null = null;
+                return (
                   <i
                     key={`${row.date}-${row.label}`}
-                    className={`odo-races__cell odo-races__cell--${row.status}`}
-                    title={`${row.label}: ${row.status === 'running' ? (row.finish ? ordinal(row.finish) : 'finished') : row.status === 'contact' ? 'out after contact' : 'out with a mechanical failure'}`}
+                    ref={(node) => {
+                      el = node;
+                    }}
+                    className={`odo-races__cell odo-races__cell--${row.status}${hot?.index === index ? ' odo-races__cell--hot' : ''}`}
+                    {...tap.target(row.sessionId || index, {
+                      show: () => el && setHot({ index, ...markBox(el, figureRef.current) }),
+                      hide: () => setHot(null),
+                      open: row.sessionId ? () => navigate(raceHref(row.sessionId)) : null
+                    })}
                   />
-                ))}
+                );
+              })}
             </span>
             <span className="odo-races__label">{year}</span>
           </span>
@@ -636,15 +1015,30 @@ const IncidentsVisual = () => {
       </div>
       <figcaption className="odo-legend">
         <span>
-          <i aria-hidden className="odo-key odo-key--ink" />
+          <i aria-hidden className="odo-key odo-key--out" />
           out after contact
         </span>
         <span>
-          <i aria-hidden className="odo-key odo-key--hatch" />
+          <i aria-hidden className="odo-key odo-key--out-hatch" />
           mechanical
         </span>
         <span className="odo-legend__note">One square is one INDY NXT race</span>
       </figcaption>
+      {hot && hotRow ? (
+        <OdoCard
+          x={hot.x}
+          y={hot.y}
+          under={hot.under}
+          tap={tap}
+          venue={{ sessionId: hotRow.sessionId, trackName: hotRow.trackName }}
+          swatch="var(--chapter-indy)"
+          meta={`INDY NXT · ${hotRow.date.slice(0, 4)}`}
+          title={hotRow.label}
+          action="open the race"
+        >
+          <span className={`odo-card__nums${hotRow.status !== 'running' ? ' odo-card__nums--out' : ''}`}>{sentence(outcome(hotRow))}</span>
+        </OdoCard>
+      ) : null}
     </figure>
   );
 };
@@ -763,11 +1157,11 @@ const OdoGroup = ({
       case 'distance':
         return <DistanceVisual figures={figures} />;
       case 'time':
-        return <TimeVisual figures={figures} />;
+        return <TimeVisual figures={figures} breakdown={lifeStats.timeBreakdown} />;
       case 'places':
         return <PlacesVisual />;
       case 'people':
-        return <PeopleVisual figures={figures} />;
+        return <PeopleVisual figures={figures} drivers={lifeStats.otherDrivers} />;
       case 'incidents':
         return <IncidentsVisual />;
       default:
@@ -1246,7 +1640,7 @@ const weekLabel = (model: LifeModel, week: LifeWeek): string => {
   return `${base}: no recorded racing.`;
 };
 
-const LifeGrid = ({ lifeStats, model }: { lifeStats: UiCareerLifeStats; model: LifeModel }) => {
+const LifeGrid = ({ lifeStats, model, focus = null }: { lifeStats: UiCareerLifeStats; model: LifeModel; focus?: string | null }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const coarse = useCoarsePointer();
   const [active, setActive] = useState<number | null>(null);
@@ -1386,7 +1780,7 @@ const LifeGrid = ({ lifeStats, model }: { lifeStats: UiCareerLifeStats; model: L
               if (week.kind === 'race') {
                 const ids = [...new Set(week.races.map((race) => race.seriesId))];
                 return (
-                  <g key={week.index}>
+                  <g key={week.index} opacity={focus && !ids.includes(focus) ? 0.18 : 1} style={{ transition: 'opacity 160ms ease' }}>
                     <rect x={x} y={y} width={cellW} height={cellH} fill={seriesMetaById(ids[0]).tint} />
                     {ids.length > 1 ? (
                       <rect
@@ -1473,6 +1867,9 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
   const share = lifeStats.lifeShare;
   const model = useLifeModel(lifeStats);
   const [howOpen, setHowOpen] = useState(false);
+  /* Pointing at (or tapping) a series in the key lights only its weeks. */
+  const [focus, setFocus] = useState<string | null>(null);
+  const keyTap = useTapPreview();
   const f = (id: string) => figureById(share.figures, id);
   const eventDays = figureById(lifeStats.figures, 'eventDays');
   const raceWeeks = figureById(share.figures, 'raceWeeksShareOfLife') ?? figureById(lifeStats.figures, 'raceWeeks');
@@ -1521,12 +1918,16 @@ const LifeInWeeks = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
       </div>
       <div className="life-layout">
         <div className="life-layout__grid">
-          <LifeGrid lifeStats={lifeStats} model={model} />
-          <div className="series-key" aria-label="What the squares mean">
+          <LifeGrid lifeStats={lifeStats} model={model} focus={focus} />
+          <div className={`series-key${focus ? ' series-key--focus' : ''}`} aria-label="What the squares mean">
             {seriesInGrid.map((id) => {
               const meta = seriesMetaById(id);
               return (
-                <span key={id}>
+                <span
+                  key={id}
+                  className={`series-key__series${focus === id ? ' series-key__series--on' : ''}`}
+                  {...keyTap.target(id, { show: () => setFocus(id), hide: () => setFocus(null) })}
+                >
                   <i aria-hidden style={{ background: meta.tint }} />
                   {meta.short}
                 </span>

@@ -49,7 +49,7 @@ export const rememberSwitch = (name: string, value: string | null): void => {
 };
 
 /** Switches whose look lives in CSS: written to <html data-…> once at start (a change reloads the page). */
-export const CSS_SWITCHES = ['yoy'] as const;
+export const CSS_SWITCHES = ['yoy', 'palette'] as const;
 
 export const applyCssSwitches = (): void => {
   if (typeof document === 'undefined') return;
