@@ -2115,6 +2115,8 @@ const buildSmallSeriesStories = ({ canonicalDataset, qualiSessionRows, resultCon
 
 /** The Career Lab climb needs true chronology; conversion rows carry no
  *  dates, so join each session to its canonical event start date. */
+const BRYCE_DRIVER_ID = 'driver_bryce_aron';
+
 const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = []) => {
   const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
   const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
@@ -2123,6 +2125,13 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
       .filter((row) => row.sessionId && row.wetDry && row.wetDry !== 'unknown')
       .map((row) => [row.sessionId, { wetDry: row.wetDry, weatherConfidence: row.confidence ?? null }])
   );
+  /* Field size (cars in the race's result) from the same canonical result
+   * row the conversion table read; the climb's field view draws it. */
+  const fieldBySession = new Map(
+    (canonicalDataset.results ?? [])
+      .filter((result) => result.driverId === BRYCE_DRIVER_ID)
+      .map((result) => [result.sessionId, numberOrNull(result.fieldSize)])
+  );
   return rows.map((row) => {
     const session = sessionById.get(row.sessionId);
     const event = session ? eventById.get(session.eventId) : null;
@@ -2130,10 +2139,52 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
     return {
       ...row,
       eventStartDate: event?.eventStartDate ?? null,
+      fieldSize: fieldBySession.get(row.sessionId) ?? null,
       wetDry: weather?.wetDry ?? null,
       weatherConfidence: weather?.weatherConfidence ?? null
     };
   });
+};
+
+/* The races the conversion table leaves out because they have no classified
+ * finish (a DNF, DNS or DSQ with no finishing position in the source). The
+ * conversion table needs a finishing position for its percentile, so these
+ * stay out of it; the climb draws them as their own mark so the chart counts
+ * every one of the 173 races. Straight from the canonical result rows. */
+const buildUnclassifiedRaces = (canonicalDataset, conversionRows) => {
+  const covered = new Set(conversionRows.map((row) => row.sessionId));
+  const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const seriesById = new Map((canonicalDataset.series ?? []).map((series) => [series.id, series]));
+  const trackById = new Map((canonicalDataset.tracks ?? []).map((track) => [track.id, track]));
+  return (canonicalDataset.results ?? [])
+    .filter((result) => result.driverId === BRYCE_DRIVER_ID && !covered.has(result.sessionId))
+    .flatMap((result) => {
+      const session = sessionById.get(result.sessionId);
+      if (!session || session.sessionType !== 'race' || result.finishPosition != null) return [];
+      const event = eventById.get(session.eventId) ?? {};
+      const track = trackById.get(event.trackId) ?? {};
+      return [
+        {
+          sessionId: session.id,
+          seriesId: event.seriesId ?? null,
+          seriesName: seriesById.get(event.seriesId)?.name ?? event.seriesId ?? null,
+          seasonYear: event.seasonYear ?? null,
+          eventName: event.name ?? null,
+          raceLabel: `${event.seasonYear ?? ''} ${event.name ?? ''}`.trim(),
+          trackName: track.canonicalName ?? track.name ?? null,
+          trackType: track.trackType ?? null,
+          eventStartDate: event.eventStartDate ?? null,
+          raceNumber: numberOrNull(session.raceNumber),
+          startPosition: numberOrNull(result.startPosition ?? result.gridPosition),
+          fieldSize: numberOrNull(result.fieldSize),
+          lapsCompleted: numberOrNull(result.lapsCompleted),
+          status: result.status ?? null,
+          sourceState: 'canonical_result_no_classified_finish'
+        }
+      ];
+    })
+    .sort((left, right) => String(left.eventStartDate).localeCompare(String(right.eventStartDate)) || left.sessionId.localeCompare(right.sessionId));
 };
 
 /* Named climb moments stay source-derived and deterministic: earliest means
@@ -3668,6 +3719,7 @@ const buildPackage = () => {
         resultConversionRows: careerLabPayload.resultConversionRows,
         resultConversion: careerConversionEnriched,
         resultConversionSample: careerConversionEnriched.slice(0, 25),
+        unclassifiedRaces: buildUnclassifiedRaces(canonicalDataset, careerConversionEnriched),
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
         headToHead: buildCareerHeadToHead(headToHeadRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
