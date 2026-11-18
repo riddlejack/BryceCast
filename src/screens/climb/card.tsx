@@ -4,6 +4,7 @@ import { TAP_CARD, TapAction, useTouchPlacement, type TapPreview } from '../../a
 import { CardStill, useVenuePicture } from '../../app/venuePeek';
 import { chapterTint } from '../careerExplorer';
 import { beatLine, placeLine } from '../../app/raceFacts';
+import { wetPhraseFor } from '../../app/wetDry';
 import { clamp, statusWords, type ClimbRace } from './model';
 
 /* The climb's race card: the explorer's mouse card (its track's 3D still on
@@ -15,7 +16,8 @@ const Body = ({ race }: { race: ClimbRace }) => {
   const classified = race.finish !== null;
   const notes = [
     classified && race.status !== 'running' ? statusWords[race.status] ?? race.status : null,
-    race.wetDry && race.wetDry !== 'dry' ? `${race.wetDry} track` : null,
+    // the track in the source's words, with who called it (app/wetDry.ts): "damp track (series report)"
+    wetPhraseFor(race.sessionId, race.wetDry),
     race.oneOff ? 'a one-off, during his INDY NXT years' : null
   ].filter(Boolean);
   return (

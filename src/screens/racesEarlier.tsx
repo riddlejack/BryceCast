@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { wetPhraseFor } from '../app/wetDry';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Card, SourcePill } from '../app/components';
 import { chartFont, useMeasuredWidth, PointerOpen } from '../app/charts';
@@ -47,7 +48,7 @@ const noteFor = (race: ArchiveRace): string | null => {
   return [
     race.start !== null && race.finish !== null && race.start !== race.finish ? `started P${race.start}` : null,
     ended ? `ended early: ${ended.toLowerCase()}` : null,
-    switchValue('rainmarks') === 'off' ? (race.wetDry && race.wetDry !== 'dry' ? `${race.wetDry} track` : null) : (wetFor(race.sessionId)?.words ?? null)
+    switchValue('rainmarks') === 'off' ? wetPhraseFor(race.sessionId, race.wetDry) : (wetFor(race.sessionId)?.words ?? null)
   ]
     .filter(Boolean)
     .join(' · ') || null;

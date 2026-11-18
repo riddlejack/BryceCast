@@ -18,6 +18,7 @@ import { chapterTint, raceHref, seriesShort } from './careerExplorer';
 import { enteredBySeries, statusShort, useArchiveRaces, statusWords, unclassifiedRaceFor, unclassifiedTitle, useSheetRaces, type SheetRace } from './careerRaceList';
 import { DeepTip } from './deepDives/frame';
 import { RainStreaks, wetFor } from './raceWet';
+import { wetCallFor, wetPhrase } from '../app/wetDry';
 import './careerRace.css';
 
 /* ============================================================================
@@ -57,7 +58,9 @@ const ordinalOf = (n: number): string => {
 const ledeFor = (race: SheetRace): string => {
   const { start, finish, wetDry } = race.row;
   const gain = race.row.gain ?? (start !== null ? start - finish : null);
-  const tail = wetDry && wetDry !== 'dry' ? ` on a ${wetDry} track` : '';
+  // the track in the source's words (app/wetDry.ts): "on a damp track", "on a wet, drying track", "dry at the start, then rain"
+  const call = wetCallFor(race.row.sessionId, wetDry);
+  const tail = call && call.state !== 'dry' ? (/track$/.test(call.words) ? ` on a ${call.words}` : `, ${call.words}`) : '';
   if (start === null) return finish === 1 ? `Won${tail}.` : `Finished ${ordinalOf(finish)}${tail}.`;
   if (finish === 1) return start === 1 ? `Started on pole and won${tail}.` : `Won from ${ordinalOf(start)} on the grid${tail}.`;
   if (gain === 0 || gain === null) return start === 1 ? `Started and finished on pole${tail}.` : `Started and finished ${ordinalOf(finish)}${tail}.`;
@@ -929,11 +932,14 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
   const showField = race.field !== null || (race.row.start !== null && race.row.start !== race.row.finish);
   const stageH = column ? Math.round(Math.min(440, Math.max(320, 15 * depth + 44))) : 240;
 
+  // the track and who called it: "damp track (series report)", "dry track (observed, NOAA)"
+  const conditionsCall = wetCallFor(race.row.sessionId, race.row.wetDry);
+  const conditions = conditionsCall ? wetPhrase(conditionsCall) : null;
   const facts: Array<[string, string]> = [
     ...(race.row.seriesName !== race.row.seriesShort ? ([['Series', race.row.seriesName]] as Array<[string, string]>) : []),
     ...(race.team ? ([['Team', race.team]] as Array<[string, string]>) : []),
     ['Track', `${race.row.trackName}${race.row.trackType === 'oval' ? ', oval' : ''}`],
-    ...(race.row.wetDry ? ([['Conditions', `${race.row.wetDry} track`]] as Array<[string, string]>) : []),
+    ...(conditions ? ([['Conditions', conditions]] as Array<[string, string]>) : []),
     ...(race.points !== null ? ([['Points', String(race.points)]] as Array<[string, string]>) : [])
   ];
 
@@ -972,12 +978,12 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
               label: 'Race day',
               note: 'The race’s own day from its official start (raceDate), else the season campaign’s race date; otherwise the meeting’s first day, shown as “Weekend of”.'
             },
-            ...(race.row.wetDry
+            ...(conditions
               ? [
                   {
-                    label: 'Per-session condition report',
-                    path: 'analysis/context-event-narrative-layer/output/weather_condition_context.csv',
-                    note: 'Official series weather lines plus labeled modeled observations, joined by session.'
+                    label: 'Wet or dry',
+                    path: 'data/career/reports/career-race-weather-report.json',
+                    note: 'The series’ own condition report where one exists, else weather stations near the track (NOAA) and race reports, else the Open-Meteo reanalysis rain over the race window; the Conditions line names which.'
                   }
                 ]
               : []),

@@ -1527,11 +1527,11 @@ const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }
         const reads = races.flatMap((race) => model.wetByEvent.get(race.eventId) ?? []);
         if (reads.length === 0) return null;
         const of = (n: number) => (n === total ? (total === 1 ? 'the race' : `all ${total} races`) : `${n} of ${total} races`);
-        const wet = reads.filter((read) => read.state === 'wet').length;
-        const mixed = reads.length - wet;
-        const modelled = reads.every((read) => read.modelled) ? ' (modelled)' : reads.some((read) => read.modelled) ? ' (partly modelled)' : '';
-        const parts = [wet > 0 ? `wet track in ${of(wet)}` : null, mixed > 0 ? `damp or drying in ${of(mixed)}` : null].filter(Boolean).join('; ');
-        return <span className="life-tip__wet">{`${parts.charAt(0).toUpperCase()}${parts.slice(1)}${modelled}`}</span>;
+        // each race's track in the source's words with who called it (app/wetDry.ts), alike ones counted together
+        const counts = new Map<string, number>();
+        for (const read of reads) counts.set(read.words, (counts.get(read.words) ?? 0) + 1);
+        const parts = [...counts].map(([words, n]) => (total === 1 ? words : `${words} in ${of(n)}`)).join('; ');
+        return <span className="life-tip__wet">{`${parts.charAt(0).toUpperCase()}${parts.slice(1)}`}</span>;
       })()}
     </span>
   );
