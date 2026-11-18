@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties } from 'react';
-import { uiDataPackage, type UiCareerRival } from '../../data/uiDataPackage';
+import { uiDataPackage } from '../../data/uiDataPackage';
 import {
   chartFont,
   useCoarsePointer,
@@ -11,69 +11,33 @@ import {
 import { useTapPreview } from '../../app/tapPreview';
 import { SourcePill } from '../../app/components';
 import { switchValue } from '../../review/switches';
-import { Segmented } from '../careerExplorer';
+import { Segmented, useCareerRows } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
+import { GROUP_LABEL, TEAMMATE_FLOOR, recordDetail, teammateWords, toRival, type Rival } from './rivalsModel';
+import { GOLD, TyreBoard, TyreKey } from './rivalsTyres';
+import { RaceGrid } from './rivalsGrid';
 import './rivals.css';
 
 /**
- * The rivals (November 17, 2026). The old beeswarm had 43 dots and no names:
- * nobody could tell who was who without hovering. Now every rival is a named
- * row, and every race the two of them both finished is one small square:
- * gold on Bryce's side when he came home ahead, ink on the rival's side when
- * the rival did. The package carries each record's totals, not race-by-race
- * outcomes, so the squares are grouped by who finished ahead, never drawn as
- * a race order (said in Sources).
+ * The rivals. Round 2 (November 17, 2026, Jack: "more interesting shapes
+ * instead of just the generic boxes ... car tires or something like that"):
+ * every race the two of them both finished is a tyre, and each tyre is a real
+ * race with its own card and track still (headToHead[].sharedRaces).
  *
- * `?ddrivals=tiles` is the other design: the same squares as one small waffle
- * per driver, a grid of people rather than one ranked chart.
+ * `?ddrivals=` switches the design:
+ *   (default) tyres: the board, rival's tyres left of the name, Bryce's right,
+ *             rolling out from the names on reveal (rivalsTyres.tsx);
+ *   grid:     every INDY NXT race a column, every rival a row (rivalsGrid.tsx);
+ *   boxes:    the squares board live before round 2 (below);
+ *   tiles:    one small waffle per rival (below).
  */
 
-const GOLD = '#e09a2f'; /* the house ramp's gold pole (charts.inkGoldDiverging) */
 const GOLD_TEXT = 'var(--link)'; /* the same hue at text contrast */
 const INK = '#3a3a3f'; /* the house ramp's ink pole */
-const TEAMMATE_FLOOR = 5; /* the old card's floor for naming teammates */
 const PHONE_ROWS = 12;
 
-interface Rival {
-  name: string;
-  races: number;
-  ahead: number;
-  behind: number;
-  teammates: number;
-  share: number;
-  group: 'bryce' | 'level' | 'rival';
-}
-
 type SortKey = 'shared' | 'record';
-
-const toRival = (rival: UiCareerRival): Rival => {
-  const races = rival.racesTogether ?? 0;
-  const ahead = rival.bryceAhead ?? 0;
-  const behind = rival.bryceBehind ?? 0;
-  return {
-    name: rival.driverName,
-    races,
-    ahead,
-    behind,
-    teammates: rival.sameTeamRaces ?? 0,
-    share: races > 0 ? ahead / races : 0.5,
-    group: ahead > behind ? 'bryce' : ahead < behind ? 'rival' : 'level'
-  };
-};
-
-const teammateWords = (rival: Rival) =>
-  rival.teammates >= TEAMMATE_FLOOR ? `teammates for ${rival.teammates} of ${rival.races}` : null;
-
-const recordDetail = (rival: Rival) =>
-  [`Bryce ahead in ${rival.ahead} of ${rival.races} shared races`, rival.teammates >= TEAMMATE_FLOOR ? `teammates for ${rival.teammates} of them` : null]
-    .filter(Boolean)
-    .join(' · ');
-
-const GROUP_LABEL: Record<Rival['group'], string> = {
-  bryce: 'Bryce leads the record',
-  level: 'Level',
-  rival: 'The rival leads'
-};
+type Design = 'auto' | 'tyres' | 'grid' | 'boxes' | 'tiles';
 
 /* ---------- the board: one named row per rival, races as squares ---------- */
 
@@ -349,10 +313,13 @@ const Tiles = ({ rivals }: { rivals: Rival[] }) => {
 /* ---------- the section ---------- */
 
 export const RivalsDeepDive = () => {
-  const design = switchValue('ddrivals') === 'tiles' ? 'tiles' : 'board';
+  const raw = switchValue('ddrivals');
+  const design: Design = raw === 'tyres' || raw === 'grid' || raw === 'boxes' || raw === 'tiles' ? raw : 'auto';
   const coarse = useCoarsePointer();
   const [sort, setSort] = useState<SortKey>('shared');
   const all = uiDataPackage.screens.careerLab.headToHead ?? [];
+  const careerRows = useCareerRows();
+  const rowsById = useMemo(() => new Map(careerRows.map((row) => [row.sessionId, row])), [careerRows]);
 
   /* Five shared races is the honest floor, as before: below that a record is a coin flip. */
   const charted = useMemo(
@@ -360,7 +327,7 @@ export const RivalsDeepDive = () => {
     [all]
   );
   const smallSample = all.length - charted.length;
-  const rivals = useMemo(() => charted.map(toRival), [charted]);
+  const rivals = useMemo(() => charted.map((rival) => toRival(rival, rowsById)), [charted, rowsById]);
   const ordered = useMemo(() => {
     if (sort === 'shared') return rivals; /* the package's own order: most shared races first */
     const rank = { bryce: 0, level: 1, rival: 2 } as const;
@@ -368,6 +335,7 @@ export const RivalsDeepDive = () => {
       (a, b) => rank[a.group] - rank[b.group] || b.share - a.share || b.races - a.races
     );
   }, [rivals, sort]);
+  const perRace = design === 'auto' || design === 'tyres' || design === 'grid';
 
   if (charted.length === 0) return null;
   const mostShared = charted[0];
@@ -395,10 +363,22 @@ export const RivalsDeepDive = () => {
               path: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
               note: 'Official classified finishes for every driver Bryce has shared an INDY NXT grid with, 2024–26. Counts races where both cars were classified; the chart holds rivals with five or more shared races.'
             },
-            {
-              label: 'How the squares are drawn',
-              note: `Each square is one race both cars finished: gold when Bryce was classified ahead, ink when the rival was. The package carries each record's totals, not race-by-race outcomes, so a row's squares are grouped by who finished ahead, not drawn in race order. "Teammates" names a rival who shared Bryce's team in ${TEAMMATE_FLOOR} or more of their races. ${smallSample} more drivers shared fewer than five races and are left off.`
-            }
+            perRace
+              ? {
+                  label: 'How the tyres are drawn',
+                  path: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head_races.csv',
+                  note: `Each tyre is one race both cars were classified: gold-rimmed when Bryce finished ahead, plain black when the rival did. ${
+                    design === 'grid'
+                      ? 'Each column is one INDY NXT race in date order; an empty slot is a race the two did not both finish.'
+                      : design === 'tyres'
+                        ? 'Each side runs in date order, the first race nearest the name.'
+                        : 'On a laptop or wider each column is one INDY NXT race in date order, and an empty slot is a race the two did not both finish; on a phone each rival is two rows of tyres, Bryce’s above, in date order.'
+                  } The race list is rebuilt from the same race results by the same rule as the totals and checked against them. "Teammates" names a rival who shared Bryce's team in ${TEAMMATE_FLOOR} or more of their races. ${smallSample} more drivers shared fewer than five races and are left off.`
+                }
+              : {
+                  label: 'How the squares are drawn',
+                  note: `Each square is one race both cars finished: gold when Bryce was classified ahead, ink when the rival was. A row's squares are grouped by who finished ahead, not drawn in race order. "Teammates" names a rival who shared Bryce's team in ${TEAMMATE_FLOOR} or more of their races. ${smallSample} more drivers shared fewer than five races and are left off.`
+                }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
         />
@@ -416,11 +396,30 @@ export const RivalsDeepDive = () => {
       foot={
         <>
           {smallSample > 0 ? `${smallSample} more drivers shared fewer than five races` : null}
-          {design === 'board' ? `${smallSample > 0 ? ' · ' : ''}${coarse ? 'tap' : 'hover'} a driver for the record` : null}
+          {design === 'tiles'
+            ? null
+            : `${smallSample > 0 ? ' · ' : ''}${
+                perRace
+                  ? coarse
+                    ? 'tap a tyre for the race, a name for the record'
+                    : 'hover a tyre for the race and its track, a name for the record; click a tyre to open the race'
+                  : `${coarse ? 'tap' : 'hover'} a driver for the record`
+              }`}
         </>
       }
     >
-      {design === 'tiles' ? <Tiles rivals={ordered} /> : <Board rivals={ordered} sort={sort} />}
+      {design === 'grid' || design === 'auto' ? <TyreKey wideOnly={design === 'auto'} /> : null}
+      {design === 'tiles' ? (
+        <Tiles rivals={ordered} />
+      ) : design === 'boxes' ? (
+        <Board rivals={ordered} sort={sort} />
+      ) : design === 'grid' ? (
+        <RaceGrid rivals={ordered} sort={sort} />
+      ) : design === 'auto' ? (
+        <RaceGrid rivals={ordered} sort={sort} phoneBoard={<TyreBoard rivals={ordered} sort={sort} />} />
+      ) : (
+        <TyreBoard rivals={ordered} sort={sort} />
+      )}
     </DeepDive>
   );
 };

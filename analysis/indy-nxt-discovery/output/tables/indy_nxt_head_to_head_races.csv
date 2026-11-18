@@ -1,0 +1,908 @@
+driverId,sessionId,scheduledStart,seasonYear,raceLabel,trackId,trackName,bryceFinish,rivalFinish,sameTeam
+driver_alessandro_de_tullio,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,10,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,11,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,20,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,1,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,9,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,5,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,22,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,2,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,3,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,23,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,6,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,8,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,9,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,1,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,6,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,18,0
+driver_alessandro_de_tullio,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,8,0
+driver_alexander_koreiba,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,20,0
+driver_alexander_koreiba,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,16,0
+driver_alexander_koreiba,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,13,0
+driver_alexander_koreiba,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,22,0
+driver_alexander_koreiba,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,19,0
+driver_alexander_koreiba,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,17,0
+driver_alexander_koreiba,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,16,0
+driver_alexander_koreiba,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,24,0
+driver_alexander_koreiba,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,23,0
+driver_alexander_koreiba,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,14,0
+driver_alexander_koreiba,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,19,0
+driver_alexander_koreiba,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,24,0
+driver_alexander_koreiba,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,14,0
+driver_alexander_koreiba,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,18,0
+driver_alexander_koreiba,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,10,0
+driver_alexander_koreiba,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,16,0
+driver_alexander_koreiba,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,18,0
+driver_bart_harrison,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,10,0
+driver_bart_harrison,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,12,0
+driver_bart_harrison,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,17,0
+driver_caio_collet,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,7,0
+driver_caio_collet,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,4,0
+driver_caio_collet,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,19,0
+driver_caio_collet,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,3,0
+driver_caio_collet,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,2,0
+driver_caio_collet,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,5,0
+driver_caio_collet,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,2,0
+driver_caio_collet,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,2,0
+driver_caio_collet,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,1,0
+driver_caio_collet,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,17,0
+driver_caio_collet,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,14,0
+driver_caio_collet,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,4,0
+driver_caio_collet,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,8,0
+driver_caio_collet,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,3,0
+driver_caio_collet,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,3,1
+driver_caio_collet,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,19,0
+driver_caio_collet,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,2,0
+driver_caio_collet,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,5,0
+driver_caio_collet,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,2,0
+driver_caio_collet,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,3,0
+driver_caio_collet,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,1,0
+driver_caio_collet,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,2,0
+driver_caio_collet,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,4,0
+driver_caio_collet,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,1,0
+driver_caio_collet,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,1,0
+driver_caio_collet,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,2,0
+driver_caio_collet,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,7,0
+driver_caio_collet,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,4,0
+driver_callum_hedge,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,11,0
+driver_callum_hedge,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,9,0
+driver_callum_hedge,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,4,0
+driver_callum_hedge,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,10,0
+driver_callum_hedge,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,3,0
+driver_callum_hedge,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,6,0
+driver_callum_hedge,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,12,0
+driver_callum_hedge,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,16,0
+driver_callum_hedge,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,4,0
+driver_callum_hedge,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,4,0
+driver_callum_hedge,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,5,0
+driver_callum_hedge,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,13,0
+driver_callum_hedge,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,11,0
+driver_callum_hedge,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,16,0
+driver_callum_hedge,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,8,0
+driver_callum_hedge,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,18,0
+driver_callum_hedge,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,4,0
+driver_callum_hedge,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,10,0
+driver_callum_hedge,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,11,0
+driver_callum_hedge,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,7,0
+driver_callum_hedge,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,6,0
+driver_callum_hedge,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,6,0
+driver_callum_hedge,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,6,0
+driver_callum_hedge,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,5,0
+driver_callum_hedge,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,3,0
+driver_callum_hedge,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,4,0
+driver_callum_hedge,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,4,0
+driver_callum_hedge,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,18,0
+driver_carson_etter,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,24,1
+driver_carson_etter,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,19,1
+driver_carson_etter,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,21,1
+driver_carson_etter,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,21,1
+driver_carson_etter,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,17,1
+driver_carson_etter,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,19,1
+driver_carson_etter,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,19,1
+driver_carson_etter,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,16,1
+driver_carson_etter,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,16,1
+driver_carson_etter,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,13,1
+driver_carson_etter,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,21,1
+driver_carson_etter,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,23,1
+driver_carson_etter,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,20,1
+driver_carson_etter,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,24,1
+driver_carson_etter,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,16,1
+driver_carson_etter,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,20,1
+driver_carson_etter,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,19,1
+driver_christian_bogle,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,10,0
+driver_christian_bogle,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,13,0
+driver_christian_bogle,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,9,0
+driver_christian_bogle,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,15,0
+driver_christian_bogle,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,11,0
+driver_christian_bogle,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,14,0
+driver_christian_bogle,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,7,0
+driver_christian_bogle,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,8,0
+driver_christian_bogle,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,11,0
+driver_christian_bogle,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,6,0
+driver_christian_bogle,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,8,0
+driver_christian_bogle,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,11,0
+driver_christian_bogle,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,14,0
+driver_christian_bogle,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,11,0
+driver_christian_brooks,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,8,0
+driver_christian_brooks,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,7,0
+driver_christian_brooks,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,5,0
+driver_christian_brooks,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,5,0
+driver_christian_brooks,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,7,0
+driver_christian_brooks,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,5,0
+driver_christian_brooks,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,10,0
+driver_christian_brooks,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,9,0
+driver_colin_kaminsky,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,15,0
+driver_colin_kaminsky,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,24,0
+driver_colin_kaminsky,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,16,0
+driver_colin_kaminsky,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,18,0
+driver_colin_kaminsky,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,16,0
+driver_colin_kaminsky,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,15,0
+driver_colin_kaminsky,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,10,0
+driver_colin_kaminsky,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,17,0
+driver_colin_kaminsky,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,20,0
+driver_colin_kaminsky,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,21,0
+driver_colin_kaminsky,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,17,0
+driver_colin_kaminsky,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,22,0
+driver_colin_kaminsky,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,19,0
+driver_colin_kaminsky,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,12,0
+driver_colin_kaminsky,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,18,0
+driver_colin_kaminsky,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,15,0
+driver_colin_kaminsky,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,13,0
+driver_davey_hamilton_jr,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,15,0
+driver_davey_hamilton_jr,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,15,0
+driver_davey_hamilton_jr,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,15,0
+driver_davey_hamilton_jr,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,16,0
+driver_dennis_hauger,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,1,0
+driver_dennis_hauger,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,1,0
+driver_dennis_hauger,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,8,0
+driver_dennis_hauger,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,1,0
+driver_dennis_hauger,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,1,0
+driver_dennis_hauger,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,5,0
+driver_dennis_hauger,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,2,0
+driver_dennis_hauger,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,1,0
+driver_dennis_hauger,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,2,0
+driver_dennis_hauger,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,2,0
+driver_dennis_hauger,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,16,0
+driver_dennis_hauger,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,1,0
+driver_dennis_hauger,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,2,0
+driver_dennis_hauger,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,3,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,17,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,2,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,2,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,4,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,1,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,3,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,1,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,13,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,22,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,4,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,1,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,1,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,11,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,7,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,7,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,8,0
+driver_enzo_fittipaldi,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,5,0
+driver_evagoras_papasavvas,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,2,0
+driver_evagoras_papasavvas,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,10,0
+driver_evagoras_papasavvas,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,13,0
+driver_evagoras_papasavvas,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,12,0
+driver_evagoras_papasavvas,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,9,0
+driver_hailie_deegan,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,14,1
+driver_hailie_deegan,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,17,0
+driver_hailie_deegan,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,17,0
+driver_hailie_deegan,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,18,0
+driver_hailie_deegan,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,16,0
+driver_hailie_deegan,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,16,0
+driver_hailie_deegan,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,18,0
+driver_hailie_deegan,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,17,0
+driver_hailie_deegan,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,18,0
+driver_hailie_deegan,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,12,0
+driver_hailie_deegan,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,11,0
+driver_hailie_deegan,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,17,0
+driver_hailie_deegan,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,14,0
+driver_hailie_deegan,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,13,0
+driver_jack_beeton,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,11,0
+driver_jack_beeton,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,15,0
+driver_jack_beeton,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,9,0
+driver_jack_beeton,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,9,0
+driver_jack_beeton,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,21,0
+driver_jack_beeton,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,13,0
+driver_jack_beeton,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,13,0
+driver_jack_beeton,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,11,0
+driver_jack_beeton,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,4,0
+driver_jack_beeton,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,6,0
+driver_jack_beeton,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,3,0
+driver_jack_beeton,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,2,0
+driver_jack_beeton,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,8,0
+driver_jack_beeton,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,13,0
+driver_jack_beeton,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,3,0
+driver_jack_beeton,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,19,0
+driver_jack_beeton,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,10,0
+driver_jack_william_miller,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,18,0
+driver_jack_william_miller,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,12,0
+driver_jack_william_miller,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,16,0
+driver_jack_william_miller,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,18,0
+driver_jack_william_miller,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,15,0
+driver_jack_william_miller,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,15,0
+driver_jack_william_miller,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,10,0
+driver_jack_william_miller,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,10,0
+driver_jack_william_miller,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,12,0
+driver_jack_william_miller,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,14,0
+driver_jack_william_miller,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,18,0
+driver_jack_william_miller,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,15,0
+driver_jack_william_miller,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,16,0
+driver_jack_william_miller,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,15,0
+driver_jack_william_miller,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,16,0
+driver_jack_william_miller,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,8,0
+driver_jack_william_miller,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,9,0
+driver_jack_william_miller,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,19,0
+driver_jack_william_miller,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,7,0
+driver_jack_william_miller,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,19,0
+driver_jack_william_miller,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,7,0
+driver_jack_william_miller,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,11,0
+driver_jack_william_miller,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,14,0
+driver_jack_william_miller,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,7,0
+driver_jack_william_miller,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,7,0
+driver_jack_william_miller,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,13,0
+driver_jack_william_miller,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,17,0
+driver_jack_william_miller,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,15,0
+driver_jacob_abel,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,2,0
+driver_jacob_abel,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,1,0
+driver_jacob_abel,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,1,0
+driver_jacob_abel,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,2,0
+driver_jacob_abel,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,5,0
+driver_jacob_abel,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,3,0
+driver_jacob_abel,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,3,0
+driver_jacob_abel,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,11,0
+driver_jacob_abel,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,3,0
+driver_jacob_abel,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,15,0
+driver_jacob_abel,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,2,0
+driver_jacob_abel,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,1,0
+driver_jacob_abel,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,2,0
+driver_jacob_abel,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,8,0
+driver_jacob_abel,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,5,0
+driver_jacob_abel,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,9,0
+driver_jacob_abel,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,13,0
+driver_jacob_abel,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,4,0
+driver_jagger_jones,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,13,0
+driver_james_roe,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,16,1
+driver_james_roe,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,3,1
+driver_james_roe,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,15,1
+driver_james_roe,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,4,1
+driver_james_roe,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,16,1
+driver_james_roe,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,18,1
+driver_james_roe,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,5,1
+driver_james_roe,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,19,1
+driver_james_roe,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,15,1
+driver_james_roe,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,2,1
+driver_james_roe,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,10,1
+driver_james_roe,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,16,1
+driver_james_roe,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,6,1
+driver_james_roe,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,4,1
+driver_james_roe,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,20,0
+driver_james_roe,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,10,0
+driver_james_roe,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,19,0
+driver_james_roe,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,11,0
+driver_james_roe,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,13,0
+driver_james_roe,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,18,0
+driver_james_roe,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,14,0
+driver_james_roe,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,13,0
+driver_james_roe,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,7,0
+driver_james_roe,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,14,0
+driver_james_roe,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,13,0
+driver_james_roe,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,18,0
+driver_james_roe,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,9,0
+driver_james_roe,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,10,0
+driver_james_roe,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,21,1
+driver_james_roe,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,17,1
+driver_james_roe,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,23,1
+driver_james_roe,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,12,1
+driver_james_roe,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,10,1
+driver_james_roe,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,22,1
+driver_james_roe,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,18,1
+driver_james_roe,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,18,1
+driver_james_roe,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,15,1
+driver_james_roe,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,19,1
+driver_james_roe,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,20,1
+driver_james_roe,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,19,1
+driver_james_roe,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,16,1
+driver_james_roe,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,14,1
+driver_james_roe,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,15,1
+driver_james_roe,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,21,1
+driver_james_roe,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,16,1
+driver_jamie_chadwick,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,20,1
+driver_jamie_chadwick,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,20,1
+driver_jamie_chadwick,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,3,1
+driver_jamie_chadwick,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,16,1
+driver_jamie_chadwick,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,12,1
+driver_jamie_chadwick,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,1,1
+driver_jamie_chadwick,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,9,1
+driver_jamie_chadwick,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,6,1
+driver_jamie_chadwick,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,10,1
+driver_jamie_chadwick,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,7,1
+driver_jamie_chadwick,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,16,1
+driver_jamie_chadwick,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,14,1
+driver_jamie_chadwick,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,5,1
+driver_jamie_chadwick,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,17,1
+driver_jm_correa,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,21,0
+driver_jm_correa,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,14,0
+driver_jm_correa,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,3,0
+driver_jm_correa,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,8,0
+driver_jm_correa,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,8,0
+driver_jm_correa,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,12,0
+driver_jm_correa,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,15,0
+driver_jm_correa,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,17,0
+driver_jm_correa,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,9,0
+driver_jm_correa,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,9,0
+driver_jm_correa,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,4,0
+driver_jm_correa,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,11,0
+driver_jm_correa,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,8,0
+driver_jm_correa,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,12,0
+driver_jm_correa,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,11,0
+driver_jm_correa,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,9,0
+driver_jm_correa,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,14,0
+driver_jm_correa,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,7,0
+driver_jm_correa,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,7,0
+driver_jm_correa,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,22,0
+driver_jm_correa,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,4,0
+driver_jm_correa,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,23,0
+driver_jm_correa,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,6,0
+driver_jm_correa,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,2,0
+driver_jm_correa,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,4,0
+driver_jm_correa,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,12,0
+driver_jonathan_browne,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,6,0
+driver_jonathan_browne,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,14,0
+driver_jonathan_browne,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,8,0
+driver_jonathan_browne,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,8,0
+driver_jonathan_browne,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,9,0
+driver_jonathan_browne,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,17,0
+driver_jonathan_browne,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,15,0
+driver_jonathan_browne,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,20,0
+driver_jonathan_browne,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,7,0
+driver_jonathan_browne,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,9,0
+driver_jonathan_browne,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,11,0
+driver_jonathan_browne,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,10,0
+driver_jonathan_browne,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,9,0
+driver_jonathan_browne,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,12,0
+driver_jonathan_browne,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,7,0
+driver_jordan_missig,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,18,0
+driver_jordan_missig,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,13,0
+driver_jordan_missig,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,20,0
+driver_jordan_missig,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,17,0
+driver_jordan_missig,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,9,0
+driver_jordan_missig,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,6,0
+driver_jordan_missig,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,12,0
+driver_jordan_missig,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,11,0
+driver_jordan_missig,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,17,0
+driver_jordan_missig,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,12,0
+driver_jordan_missig,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,11,0
+driver_jordan_missig,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,19,0
+driver_jordan_missig,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,7,0
+driver_jordan_missig,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,8,0
+driver_jordan_missig,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,18,0
+driver_jordan_missig,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,10,0
+driver_jordan_missig,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,8,0
+driver_jordan_missig,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,13,0
+driver_jordan_missig,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,8,0
+driver_jordan_missig,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,14,0
+driver_jordan_missig,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,10,0
+driver_jordan_missig,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,6,0
+driver_jordan_missig,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,6,0
+driver_jordan_missig,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,11,0
+driver_jordan_missig,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,16,0
+driver_jordan_missig,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,15,0
+driver_jordan_missig,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,10,0
+driver_jordan_missig,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,24,0
+driver_jordan_missig,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,16,0
+driver_jordan_missig,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,12,0
+driver_jordan_missig,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,20,0
+driver_jordan_missig,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,22,0
+driver_josh_mason,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,17,0
+driver_josh_mason,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,16,0
+driver_josh_pierson,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,13,0
+driver_josh_pierson,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,17,0
+driver_josh_pierson,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,21,0
+driver_josh_pierson,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,12,0
+driver_josh_pierson,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,8,0
+driver_josh_pierson,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,7,0
+driver_josh_pierson,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,13,0
+driver_josh_pierson,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,9,0
+driver_josh_pierson,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,9,0
+driver_josh_pierson,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,11,0
+driver_josh_pierson,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,13,0
+driver_josh_pierson,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,9,0
+driver_josh_pierson,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,12,0
+driver_josh_pierson,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,10,0
+driver_josh_pierson,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,9,1
+driver_josh_pierson,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,5,0
+driver_josh_pierson,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,6,0
+driver_josh_pierson,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,9,0
+driver_josh_pierson,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,4,0
+driver_josh_pierson,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,6,0
+driver_josh_pierson,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,4,0
+driver_josh_pierson,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,5,0
+driver_josh_pierson,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,11,0
+driver_josh_pierson,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,3,0
+driver_josh_pierson,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,2,0
+driver_josh_pierson,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,11,0
+driver_josh_pierson,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,11,0
+driver_josh_pierson,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,9,0
+driver_josh_pierson,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,7,0
+driver_josh_pierson,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,23,0
+driver_josh_pierson,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,24,0
+driver_josh_pierson,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,14,0
+driver_josh_pierson,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,6,0
+driver_josh_pierson,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,8,0
+driver_josh_pierson,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,14,0
+driver_josh_pierson,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,3,0
+driver_josh_pierson,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,2,0
+driver_josh_pierson,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,22,0
+driver_josh_pierson,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,11,0
+driver_josh_pierson,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,6,0
+driver_josh_pierson,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,6,0
+driver_josh_pierson,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,21,0
+driver_josh_pierson,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,22,0
+driver_josh_pierson,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,1,0
+driver_josh_pierson,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,24,0
+driver_kiko_porto,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,12,0
+driver_liam_sceats,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,18,1
+driver_liam_sceats,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,6,0
+driver_liam_sceats,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,7,0
+driver_liam_sceats,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,8,0
+driver_liam_sceats,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,14,0
+driver_liam_sceats,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,10,0
+driver_liam_sceats,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,8,0
+driver_liam_sceats,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,18,0
+driver_lindsay_brewer,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,15,0
+driver_lindsay_brewer,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,19,0
+driver_lindsay_brewer,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,17,0
+driver_lindsay_brewer,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,20,0
+driver_lindsay_brewer,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,19,0
+driver_lindsay_brewer,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,16,0
+driver_lindsay_brewer,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,17,0
+driver_lindsay_brewer,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,15,0
+driver_lochie_hughes,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,2,0
+driver_lochie_hughes,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,3,0
+driver_lochie_hughes,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,1,0
+driver_lochie_hughes,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,2,0
+driver_lochie_hughes,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,5,0
+driver_lochie_hughes,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,1,0
+driver_lochie_hughes,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,3,0
+driver_lochie_hughes,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,3,0
+driver_lochie_hughes,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,16,0
+driver_lochie_hughes,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,6,0
+driver_lochie_hughes,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,15,0
+driver_lochie_hughes,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,10,0
+driver_lochie_hughes,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,3,0
+driver_lochie_hughes,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,5,0
+driver_lochie_hughes,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,5,0
+driver_lochie_hughes,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,5,0
+driver_lochie_hughes,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,12,0
+driver_lochie_hughes,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,16,0
+driver_lochie_hughes,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,2,0
+driver_lochie_hughes,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,4,0
+driver_lochie_hughes,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,21,0
+driver_lochie_hughes,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,6,0
+driver_lochie_hughes,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,1,0
+driver_lochie_hughes,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,20,0
+driver_lochie_hughes,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,5,0
+driver_lochie_hughes,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,10,0
+driver_lochie_hughes,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,7,0
+driver_lochie_hughes,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,2,0
+driver_lochie_hughes,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,14,0
+driver_lochie_hughes,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,14,0
+driver_lochie_hughes,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,3,0
+driver_louis_foster,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,3,1
+driver_louis_foster,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,5,1
+driver_louis_foster,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,7,1
+driver_louis_foster,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,1,1
+driver_louis_foster,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,1,1
+driver_louis_foster,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,2,1
+driver_louis_foster,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,1,1
+driver_louis_foster,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,1,1
+driver_louis_foster,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,2,1
+driver_louis_foster,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,1,1
+driver_louis_foster,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,1,1
+driver_louis_foster,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,2,1
+driver_louis_foster,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,1,1
+driver_louis_foster,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,1,1
+driver_matteo_nannini,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,19,0
+driver_matteo_nannini,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,8,0
+driver_matteo_nannini,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,15,0
+driver_matteo_nannini,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,13,0
+driver_matteo_nannini,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,23,0
+driver_matteo_nannini,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,7,0
+driver_matteo_nannini,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,11,0
+driver_matteo_nannini,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,20,0
+driver_matteo_nannini,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,5,0
+driver_matteo_nannini,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,1,0
+driver_matteo_nannini,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,14,0
+driver_matteo_nannini,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,12,0
+driver_matteo_nannini,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,1,0
+driver_matteo_nannini,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,20,0
+driver_matteo_nannini,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,20,0
+driver_matteo_nannini,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,11,0
+driver_matteo_nannini,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,7,0
+driver_max_garcia,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,12,0
+driver_max_garcia,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,14,0
+driver_max_garcia,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,4,0
+driver_max_garcia,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,24,0
+driver_max_garcia,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,15,0
+driver_max_garcia,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,23,0
+driver_max_garcia,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,4,0
+driver_max_garcia,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,8,0
+driver_max_garcia,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,10,0
+driver_max_garcia,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,18,0
+driver_max_garcia,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,8,0
+driver_max_garcia,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,7,0
+driver_max_garcia,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,4,0
+driver_max_garcia,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,9,0
+driver_max_garcia,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,1,0
+driver_max_garcia,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,3,0
+driver_max_garcia,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,21,0
+driver_max_taylor,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,7,0
+driver_max_taylor,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,19,0
+driver_max_taylor,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,10,0
+driver_max_taylor,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,16,0
+driver_max_taylor,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,4,0
+driver_max_taylor,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,10,0
+driver_max_taylor,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,2,0
+driver_max_taylor,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,1,0
+driver_max_taylor,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,19,0
+driver_max_taylor,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,2,0
+driver_max_taylor,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,5,0
+driver_max_taylor,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,2,0
+driver_max_taylor,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,20,0
+driver_max_taylor,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,5,0
+driver_max_taylor,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,12,0
+driver_max_taylor,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,17,0
+driver_max_taylor,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,10,0
+driver_max_taylor,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,9,0
+driver_max_taylor,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,5,0
+driver_max_taylor,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,3,0
+driver_max_taylor,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,4,0
+driver_max_taylor,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,7,0
+driver_max_taylor,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,14,0
+driver_michael_d_orlando,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,4,0
+driver_michael_d_orlando,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,7,0
+driver_michael_d_orlando,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,12,0
+driver_michael_d_orlando,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,6,0
+driver_michael_d_orlando,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,10,0
+driver_michael_d_orlando,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,11,0
+driver_michael_d_orlando,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,6,0
+driver_michael_d_orlando,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,7,0
+driver_michael_d_orlando,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,8,0
+driver_michael_d_orlando,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,14,0
+driver_myles_rowe,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,8,0
+driver_myles_rowe,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,6,0
+driver_myles_rowe,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,5,0
+driver_myles_rowe,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,7,0
+driver_myles_rowe,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,4,0
+driver_myles_rowe,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,19,0
+driver_myles_rowe,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,6,0
+driver_myles_rowe,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,17,0
+driver_myles_rowe,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,19,0
+driver_myles_rowe,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,18,0
+driver_myles_rowe,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,17,0
+driver_myles_rowe,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,7,0
+driver_myles_rowe,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,15,0
+driver_myles_rowe,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,14,0
+driver_myles_rowe,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,4,0
+driver_myles_rowe,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,4,0
+driver_myles_rowe,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,3,0
+driver_myles_rowe,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,3,0
+driver_myles_rowe,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,18,0
+driver_myles_rowe,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,2,0
+driver_myles_rowe,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,5,0
+driver_myles_rowe,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,10,0
+driver_myles_rowe,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,1,0
+driver_myles_rowe,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,4,0
+driver_myles_rowe,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,8,0
+driver_myles_rowe,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,3,0
+driver_myles_rowe,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,6,0
+driver_myles_rowe,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,1,0
+driver_myles_rowe,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,6,0
+driver_myles_rowe,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,9,0
+driver_myles_rowe,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,5,0
+driver_myles_rowe,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,23,0
+driver_myles_rowe,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,7,0
+driver_myles_rowe,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,24,0
+driver_myles_rowe,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,2,0
+driver_myles_rowe,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,1,0
+driver_myles_rowe,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,9,0
+driver_myles_rowe,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,5,0
+driver_myles_rowe,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,9,0
+driver_myles_rowe,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,16,0
+driver_myles_rowe,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,3,0
+driver_myles_rowe,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,22,0
+driver_myles_rowe,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,21,0
+driver_myles_rowe,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,23,0
+driver_myles_rowe,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,6,0
+driver_nicholas_monteiro,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,14,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,23,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,22,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,14,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,19,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,18,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,18,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,17,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,15,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,19,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,24,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,18,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,21,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,17,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,19,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,17,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,24,0
+driver_nicholas_monteiro,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,20,0
+driver_nicolas_stati,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,16,0
+driver_nicolas_stati,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,21,0
+driver_nicolas_stati,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,10,0
+driver_nicolas_stati,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,15,0
+driver_nicolas_stati,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,14,0
+driver_nicolas_stati,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,21,0
+driver_nicolas_stati,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,7,0
+driver_nicolas_stati,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,17,0
+driver_nicolas_stati,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,12,0
+driver_nicolas_stati,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,23,0
+driver_nicolas_stati,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,17,0
+driver_nicolas_stati,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,15,0
+driver_nicolas_stati,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,23,0
+driver_nicolas_stati,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,13,0
+driver_nicolas_stati,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,17,0
+driver_nicolas_stati,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,15,0
+driver_niels_koolen,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,21,0
+driver_niels_koolen,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,15,0
+driver_niels_koolen,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,10,0
+driver_niels_koolen,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,14,0
+driver_niels_koolen,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,13,0
+driver_niels_koolen,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,13,0
+driver_niels_koolen,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,19,0
+driver_niels_koolen,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,12,0
+driver_niels_koolen,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,13,0
+driver_niels_koolen,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,21,0
+driver_niels_koolen,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,13,1
+driver_niels_koolen,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,18,1
+driver_niels_koolen,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,6,1
+driver_niels_koolen,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,9,1
+driver_niels_koolen,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,10,1
+driver_niels_koolen,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,15,1
+driver_niels_koolen,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,14,1
+driver_niels_koolen,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,5,1
+driver_niels_koolen,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,11,1
+driver_niels_koolen,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,6,1
+driver_niels_koolen,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,6,1
+driver_niels_koolen,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,12,1
+driver_niels_koolen,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,7,1
+driver_niels_koolen,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,22,1
+driver_niels_koolen,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,13,1
+driver_niels_koolen,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,17,1
+driver_niels_koolen,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,20,1
+driver_niels_koolen,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,8,1
+driver_niels_koolen,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,14,1
+driver_niels_koolen,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,23,1
+driver_niels_koolen,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,4,1
+driver_niels_koolen,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,11,1
+driver_niels_koolen,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,9,1
+driver_niels_koolen,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,13,1
+driver_niels_koolen,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,13,1
+driver_niels_koolen,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,21,1
+driver_niels_koolen,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,17,1
+driver_niels_koolen,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,23,1
+driver_niels_koolen,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,5,1
+driver_niels_koolen,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,23,1
+driver_nikita_johnson,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,11,1
+driver_nikita_johnson,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,20,0
+driver_nikita_johnson,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,7,0
+driver_nikita_johnson,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,1,0
+driver_nikita_johnson,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,6,0
+driver_nikita_johnson,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,1,0
+driver_nikita_johnson,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,3,0
+driver_nikita_johnson,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,3,0
+driver_nikita_johnson,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,6,0
+driver_nikita_johnson,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,6,0
+driver_nikita_johnson,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,7,0
+driver_nikita_johnson,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,6,0
+driver_nikita_johnson,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,3,0
+driver_nikita_johnson,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,7,0
+driver_nikita_johnson,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,3,0
+driver_nikita_johnson,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,2,0
+driver_nikita_johnson,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,8,0
+driver_nikita_johnson,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,5,0
+driver_nikita_johnson,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,2,0
+driver_nikita_johnson,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,2,0
+driver_nolan_allaer,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,14,0
+driver_nolan_allaer,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,18,0
+driver_nolan_allaer,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,13,0
+driver_nolan_allaer,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,17,0
+driver_nolan_allaer,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,17,0
+driver_nolan_allaer,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,10,0
+driver_nolan_allaer,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,20,0
+driver_nolan_allaer,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,14,0
+driver_nolan_allaer,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,8,0
+driver_nolan_allaer,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,13,0
+driver_nolan_allaer,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,19,1
+driver_nolan_allaer,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,20,0
+driver_nolan_allaer,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,16,0
+driver_nolan_allaer,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,20,0
+driver_nolan_allaer,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,15,0
+driver_nolan_allaer,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,9,0
+driver_nolan_allaer,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,16,0
+driver_nolan_allaer,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,16,0
+driver_nolan_allaer,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,19,0
+driver_nolan_allaer,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,9,0
+driver_nolan_allaer,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,14,0
+driver_nolan_allaer,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,15,0
+driver_nolan_allaer,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,12,0
+driver_nolan_allaer,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,24,0
+driver_nolan_allaer,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,18,0
+driver_nolan_allaer,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,11,0
+driver_nolan_allaer,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,9,0
+driver_nolan_allaer,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,22,0
+driver_nolan_siegel,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,1,0
+driver_nolan_siegel,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,2,0
+driver_nolan_siegel,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,2,0
+driver_nolan_siegel,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,5,0
+driver_nolan_siegel,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,18,0
+driver_reece_gold,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,5,0
+driver_reece_gold,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,11,0
+driver_reece_gold,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,6,0
+driver_reece_gold,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,11,0
+driver_reece_gold,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,6,0
+driver_reece_gold,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,4,0
+driver_reece_gold,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,14,0
+driver_reece_gold,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,18,0
+driver_reece_gold,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,6,0
+driver_reece_gold,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,12,0
+driver_reece_gold,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,12,0
+driver_reece_gold,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,6,0
+driver_reece_gold,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,17,0
+driver_ricardo_escotto,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,21,0
+driver_ricardo_escotto,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,18,0
+driver_ricardo_escotto,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,13,0
+driver_ricardo_escotto,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,17,0
+driver_ricardo_escotto,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,13,0
+driver_ricardo_escotto,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,10,0
+driver_ricardo_escotto,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,9,0
+driver_ricardo_escotto,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,14,0
+driver_ricardo_escotto,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,16,0
+driver_ricardo_escotto,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,20,0
+driver_ricardo_escotto,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,13,0
+driver_ricardo_escotto,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,13,0
+driver_ricardo_escotto,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,19,0
+driver_ricardo_escotto,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,13,0
+driver_ricardo_escotto,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,13,0
+driver_ricardo_escotto,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,12,0
+driver_ricardo_escotto,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,7,0
+driver_ricardo_escotto,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,17,0
+driver_ricardo_escotto,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,24,0
+driver_ricardo_escotto,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,20,0
+driver_ricardo_escotto,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,24,0
+driver_ricardo_escotto,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,19,0
+driver_ricardo_escotto,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,14,0
+driver_ricardo_escotto,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,11,0
+driver_salvador_de_alba,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,9,0
+driver_salvador_de_alba,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,10,0
+driver_salvador_de_alba,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,11,0
+driver_salvador_de_alba,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,9,0
+driver_salvador_de_alba,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,7,0
+driver_salvador_de_alba,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,21,0
+driver_salvador_de_alba,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,11,0
+driver_salvador_de_alba,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,5,0
+driver_salvador_de_alba,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,16,0
+driver_salvador_de_alba,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,3,0
+driver_salvador_de_alba,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,4,0
+driver_salvador_de_alba,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,12,0
+driver_salvador_de_alba,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,3,0
+driver_salvador_de_alba,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,5,0
+driver_salvador_de_alba,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,5,0
+driver_salvador_de_alba,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,11,0
+driver_salvador_de_alba,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,5,0
+driver_salvador_de_alba,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,4,0
+driver_salvador_de_alba,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,8,0
+driver_salvador_de_alba,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,4,0
+driver_salvador_de_alba,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,8,0
+driver_salvador_de_alba,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,4,0
+driver_salvador_de_alba,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,3,0
+driver_salvador_de_alba,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,19,0
+driver_salvador_de_alba,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,9,0
+driver_salvador_de_alba,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,5,0
+driver_salvador_de_alba,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,1,0
+driver_salvador_de_alba,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,2,0
+driver_salvador_de_alba,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,8,0
+driver_salvador_de_alba,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,20,0
+driver_salvador_de_alba,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,18,0
+driver_salvador_de_alba,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,11,0
+driver_salvador_de_alba,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,13,0
+driver_salvador_de_alba,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,10,0
+driver_salvador_de_alba,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,12,0
+driver_salvador_de_alba,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,22,0
+driver_salvador_de_alba,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,18,0
+driver_salvador_de_alba,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,8,0
+driver_salvador_de_alba,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,4,0
+driver_salvador_de_alba,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,11,0
+driver_salvador_de_alba,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,12,0
+driver_salvador_de_alba,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,19,0
+driver_seb_murray,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,17,0
+driver_seb_murray,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,16,0
+driver_seb_murray,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,12,0
+driver_seb_murray,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,12,0
+driver_seb_murray,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,6,0
+driver_seb_murray,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,12,0
+driver_seb_murray,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,11,0
+driver_seb_murray,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,18,0
+driver_seb_murray,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,17,0
+driver_seb_murray,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,5,0
+driver_seb_murray,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,16,0
+driver_seb_murray,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,16,0
+driver_seb_murray,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,11,0
+driver_seb_murray,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,4,0
+driver_seb_murray,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,7,0
+driver_seb_murray,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,22,0
+driver_seb_murray,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,10,0
+driver_seb_murray,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,20,0
+driver_seb_murray,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,9,0
+driver_seb_murray,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,5,0
+driver_seb_murray,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,12,0
+driver_seb_murray,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,13,0
+driver_seb_murray,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,15,0
+driver_seb_murray,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,15,0
+driver_seb_murray,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,15,0
+driver_seb_murray,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,13,0
+driver_seb_murray,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,15,0
+driver_seb_murray,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,11,0
+driver_seb_murray,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,22,0
+driver_seb_murray,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,11,0
+driver_sophia_floersch,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,12,1
+driver_taylor_ferns,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,16,0
+driver_taylor_ferns,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,15,0
+driver_taylor_ferns,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,18,0
+driver_taylor_ferns,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,18,0
+driver_tommy_smith,session_indy_nxt_2025_6446,2025-03-02T10:00:00,2025,2025 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,13,15,1
+driver_tommy_smith,session_indy_nxt_2025_6445,2025-05-04T10:30:00,2025,2025 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,15,14,0
+driver_tommy_smith,session_indy_nxt_2025_6444,2025-05-09T19:00:00,2025,2025 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,13,0
+driver_tommy_smith,session_indy_nxt_2025_6443,2025-05-10T13:00:00,2025,2025 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,15,21,0
+driver_tommy_smith,session_indy_nxt_2025_6455,2025-06-01T10:30:00,2025,2025 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,10,17,0
+driver_tommy_smith,session_indy_nxt_2025_6454,2025-06-15T15:30:00,2025,2025 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,14,17,0
+driver_tommy_smith,session_indy_nxt_2025_6453,2025-06-22T10:00:00,2025,2025 Grand Prix at Road America,track_road_america,Road America,9,17,0
+driver_tommy_smith,session_indy_nxt_2025_6452,2025-07-06T10:30:00,2025,2025 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,12,15,0
+driver_tommy_smith,session_indy_nxt_2025_6451,2025-07-12T11:00:00,2025,2025 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,9,17,0
+driver_tommy_smith,session_indy_nxt_2025_6442,2025-07-26T13:30:00,2025,2025 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,10,13,0
+driver_tommy_smith,session_indy_nxt_2025_6450,2025-07-27T15:30:00,2025,2025 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,19,12,0
+driver_tommy_smith,session_indy_nxt_2025_6449,2025-08-10T10:00:00,2025,2025 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,19,12,0
+driver_tommy_smith,session_indy_nxt_2025_6448,2025-08-24T10:30:00,2025,2025 INDY NXT by Firestone at the Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,5,18,0
+driver_tommy_smith,session_indy_nxt_2025_6447,2025-08-31T10:30:00,2025,2025 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,6,17,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6751,2026-03-01T10:00:00,2026,2026 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,18,3,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6753,2026-03-15T09:30:00,2026,2026 Grand Prix of Arlington,track_streets_of_arlington,Grand Prix of Arlington Street Circuit,18,3,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6750,2026-03-28T12:00:00,2026,2026 Grand Prix of Alabama Race 1 R1,track_barber_motorsports_park,Barber Motorsports Park,8,3,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6752,2026-03-29T10:00:00,2026,2026 Grand Prix of Alabama Race 2 R2,track_barber_motorsports_park,Barber Motorsports Park,7,5,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6756,2026-05-08T16:00:00,2026,2026 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,22,4,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6765,2026-05-09T14:30:00,2026,2026 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,12,1,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6749,2026-05-31T10:30:00,2026,2026 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,8,3,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,9,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6762,2026-06-20T11:30:00,2026,2026 Grand Prix at Road America Race 1 R1,track_road_america,Road America,21,8,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6754,2026-06-21T11:00:00,2026,2026 Grand Prix at Road America Race 2 R2,track_road_america,Road America,10,2,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6761,2026-07-04T13:00:00,2026,2026 Grand Prix at Mid-Ohio Race 1 R1,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,16,2,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6760,2026-07-05T10:00:00,2026,2026 Grand Prix at Mid-Ohio Race 2 R2,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,14,5,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6755,2026-07-19T12:00:00,2026,2026 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,10,18,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6764,2026-08-09T11:00:00,2026,2026 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,16,4,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6757,2026-08-30T10:00:00,2026,2026 INDY NXT by Firestone at Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,8,12,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6759,2026-09-05T15:30:00,2026,2026 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,6,10,0
+driver_tymek_kucharczyk,session_indy_nxt_2026_6758,2026-09-06T09:30:00,2026,2026 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,9,1,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6324,2024-03-10T10:00:00,2024,2024 Grand Prix of St. Petersburg,track_streets_of_st_petersburg,Streets of St. Petersburg,19,12,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6314,2024-04-28T10:05:00,2024,2024 Grand Prix of Alabama,track_barber_motorsports_park,Barber Motorsports Park,8,21,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6315,2024-05-10T18:10:00,2024,2024 Indianapolis Grand Prix Race 1 R1,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,14,20,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6325,2024-05-11T13:00:00,2024,2024 Indianapolis Grand Prix Race 2 R2,track_indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,19,21,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6326,2024-06-02T10:20:00,2024,2024 Detroit Grand Prix,track_streets_of_detroit,Detroit Downtown Street Circuit,20,14,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6316,2024-06-09T12:05:00,2024,2024 Grand Prix at Road America,track_road_america,Road America,8,9,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6317,2024-06-22T12:25:00,2024,2024 Grand Prix of Monterey Race 1 R1,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,16,4,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6327,2024-06-23T12:55:00,2024,2024 Grand Prix of Monterey Race 2 R2,track_weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,3,4,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6318,2024-07-07T11:15:00,2024,2024 Grand Prix at Mid-Ohio,track_mid_ohio_sports_car_course,Mid-Ohio Sports Car Course,18,14,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6319,2024-07-13T13:05:00,2024,2024 INDY NXT by Firestone at Iowa Speedway,track_iowa_speedway,Iowa Speedway,8,10,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6320,2024-08-17T14:55:00,2024,2024 OUTFRONT Showdown,track_world_wide_technology_raceway,World Wide Technology Raceway,6,3,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6321,2024-08-25T10:10:00,2024,2024 Grand Prix of Portland,track_portland_international_raceway,Portland International Raceway,3,8,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6322,2024-08-31T14:50:00,2024,2024 INDY NXT By Firestone at The Milwaukee Mile,track_the_milwaukee_mile,The Milwaukee Mile,4,7,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2024_6323,2024-09-15T10:50:00,2024,2024 Music City Grand Prix,track_nashville_superspeedway,Nashville Superspeedway,7,2,0
+driver_yuven_sundaramoorthy,session_indy_nxt_2026_6763,2026-06-07T16:30:00,2026,2026 INDY NXT by Firestone at World Wide Technology Raceway,track_world_wide_technology_raceway,World Wide Technology Raceway,23,21,0

@@ -42,6 +42,7 @@ const sources = {
   prepSessionSignals: 'analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv',
   fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
   headToHead: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
+  headToHeadRaces: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head_races.csv',
   raceLapInflectionPoints: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_lap_inflection_points.csv',
   raceSectionLapObservations: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
   raceSectionFieldDistribution: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_field_distribution.json',
@@ -2216,8 +2217,15 @@ const buildCareerMoments = ({ resultConversion, seasonIndex }) => {
 
 /* Career head-to-head: every rival Bryce has shared an INDY NXT grid with,
  * sorted by races together. notableRaces parse: "label (+15) | label (-10)". */
-const buildCareerHeadToHead = (rows) =>
-  rows
+const buildCareerHeadToHead = (rows, raceRows = []) => {
+  /* One row per (rival, shared race), from head_to_head_races.py, which
+   * refuses to write unless its totals equal the head-to-head table. */
+  const racesByRival = new Map();
+  for (const race of raceRows) {
+    if (!racesByRival.has(race.driverId)) racesByRival.set(race.driverId, []);
+    racesByRival.get(race.driverId).push(race);
+  }
+  return rows
     .map((row) => ({
       driverId: row.driverId ?? null,
       driverName: row.driverName ?? '',
@@ -2234,10 +2242,20 @@ const buildCareerHeadToHead = (rows) =>
         .map((chunk) => {
           const match = chunk.match(/^(.*)\(([+-]\d+)\)$/);
           return match ? { label: match[1].trim(), finishDelta: Number(match[2]) } : { label: chunk, finishDelta: null };
-        })
+        }),
+      sharedRaces: (racesByRival.get(row.driverId) ?? [])
+        .slice()
+        .sort((left, right) => String(left.scheduledStart).localeCompare(String(right.scheduledStart)))
+        .map((race) => ({
+          sessionId: race.sessionId,
+          bryceFinish: numberOrNull(race.bryceFinish),
+          rivalFinish: numberOrNull(race.rivalFinish),
+          sameTeam: race.sameTeam === '1'
+        }))
     }))
     .filter((row) => row.driverName && (row.racesTogether ?? 0) > 0)
     .sort((left, right) => (right.racesTogether ?? 0) - (left.racesTogether ?? 0) || left.driverName.localeCompare(right.driverName));
+};
 
 /* The restart through-line: career, per-season, and per-venue restart movement
  * against the field, plus a per-race spine for the Career Lab and a per-venue
@@ -3392,6 +3410,7 @@ const buildPackage = () => {
   const debriefScoreRows = readCsv(sources.raceDebriefScores);
   const prepSignalRows = readCsv(sources.prepSessionSignals);
   const headToHeadRows = readCsv(sources.headToHead);
+  const headToHeadRaceRows = fs.existsSync(path.join(repoRoot, sources.headToHeadRaces)) ? readCsv(sources.headToHeadRaces) : [];
   const weatherConditionRows = readCsv(sources.contextEventWeatherConditions);
   const lapTimelineRows = readCsv(sources.indyNxtLapTimeline);
   const careerConversionEnriched = enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset, weatherConditionRows);
@@ -3669,7 +3688,7 @@ const buildPackage = () => {
         resultConversion: careerConversionEnriched,
         resultConversionSample: careerConversionEnriched.slice(0, 25),
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
-        headToHead: buildCareerHeadToHead(headToHeadRows),
+        headToHead: buildCareerHeadToHead(headToHeadRows, headToHeadRaceRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
         seasonCampaigns: buildSeasonCampaigns({
           canonicalDataset,

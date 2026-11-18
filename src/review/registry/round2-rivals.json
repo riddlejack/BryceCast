@@ -1,0 +1,22 @@
+{
+  "lane": "round2-rivals",
+  "entries": [
+    {
+      "id": "r2-rivals",
+      "page": "/career",
+      "title": "The rivals as tyres: every shared race a tyre you can point at, with its track",
+      "switch": "ddrivals",
+      "values": [
+        { "value": null, "label": "recommended (default): the race grid on a laptop or wider, every INDY NXT race a column in date order, every rival a row, a tyre where both finished (gold wheels when Bryce was ahead); on a phone, the tyre board as two rows per rival" },
+        { "value": "tyres", "label": "tyre board everywhere: the board's comparison kept, the rival's tyres left of the name, Bryce's right, rolling out from the names on reveal" },
+        { "value": "grid", "label": "race grid everywhere, the phone included (45 small columns)" },
+        { "value": "boxes", "label": "the squares board live before round 2" },
+        { "value": "tiles", "label": "one small waffle per rival (the older alternative)" }
+      ],
+      "look": "Career → More from the archive → The rivals. Watch the tyres roll in race by race, left to right (grid) or out from the names (tyres). Point at a tyre: its card shows the track's 3D still, the race, and both finishes; every other rival's tyre from that race stays lit. Point at a column's empty slots for the race against the whole field, or at a name for the record. Click (or tap twice) to open the race. Flip By record for the three groups.",
+      "anchor": "#archive-rivals",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}
