@@ -1,6 +1,6 @@
 {
   "asOfDate": "2026-09-19",
-  "generatedAt": "2026-11-18T00:18:59Z",
+  "generatedAt": "2026-11-18T02:57:44Z",
   "packCounts": {
     "career_lab": 1,
     "live_race_day": 1,
@@ -25,7 +25,7 @@
       "bytes": 2913,
       "id": "live_race_day_context",
       "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-      "sha256": "ff40b5251946be44148c27f065a0e3f829f11db85549bbcf5dba1e5c9130909f",
+      "sha256": "6862730e3d1fcc0738fd276e7784fb9003c434d250c54bd16caf2fd301a2706c",
       "sourceRefs": [
         "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
         "scripts/api-server.mjs",
@@ -1024,7 +1024,7 @@
       "type": "race_debrief"
     }
   ],
-  "repoHead": "36f3aa9",
+  "repoHead": "99af4fb",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.contextPackManifest.v1",
   "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "sourceRefs": [

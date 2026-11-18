@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-18T00:19:01.359Z",
+  "generatedAt": "2026-11-18T02:57:50.593Z",
   "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9659310",
@@ -454,8 +454,8 @@
     "predictiveContextPackManifest": {
       "path": "analysis/predictive-race-intelligence/output/context-packs/context-pack-manifest.json",
       "bytes": 62773,
-      "modifiedAt": "2026-11-18T00:18:59.867Z",
-      "sha256": "551d7e68f589a0dc7d1285767331ef5b8943ab673c6415343ea3b33dce120085"
+      "modifiedAt": "2026-11-18T02:57:45.018Z",
+      "sha256": "0beca769cddcbd1b3b20193b41218f74ca97f9fc7038da50c81ed1a1b243888c"
     },
     "predictiveCareerPriorMatrix": {
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
@@ -702,14 +702,14 @@
         "bytes": 2913,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "ff40b5251946be44148c27f065a0e3f829f11db85549bbcf5dba1e5c9130909f",
+        "sha256": "6862730e3d1fcc0738fd276e7784fb9003c434d250c54bd16caf2fd301a2706c",
         "sourceRefs": [
           "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
           "scripts/live-source-endpoints.mjs"
         ],
         "type": "live_race_day",
-        "modifiedAt": "2026-11-18T00:18:59.573Z"
+        "modifiedAt": "2026-11-18T02:57:44.747Z"
       },
       {
         "bytes": 5742,
@@ -2300,14 +2300,14 @@
         "bytes": 2913,
         "id": "live_race_day_context",
         "path": "analysis/predictive-race-intelligence/output/context-packs/live-race-day-context.json",
-        "sha256": "ff40b5251946be44148c27f065a0e3f829f11db85549bbcf5dba1e5c9130909f",
+        "sha256": "6862730e3d1fcc0738fd276e7784fb9003c434d250c54bd16caf2fd301a2706c",
         "sourceRefs": [
           "docs/contracts/LIVE_RACE_DAY_PRODUCT_CONTRACT.md",
           "scripts/api-server.mjs",
           "scripts/live-source-endpoints.mjs"
         ],
         "type": "live_race_day",
-        "modifiedAt": "2026-11-18T00:18:59.573Z"
+        "modifiedAt": "2026-11-18T02:57:44.747Z"
       },
       "fixtures": [
         {
