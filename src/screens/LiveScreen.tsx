@@ -80,6 +80,7 @@ import { useReplayRace, type CarLabel } from './liveTrack';
 import { RaceBar, lapAxisFor, lapStepTarget, useReplayNow, type LapAxis } from './liveRaceBar';
 import { aroundWindowOf, fieldCarsOf, fieldModeOf } from './liveField';
 import { lapTimeSeconds } from './liveSectionLight';
+import { bryceMovesOf, latestMoveWords, passFrameOf, raceControlTally, type BryceMoves } from '../data/overtakeModel';
 import './live.css';
 
 type Row = Record<string, unknown>;
@@ -143,6 +144,11 @@ const sourceEntries = {
       label: 'Race Control timing feed · car 9 identity guard',
       path: '/api/readiness + /api/timing',
       note: 'Position, lap, flag, gaps, and neighboring drivers come from the active INDY NXT timing payload. Car 9 must match source driver identity 2143 or Bryce Aron.'
+    },
+    {
+      label: 'Overtakes · Race Control’s pass count',
+      path: '/api/readiness + /api/history/rank-series → rows[].passes / passed / pitStops',
+      note: 'When Bryce and another car swap places between one reading and the next, that is an overtake only if Race Control’s own pass count agrees: his passes (or passed) count rises within a minute, and the other car’s opposite count names it. A swap under a yellow or red flag, with a car that pits within two and a half minutes, with a car that stopped, or with three or more cars in one reading (a spin or contact) is never a pass; the line under his place says what it was instead. A replay knows the whole race and counts the passes it names; live shows Race Control’s running count. Replays recorded before July 2026 carry no pass count: there a swap of one or two places that the next reading keeps is a pass.'
     },
     {
       label: 'Lap average speed · official timing',
@@ -466,6 +472,14 @@ const AroundBryce = ({
   );
 };
 
+/** "2 passes made, passed once". Pit stops and caution reshuffles are not in
+ *  either count. */
+const passTallyWords = ({ made, lost }: { made: number; lost: number }): string => {
+  const madeWords = made === 0 ? 'no passes made' : `${made} pass${made === 1 ? '' : 'es'} made`;
+  const lostWords = lost === 0 ? 'never passed' : lost === 1 ? 'passed once' : lost === 2 ? 'passed twice' : `passed ${lost} times`;
+  return `${madeWords.charAt(0).toUpperCase()}${madeWords.slice(1)}, ${lostWords}`;
+};
+
 const aroundGapText = (offsetSeconds: number | undefined): string => {
   if (offsetSeconds === undefined || !Number.isFinite(offsetSeconds)) return '';
   const seconds = Math.abs(offsetSeconds);
@@ -579,6 +593,8 @@ const BryceColumn = ({
   payload,
   samples,
   history,
+  moves,
+  wholeRace,
   sessionKind,
   highlightId,
   onHoverCar
@@ -586,6 +602,10 @@ const BryceColumn = ({
   payload: LiveReadiness;
   samples: GapSample[];
   history: LiveSessionHistory | null;
+  /** His place changes, classed (overtakes, pit stops, cautions). */
+  moves: BryceMoves | null;
+  /** The moves cover the whole race (a replay's timeline), not a window. */
+  wholeRace: boolean;
   sessionKind: LiveSessionKind;
   highlightId: string | null;
   onHoverCar: (id: string | null) => void;
@@ -615,21 +635,34 @@ const BryceColumn = ({
   const bryceHoldsFastest = speedValue !== null && (fieldFastest === null || fieldFastest.speed <= speedValue + 0.05);
   const fastestName = fieldFastest ? driverLabel(fieldFastest.row) : null;
 
+  // The line under his place: his newest change, with its reason. A pass is
+  // a pass only when Race Control's count agrees; a place he gained because a
+  // car ahead pitted, or under a caution, says so instead (round 10).
   const recent = samples.filter((sample) => sample.rank !== null && (lap === null || sample.lap === null || sample.lap >= lap - 5));
-  const firstRecent = recent[0];
-  const gained = rank !== null && firstRecent?.rank !== null && firstRecent?.rank !== undefined ? firstRecent.rank - rank : 0;
-  let positionStory: { text: string; up: boolean } | null = null;
-  if (gained > 0 && firstRecent?.lap !== null && firstRecent?.lap !== undefined && lap !== null && lap > firstRecent.lap) {
-    const span = Math.min(5, lap - firstRecent.lap);
-    positionStory = { text: `▲ up ${gained} ${span === 1 ? 'on the last lap' : `in the last ${span} laps`}`, up: true };
-  } else if (rank !== null && lap !== null) {
+  const frameMs = Date.parse(liveSourceCheckedAtOf(payload));
+  const bryceLaps = bryce ? asNumber(bryce.laps) : null;
+  const moveWords = moves && Number.isFinite(frameMs) ? latestMoveWords(moves.moves, frameMs, bryceLaps !== null ? bryceLaps + 1 : null) : null;
+  let positionStory: { text: string; tone: 'up' | 'down' | 'flat' } | null = moveWords ? { text: moveWords.text, tone: moveWords.tone } : null;
+  if (!positionStory && rank !== null && lap !== null) {
     let heldFrom = lap;
     for (let index = recent.length - 1; index >= 0; index -= 1) {
       if (recent[index].rank !== rank) break;
       if (recent[index].lap !== null) heldFrom = Math.min(heldFrom, recent[index].lap!);
     }
-    if (lap - heldFrom >= 1) positionStory = { text: `held P${rank} for ${lap - heldFrom + 1} laps`, up: false };
+    if (lap - heldFrom >= 1) positionStory = { text: `held P${rank} for ${lap - heldFrom + 1} laps`, tone: 'flat' };
   }
+  // His passes so far. A replay knows the whole race, so it counts the passes
+  // it names (the marks on the race bar, the line above): the three always
+  // agree. Live holds only the last few minutes, so it reads Race Control's
+  // own running count, which is what confirms each pass there.
+  const ownTally =
+    moves && Number.isFinite(frameMs)
+      ? {
+          made: moves.passes.filter((move) => move.atMs <= frameMs && move.kind === 'made').length,
+          lost: moves.passes.filter((move) => move.atMs <= frameMs && move.kind === 'lost').length
+        }
+      : null;
+  const tally = !isRace ? null : wholeRace ? ownTally : raceControlTally(rows as Array<Record<string, unknown>>) ?? ownTally;
 
   // Distance to the leader: the sourced gap now, and against one lap ago.
   const bryceId = bryce ? stableDriverId(bryce) : '';
@@ -646,7 +679,11 @@ const BryceColumn = ({
           <div>
             <span className="caption">{sessionRankCaption(sessionKind)}</span>
             <TickerValue className="stat__value stat__value--hero live-position__value" value={rank !== null ? `P${rank}` : '—'} valueKey={rank ?? 'na'} />
-            {isRace && positionStory ? <span className={`stat__delta${positionStory.up ? ' stat__delta--up' : ''}`}>{positionStory.text}</span> : null}
+            {isRace && positionStory ? (
+              <span className={`stat__delta stat__delta--${positionStory.tone}`} data-live-move={moveWords?.pass ? 'pass' : moveWords ? 'other' : 'held'}>
+                {positionStory.text}
+              </span>
+            ) : null}
           </div>
         </div>
         {leaderGap !== null ? (
@@ -669,6 +706,11 @@ const BryceColumn = ({
                   : ` · field best ${fastestName ? `${fastestName}, ` : ''}${fieldFastest!.speed.toFixed(1)} mph`}
               </>
             )}
+          </p>
+        ) : null}
+        {tally && (tally.made > 0 || tally.lost > 0) ? (
+          <p className="live-me__line live-me__line--quiet" data-live-passes={`${tally.made}-${tally.lost}`}>
+            {passTallyWords(tally)}
           </p>
         ) : null}
       </div>
@@ -1006,6 +1048,24 @@ const LiveDesk = ({
   const { identity, isRace, fieldMode, trail, bryceLabel, race, axis, now, awaitingRace, shownPhase, fieldCars, settling, place, readout, seek, virtualNow } =
     useReplayStage({ payload, phase, history, sessionKind, replay });
   const [hoverCar, setHoverCar] = useState<string | null>(null);
+  const { route } = useRouter();
+  // `?passes=quiet` (review): the line under his place and the tally only; no
+  // marks on the race bar, nothing by his plate.
+  const passesQuiet = switchValue('passes', route.search) === 'quiet';
+  // His place changes, classed. A replay knows the whole race (its timeline,
+  // so a pit stop is seen coming); live reads what the history holds, and a
+  // swap waits for Race Control's count before it is called a pass.
+  const timeline = replay?.timeline ?? null;
+  // The frame on screen: the running order and his column show it, so a pass
+  // shows by his plate when they do, not when the smoother track clock gets there.
+  const frameMs = payload ? Date.parse(liveSourceCheckedAtOf(payload)) : NaN;
+  const moves = useMemo<BryceMoves | null>(() => {
+    if (!isRace) return null;
+    if (timeline) return timeline.moves;
+    const samples = history?.samples ?? [];
+    if (samples.length < 2) return null;
+    return bryceMovesOf(samples.map((sample) => passFrameOf(sample.checkedAtMs, sample.flag, sample.rows as Array<Record<string, unknown>>)), samples.at(-1)!.checkedAtMs);
+  }, [isRace, timeline, history]);
 
   return (
     <section className={`live-desk${settling ? ' live-desk--settling' : ''}`} data-live-desk data-desk-phase={shownPhase} aria-label="The race, now">
@@ -1021,7 +1081,7 @@ const LiveDesk = ({
       {replay ? (
         <>
           <ReplayBar replay={replay} payload={payload} onExit={onExit} lead={readout} />
-          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} now={now} place={isRace ? place : undefined} onSeek={seek} /> : null}
+          {axis ? <RaceBar replay={replay} axis={axis} timeline={replay.timeline} virtualNow={virtualNow} now={now} place={isRace ? place : undefined} moves={isRace && !passesQuiet ? moves : null} onSeek={seek} /> : null}
         </>
       ) : payload ? (
         <div className="live-desk__bar live-desk__bar--live">
@@ -1050,6 +1110,8 @@ const LiveDesk = ({
           bryceLabel={bryceLabel}
           highlightId={hoverCar}
           onHoverCar={setHoverCar}
+          moves={passesQuiet ? undefined : moves?.moves}
+          frameMs={frameMs}
         />
         {phase === 'cueing' || !payload ? (
           <DeskPlaceholder area="bryce" words="His position, gaps and lap appear with it." />
@@ -1058,7 +1120,7 @@ const LiveDesk = ({
         ) : shownPhase === 'prestart' && replay ? (
           <PreStartBryce payload={payload} replay={replay} />
         ) : (
-          <BryceColumn payload={payload} samples={samples} history={history} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
+          <BryceColumn payload={payload} samples={samples} history={history} moves={moves} wholeRace={Boolean(timeline)} sessionKind={sessionKind} highlightId={hoverCar} onHoverCar={setHoverCar} />
         )}
       </div>
     </section>

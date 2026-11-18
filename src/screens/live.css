@@ -623,6 +623,12 @@
 .live-marks__plate { fill: var(--bryce); stroke: var(--ink); stroke-width: 1.6; filter: drop-shadow(0 2px 2.5px rgba(30, 28, 26, 0.3)); }
 .live-marks__plate-no { font-family: var(--font-ui); font-size: 17px; font-weight: 760; fill: var(--bryce-ink-on); }
 .live-marks__bryce.is-focus .live-marks__plate { stroke: var(--link); stroke-width: 2; }
+/* A pass as it happens (round 10): its words above his plate, the other car's mark ringed in the same colour. */
+.live-marks__pass { font-family: var(--font-ui); font-size: 13px; font-weight: 700; paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+.live-marks__pass[data-tone='up'] { fill: var(--status-good); }
+.live-marks__pass[data-tone='down'] { fill: var(--status-bad); }
+.live-marks__car[data-passing] .live-marks__dot { stroke-width: 2.5; }
+.live-marks__car[data-passing] .live-marks__hit { fill: none; stroke: var(--ink); stroke-width: 1.5; }
 
 .live-marks__tip {
   position: absolute;
@@ -678,6 +684,10 @@
 .race-bar__label { font-size: 11px; fill: var(--ink-muted); font-variant-numeric: tabular-nums; }
 .race-bar__trace { fill: none; stroke: var(--amber); stroke-width: 2; stroke-linejoin: round; }
 .race-bar__hover { stroke: var(--link); stroke-width: 1; stroke-dasharray: 2 2; }
+/* His passes on the trace (round 10): up, green, for one he made; down, red, for one on him. */
+.race-bar__pass { stroke: var(--paper); stroke-width: 1; stroke-linejoin: round; }
+.race-bar__pass--made { fill: var(--status-good); }
+.race-bar__pass--lost { fill: var(--status-bad); }
 .race-bar__playhead { stroke: var(--ink); stroke-width: 1.5; }
 .race-bar__knob { fill: var(--ink); stroke: var(--paper); stroke-width: 2; }
 .race-bar[data-race-bar-dragging='true'] .race-bar__svg { cursor: grabbing; }

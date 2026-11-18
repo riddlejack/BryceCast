@@ -20,6 +20,7 @@
  * runs unchanged in node tests.
  */
 import { isNeutralisedFlag, OPENING_CAUTION_LAPS, type OpeningCaution } from './replayStart.ts';
+import { bryceMovesOf, passFrameOf, type BryceMoves, type PassCar } from './overtakeModel.ts';
 
 /** One breakpoint, reduced to what the replay needs. */
 export interface TimelineFrame {
@@ -31,6 +32,8 @@ export interface TimelineFrame {
   /** Bryce's running position and laps completed, when he has a row. */
   bryceRank: number | null;
   bryceLaps: number | null;
+  /** Every car, reduced to what the overtake classing reads (round 10). */
+  cars?: PassCar[];
 }
 
 /** A stretch with the field neutralised, from the first frame that reads
@@ -58,6 +61,10 @@ export interface ReplayTimeline {
   /** The breakpoints reach back to the capture's first frame (the server keeps
    *  at most 400 per read; a longer list arrives in pieces). */
   complete: boolean;
+  /** Every change in Bryce's place, classed: overtakes (Race Control's count
+   *  agreeing), pit stops, caution reshuffles, incidents. The whole race is
+   *  known, so nothing is pending. */
+  moves: BryceMoves;
 }
 
 interface RankSeriesFrame {
@@ -90,7 +97,8 @@ export const timelineFramesOf = (response: RankSeriesResponse | null | undefined
       lap: numberOf(frame.lap),
       flag: String(frame.flag ?? '').trim().toUpperCase(),
       bryceRank: bryce ? numberOf(bryce.liveRank) ?? numberOf(bryce.rank) : null,
-      bryceLaps: bryce ? numberOf(bryce.laps) : null
+      bryceLaps: bryce ? numberOf(bryce.laps) : null,
+      cars: passFrameOf(atMs, frame.flag, frame.rows).cars
     });
   }
   return frames.sort((a, b) => a.atMs - b.atMs);
@@ -138,7 +146,11 @@ export const buildReplayTimeline = (frames: TimelineFrame[], complete: boolean):
   firstBryceMs: frames.find((frame) => frame.bryceRank !== null || frame.bryceLaps !== null)?.atMs ?? null,
   firstGreenMs: frames.find((frame) => frame.flag === 'GREEN')?.atMs ?? null,
   checkeredMs: frames.find((frame) => frame.flag.includes('CHECK'))?.atMs ?? null,
-  complete
+  complete,
+  moves: bryceMovesOf(
+    frames.filter((frame) => frame.cars).map((frame) => ({ atMs: frame.atMs, flag: frame.flag, cars: frame.cars! })),
+    Number.POSITIVE_INFINITY
+  )
 });
 
 /** The flag period the clock is inside, or null. */

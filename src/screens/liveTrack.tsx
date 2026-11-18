@@ -35,6 +35,7 @@ import {
   type RaceClockModel
 } from './liveMarker';
 import type { FieldCar, FieldMode } from './liveField';
+import { readingWords, type BryceMove } from '../data/overtakeModel';
 
 /* ============================================================
    The live page's track: the circuit drawn large and, in a
@@ -558,6 +559,10 @@ const PLATE_W = 32;
 const PLATE_H = 24;
 const PLATE_LIFT = 27;
 const CAR_R = 8.5;
+/** A pass shows by his plate this long (wall time, any speed), if the clock
+ *  reached it within this much race time of playing. */
+const PASS_WALL_MS = 4_500;
+const PASS_FRESH_MS = 20_000;
 /** Two cars nearer than this (px, centre to centre) would overlap their
  *  numbers or their counts: the pile shows one plate, the best placed, with a
  *  quiet "+n" at its shoulder. */
@@ -608,7 +613,9 @@ export const TrackMarks = ({
   bryceLabel,
   highlightId,
   onHoverCar,
-  onReadout
+  onReadout,
+  moves,
+  frameMs
 }: {
   view: TrackOverlayView;
   race: ReplayRace;
@@ -623,7 +630,16 @@ export const TrackMarks = ({
   highlightId?: string | null;
   onHoverCar?: (id: string | null) => void;
   onReadout?: (readout: MarkerReadout | null) => void;
+  /** His place changes (round 10): each pass shows by his plate for a few
+   *  seconds as the clock reaches it, and the other car's mark is ringed. */
+  moves?: BryceMove[];
+  /** The time of the frame the page shows: the pass appears with it. */
+  frameMs?: number;
 }) => {
+  const movesRef = useRef(moves);
+  movesRef.current = moves;
+  const frameMsRef = useRef(frameMs);
+  frameMsRef.current = frameMs;
   const viewRef = useRef(view);
   viewRef.current = view;
   const raceRef = useRef(race);
@@ -643,6 +659,7 @@ export const TrackMarks = ({
   const trailPathRef = useRef<SVGPathElement | null>(null);
   const bryceRef = useRef<SVGGElement | null>(null);
   const bryceMoreRef = useRef<SVGTextElement | null>(null);
+  const passRef = useRef<SVGTextElement | null>(null);
   const carRefs = useRef(new Map<string, SVGGElement>());
   const tipRef = useRef<HTMLDivElement | null>(null);
   const tipLineRef = useRef<HTMLSpanElement | null>(null);
@@ -657,6 +674,9 @@ export const TrackMarks = ({
     let fade: { lap: number; index: number; startedAt: number } | null = null;
     let finished: number[] = [];
     let lastReadout = '';
+    let passSeen: number | null | undefined;
+    let pass: { startedAt: number; rivals: string[] } | null = null;
+    let ringed: string[] = [];
     const eased = new Map<string, { from: number; to: number; at: number }>();
     const positions = new Map<string, [number, number]>();
     let easedEpoch = epochRef.current;
@@ -754,6 +774,47 @@ export const TrackMarks = ({
         positions.set('bryce', point);
       } else hide(bryce);
       svgRef.current?.setAttribute('data-marks-bryce', `${lap}:${at.index}:${place.holding ? 'hold' : 'move'}`);
+
+      // A pass, by his plate, as the clock reaches it: only when the clock
+      // played into it (a jump past one says nothing), for a few seconds of
+      // wall time at any speed. Pit stops and caution reshuffles never show.
+      const frameAt = frameMsRef.current;
+      const passNow = frameAt !== undefined && Number.isFinite(frameAt) ? Math.min(now, frameAt) : now;
+      let newest: number | null = null;
+      for (const move of movesRef.current ?? []) {
+        if (move.atMs > passNow) break;
+        if (move.cause === 'pass') newest = move.atMs;
+      }
+      if (newest !== passSeen) {
+        const first = passSeen === undefined;
+        passSeen = newest;
+        const reading = newest === null ? [] : (movesRef.current ?? []).filter((move) => move.atMs === newest && move.cause === 'pass');
+        const words = readingWords(reading);
+        const fresh = !first && !jumped && newest !== null && passNow - newest < PASS_FRESH_MS;
+        const node = passRef.current;
+        if (words && fresh && node) {
+          node.textContent = words.text;
+          node.setAttribute('data-tone', words.tone);
+          pass = { startedAt: wall, rivals: reading.map((move) => move.rivalId) };
+        } else if (!fresh) pass = null;
+      }
+      if (jumped) pass = null;
+      const passOn = pass !== null && wall - pass.startedAt < PASS_WALL_MS;
+      if (!passOn) pass = null;
+      const passNode = passRef.current;
+      if (passNode) {
+        passNode.setAttribute('visibility', passOn ? 'visible' : 'hidden');
+        // In over a fifth of a second, out over the last six tenths.
+        const age = passOn ? wall - pass!.startedAt : 0;
+        passNode.setAttribute('opacity', passOn ? Math.min(1, age / 200, (PASS_WALL_MS - age) / 600).toFixed(2) : '0');
+      }
+      const ring = passOn ? pass!.rivals : [];
+      if (ring.join() !== ringed.join()) {
+        for (const id of ringed) carRefs.current.get(id)?.removeAttribute('data-passing');
+        for (const id of ring) carRefs.current.get(id)?.setAttribute('data-passing', 'true');
+        ringed = ring;
+      }
+      svgRef.current?.setAttribute('data-marks-pass', passOn ? String(passSeen) : 'none');
 
       // The other cars: their gap to him, eased, turned into distance at his pace.
       // A jump of the clock drops the easing: each car takes its new gap at
@@ -961,6 +1022,8 @@ export const TrackMarks = ({
           <text y={-PLATE_LIFT + 6} textAnchor="middle" className="live-marks__plate-no">
             {bryceLabel?.no || '9'}
           </text>
+          {/* a pass, for a few seconds as it happens */}
+          <text ref={passRef} y={-PLATE_LIFT - PLATE_H / 2 - 8} textAnchor="middle" className="live-marks__pass" visibility="hidden" />
           {/* the cars under his stem, counted beside his plate */}
           <text ref={bryceMoreRef} x={PLATE_W / 2 + 4} y={-PLATE_LIFT + 4} className="live-marks__more" visibility="hidden" />
         </g>

@@ -1,0 +1,19 @@
+{
+  "lane": "round-10",
+  "entries": [
+    {
+      "id": "live-overtakes",
+      "page": "/live",
+      "title": "Overtakes are back, and a pit stop is never one",
+      "switch": "passes",
+      "values": [
+        { "value": null, "label": "the line under his place, the tally, marks on the race bar and the words by his plate as it happens (new)" },
+        { "value": "quiet", "label": "only the line under his place and the tally" }
+      ],
+      "look": "Open /live?replay=5542-6759&lap=2 (Monterey Race 1) and let it play at 4×. About four seconds in, Correa passes him: '▽ passed by Correa, lap 2' under P7, the same words above his 9 on the track for a few seconds, a small red mark on the race bar, and '2 passes made, passed twice' below his speed. A minute later Rowe, running second, heads for the pits and drops behind him: the line reads '▲ up 1 as Rowe pitted, lap 3' in grey, nothing by his plate, no mark, and the tally does not move. A pass counts only when Race Control's own pass count agrees; a swap under a yellow, with a car that pits, with a car that stopped, or with three or more cars at once is never one, and the line says what it was. Point at a mark on the race bar to read it; click one to watch it from six seconds before. Sources (top right) has the rule in full. Live uses the same rule; it was not seen live, as no race is running.",
+      "anchor": "[data-race-bar]",
+      "added": "2026-11-17T20:50",
+      "reviewed": false
+    }
+  ]
+}
