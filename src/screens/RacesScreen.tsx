@@ -19,7 +19,7 @@ import { AlsoInYear, EarlierSeason } from './racesEarlier';
 import { anyWet, RainStreaks, wetFor } from './raceWet';
 import { switchValue } from '../review/switches';
 import { FieldSeason, seasonLook } from './races/fieldSeason';
-import { archiveLabel, firstWinsOf, indyMarks } from './races/seasonMarks';
+import { firstWinsOf, indyMarks, indyTitle } from './races/seasonMarks';
 import { EarlierDrawer, type EarlierSummary } from './races/earlierDrawer';
 import './fieldFloor.css';
 import './race.css';
@@ -54,7 +54,7 @@ const SpineCard = ({ row, x, y, width, tap }: { row: UiSeasonIndexRow; x: number
       width={width}
       swatch={chapterTint('INDY NXT')}
       meta={[`INDY NXT · Round ${row.roundIndex ?? '—'}`, day ? formatDate(day, { month: 'short', day: 'numeric' }) : null].filter(Boolean).join(' · ')}
-      title={archiveLabel(row.raceLabel)}
+      title={indyTitle(row)}
       nums={[placeLine(row.finishPosition, field), beatLine(row.finishPosition, field)].filter(Boolean).join(' · ') || null}
       note={
         [
@@ -319,7 +319,7 @@ const IndySeason = ({ rows, season, look }: { rows: UiSeasonIndexRow[]; season: 
 
 const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
   const gain = row.startPosition !== null && row.finishPosition !== null ? formatGain(row.startPosition - row.finishPosition) : null;
-  const shortLabel = archiveLabel(row.raceLabel);
+  const shortLabel = indyTitle(row);
   const clean = row.officialStatus === 'running';
   /* A ring means the same thing here as on the spine above: a top-5 finish. */
   const topFive = clean && row.finishPosition !== null && row.finishPosition <= 5;
@@ -338,7 +338,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
         className="tower__name"
         style={{ whiteSpace: 'normal', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}
       >
-        <span>{shortLabel.replace(/ (Race \d+)$/, (_, race: string) => `\u00a0${race.replace(' ', '\u00a0')}`)}</span>
+        <span>{shortLabel.replace(/ (Race) (\d+)$/, ' $1\u00a0$2')}</span>
         {!clean && row.officialStatus && row.officialStatus !== 'unknown' ? (
           <span className="tower__team">
             {row.officialStatus.charAt(0).toUpperCase() + row.officialStatus.slice(1)}
@@ -396,7 +396,7 @@ const remainingRoundsFor = (completed: UiSeasonIndexRow[], upcoming: UpcomingPre
     raceDate: raceDayOf(event),
     round: lastRun + index + 1,
     seasonTotal,
-    label: archiveLabel(event.eventName)
+    label: indyTitle({ raceLabel: event.eventName, sessionId: event.eventId, trackName: event.trackName })
   }));
 };
 

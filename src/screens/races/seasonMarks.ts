@@ -5,6 +5,7 @@ import type { UiSeasonIndexRow } from '../../data/uiDataPackage';
 import type { VenueRef } from '../../app/venuePeek';
 import { chapterTint } from '../careerExplorer';
 import { fieldSizeFor, statusWords, type ArchiveRace } from '../careerRaceList';
+import { raceName } from '../careerRaceNames';
 import { wetFor } from '../raceWet';
 import { switchValue } from '../../review/switches';
 
@@ -86,6 +87,21 @@ export const archiveLabel = (raceLabel: string): string =>
     .replace(/^INDY NXT by Firestone at (the )?/i, '')
     .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
 
+/** An INDY NXT race's name in the site's one race-name grammar (careerRaceNames,
+ *  proxy review 2): "Grand Prix of Monterey · Race 2", a single-race weekend
+ *  plain "Iowa Speedway". The meeting and the race of a doubleheader are read
+ *  from the source label, then named by raceName like every other race. */
+export const indyTitle = ({ raceLabel, sessionId, trackName }: { raceLabel: string; sessionId: string; trackName: string | null }): string => {
+  const bare = archiveLabel(raceLabel);
+  const double = bare.match(/^(.*?),\s*Race\s+(\d+)$/i);
+  return raceName({
+    eventName: double ? double[1] : bare,
+    sessionId,
+    trackName: trackName ?? '',
+    raceInRound: double ? Number(double[2]) : null
+  }).title;
+};
+
 export const indyMarks = (rows: UiSeasonIndexRow[]): SeasonMark[] => {
   const tint = chapterTint('INDY NXT');
   return rows.map((row) => {
@@ -107,7 +123,7 @@ export const indyMarks = (rows: UiSeasonIndexRow[]): SeasonMark[] => {
       card: {
         venue: { sessionId: row.sessionId, trackName: row.trackName },
         meta: [`INDY NXT · Round ${row.roundIndex ?? '—'}`, day ? formatDate(day, { month: 'short', day: 'numeric' }) : null].filter(Boolean).join(' · '),
-        title: archiveLabel(row.raceLabel),
+        title: indyTitle(row),
         nums: [placeLine(row.finishPosition, field), beatLine(row.finishPosition, field)].filter(Boolean).join(' · ') || null,
         note:
           [
