@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-18T03:45:49.822Z",
+  "checkedAt": "2026-11-18T07:35:39.711Z",
   "ok": true,
   "dryRun": false,
   "verifySourceUrls": false,
@@ -10,9 +10,9 @@
     "rawTracks": 47,
     "datasetTracksBefore": 47,
     "datasetTracksAfter": 47,
-    "tracksUpdated": 5,
+    "tracksUpdated": 4,
     "sourceEvidenceUpserted": 47,
-    "eventTimezonesBackfilled": 6,
+    "eventTimezonesBackfilled": 0,
     "sessionTimezonesBackfilled": 0,
     "sessionTimezoneMismatches": 0,
     "weatherPreciseWindowReadySessions": 447,

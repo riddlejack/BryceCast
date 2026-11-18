@@ -1,12 +1,12 @@
 seriesId,seriesName,seasonYears,eventCount,sessionCount,totalContextRows,racecraftCount,penaltyCount,incidentCount,weatherCount,mediaCount,bryceContextCount,officialContextShare,sourceHash
-global_context,Global / career context,,0,0,5,0,0,0,0,5,3,0.0,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_euroformula_open,Euroformula Open,2023,7,28,28,0,0,0,0,28,0,0.0,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_formula_ford,Formula Ford,2019; 2020,13,72,99,0,4,0,72,23,1,0.7677,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_froc,Castrol Toyota Formula Regional Oceania Championship,2024,5,11,32,0,0,0,0,32,3,0.0,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_frp_f1600,F1600 Championship Series,2019,7,37,39,0,2,0,0,37,0,0.0513,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_gb3,GB3 Championship,2021; 2022,16,118,194,0,0,0,44,150,0,0.2268,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,2025,1,1,5,0,0,0,1,4,0,0.2,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_indy_nxt,INDY NXT,2024; 2025; 2026,45,203,1273,44,88,166,135,840,13,0.2341,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_rcffs,Right Coast Formula F Series,2019,1,1,1,0,0,0,0,1,0,0.0,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_scca_super_tour,SCCA U.S. Majors Tour,2019,4,8,8,0,0,0,0,8,0,0.0,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-series_usf_pro_2000,USF Pro 2000 Championship,2024,1,2,2,0,0,0,0,2,0,0.0,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
+global_context,Global / career context,,0,0,5,0,0,0,0,5,3,0.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_euroformula_open,Euroformula Open,2023,7,28,28,0,0,0,0,28,0,0.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_formula_ford,Formula Ford,2019; 2020,13,72,99,0,4,0,72,23,1,0.7677,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_froc,Castrol Toyota Formula Regional Oceania Championship,2024,5,11,32,0,0,0,0,32,3,0.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_frp_f1600,F1600 Championship Series,2019,7,37,39,0,2,0,0,37,0,0.0513,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_gb3,GB3 Championship,2021; 2022,16,118,194,0,0,0,44,150,0,0.2268,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_imsa_weathertech,IMSA WeatherTech SportsCar Championship,2025,1,1,5,0,0,0,1,4,0,0.2,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_indy_nxt,INDY NXT,2024; 2025; 2026,45,203,1273,44,88,166,135,840,13,0.2341,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_rcffs,Right Coast Formula F Series,2019,1,1,1,0,0,0,0,1,0,0.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_scca_super_tour,SCCA U.S. Majors Tour,2019,4,8,8,0,0,0,0,8,0,0.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+series_usf_pro_2000,USF Pro 2000 Championship,2024,1,2,2,0,0,0,0,2,0,0.0,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c

@@ -26,6 +26,7 @@ import type { TrackModelSection } from '../three/TrackModel3D';
 import { loadSectionLaps, sectionLapVisitsFor, type SectionLapsPack } from '../data/sectionLaps';
 import { loadPassMarks, resolvePassMarks, type PassMarksPack } from '../data/passMarks';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { labelledRaceTitle } from './careerRaceNames';
 import { causeClause } from '../data/cautionCause';
 import {
   SectionHeatCard,
@@ -563,8 +564,8 @@ const LapChartCard = ({
     >
       {hasBryceLine ? (
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
-          Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker gray` : ''} · the
-          field in light gray · ○ marks a day that ended early{yellowNote}{undrawnNote} · {coarse ? 'tap any line' : 'hover any line'}
+          Bryce in ink with gold moments{teammateCount > 0 ? ` · ${story.teamContext?.teamName ?? 'team'} cars in darker grey` : ''} · the
+          field in light grey · ○ marks a day that ended early{yellowNote}{undrawnNote} · {coarse ? 'tap any line' : 'hover any line'}
         </p>
       ) : (
         /* Fact first: the legend explains the missing ink so it never reads as
@@ -792,9 +793,9 @@ const TheDay = ({ story, pack, venue, visit }: { story: RaceStoryPack; pack: Arc
           title="Race-day conditions and character"
           entries={[
             {
-              label: rw ? 'Near-track weather · over the race' : 'Near-track weather · race hour',
+              label: rw ? 'Race weather · over the race' : 'Race weather · race hour',
               path: rw ? 'data/career/reports/career-race-weather-report.json' : 'data/career/career.dataset.json',
-              note: weather?.source ?? 'Modeled near-track weather.'
+              note: weather?.source ?? 'Modelled weather (Open-Meteo reanalysis).'
             },
             {
               label: 'Leader and incident context',
@@ -1774,8 +1775,8 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
           {pack.seasonYear} season · Round {roundIndexOf(pack)} · {asString(pack.track.name)}
           {eventDate ? ` · ${formatDate(eventDate, { month: 'long', day: 'numeric' })}` : ''}
         </span>
-        {/* One race-name format across the site: "Grand Prix of Monterey, Race 2". */}
-        <h1 className="screen-head__title">{displayRaceLabel(pack).replace(/[,\s]+(Race\s+\d+)$/i, ', $1')}</h1>
+        {/* One race name across the site (careerRaceNames): "Grand Prix of Monterey · Race 2". */}
+        <h1 className="screen-head__title">{labelledRaceTitle({ raceLabel: displayRaceLabel(pack), sessionId: pack.sessionId, trackName: asString(pack.track.name) })}</h1>
       </header>
 
       <section className={`race-hero${outline ? '' : ' race-hero--no-track'}`} aria-label="The result">
@@ -1929,7 +1930,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         if (hasOwnCapture) parts.push('our Race Control timing capture');
         if (hasRaceTools) parts.push('the RaceTools race-weekend capture');
         if (hasTiming71) parts.push('Timing71 normalized timing');
-        if (story?.weather) parts.push('modeled near-track weather (Open-Meteo)');
+        if (story?.weather) parts.push('modelled weather (the Open-Meteo reanalysis)');
         const sources =
           parts.length === 1
             ? parts[0]

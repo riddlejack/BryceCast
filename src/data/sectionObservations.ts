@@ -517,7 +517,7 @@ export const sectionObservationsFromLaps = (
     sourceState: measured ? 'racetools_capture_loop_crossings_per_lap' : 'official_section_results_per_lap',
     sourceTier: tier,
     caveat: single
-      ? 'one lap is one lap — a snapshot, not a trend; caution laps are labeled'
+      ? 'one lap is one lap — a snapshot, not a trend; caution laps are labelled'
       : `${observationLabel} only; sections under ${minimumObservations} observations in this scope are not compared`
   };
 };

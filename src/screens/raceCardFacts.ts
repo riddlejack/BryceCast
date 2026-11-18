@@ -46,29 +46,20 @@ const index = () => {
   }
   const bySession = new Map<string, Facts>();
   const trackOfEvent = new Map<string, string>();
-  const add = (sessionId: string, eventName: string, trackName: string, field: number | null, seriesName: string) => {
+  const add = (sessionId: string, eventName: string, trackName: string, field: number | null) => {
     if (!sessionId) return;
     const clean = field !== null && field > 0 ? Math.round(field) : null;
-    if (seriesName === 'INDY NXT') {
-      /* INDY NXT events are already named meetings ("Grand Prix of Monterey Race 2"); the
-       * Races page drops the series prefix the same way. A doubleheader keeps its race. */
-      const bare = (eventName || trackName).replace(/^INDY NXT by Firestone at (the )?/i, '').trim();
-      const double = bare.match(/^(.*?)[,\s]+Race\s+(\d+)$/i);
-      const event = double ? double[1].trim() : bare;
-      bySession.set(sessionId, { title: double ? `${event} · Race ${Number(double[2])}` : event, event, field: clean });
-      return;
-    }
     const name = raceName({ eventName: eventName || trackName, sessionId, trackName, raceInRound: inRound.get(sessionId) ?? null });
     bySession.set(sessionId, { title: name.title, event: name.event, field: clean });
   };
   for (const row of lab.resultConversion ?? []) {
     const eventName = str(row.eventName);
     const trackName = str(row.trackName);
-    add(str(row.sessionId), eventName, trackName, num(row.fieldSize), str(row.seriesName));
+    add(str(row.sessionId), eventName, trackName, num(row.fieldSize));
     if (eventName && trackName && !trackOfEvent.has(eventName)) trackOfEvent.set(eventName, trackName);
   }
   for (const race of lab.unclassifiedRaces ?? []) {
-    if (!bySession.has(race.sessionId)) add(race.sessionId, race.eventName ?? '', race.trackName ?? '', race.fieldSize ?? null, race.seriesName ?? '');
+    if (!bySession.has(race.sessionId)) add(race.sessionId, race.eventName ?? '', race.trackName ?? '', race.fieldSize ?? null);
     if (race.eventName && race.trackName && !trackOfEvent.has(race.eventName)) trackOfEvent.set(race.eventName, race.trackName);
   }
   cache = { bySession, trackOfEvent };

@@ -1,14 +1,14 @@
 venueSlug,trackName,trackType,seasons,spanFirstSeason,spanLastSeason,restarts,driverObservations,meanAbsoluteFieldMove,medianFieldMove,stable,sourceHash
-weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,road,2024;2025;2026,2024,2026,11,212,0.745,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,2024,2026,9,180,0.322,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-road_america,Road America,road,2024;2026,2024,2026,8,168,0.845,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-streets_of_detroit,Streets of Detroit,street,2024;2025;2026,2024,2026,8,149,0.604,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,road,2024;2025;2026,2024,2026,6,120,1.117,1.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-the_milwaukee_mile,The Milwaukee Mile,oval,2024;2025;2026,2024,2026,6,113,0.549,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-world_wide_technology_raceway,World Wide Technology Raceway,oval,2024;2026,2024,2026,6,107,0.636,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-barber_motorsports_park,Barber Motorsports Park,road,2024;2025;2026,2024,2026,5,106,0.698,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-mid_ohio,Mid-Ohio Sports Car Course,road,2024;2025;2026,2024,2026,5,106,0.283,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-nashville_superspeedway,Nashville Superspeedway,oval,2024;2025;2026,2024,2026,4,74,0.541,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-iowa_speedway,Iowa Speedway,oval,2024;2025,2024,2025,3,54,0.704,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-portland_international_raceway,Portland International Raceway,road,2024;2025;2026,2024,2026,3,58,1.034,0.0,true,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
-streets_of_arlington,Streets of Arlington,street,2026,2026,2026,2,45,1.244,0.0,false,79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a
+weathertech_raceway_laguna_seca,WeatherTech Raceway Laguna Seca,road,2024;2025;2026,2024,2026,11,212,0.745,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+streets_of_st_petersburg,Streets of St. Petersburg,street,2024;2025;2026,2024,2026,9,180,0.322,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+road_america,Road America,road,2024;2026,2024,2026,8,168,0.845,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+streets_of_detroit,Streets of Detroit,street,2024;2025;2026,2024,2026,8,149,0.604,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+indianapolis_motor_speedway_road_course,Indianapolis Motor Speedway Road Course,road,2024;2025;2026,2024,2026,6,120,1.117,1.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+the_milwaukee_mile,The Milwaukee Mile,oval,2024;2025;2026,2024,2026,6,113,0.549,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+world_wide_technology_raceway,World Wide Technology Raceway,oval,2024;2026,2024,2026,6,107,0.636,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+barber_motorsports_park,Barber Motorsports Park,road,2024;2025;2026,2024,2026,5,106,0.698,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+mid_ohio,Mid-Ohio Sports Car Course,road,2024;2025;2026,2024,2026,5,106,0.283,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+nashville_superspeedway,Nashville Superspeedway,oval,2024;2025;2026,2024,2026,4,74,0.541,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+iowa_speedway,Iowa Speedway,oval,2024;2025,2024,2025,3,54,0.704,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+portland_international_raceway,Portland International Raceway,road,2024;2025;2026,2024,2026,3,58,1.034,0.0,true,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c
+streets_of_arlington,Streets of Arlington,street,2026,2026,2026,2,45,1.244,0.0,false,256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c

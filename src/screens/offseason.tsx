@@ -6,21 +6,19 @@ import { Link } from '../app/router';
 import { TrackArt, TrackIcon } from '../app/trackArt';
 import { TrackStill } from '../app/trackStill';
 import { trackOutlineFor } from '../assets/tracks';
-import { displayRaceLabelText } from '../data/debriefArchive';
 import { nextSeasonOutlook } from '../data/nextSeason';
 import { bestFinishAt, getSeasonReview, racesAt, type SeasonReview, type SeasonStandout, type SeasonVenue } from '../data/seasonPhase';
 import { getUpcomingEvents, raceDayOf } from '../data/upcoming';
 import { raceStillSectionsFor, useVenueSectionData } from './sectionIntelligence';
+import { labelledRaceTitle } from './careerRaceNames';
 
 /** /tracks deep links use the canonical (outline) venue name. */
 const tracksHref = (trackName: string | null): string =>
   `/tracks?venue=${encodeURIComponent(trackOutlineFor(trackName)?.name ?? trackName ?? '')}`;
 
-const shortRaceLabel = (raceLabel: string): string =>
-  displayRaceLabelText(raceLabel)
-    .replace(/^\d{4}\s+/, '')
-    .replace(/^INDY NXT by Firestone at (the )?/i, '')
-    .replace(/\s+R[12]$/, '');
+/** The site's one race name (careerRaceNames): "Grand Prix of Monterey · Race 2", or the plain event. */
+const shortRaceLabel = (row: { raceLabel: string; sessionId: string; trackName: string | null }): string =>
+  labelledRaceTitle({ raceLabel: row.raceLabel, sessionId: row.sessionId, trackName: row.trackName });
 
 /* ---------- a venue mark: the 3D model from above ----------
  * Round 7 (Jack's review of Nov 16): the board's marks are the venues' 3D
@@ -309,7 +307,7 @@ export const FeatureDoors = ({
               {latestRaces.map((row) => (
                 <span key={row.sessionId} className="door__list-row">
                   <PlayCircle size={13} aria-hidden />
-                  <span>{shortRaceLabel(row.raceLabel)}</span>
+                  <span>{shortRaceLabel(row)}</span>
                   <span className="tnum">{formatPosition(row.finishPosition)}</span>
                 </span>
               ))}
@@ -469,7 +467,7 @@ const StandoutCard = ({ standout }: { standout: SeasonStandout }) => {
         <span className="stat__value stat__value--big">{formatPosition(row.finishPosition)}</span>
         {row.startPosition !== null ? <span className="caption">from {formatPosition(row.startPosition)} on the grid</span> : null}
       </span>
-      <span className="standout__name">{shortRaceLabel(row.raceLabel)}</span>
+      <span className="standout__name">{shortRaceLabel(row)}</span>
       <span className="caption caption--secondary">
         {formatDate(row.raceDate ?? row.eventStartDate, { month: 'long', day: 'numeric' })} · shaded by his pace that day · full debrief →
       </span>

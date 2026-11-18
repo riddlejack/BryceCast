@@ -1,8 +1,8 @@
 # INDY NXT Section-Lap Deep Dive
 
-Generated: `2026-11-18T04:23:05Z`
+Generated: `2026-11-18T07:43:05Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a`
+Source hash: `256f79d0d302096f27d52bebb84a66a25ea09f6fcd34ee62d9faff8abe0ef03c`
 
 ## Source Scope
 

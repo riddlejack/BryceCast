@@ -5,7 +5,7 @@ import type { UiSeasonIndexRow } from '../../data/uiDataPackage';
 import type { VenueRef } from '../../app/venuePeek';
 import { chapterTint } from '../careerExplorer';
 import { fieldSizeFor, statusWords, type ArchiveRace } from '../careerRaceList';
-import { raceName } from '../careerRaceNames';
+import { labelledRaceTitle } from '../careerRaceNames';
 import { wetFor } from '../raceWet';
 import { switchValue } from '../../review/switches';
 
@@ -54,6 +54,8 @@ const SHORT: Record<string, string> = {
   'champion of brands': 'Brands Hatch',
   'champion of cadwell': 'Cadwell Park',
   'spa-francorchamps': 'Spa',
+  portimao: 'Portimão',
+  'autodromo internacional do algarve': 'Portimão',
   'streets of st. petersburg': 'St. Pete',
   'barber motorsports park': 'Barber',
   'indianapolis motor speedway road course': 'Indy GP',
@@ -91,16 +93,8 @@ export const archiveLabel = (raceLabel: string): string =>
  *  proxy review 2): "Grand Prix of Monterey · Race 2", a single-race weekend
  *  plain "Iowa Speedway". The meeting and the race of a doubleheader are read
  *  from the source label, then named by raceName like every other race. */
-export const indyTitle = ({ raceLabel, sessionId, trackName }: { raceLabel: string; sessionId: string; trackName: string | null }): string => {
-  const bare = archiveLabel(raceLabel);
-  const double = bare.match(/^(.*?),\s*Race\s+(\d+)$/i);
-  return raceName({
-    eventName: double ? double[1] : bare,
-    sessionId,
-    trackName: trackName ?? '',
-    raceInRound: double ? Number(double[2]) : null
-  }).title;
-};
+export const indyTitle = ({ raceLabel, sessionId, trackName }: { raceLabel: string; sessionId: string; trackName: string | null }): string =>
+  labelledRaceTitle({ raceLabel, sessionId, trackName });
 
 export const indyMarks = (rows: UiSeasonIndexRow[]): SeasonMark[] => {
   const tint = chapterTint('INDY NXT');
