@@ -19,6 +19,7 @@ import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerE
 import { DeepDive, DeepTip } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
 import { finishLine, raceFieldOf } from '../raceCardFacts';
+import { FlagDot, RUN_W, StartRing, runColour, runOpacity } from './flagMarks';
 import './climbs.css';
 
 /* ============================================================================
@@ -245,7 +246,7 @@ const ticksTo = (depth: number) => [1, 5, 10, 15, 20, 25, 30, 35, 40].filter((ti
 
 /* ---------- version A: five ladders ---------- */
 
-const Ladders = ({ climbs, width, play }: { climbs: Climb[]; width: number; play: boolean }) => {
+const Ladders = ({ climbs, width, play, clean = false }: { climbs: Climb[]; width: number; play: boolean; clean?: boolean }) => {
   const reduced = useReducedMotion();
   const elapsed = useClock(play, reduced, climbs.length);
   const tap = useTapPreview();
@@ -348,31 +349,60 @@ const Ladders = ({ climbs, width, play }: { climbs: Climb[]; width: number; play
             {...handlersFor(index, showTip(index))}
           >
             <rect x={0} y={0} width={colW} height={height} fill="transparent" />
-            {/* the rails run the length of the classified field */}
-            <line x1={left} x2={left} y1={y(1) - 4} y2={y(field) + 4} stroke="var(--grey-line)" />
-            <line x1={right} x2={right} y1={y(1) - 4} y2={y(field) + 4} stroke="var(--grey-line)" />
-            {Array.from({ length: climb.depth }, (_, i) => i + 1).map((position) => (
-              <line
-                key={position}
-                x1={left}
-                x2={right}
-                y1={y(position)}
-                y2={y(position)}
-                {...rungStroke(position > climb.finish && position < climb.start && dotY < y(position) - 0.5, position > field)}
+            {clean ? (
+              <>
+                {/* one hairline the length of the classified field; dotted where he started behind it */}
+                <line x1={cx} x2={cx} y1={y(1)} y2={y(field)} stroke="var(--ink)" strokeOpacity={0.28} />
+                {climb.start > field ? <line x1={cx} x2={cx} y1={y(field)} y2={y(climb.start)} stroke="var(--grey-ink3)" strokeDasharray="2 3" /> : null}
+                {axisW === 0 ? (
+                  <text x={cx} y={y(1) - 9} textAnchor="middle" fontFamily={chartFont} fontSize={12} fill="var(--ink-muted)" className="climbs__num">
+                    P1
+                  </text>
+                ) : null}
+                <rect
+                  x={cx - RUN_W / 2}
+                  width={RUN_W}
+                  y={dotY}
+                  height={Math.max(0, y(climb.start) - dotY)}
+                  fill={runColour('gained')}
+                  opacity={runOpacity('gained')}
+                />
+                <g transform={`translate(${cx} ${y(climb.start)})`}>
+                  <StartRing r={narrow ? 4 : 4.5} />
+                </g>
+                <g transform={`translate(${cx} ${dotY})`}>
+                  <FlagDot kind="gained" r={narrow ? 5 : 6} lit={focus === index} />
+                </g>
+              </>
+            ) : (
+              <>
+              {/* the rails run the length of the classified field */}
+              <line x1={left} x2={left} y1={y(1) - 4} y2={y(field) + 4} stroke="var(--grey-line)" />
+              <line x1={right} x2={right} y1={y(1) - 4} y2={y(field) + 4} stroke="var(--grey-line)" />
+              {Array.from({ length: climb.depth }, (_, i) => i + 1).map((position) => (
+                <line
+                  key={position}
+                  x1={left}
+                  x2={right}
+                  y1={y(position)}
+                  y2={y(position)}
+                  {...rungStroke(position > climb.finish && position < climb.start && dotY < y(position) - 0.5, position > field)}
+                />
+              ))}
+              {/* the climb, grid slot to flag */}
+              <line x1={cx} x2={cx} y1={y(climb.start)} y2={dotY} stroke="var(--bryce)" strokeWidth={4} strokeLinecap="round" />
+              <circle
+                cx={cx}
+                cy={y(climb.start)}
+                r={narrow ? 4 : 4.5}
+                fill="var(--paper)"
+                stroke="var(--ink)"
+                strokeOpacity={0.6}
+                strokeWidth={1.5}
               />
-            ))}
-            {/* the climb, grid slot to flag */}
-            <line x1={cx} x2={cx} y1={y(climb.start)} y2={dotY} stroke="var(--bryce)" strokeWidth={4} strokeLinecap="round" />
-            <circle
-              cx={cx}
-              cy={y(climb.start)}
-              r={narrow ? 4 : 4.5}
-              fill="var(--paper)"
-              stroke="var(--ink)"
-              strokeOpacity={0.6}
-              strokeWidth={1.5}
-            />
-            <circle cx={cx} cy={dotY} r={narrow ? 5.5 : 6.5} fill="var(--bryce)" stroke="var(--ink)" strokeWidth={1.5} />
+              <circle cx={cx} cy={dotY} r={narrow ? 5.5 : 6.5} fill="var(--bryce)" stroke="var(--ink)" strokeWidth={1.5} />
+              </>
+            )}
             <text
               x={left - (narrow ? 3 : 5)}
               y={y(climb.start)}
@@ -408,7 +438,7 @@ const Ladders = ({ climbs, width, play }: { climbs: Climb[]; width: number; play
 
 /* ---------- version B: five rows, the field as a line of grid slots ---------- */
 
-const Rows = ({ climbs, width, play }: { climbs: Climb[]; width: number; play: boolean }) => {
+const Rows = ({ climbs, width, play, clean = false }: { climbs: Climb[]; width: number; play: boolean; clean?: boolean }) => {
   const reduced = useReducedMotion();
   const elapsed = useClock(play, reduced, climbs.length);
   const tap = useTapPreview();
@@ -498,21 +528,39 @@ const Rows = ({ climbs, width, play }: { climbs: Climb[]; width: number; play: b
               className="climbs__strip"
             >
               <rect x={0} y={0} width={stripW} height={stripH} fill="transparent" />
-              <line x1={x(field) - 5} x2={x(1) + 5} y1={midY - slotH / 2} y2={midY - slotH / 2} stroke="var(--grey-line)" />
-              <line x1={x(field) - 5} x2={x(1) + 5} y1={midY + slotH / 2} y2={midY + slotH / 2} stroke="var(--grey-line)" />
-              {Array.from({ length: climb.depth }, (_, i) => i + 1).map((position) => (
-                <line
-                  key={position}
-                  x1={x(position)}
-                  x2={x(position)}
-                  y1={midY - slotH / 2}
-                  y2={midY + slotH / 2}
-                  {...rungStroke(position > climb.finish && position < climb.start && dotX > x(position) + 0.5, position > field)}
-                />
-              ))}
-              <line x1={x(climb.start)} x2={dotX} y1={midY} y2={midY} stroke="var(--bryce)" strokeWidth={4} strokeLinecap="round" />
-              <circle cx={x(climb.start)} cy={midY} r={4.5} fill="var(--paper)" stroke="var(--ink)" strokeOpacity={0.6} strokeWidth={1.5} />
-              <circle cx={dotX} cy={midY} r={6.5} fill="var(--bryce)" stroke="var(--ink)" strokeWidth={1.5} />
+              {clean ? (
+                <>
+                  {/* one hairline the length of the classified field, front on the right; dotted where he started behind it */}
+                  <line x1={x(field)} x2={x(1)} y1={midY} y2={midY} stroke="var(--ink)" strokeOpacity={0.28} />
+                  {climb.start > field ? <line x1={x(climb.start)} x2={x(field)} y1={midY} y2={midY} stroke="var(--grey-ink3)" strokeDasharray="2 3" /> : null}
+                  <line x1={x(1)} x2={x(1)} y1={midY - 4} y2={midY + 4} stroke="var(--ink)" strokeOpacity={0.4} />
+                  <rect x={x(climb.start)} width={Math.max(0, dotX - x(climb.start))} y={midY - RUN_W / 2} height={RUN_W} fill={runColour('gained')} opacity={runOpacity('gained')} />
+                  <g transform={`translate(${x(climb.start)} ${midY})`}>
+                    <StartRing r={4.5} />
+                  </g>
+                  <g transform={`translate(${dotX} ${midY})`}>
+                    <FlagDot kind="gained" r={6} lit={focus === index} />
+                  </g>
+                </>
+              ) : (
+                <>
+                <line x1={x(field) - 5} x2={x(1) + 5} y1={midY - slotH / 2} y2={midY - slotH / 2} stroke="var(--grey-line)" />
+                <line x1={x(field) - 5} x2={x(1) + 5} y1={midY + slotH / 2} y2={midY + slotH / 2} stroke="var(--grey-line)" />
+                {Array.from({ length: climb.depth }, (_, i) => i + 1).map((position) => (
+                  <line
+                    key={position}
+                    x1={x(position)}
+                    x2={x(position)}
+                    y1={midY - slotH / 2}
+                    y2={midY + slotH / 2}
+                    {...rungStroke(position > climb.finish && position < climb.start && dotX > x(position) + 0.5, position > field)}
+                  />
+                ))}
+                <line x1={x(climb.start)} x2={dotX} y1={midY} y2={midY} stroke="var(--bryce)" strokeWidth={4} strokeLinecap="round" />
+                <circle cx={x(climb.start)} cy={midY} r={4.5} fill="var(--paper)" stroke="var(--ink)" strokeOpacity={0.6} strokeWidth={1.5} />
+                <circle cx={dotX} cy={midY} r={6.5} fill="var(--bryce)" stroke="var(--ink)" strokeWidth={1.5} />
+                </>
+              )}
               <text
                 x={x(climb.start)}
                 y={midY + slotH / 2 + 16}
@@ -572,7 +620,8 @@ export const ClimbsDeepDive = () => {
   const rows = useCareerRows();
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [viewRef, inView] = useInViewOnce<HTMLDivElement>(0.3);
-  const version = switchValue('ddclimbs') === 'rows' ? 'rows' : 'ladders';
+  const asked = switchValue('ddclimbs');
+  const version = asked === 'rise' ? 'rise' : asked === 'old' ? 'ladders' : asked === 'rows' ? 'rows' : 'runs';
   if (climbs.length === 0) return null;
   const top = climbs[0];
   const withStart = rows.filter((row) => row.start !== null && row.gain !== null).length;
@@ -625,10 +674,10 @@ export const ClimbsDeepDive = () => {
         className="climbs__stage"
       >
         {width > 0 ? (
-          version === 'rows' ? (
-            <Rows climbs={climbs} width={width} play={inView} />
+          version === 'runs' || version === 'rows' ? (
+            <Rows climbs={climbs} width={width} play={inView} clean={version === 'runs'} />
           ) : (
-            <Ladders climbs={climbs} width={width} play={inView} />
+            <Ladders climbs={climbs} width={width} play={inView} clean={version === 'rise'} />
           )
         ) : null}
       </div>

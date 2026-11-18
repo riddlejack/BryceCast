@@ -1,0 +1,50 @@
+{
+  "lane": "round3-deep",
+  "entries": [
+    {
+      "id": "r3-qualifying",
+      "page": "/career",
+      "title": "Qualifying to the flag, a new approach: the Restarts' own dots, no lines through the grid slot",
+      "switch": "ddquali",
+      "values": [
+        { "value": null, "label": "the split (default): every race one dot, stacked over how many places he moved from qualifying to the flag; lost on the left, made up on the right, held in the middle. The dots leave the held column on reveal. 'By series' lifts them into one row per chapter" },
+        { "value": "runs", "label": "the runs: one row per race, a ring where he qualified and a dot where he finished, front of the grid on the right, joined by a thin run; biggest gain first" },
+        { "value": "old", "label": "round 2's places-gained lines (the version Jack called clunky)" }
+      ],
+      "look": "Career → More from the archive → Qualifying to the flag. Watch the dots leave the 'held' column for their places; flip All races / By series and watch them regroup. Point at (or tap) any dot for the race, its track and both places; click (or tap again) to open the race.",
+      "anchor": "#archive-qualifying",
+      "added": "2026-11-18T03:00",
+      "reviewed": false
+    },
+    {
+      "id": "r3-climbs",
+      "page": "/career",
+      "title": "Biggest climbs without the ladders: one clean run per climb",
+      "switch": "ddclimbs",
+      "values": [
+        { "value": null, "label": "the runs (default): five rows, each the race's field as one hairline (front on the right), a ring at his grid slot and a gold dot at his finish; the dot runs forward on reveal" },
+        { "value": "rise", "label": "the rise: the same five as columns, P1 at the top, the dot rising from grid slot to finish" },
+        { "value": "old", "label": "round 2's five ladders (rails and a rung per grid slot)" }
+      ],
+      "look": "Career → More from the archive → Biggest climbs. Watch the five dots run from grid slot to finish; point at (or tap) a climb for the race and its track; click (or tap again) to open it.",
+      "anchor": "#archive-climbs",
+      "added": "2026-11-18T03:00",
+      "reviewed": false
+    },
+    {
+      "id": "r3-tyres",
+      "page": "/career",
+      "title": "The rivals' tyres, cleaner: rubber, wheel, five plain spokes, hub",
+      "switch": "rvtyre",
+      "values": [
+        { "value": null, "label": "spoked (default): black rubber, gold wheel for Bryce and silver for the rival, five straight spokes; the small tyres on a phone drop the spokes" },
+        { "value": "slick", "label": "a race slick: rubber, wheel, hub and one white sidewall mark" },
+        { "value": "old", "label": "round 2's tyre (tread ring, gold stripe, tapered spokes)" }
+      ],
+      "look": "Career → More from the archive → The rivals. Every rivals layout (?ddrivals=tyres, grid, the phone board) uses the same tyre. Watch them roll in; point at one for the race.",
+      "anchor": "#archive-rivals",
+      "added": "2026-11-18T03:00",
+      "reviewed": false
+    }
+  ]
+}

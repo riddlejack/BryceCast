@@ -50,3 +50,12 @@
   .ddq-key__row { grid-template-columns: 96px minmax(0, 1fr); column-gap: 10px; padding: 9px 6px; }
   .ddq-key__name { font-size: 14px; }
 }
+
+/* Round 3 (November 18, 2026): the split and the runs. */
+.ddq-flag { position: relative; width: 100%; }
+.ddq-flag svg { touch-action: manipulation; }
+.ddq-gold {
+  color: var(--ink);
+  background: linear-gradient(transparent 58%, color-mix(in srgb, var(--bryce) 55%, transparent) 58%);
+  padding: 0 1px;
+}

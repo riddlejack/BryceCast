@@ -2,7 +2,7 @@ import { useId, useMemo, useRef, useState, type CSSProperties, type ReactNode } 
 import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
 import { raceHref } from '../careerExplorer';
 import { GROUP_LABEL, type Rival, type RivalRace } from './rivalsModel';
-import { GOLD_TEXT, INK, PHONE_ROWS, RivalCard, TyreDefs, tyreHref, useMarks, type Mark, type SortKey } from './rivalsTyres';
+import { GOLD_TEXT, INK, PHONE_ROWS, RivalCard, TyreDefs, snap, snapR, tyreHref, useMarks, type Mark, type SortKey } from './rivalsTyres';
 
 /**
  * ?ddrivals=grid: the rivals on the INDY NXT calendar (career round 2,
@@ -61,7 +61,7 @@ export const RaceGrid = ({ rivals, sort, phoneBoard }: { rivals: Rival[]; sort: 
   const blockX = phone ? 0 : Math.max(0, (width - (nameCol + 14 + gridW + recCol)) / 2);
   const nameX = blockX + nameCol;
   const x0 = phone ? Math.max(0, (width - gridW) / 2) : nameX + 14;
-  const r = colW / 2 - Math.max(0.4, colW * 0.06);
+  const r = snapR(colW / 2 - Math.max(0.4, colW * 0.06));
   const header = phone ? 30 : 36;
   const lineH = phone ? 17 : 0;
   const rowH = phone ? lineH + colW + 9 : Math.max(18, colW + 3);
@@ -243,7 +243,7 @@ export const RaceGrid = ({ rivals, sort, phoneBoard }: { rivals: Rival[]; sort: 
                     if (!column) return null;
                     const isFocus = hotRace === race.sessionId && hotRival === rival.name;
                     return (
-                      <g key={race.sessionId} transform={`translate(${column.x}, ${tyreY})`} data-race={race.sessionId} className="rv-ty__tyre">
+                      <g key={race.sessionId} transform={`translate(${snap(column.x)}, ${snap(tyreY)})`} data-race={race.sessionId} className="rv-ty__tyre">
                         <g className="rv-ty__roll" style={rollStyle(column.index, rowIndex)}>
                           <use href={tyreHref(prefix, race.ahead, r)} x={-r} y={-r} width={r * 2} height={r * 2} />
                         </g>

@@ -125,7 +125,7 @@
 .rv-ty__icon { display: block; flex: none; }
 
 .rv-ty__tyre { transition: opacity 140ms ease; }
-.rv-ty__roll { transform-box: fill-box; transform-origin: center; will-change: transform; }
+.rv-ty__roll { transform-box: fill-box; transform-origin: center; }
 .rv__name--hot { font-weight: 650; }
 
 .rv-grid__season { font-size: 12.5px; font-weight: 620; fill: var(--ink); font-variant-numeric: tabular-nums; }
