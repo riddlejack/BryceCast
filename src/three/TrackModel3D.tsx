@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { useCoarsePointer } from '../app/charts';
-import type { TrackModelData, TrackScene, TrackSceneHover } from './trackScene.js';
+import { useCoarsePointer, useReducedMotion } from '../app/charts';
+import { sunTake, useTrackWeather, weatherCaption, weatherTake, type SceneWeather } from './weather/sceneWeather';
+import { WeatherRain } from './weather/WeatherRain';
+import type { TrackModelData, TrackScene, TrackSceneHover, TrackSceneMarker } from './trackScene.js';
 import { POSTER_SIZES, hasWebgl, loadIndex, loadModel, posterSrcSet, type ModelIndexEntry } from './trackModelLoad';
 import './track3d.css';
 
@@ -54,7 +56,9 @@ export const TrackModel3D = ({
   legend,
   caption,
   overlay,
-  hint: hintOverride
+  hint: hintOverride,
+  weather: ownWeather,
+  markers
 }: {
   slug: string;
   name: string;
@@ -70,8 +74,17 @@ export const TrackModel3D = ({
   overlay?: (view: TrackOverlayView) => ReactNode;
   /** Replaces the how-to-turn-it line in the caption. */
   hint?: string;
+  /** The race hour's weather to draw on the model (null: none). Left out, the
+   *  page's TrackWeatherProvider decides (the Tracks page's selected race). */
+  weather?: SceneWeather | null;
+  /** Boxes laid on the track at a site t (a driver's grid box on the start straight): see TrackSceneMarker. */
+  markers?: TrackSceneMarker[];
 }) => {
   const coarse = useCoarsePointer();
+  const reduced = useReducedMotion();
+  const take = weatherTake();
+  const pageWeather = useTrackWeather(ownWeather);
+  const weather = take === 'off' ? null : pageWeather;
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const boxRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<TrackScene | null>(null);
@@ -169,6 +182,24 @@ export const TrackModel3D = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSig, status]);
 
+  /* The race hour's weather on the model: its light, wet asphalt, the trees
+   * in the wind, and the wind's marker in the world. */
+  useEffect(() => {
+    if (status !== 'ready') return;
+    sceneRef.current?.setWeather(weather, { take, reduced, sun: sunTake() });
+  }, [weather, take, reduced, status]);
+  const markerSig = JSON.stringify(markers ?? []);
+  useEffect(() => {
+    if (status !== 'ready') return;
+    sceneRef.current?.setMarkers(markers ?? []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [markerSig, status]);
+  const windDrift = useCallback(() => {
+    const dir = sceneRef.current?.windScreen();
+    const kph = weather?.windKph ?? 0;
+    return dir ? dir[0] * Math.min(1, kph / 40) * 0.55 : 0;
+  }, [weather]);
+
   /* Cross-highlight from the bars: their hover lights the section on the model. */
   useEffect(() => {
     if (!hover) sceneRef.current?.setActive(active);
@@ -235,7 +266,7 @@ export const TrackModel3D = ({
   const poster = entry?.poster?.['1200'] ?? null;
 
   return (
-    <figure className="track3d" data-status={status}>
+    <figure className="track3d" data-status={status} data-weather={weather ? `${weather.sky}${weather.wet ? ' wet' : ''}` : undefined}>
       {legend ? <div className="track3d__legend">{legend}</div> : null}
       <div
         ref={boxRef}
@@ -266,6 +297,9 @@ export const TrackModel3D = ({
           aria-label={`${name}, a 3D model of the track${sections.length ? ', each section shaded by his pace' : ''}. Arrow keys turn it, plus and minus zoom, 0 goes back to the start view.`}
           role="img"
         />
+        {weather && weather.rainIntensity > 0 && status === 'ready' ? (
+          <WeatherRain intensity={weather.rainIntensity} drift={windDrift} reduced={reduced} scale={coarse ? 0.8 : 1} className="track3d__rain" />
+        ) : null}
         {overlay && status === 'ready' && sceneRef.current ? (
           <div className="track3d__overlay">
             {overlay({ version: viewVersion, project, halfWidth: sceneRef.current.trackHalfWidth })}
@@ -284,6 +318,7 @@ export const TrackModel3D = ({
         <span className="track3d__hint">{hint}</span>{' '}
         {caption}
         {caption ? ' ' : null}
+        {weather ? <span className="track3d__weather" data-track3d-weather>{weatherCaption(weather)} </span> : null}
         {entry?.attribution}
       </figcaption>
     </figure>

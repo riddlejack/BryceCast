@@ -19,11 +19,14 @@
 //   scene.resetView(), scene.zoomBy(factor), scene.resize(), scene.dispose(), scene.stats()
 //   onHover({ key, x, y, pinned } | null)   key null: a stretch no section covers; x, y CSS px inside the canvas
 //   onView({ home: boolean })               after every camera change
+//   scene.setWeather(weather | null, { take, reduced })   the race hour's weather on the model (weather/weatherScene.js)
+//   scene.windScreen()                      the downwind direction on screen now, [dx, dy] unit, or null
 import { THREE, hex } from './rig/lib/rig.js';
 import { KIT, createStage } from './rig/shots/brycecast-film/kit.js';
 import { createLaguna } from './rig/shots/brycecast-film/world/laguna.js';
 import { createVenue } from './rig/shots/brycecast-film/world/venues.js';
 import { createCity, trackRibbon } from './rig/shots/brycecast-film/world/city.js';
+import { createWeather } from './weather/weatherScene.js';
 
 const FOV = 25;
 const PALE = '#F1EDE6';          // a section with no comparison in this scope, and stretches no section covers
@@ -108,7 +111,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     const Wd = L.data.width;
     // the pit lane, its wall, fence and box lines: light and quiet (its lane material is the rig's '#5A5652')
     L.root.traverse((o) => { if (o.isMesh && o.material && o.material.color && o.material.color.getHexString() === '5a5652') o.material.color.copy(hex(PIT_ROAD)); });
-    model = { at: (u, lat = 0, dy = 0) => L.pointAt(u, lat, dy), half: Wd / 2, bandHalf: Wd / 2 + 0.05, bandDy: 0.012, length: L.lap,
+    model = { north: L.north, at: (u, lat = 0, dy = 0) => L.pointAt(u, lat, dy), half: Wd / 2, bandHalf: Wd / 2 + 0.05, bandDy: 0.012, length: L.lap,
       slab: L.data.slab.outline.map(([x, z]) => [x, L.gridY(x, z), z]).concat(L.data.slab.outline.map(([x, z]) => [x, 0, z])) };
   } else if (data.kind === 'venue') {
     const V = createVenue(rig, M);
@@ -188,7 +191,47 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   const base = new THREE.Mesh(ribbonGeometry(0, 1, model.bandHalf, model.bandHalf, model.bandDy * 0.5), bandMat(PALE, -4));
   base.receiveShadow = true; base.renderOrder = 2; base.visible = false; bandRoot.add(base);
 
-  let sections = [], sectionMeshes = new Map(), spanSig = '', active = null, hoverKey;
+  // ---------- markers on the track (round 2): a box laid on the asphalt at a site t, e.g. a driver's grid box on the
+  // start straight. setMarkers([{ id, t, color, lengthM, widthM, lat, lineM, fill, minPx }]):
+  //   t        the site outline's arc parameter (as projectT and the section spans read it)
+  //   color    any CSS colour the caller resolves (series colours come from chapterTint / --chapter-*)
+  //   lengthM  along the track (default 7), widthM across it (default 3), lat its centre's offset across the track in
+  //            metres (positive to the left of the driving direction; a grid's two files sit at about +-2.5)
+  //   lineM    the outline's width in metres (default 0.5); fill 0..1 a tint inside it (default 0)
+  //   minPx    the box is never drawn smaller than this many CSS px along the track (default 10), so it reads far off
+  // Drawn over the heat bands, under the hover; rebuilt when the camera's distance changes the minimum.
+  const markerRoot = new THREE.Group(); markerRoot.renderOrder = 6; scene.add(markerRoot);
+  let markers = [], markerScale = 1;
+  const markerMat = (color, opacity = 1) => new THREE.MeshBasicMaterial({ color: hex(color), side: THREE.DoubleSide, transparent: opacity < 1, opacity,
+    depthWrite: opacity >= 1, polygonOffset: true, polygonOffsetFactor: -7, polygonOffsetUnits: -7, toneMapped: false });
+  const markerScaleFor = (D) => Math.max(1, ...markers.map((m) => ((m.minPx ?? 10) * mppAt(D)) / (m.lengthM ?? 7)));
+  function buildMarkers() {
+    for (const o of [...markerRoot.children]) { o.traverse((c) => { if (c.geometry) c.geometry.dispose(); if (c.material) c.material.dispose(); }); markerRoot.remove(o); }
+    markerScale = markerScaleFor(pose.D);
+    for (const mk of markers) {
+      if (typeof mk.t !== 'number' || !Number.isFinite(mk.t)) continue;
+      const k = markerScale, len = (mk.lengthM ?? 7) * k, wid = (mk.widthM ?? 3) * k, line = Math.max(mk.lineM ?? 0.5, 1.2 * mppAt(pose.D)), lat = mk.lat ?? 0;
+      let uc = uOf(mk.t); const du = len / model.length / 2, dl = line / model.length;
+      if (uc - du < 0) uc += 1;
+      const u0 = uc - du, u1 = uc + du, dy = model.bandDy * 1.6, left = lat + wid / 2, right = lat - wid / 2;
+      const g = new THREE.Group(); g.userData.id = mk.id;
+      const mat = markerMat(mk.color ?? INK);
+      for (const geo of [stripGeometry(u0, u1, left, left - line, dy), stripGeometry(u0, u1, right + line, right, dy),
+        stripGeometry(u0, u0 + dl, left, right, dy), stripGeometry(u1 - dl, u1, left, right, dy)]) {
+        const m = new THREE.Mesh(geo, mat); m.renderOrder = 6; g.add(m);
+      }
+      if (mk.fill) { const f = new THREE.Mesh(stripGeometry(u0, u1, left, right, dy * 0.9), markerMat(mk.color ?? INK, Math.min(1, mk.fill))); f.renderOrder = 5; g.add(f); }
+      markerRoot.add(g);
+    }
+    invalidate();
+  }
+  function setMarkers(list) {
+    const next = Array.isArray(list) ? list : [];
+    if (JSON.stringify(next) === JSON.stringify(markers)) return;
+    markers = next; buildMarkers();
+  }
+
+  let sections = [], sectionMeshes = new Map(), spanSig = '', active = null, hoverKey, wx = null;
   const ranges = [];   // [u0, u1, key] for picking
   function setSections(list, force = false) {
     const sig = JSON.stringify(list.map((s) => [s.key, s.spans, Boolean(s.dashed)]));
@@ -216,10 +259,12 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   }
   function recolour() {
     const focus = hoverKey !== undefined && hoverKey !== null ? hoverKey : active;
+    base.material.color.copy(hex(PALE)); if (wx) base.material.color.multiply(wx.bandComp);
     for (const s of sections) {
       const g = sectionMeshes.get(s.key); if (!g) continue;
       const c = hex(s.color || PALE);
       if (focus && focus !== s.key) c.lerp(hex(DIM_TO), 0.62);
+      if (wx) c.multiply(wx.bandComp);   // the weather's light lands on the model, never on the heat's colours
       g.userData.mat.color.copy(c);
       // a pale (not compared) section draws no band of its own: the pale lane under it shows
       g.visible = Boolean(s.color) || (focus === s.key);
@@ -298,19 +343,22 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   function checkBandWidth() {
     const want = bandHalfFor(pose.D), wantEdge = edgeFor(pose.D);
     const bandMoved = Math.abs(want - bandHalfNow) / bandHalfNow >= 0.15, edgeMoved = Math.abs(wantEdge - edgeNow) / edgeNow >= 0.2;
+    if (markers.length && Math.abs(markerScaleFor(pose.D) - markerScale) / markerScale >= 0.15) buildMarkers();
     if (!bandMoved && !edgeMoved) return;
     bandHalfNow = want; edgeNow = wantEdge;
     edge.geometry.dispose(); edge.geometry = ribbonGeometry(0, 1, want + wantEdge, want + wantEdge, model.bandDy * 0.4);
     base.geometry.dispose(); base.geometry = ribbonGeometry(0, 1, want, want, model.bandDy * 0.5);
     if (bandMoved && sections.length) setSections(sections, true); else invalidate();
   }
+  let settleTimer = 0;
   function changed() {
     atHome = false; clampPose(); placeCamera(); refreshPick(); invalidate(); onView({ home: false });
     clearTimeout(widthTimer); widthTimer = setTimeout(checkBandWidth, 140);
+    clearTimeout(settleTimer); settleTimer = setTimeout(() => { if (!disposed) { wx?.settled({ ...pose, target: [...pose.target] }, atHome); invalidate(); } }, 450);
   }
   function resetView() {
     pose = { ...home, target: [...home.target] }; atHome = true; placeCamera(); invalidate(); onView({ home: true });
-    checkBandWidth();
+    checkBandWidth(); clearTimeout(settleTimer); wx?.relayout();
   }
   function zoomBy(f, at = null) {
     const before = pose.D;
@@ -455,6 +503,20 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   // ---------- frames on demand ----------
   let queued = false, disposed = false, frames = 0, lastMs = 0;
   const times = [];
+  // the weather's motion (the trees swaying, the arrow's pulse, the sock): frames at most 30 a second, only while the
+  // model is on screen and the page is shown; otherwise frames stay on demand
+  let onScreen = true, loopId = 0, lastLoop = 0;
+  const seen = typeof IntersectionObserver === 'function' ? new IntersectionObserver((es) => { onScreen = es.some((e) => e.isIntersecting); kick(); }) : null;
+  seen?.observe(canvas);
+  const onVis = () => kick();
+  document.addEventListener('visibilitychange', onVis);
+  function loop(now) {
+    loopId = 0;
+    if (disposed || !wx?.animating || !onScreen || document.hidden) return;
+    if (now - lastLoop >= 31) { lastLoop = now; wx.tick(now / 1000); invalidate(); }
+    loopId = requestAnimationFrame(loop);
+  }
+  function kick() { if (!loopId && wx?.animating && onScreen && !document.hidden && !disposed) loopId = requestAnimationFrame(loop); }
   function render() {
     queued = false; if (disposed) return;
     const t0 = performance.now();
@@ -468,16 +530,30 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     renderer.setSize(cssW(), cssH(), false);
     home = frame(framePts, { elev: cam0.elev, azim: cam0.azim, fill: cam0.fill ?? 0.9 });
     if (atHome) pose = { ...home, target: [...home.target] }; else clampPose();
-    placeCamera(); refreshPick(); renderer.shadowMap.needsUpdate = true; invalidate(); checkBandWidth();
+    placeCamera(); refreshPick(); renderer.shadowMap.needsUpdate = true; wx?.relayout(); invalidate(); checkBandWidth();
   }
   placeCamera();
   checkBandWidth();
+  wx = createWeather({
+    scene, camera, stage, model, invalidate, cssW, cssH, applyPose, centre,
+    latLon: data.kind === 'laguna' ? M.originLatLon ?? null : M.meta?.centre ?? null,   // [lat, lon] of the venue, for the race hour's sun
+    ribbon: (u0, u1, hl, hr, dy) => ribbonGeometry(u0, u1, hl, hr, dy),
+    northWorld: model.north ?? [0, -1],   // venue and city models: x east, north toward -z
+    getHome: () => home,
+    frameBox: () => ({ x0: bx0, x1: bx1, z0: bz0, z1: bz1 }),
+    silhouettes: () => {
+      const n = model.slab.length / 2, top = model.slab.slice(0, n), bottom = model.slab.slice(n);
+      return [top, bottom];
+    },
+    shadowsDirty: () => { renderer.shadowMap.needsUpdate = true; },
+  });
   renderer.shadowMap.needsUpdate = true;
   renderer.compile(scene, camera);
   render();
 
   function dispose() {
-    disposed = true; clearTimeout(widthTimer);
+    disposed = true; clearTimeout(widthTimer); clearTimeout(settleTimer); if (loopId) cancelAnimationFrame(loopId); seen?.disconnect();
+    document.removeEventListener('visibilitychange', onVis); wx?.dispose();
     canvas.removeEventListener('pointerdown', onDown); canvas.removeEventListener('pointermove', onMove);
     canvas.removeEventListener('pointerup', onUp); canvas.removeEventListener('pointercancel', onCancel);
     canvas.removeEventListener('pointerleave', onLeave); canvas.removeEventListener('wheel', onWheel);
@@ -500,7 +576,10 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   }
 
   return {
-    setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect, projectT, trackHalfWidth: model.half,
+    setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect, projectT, trackHalfWidth: model.half, setMarkers,
+    setWeather(w, opts) { wx.set(w, opts); recolour(); invalidate(); kick(); },
+    windScreen: () => wx.windScreen(),
+    weatherInfo: () => wx.info(),
     stats: () => ({ frames, lastMs, times: times.slice(), pose: { ...pose }, home: { ...home }, atHome }),
     // for headless checks: where on screen a section's middle is drawn, and a hover at that point
     screenPointOf(key) {

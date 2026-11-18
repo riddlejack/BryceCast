@@ -12,6 +12,7 @@ import { uiDataPackage } from '../data/uiDataPackage';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
 import { TrackModelSlot } from '../three/TrackModelSlot';
 import { prefetchTrackModel } from '../three/trackModelLoad';
+import { TrackWeatherProvider } from '../three/weather/sceneWeather';
 import { resolveQualifyingHeatMode } from './qualifyingHeat';
 import { switchValue } from '../review/switches';
 import { watchableCaptureForRace } from '../data/replayAvailable';
@@ -368,50 +369,55 @@ export const TracksScreen = ({
         </div>
       </div>
 
-      {replayShown && selectedCanonicalVisit ? (
-        <Suspense fallback={<div className="skeleton" style={{ height: 360 }} />}>
-          <TracksReplay
-            replay={replayShown}
-            payload={payload}
-            history={history}
-            sourceGap={replaySourceGap}
-            sessionId={selectedCanonicalVisit.sessionId}
-            onExit={exitReplay}
+      {/* The selected race's weather on every model below (the shaded model,
+        * the plain one, the replay's): a venue with two races a weekend shows
+        * each race's own sky and wind. */}
+      <TrackWeatherProvider sessionId={selectedCanonicalVisit?.sessionId ?? null}>
+        {replayShown && selectedCanonicalVisit ? (
+          <Suspense fallback={<div className="skeleton" style={{ height: 360 }} />}>
+            <TracksReplay
+              replay={replayShown}
+              payload={payload}
+              history={history}
+              sourceGap={replaySourceGap}
+              sessionId={selectedCanonicalVisit.sessionId}
+              onExit={exitReplay}
+            />
+          </Suspense>
+        ) : replayRequested && !replay ? (
+          <div className="skeleton" style={{ height: 360 }} />
+        ) : data.loading ? (
+          <div className="skeleton" style={{ height: 360 }} />
+        ) : selectedCanonicalVisit && !selectedVisit && !qualifying ? (
+          <Card title={labels.get(selectedCanonicalVisit.sessionId) ?? selectedCanonicalVisit.raceLabel}>
+            {plainModel ? <div style={{ marginBottom: 16 }}>{plainModel}</div> : null}
+            <Unavailable>
+              <span>
+                This race remains in the canonical archive, but its official Section Results report did not yield a validated lap-by-lap pack, so no section heat map is drawn for this visit.{' '}
+                <a href={`/races/${selectedCanonicalVisit.sessionId}`}>Open the race debrief</a>.
+              </span>
+            </Unavailable>
+          </Card>
+        ) : data.visits.length === 0 ? (
+          <Card>{plainModel ? <div style={{ marginBottom: 16 }}>{plainModel}</div> : null}<Unavailable>No official lap-by-lap section timing is on file for this venue.</Unavailable></Card>
+        ) : outline && data.anchors ? (
+          <VenueSectionSuite
+            outline={outline}
+            data={data}
+            selectedVisitId={selectedCanonicalVisit?.sessionId ?? null}
+            onSelectedVisitChange={setVisit}
+            showVisitControl={false}
+            qualifying={qualifying}
+            layout="tracks"
+            heatTitle={visitLabel ? `${visitLabel}, section by section` : undefined}
           />
-        </Suspense>
-      ) : replayRequested && !replay ? (
-        <div className="skeleton" style={{ height: 360 }} />
-      ) : data.loading ? (
-        <div className="skeleton" style={{ height: 360 }} />
-      ) : selectedCanonicalVisit && !selectedVisit && !qualifying ? (
-        <Card title={labels.get(selectedCanonicalVisit.sessionId) ?? selectedCanonicalVisit.raceLabel}>
-          {plainModel ? <div style={{ marginBottom: 16 }}>{plainModel}</div> : null}
-          <Unavailable>
-            <span>
-              This race remains in the canonical archive, but its official Section Results report did not yield a validated lap-by-lap pack, so no section heat map is drawn for this visit.{' '}
-              <a href={`/races/${selectedCanonicalVisit.sessionId}`}>Open the race debrief</a>.
-            </span>
-          </Unavailable>
-        </Card>
-      ) : data.visits.length === 0 ? (
-        <Card>{plainModel ? <div style={{ marginBottom: 16 }}>{plainModel}</div> : null}<Unavailable>No official lap-by-lap section timing is on file for this venue.</Unavailable></Card>
-      ) : outline && data.anchors ? (
-        <VenueSectionSuite
-          outline={outline}
-          data={data}
-          selectedVisitId={selectedCanonicalVisit?.sessionId ?? null}
-          onSelectedVisitChange={setVisit}
-          showVisitControl={false}
-          qualifying={qualifying}
-          layout="tracks"
-          heatTitle={visitLabel ? `${visitLabel}, section by section` : undefined}
-        />
-      ) : (
-        <>
-          {plainModel}
-          <VenueNumbersFallback visits={data.visits} labels={labels} />
-        </>
-      )}
+        ) : (
+          <>
+            {plainModel}
+            <VenueNumbersFallback visits={data.visits} labels={labels} />
+          </>
+        )}
+      </TrackWeatherProvider>
     </div>
   );
 };

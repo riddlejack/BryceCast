@@ -6,6 +6,7 @@ import type { ReplaySession } from '../app/useReplaySession';
 import type { LiveSessionHistory } from '../data/liveHistoryModel';
 import { replayDeepLinkQuery } from '../data/liveRaceShellModel';
 import { uiDataPackage } from '../data/uiDataPackage';
+import { TrackWeatherProvider } from '../three/weather/sceneWeather';
 import { ReplayBar, replayDeskPhaseOf, useReplayStage } from './LiveScreen';
 import { TrackPanel } from './liveParts';
 import { RaceBar } from './liveRaceBar';
@@ -78,18 +79,21 @@ const TracksReplay = ({
           <RaceBar replay={replay} axis={stage.axis} timeline={replay.timeline} virtualNow={stage.virtualNow} now={stage.now} place={stage.place} onSeek={stage.seek} />
         ) : null}
       </div>
-      <TrackPanel
-        identity={stage.identity}
-        replay={replay}
-        race={stage.race}
-        mode={stage.shownPhase === 'race' || stage.shownPhase === 'ended' ? 'race' : 'prestart'}
-        field={stage.fieldMode}
-        fieldCars={stage.fieldCars}
-        trail={stage.trail}
-        bryceLabel={stage.bryceLabel}
-        highlightId={hoverCar}
-        onHoverCar={setHoverCar}
-      />
+      {/* The race hour's weather on the replay's track (the race being replayed). */}
+      <TrackWeatherProvider sessionId={sessionId}>
+        <TrackPanel
+          identity={stage.identity}
+          replay={replay}
+          race={stage.race}
+          mode={stage.shownPhase === 'race' || stage.shownPhase === 'ended' ? 'race' : 'prestart'}
+          field={stage.fieldMode}
+          fieldCars={stage.fieldCars}
+          trail={stage.trail}
+          bryceLabel={stage.bryceLabel}
+          highlightId={hoverCar}
+          onHoverCar={setHoverCar}
+        />
+      </TrackWeatherProvider>
       <p className="tracks-replay__out">
         <Link to={liveHref}>Full replay on the Live page →</Link>
       </p>
