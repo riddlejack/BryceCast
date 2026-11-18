@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useRef } from 'react';
+import { venueName } from '../app/venueNames';
 import { MapPin, Play } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { useRouter } from '../app/router';
@@ -26,18 +27,23 @@ import './tracks.css';
 const TracksReplay = lazy(() => import('./tracksReplay'));
 
 /** The season schedule (seasonIndex, from the official venue dossier) and the
- *  section-lap packs (sectionLapRefs, joined by the track-asset name) name a
- *  couple of street circuits differently — the dossier's full event name vs
- *  the track asset's short "Streets of …" form. Left uncanonicalized this
- *  produced two dropdown entries for the same venue (one of which had no
- *  section-lap pack), and split a venue's visits across both spellings.
- *  Canonicalize on the track-asset spelling everywhere this screen keys off a
- *  venue name; extend this map if another dossier/asset name pair diverges. */
-const VENUE_NAME_ALIASES: Record<string, string> = {
-  'Detroit Downtown Street Circuit': 'Streets of Detroit',
-  'Grand Prix of Arlington Street Circuit': 'Streets of Arlington'
-};
-const canonicalVenueName = (name: string): string => VENUE_NAME_ALIASES[name] ?? name;
+ *  section-lap packs (sectionLapRefs, joined by the track-asset name) spell some
+ *  venues differently ("Detroit Downtown Street Circuit" / "Streets of Detroit").
+ *  Two spellings are one venue when the site's venue table (app/venueNames) gives
+ *  them one name. This screen keys a venue by the section packs' spelling (the
+ *  track asset's, which the outline and the section data look up), else the
+ *  schedule's; every label shows the table's name. */
+const venueKeyByName = (() => {
+  const byName = new Map<string, string>();
+  for (const ref of uiDataPackage.screens.raceDebrief.sectionLapRefs ?? []) {
+    if (ref.venueName && !byName.has(venueName(ref.venueName))) byName.set(venueName(ref.venueName), ref.venueName);
+  }
+  for (const row of uiDataPackage.screens.raceDebrief.seasonIndex ?? []) {
+    if (row.trackName && !byName.has(venueName(row.trackName))) byName.set(venueName(row.trackName), row.trackName);
+  }
+  return byName;
+})();
+const canonicalVenueName = (name: string): string => venueKeyByName.get(venueName(name)) ?? name;
 
 const selectStyle = {
   width: '100%',
@@ -172,7 +178,7 @@ export const TracksScreen = ({
             .filter((name): name is string => Boolean(name))
             .map(canonicalVenueName)
         ])
-      ].sort((left, right) => left.localeCompare(right)),
+      ].sort((left, right) => venueName(left).localeCompare(venueName(right))),
     [refs, seasonIndex]
   );
   /* The actual most-recently-raced venue, by real race date across the whole
@@ -189,8 +195,10 @@ export const TracksScreen = ({
     return latest ? canonicalVenueName(latest.trackName) : null;
   }, [seasonIndex]);
   const requestedVenue = route.search.get('venue');
+  /* An address may name the venue by either spelling or by the table's name. */
+  const requestedKey = requestedVenue ? canonicalVenueName(requestedVenue) : null;
   const selectedVenue =
-    requestedVenue && venues.includes(requestedVenue) ? requestedVenue : mostRecentlyRacedVenue ?? venues[0] ?? null;
+    requestedKey && venues.includes(requestedKey) ? requestedKey : mostRecentlyRacedVenue ?? venues[0] ?? null;
   const canonicalVisits = useMemo(
     () =>
       seasonIndex
@@ -335,14 +343,14 @@ export const TracksScreen = ({
         <div className="tracks-head__text">
           <ScreenHead
             kicker={<><MapPin size={13} aria-hidden /> Track archive</>}
-            title={selectedVenue}
+            title={venueName(selectedVenue)}
             sub="His pace at every INDY NXT track he has raced, section by section, from the official timing loops."
           />
           <div className="tracks-head__pickers">
             <label className="tracks-pick">
               <span>Venue</span>
               <select aria-label="Venue" value={selectedVenue} onChange={(event) => setVenue(event.target.value)} style={selectStyle}>
-                {venues.map((venue) => <option key={venue} value={venue}>{venue}</option>)}
+                {venues.map((venue) => <option key={venue} value={venue}>{venueName(venue)}</option>)}
               </select>
             </label>
             <label className="tracks-pick">

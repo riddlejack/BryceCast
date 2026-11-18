@@ -14,6 +14,7 @@ import { TAP_CARD, useTapPreview } from '../app/tapPreview';
 import { VenueTipCard, type VenueTip } from '../app/venueCard';
 import { useVenuePreload } from '../app/venuePeek';
 import { placeNameOf } from './raceCardFacts';
+import { venueName } from '../app/venueNames';
 import {
   uiDataPackage,
   type UiCareerAtlasSeriesSpan,
@@ -559,7 +560,7 @@ const venueAccessibleLabel = (view: VenueView, seriesFiltered: boolean): string 
             `${span.seriesShort} ${yearSpan(span.firstYear, span.lastYear)}, ${span.raceCount} ${span.raceCount === 1 ? 'race' : 'races'}`
         )
         .join('; ');
-  return `${view.venue.trackName}, ${view.venue.country}. ${view.raceCount} ${view.raceCount === 1 ? 'race' : 'races'} in this filter. ${series}.${
+  return `${venueName(view.venue.trackName)}, ${view.venue.country}. ${view.raceCount} ${view.raceCount === 1 ? 'race' : 'races'} in this filter. ${series}.${
     view.bestFinish === null ? '' : ` Best sourced finish P${view.bestFinish}.`
   } Open the latest applicable race here.`;
 };
@@ -860,7 +861,7 @@ export const CareerAtlas = () => {
         venue.coordinateSources.map((source, index) => {
           const named = splitNamedSource(source);
           return {
-            label: `${venue.trackName} · coordinates${venue.coordinateSources.length > 1 ? ` ${index + 1}` : ''}`,
+            label: `${venueName(venue.trackName)} · coordinates${venue.coordinateSources.length > 1 ? ` ${index + 1}` : ''}`,
             path: named.url,
             note: named.name
           };
@@ -1137,8 +1138,8 @@ export const CareerAtlas = () => {
                 </span>
                 <span className="career-travel__leg-route">
                   {currentLeg.greatCircleMiles <= 0
-                    ? `${currentLeg.to.trackName}, again`
-                    : `${currentLeg.from.trackName} to ${currentLeg.to.trackName}`}
+                    ? `${venueName(currentLeg.to.trackName)}, again`
+                    : `${venueName(currentLeg.from.trackName)} to ${venueName(currentLeg.to.trackName)}`}
                 </span>
                 <span className="career-travel__leg-miles">
                   {currentLeg.greatCircleMiles <= 0

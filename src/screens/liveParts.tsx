@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { Plate } from '../app/components';
 import { asNumber, asString, formatDate } from '../app/format';
 import { trackOutlineFor, type TrackOutline } from '../assets/tracks';
@@ -269,7 +270,7 @@ export const TrackPanel = ({
   }
   const shownReadout = marksOn ? readout : null;
   const litName = shownReadout && chain ? sectionDisplayName(chain[shownReadout.index], shownReadout.index, chain.length) : null;
-  const ariaLabel = `${identity.outline.name}${litName ? `: Bryce is in ${litName}, on his lap ${shownReadout!.lap}` : ''}`;
+  const ariaLabel = `${venueName(identity.outline.name)}${litName ? `: Bryce is in ${litName}, on his lap ${shownReadout!.lap}` : ''}`;
   const flat = (
     <LiveTrack
       outline={identity.outline}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { venueName } from '../app/venueNames';
 import { useMeasuredWidth, useReducedMotion } from '../app/charts';
 import { formatDate } from '../app/format';
 import { Link } from '../app/router';
@@ -228,7 +229,7 @@ const StandoutArt = ({ trackName, sessionId, raceName }: { trackName: string | n
             interactive={!playing && modelSections.length > 0}
             lit={current ? current.section.key : null}
             dotT={dotT}
-            alt={`${outline.name}: the 3D track, shaded section by section for the ${raceName}.`}
+            alt={`${venueName(outline.name)}: the 3D track, shaded section by section for the ${raceName}.`}
             sizes="(max-width: 760px) 100vw, 560px"
           />
         ) : null}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { TrackModelSlot } from '../three/TrackModelSlot';
 import type { TrackModelSection } from '../three/TrackModel3D';
 import { Card, SourcePill } from '../app/components';
@@ -2222,7 +2223,7 @@ const VisitShape = ({
         slug={outline.slug}
         sessionId={pack.sessionId}
         sections={sections}
-        alt={`${outline.name}, ${label ?? pack.seasonYear ?? ''}: the 3D track${resolved.length > 0 ? ', shaded section by section for this race' : ''}.`}
+        alt={`${venueName(outline.name)}, ${label ?? pack.seasonYear ?? ''}: the 3D track${resolved.length > 0 ? ', shaded section by section for this race' : ''}.`}
         sizes={shapeMaxHeight === undefined ? '(max-width: 760px) 100vw, 420px' : '(max-width: 760px) 100vw, 540px'}
         fallback={
           <TrackArt

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { SourcePill, Stat, TickerValue, Unavailable } from '../app/components';
 import { PointerWord, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../app/charts';
 import { useTapPreview } from '../app/tapPreview';
@@ -343,7 +344,7 @@ const OdometerLive = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live:
         <TickerValue className="odometer-live__value" value={`+${wholeNumber.format(liveToday.todayMiles)} mi`} valueKey={liveToday.laps} />
         <p className="caption caption--secondary odometer-live__note">
           {wholeNumber.format(liveToday.laps)} {liveToday.laps === 1 ? 'lap' : 'laps'} × {liveToday.lengthMi.toFixed(2)} mi at{' '}
-          {liveToday.trackName}. This session already counts in the miles raced above, so replaying it adds nothing.
+          {venueName(liveToday.trackName)}. This session already counts in the miles raced above, so replaying it adds nothing.
         </p>
       </div>
     );
@@ -357,7 +358,7 @@ const OdometerLive = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live:
         <TickerValue className="odometer-live__value" value={`+${wholeNumber.format(liveToday.todayMiles)} mi today`} valueKey={liveToday.laps} />
         <p className="caption caption--secondary odometer-live__note">
           {wholeNumber.format(provisionalTotalMiles)} mi including today · {wholeNumber.format(liveToday.laps)}{' '}
-          {liveToday.laps === 1 ? 'lap' : 'laps'} × {liveToday.lengthMi.toFixed(2)} mi at {liveToday.trackName}. Reconciled with
+          {liveToday.laps === 1 ? 'lap' : 'laps'} × {liveToday.lengthMi.toFixed(2)} mi at {venueName(liveToday.trackName)}. Reconciled with
           official results after the flag.
         </p>
       </div>
@@ -795,11 +796,11 @@ const PlacesVisual = () => {
             venue: { trackName: shown.trackName, trackId: shown.trackIds[0] ?? null },
             meta: hot.venue ? hot.country : plural(hotList.length, 'track'),
             tint: odoColourOld() ? countryTint(hot.country) : null,
-            title: hot.venue ? shown.trackName : hot.country,
+            title: hot.venue ? venueName(shown.trackName) : hot.country,
             detail: hot.venue
               ? `${plural(shown.raceCount, 'race')}, ${yearsOf(shown.firstYear, shown.lastYear)} · ${shown.seriesSpans.map((span) => span.seriesShort).join(', ')}`
               : `${plural(countryRaces, 'race')}, ${countryYears}`,
-            note: hot.venue ? null : `Pictured: ${shown.trackName}, where he raced most`
+            note: hot.venue ? null : `Pictured: ${venueName(shown.trackName)}, where he raced most`
           }}
         />
       ) : null}
@@ -1261,11 +1262,11 @@ const Odometer = ({ lifeStats, live }: { lifeStats: UiCareerLifeStats; live: Liv
   const venueSourceEntries = lifeStats.venueSources.flatMap((venue) => [
     ...venue.lengthSources.map((source, index) => {
       const named = splitNamedSource(source);
-      return { label: `${venue.trackName} · length${venue.lengthSources.length > 1 ? ` ${index + 1}` : ''}`, path: named.url, note: named.name };
+      return { label: `${venueName(venue.trackName)} · length${venue.lengthSources.length > 1 ? ` ${index + 1}` : ''}`, path: named.url, note: named.name };
     }),
     ...venue.coordsSources.map((source, index) => {
       const named = splitNamedSource(source);
-      return { label: `${venue.trackName} · coordinates${venue.coordsSources.length > 1 ? ` ${index + 1}` : ''}`, path: named.url, note: named.name };
+      return { label: `${venueName(venue.trackName)} · coordinates${venue.coordsSources.length > 1 ? ` ${index + 1}` : ''}`, path: named.url, note: named.name };
     })
   ]);
 
@@ -1503,7 +1504,7 @@ const WeekRaceLines = ({ model, races }: { model: LifeModel; races: GridRace[] }
   const first = races[0];
   const meta = seriesMetaById(first.seriesId);
   const event = model.events.get(first.eventId);
-  const place = event ? `${event.trackName}, ${countryShort(event.country)}` : first.eventName;
+  const place = event ? `${venueName(event.trackName)}, ${countryShort(event.country)}` : first.eventName;
   const results = races.flatMap((race) => model.results.get(race.eventId) ?? []);
   const inWeek = races.reduce((sum, race) => sum + race.raceCount, 0);
   const total = races.reduce((sum, race) => sum + (model.raceTotals.get(race.eventId) ?? race.raceCount), 0);
@@ -1634,12 +1635,12 @@ const WeekStory = ({ model, week }: { model: LifeModel; week: LifeWeek }) => {
       ) : null}
       {prevEvent && prevRace ? (
         <span className="life-tip__muted">
-          Last meeting: {seriesMetaById(prevRace.seriesId).short} at {prevEvent.trackName}, from {shortDate(prevEvent.start, true)}.
+          Last meeting: {seriesMetaById(prevRace.seriesId).short} at {venueName(prevEvent.trackName)}, from {shortDate(prevEvent.start, true)}.
         </span>
       ) : null}
       {nextEvent && nextRace ? (
         <span className="life-tip__muted">
-          Next: {seriesMetaById(nextRace.seriesId).short} at {nextEvent.trackName}, from {shortDate(nextEvent.start, true)}
+          Next: {seriesMetaById(nextRace.seriesId).short} at {venueName(nextEvent.trackName)}, from {shortDate(nextEvent.start, true)}
           {miles && miles > 0 ? `, ${wholeNumber.format(miles)} miles away in a straight line` : ''}.
         </span>
       ) : null}
