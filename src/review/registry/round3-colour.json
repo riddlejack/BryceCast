@@ -1,0 +1,57 @@
+{
+  "lane": "round3-colour",
+  "entries": [
+    {
+      "id": "r3-odometer-colour",
+      "page": "/career",
+      "title": "The odometer in one colour set: series colours only on the series bar, everything else ink, with amber only for \"at least\"",
+      "switch": "odocolour",
+      "values": [
+        {
+          "value": null,
+          "label": "one set (default): On track keeps the series colours; Distance, Time, Places and When it went wrong are ink with one soft grey (travel, practice) and one faint grey (races that ran to the flag); the other drivers are ink dots, and pointing at a dot or a chip lights that series in its colour. The dashed run past a floor is amber, like the +"
+        },
+        {
+          "value": "series",
+          "label": "series: the same, but the other drivers keep their series colours at rest (the same colours as the On track bar)"
+        },
+        {
+          "value": "old",
+          "label": "before: round 2's six schemes (series, road rust, a rust-to-sand ramp by country, INDY NXT gold and red)"
+        }
+      ],
+      "look": "Career → the odometer. Count the colours at rest, then point at (or tap) a dot on The other drivers: its series lights in its own colour. Flip to old to compare.",
+      "anchor": "#career-odometer-title",
+      "added": "2026-11-18T00:30",
+      "reviewed": false
+    },
+    {
+      "id": "r3-life-colour",
+      "page": "/career",
+      "title": "His life in weeks in ink on paper: series colour only when you ask for it",
+      "switch": "lifecolour",
+      "values": [
+        {
+          "value": null,
+          "label": "ink (default): every race week a black square. Point at (or tap) a race week, or a series under the grid, and that series' weeks light in its colour while the others go faint"
+        },
+        {
+          "value": "tone",
+          "label": "tone: one ink in steps, lightest for his first series and darkest for INDY NXT, so the grid darkens as he climbs; the same lighting on hover"
+        },
+        {
+          "value": "muted",
+          "label": "muted: each series in its colour taken halfway to grey; the same lighting on hover"
+        },
+        {
+          "value": "old",
+          "label": "before: round 2, every series in full colour"
+        }
+      ],
+      "look": "Career → His life in weeks. Point at an INDY NXT week: every INDY NXT week lights gold. Point at GB3 in the key. Flip tone, muted and old.",
+      "anchor": "#career-life-title",
+      "added": "2026-11-18T00:30",
+      "reviewed": false
+    }
+  ]
+}
