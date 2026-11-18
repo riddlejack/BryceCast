@@ -14,6 +14,8 @@ import { useStillIndex } from '../app/trackStill';
 import { venuePictureFor } from '../app/venuePeek';
 import { trackOutlineFor } from '../assets/tracks';
 import { beatLine, placeLine } from '../app/raceFacts';
+import { FieldSeason, seasonLook } from './races/fieldSeason';
+import { archiveMarks } from './races/seasonMarks';
 
 /* ============================================================================
  * The seasons before INDY NXT on the Races page (career round 2, Nov 17 2026).
@@ -233,6 +235,21 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
   );
 };
 
+/* ---------- the key under a year's title (round 3) ---------- */
+
+/* Says which way is good before the reader meets the axis: the front of the
+ * field is the top. Only what the year's chart draws is named. */
+export const FieldLegend = ({ races, share }: { races: ArchiveRace[]; share: boolean }) => {
+  const parts = [
+    share ? 'Dot: the share of the field he beat, a win at the top' : 'Dot: his finish, P1 at the top · line below it: the cars he beat',
+    'grey line: his weekend average',
+    races.some((race) => race.finish === 1) ? 'ring: a win' : null,
+    races.some((race) => race.finish === null) ? '✕ no finish' : null,
+    anyWet(races.map((race) => race.sessionId)) ? 'streaks: a wet track' : null
+  ];
+  return <>{parts.filter(Boolean).join(' · ')}</>;
+};
+
 /* ---------- one row ---------- */
 
 /* The row's "of 23", read from the place line (raceFacts) so a row and its
@@ -260,7 +277,7 @@ export const ArchiveRow = ({ race }: { race: ArchiveRace }) => {
           {[race.seriesShort, ended || null].filter(Boolean).join(' · ')}
         </span>
       </span>
-      <span className={`stat__delta ${gain?.direction === 'up' ? 'stat__delta--up' : 'stat__delta--down'}`} style={{ textAlign: 'right' }}>
+      <span className={`stat__delta stat__delta--${gain?.direction ?? 'flat'}`} style={{ textAlign: 'right' }}>
         {gain ? gain.text : ''}
       </span>
       <span className="tower__gap tnum race-row__field">{ofField(race)}</span>
@@ -360,10 +377,12 @@ const archiveSources = (races: ArchiveRace[]) => {
 
 /* ---------- a season before INDY NXT ---------- */
 
-export const EarlierSeason = ({ year, races }: { year: number; races: ArchiveRace[] }) => {
+export const EarlierSeason = ({ year, races, firstWins }: { year: number; races: ArchiveRace[]; firstWins: Map<string, string> }) => {
   const [open, setOpen] = useState(yearsOpen);
   const pictures = useAnyPicture(races);
   const newestFirst = useMemo(() => [...races].reverse(), [races]);
+  const look = seasonLook();
+  const marks = useMemo(() => archiveMarks(races, firstWins), [races, firstWins]);
   return (
     <div id={`season-${year}`} className="races-season">
       <Card
@@ -377,9 +396,16 @@ export const EarlierSeason = ({ year, races }: { year: number; races: ArchiveRac
         }
       >
         <p className="caption caption--secondary races-index__legend">
-          <SeriesKey races={races} /> <span className="races-key__how">Each dot a race, by date · a ring marks a win{anyWet(races.map((race) => race.sessionId)) ? ' · rain streaks a wet track' : ''} · <PointerOpen what="any race" /></span>
+          <SeriesKey races={races} />{' '}
+          {look === 'old' ? (
+            <span className="races-key__how">Each dot a race, by date · a ring marks a win{anyWet(races.map((race) => race.sessionId)) ? ' · rain streaks a wet track' : ''} · <PointerOpen what="any race" /></span>
+          ) : (
+            <span className="races-key__how">
+              <FieldLegend races={races} share={look === 'share'} /> · <PointerOpen what="any race" />
+            </span>
+          )}
         </p>
-        <YearSpine races={races} year={year} />
+        {look === 'old' ? <YearSpine races={races} year={year} /> : <FieldSeason marks={marks} label={`${year}: ${races.length} races by weekend, each his finish in that race's field`} look={look} />}
         <button type="button" className="races-fold" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
           <span>{open ? `Hide the ${races.length} races` : `Show the ${races.length} races`}</span>
           <ChevronDown size={16} aria-hidden style={{ transform: open ? 'rotate(180deg)' : undefined }} />
@@ -399,8 +425,10 @@ export const EarlierSeason = ({ year, races }: { year: number; races: ArchiveRac
 /* ---------- the other series in an INDY NXT year ---------- */
 
 /* QoL 3: each series in an INDY NXT year on its own line, newest series first. */
-export const AlsoInYear = ({ year, races }: { year: number; races: ArchiveRace[] }) => {
+export const AlsoInYear = ({ year, races, firstWins }: { year: number; races: ArchiveRace[]; firstWins: Map<string, string> }) => {
   const pictures = useAnyPicture(races);
+  const look = seasonLook();
+  const marks = useMemo(() => archiveMarks(races, firstWins), [races, firstWins]);
   const groups = useMemo(() => {
     const map = new Map<string, { seriesName: string; seriesShort: string; races: ArchiveRace[] }>();
     for (const race of races) {
@@ -417,7 +445,13 @@ export const AlsoInYear = ({ year, races }: { year: number; races: ArchiveRace[]
       <SeriesKey races={races} />
       <SourcePill title={`${year}: the other series`} entries={archiveSources(races)} caveats={[]} />
     </div>
-    {races.length >= 3 ? <YearSpine races={races} year={year} /> : null}
+    {races.length >= 3 ? (
+      look === 'old' ? (
+        <YearSpine races={races} year={year} />
+      ) : (
+        <FieldSeason marks={marks} label={`Also in ${year}: ${races.length} races by weekend, each his finish in that race's field`} look={look} />
+      )
+    ) : null}
     {groups.map((group) => (
       <div key={group.seriesName} className="races-also__series">
         {groups.length > 1 ? (
