@@ -67,3 +67,7 @@
   .races-index .races-earlier__toggle { grid-template-columns: minmax(0, 1fr); padding: 16px 0 6px; }
   .races-index .races-earlier__cue { padding: 0; }
 }
+
+/* the key wraps between its items, never inside one */
+.races-key__part { white-space: nowrap; }
+.races-index__legend { text-wrap: balance; }

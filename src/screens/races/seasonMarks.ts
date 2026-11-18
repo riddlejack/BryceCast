@@ -1,5 +1,5 @@
 import { formatDate } from '../../app/format';
-import { isKnownVenue, venueShort } from '../../app/venueNames';
+import { isKnownVenue, venueName, venueShort } from '../../app/venueNames';
 import { beatLine, placeLine } from '../../app/raceFacts';
 import { displayRaceLabelText } from '../../data/debriefArchive';
 import type { UiSeasonIndexRow } from '../../data/uiDataPackage';
@@ -25,9 +25,9 @@ export interface SeasonMark {
   href: string;
   /** The venue's short name, under the weekend's races. */
   venueShort: string;
-  /** The axis's names for the weekend: in full ("Donington, October") and in
-   *  its shortest form ("Donington Oct"), for when the full one has no room. */
-  axis: { long: string; short: string };
+  /** The place, short and undated ("Brands Hatch"): the chart dates every
+   *  weekend at a place it visits more than once (fieldSeason, axisNames). */
+  place: string;
   /** The series: a weekend, and the line through its averages, never crosses one. */
   series: string;
   /** The race day (YYYY-MM-DD), for grouping a weekend's races. */
@@ -86,30 +86,34 @@ export const venueShortOf = (name: string): string => {
   return when ? `${short}, ${when}` : short;
 };
 
-/* The axis's last resort on a crowded season: the word people use for the place. */
+/* The axis's short form of a place, for a chart with no room for full names:
+ * the word racing people use for it. Every place of a chart takes its short
+ * form together, so one axis never mixes "Brands" with "Oulton Park". */
 const TINY: Record<string, string> = {
   'Brands Hatch': 'Brands',
   'Castle Combe': 'Combe',
   'Cadwell Park': 'Cadwell',
+  'Oulton Park': 'Oulton',
+  'Donington Park': 'Donington',
   'Laguna Seca': 'Laguna',
-  'Road Atlanta': 'Atlanta',
   'Watkins Glen': 'Watkins',
   'Summit Point': 'Summit',
   'FF Festival': 'Festival',
   'Walter Hayes': 'Hayes',
   'Paul Ricard': 'Ricard',
-  'Red Bull Ring': 'Red Bull',
-  Hungaroring: 'Hungary'
+  'Red Bull Ring': 'Red Bull'
 };
 
-/** The axis's two names for a meeting or a track: "Brands Hatch, 12 September"
- *  and "Brands 12 Sep"; "Oulton" both ways. */
-export const axisNames = (name: string): { long: string; short: string } => {
-  const { place, when } = splitWhen(name);
-  const short = shortPlace(place);
-  const tiny = TINY[short] ?? short;
-  return { long: when ? `${short}, ${when}` : short, short: when ? `${tiny} ${whenShort(when)}` : tiny };
+/** A weekend's two axis names, given its place and, where the chart visits
+ *  the place more than once, its date ("12 September" or "October"):
+ *  "Brands Hatch, 12 September" / "Brands 12 Sep"; "Oulton Park" / "Oulton". */
+export const axisNames = (place: string, when: string | null): { long: string; short: string } => {
+  const tiny = TINY[place] ?? place;
+  return { long: when ? `${place}, ${when}` : place, short: when ? `${tiny} ${whenShort(when)}` : tiny };
 };
+
+/** The place a meeting or track name is at, short and without its month. */
+export const placeOf = (name: string): string => shortPlace(splitWhen(name).place);
 
 /* ---------- INDY NXT rounds ---------- */
 
@@ -138,7 +142,7 @@ export const indyMarks = (rows: UiSeasonIndexRow[]): SeasonMark[] => {
       id: row.sessionId,
       href: `/races/${encodeURIComponent(row.sessionId)}`,
       venueShort: venueShortOf(row.trackName ?? ''),
-      axis: axisNames(row.trackName ?? ''),
+      place: placeOf(row.trackName ?? ''),
       series: 'INDY NXT',
       day,
       finish: row.finishPosition,
@@ -223,7 +227,7 @@ export const archiveMarks = (races: ArchiveRace[], firstWins: Map<string, string
       id: race.sessionId,
       href: race.href,
       venueShort: short,
-      axis: axisNames(meetingOf(race)),
+      place: placeOf(meetingOf(race)),
       series: race.seriesId,
       day: race.day,
       finish: race.finish,
@@ -238,7 +242,7 @@ export const archiveMarks = (races: ArchiveRace[], firstWins: Map<string, string
         meta: `${race.seriesShort} · ${dayWords(race, true)}`,
         title: race.title,
         nums: archiveNums(race),
-        note: archiveNote(race) ?? race.trackName
+        note: archiveNote(race) ?? venueName(race.trackName)
       }
     };
   });

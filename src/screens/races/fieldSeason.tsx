@@ -6,7 +6,7 @@ import { beatShare } from '../../app/raceFacts';
 import { switchValue } from '../../review/switches';
 import { RaceStillCard } from '../racesPeek';
 import { RainStreaks, wetFor } from '../raceWet';
-import type { SeasonMark } from './seasonMarks';
+import { axisNames, type SeasonMark } from './seasonMarks';
 import './seasonCharts.css';
 
 /* ============================================================================
@@ -45,9 +45,32 @@ const clamp01 = (t: number) => Math.min(Math.max(t, 0), 1);
 interface Weekend {
   from: number;
   to: number;
+  place: string;
+  day: string;
   label: { long: string; short: string };
   marks: number[];
 }
+
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/* A place this chart visits more than once is dated at every weekend there,
+ * its month, or its day and month where two visits share a month (2020's four
+ * Brands Hatch weekends: 30 August, 12, 20 and 26 September). */
+const nameWeekends = (weekends: Weekend[]): Weekend[] => {
+  const byPlace = new Map<string, Weekend[]>();
+  for (const weekend of weekends) byPlace.set(weekend.place, [...(byPlace.get(weekend.place) ?? []), weekend]);
+  for (const visits of byPlace.values()) {
+    const dated = visits.length > 1 && visits.every((weekend) => /^\d{4}-\d{2}-\d{2}/.test(weekend.day));
+    const months = visits.map((weekend) => weekend.day.slice(0, 7));
+    const sameMonth = new Set(months).size < months.length;
+    for (const weekend of visits) {
+      const month = MONTH_NAMES[Number(weekend.day.slice(5, 7)) - 1];
+      const when = dated ? (sameMonth ? `${Number(weekend.day.slice(8, 10))} ${month}` : month) : null;
+      weekend.label = axisNames(weekend.place, when);
+    }
+  }
+  return weekends;
+};
 
 /** Races at one venue within four days of the weekend's first race share a weekend. */
 const weekendsOf = (marks: SeasonMark[]): Weekend[] => {
@@ -56,14 +79,14 @@ const weekendsOf = (marks: SeasonMark[]): Weekend[] => {
     const last = out[out.length - 1];
     const first = last ? marks[last.marks[0]] : null;
     const days = first && mark.day && first.day ? (Date.parse(mark.day) - Date.parse(first.day)) / 86_400_000 : Infinity;
-    if (last && first && first.venueShort === mark.venueShort && days >= 0 && days <= 4) {
+    if (last && first && first.place === mark.place && days >= 0 && days <= 4) {
       last.marks.push(index);
       last.to = index;
     } else {
-      out.push({ from: index, to: index, label: mark.axis, marks: [index] });
+      out.push({ from: index, to: index, place: mark.place, day: mark.day, label: axisNames(mark.place, null), marks: [index] });
     }
   });
-  return out;
+  return nameWeekends(out);
 };
 
 const useDrawProgress = (start: boolean, reduced: boolean): number => {
@@ -179,42 +202,64 @@ export const FieldSeason = ({
     })
     .filter((value): value is { x: number; y: number; series: string } => value !== null)
     .sort((a, b) => a.x - b.x);
-  const formD = formPts
-    .map((pt, k) => `${k && formPts[k - 1].series === pt.series ? 'L' : 'M'}${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`)
+  /* one run per series, each point joined to that series' previous one, past
+   * any other series' weekends between (2019: F1600's line runs Mid-Ohio to
+   * VIR over the lone RCFFS race) */
+  const formRuns = new Map<string, Array<{ x: number; y: number }>>();
+  for (const pt of formPts) formRuns.set(pt.series, [...(formRuns.get(pt.series) ?? []), pt]);
+  const formD = [...formRuns.values()]
+    .map((run) => run.map((pt, k) => `${k ? 'L' : 'M'}${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' '))
     .join(' ');
-  const formJoins = formPts.some((pt, k) => k > 0 && formPts[k - 1].series === pt.series);
+  const formJoins = [...formRuns.values()].some((run) => run.length > 1);
 
-  /* Weekend names, in up to three rows (four on a phone): the full name where it fits ("Brands
-   * Hatch, 12 September"), else the short one ("Brands 12 Sep"); the phone
-   * goes straight to the short ones. A short form two weekends share (a place
-   * and month both visited twice) is never used: those weekends keep the full
-   * name or, on a phone with no room, the card. */
-  const ROWS = phone ? 4 : 3;
-  const labelRows: Array<Array<[number, number]>> = Array.from({ length: ROWS }, () => []);
-  const shortCount = new Map<string, number>();
-  for (const weekend of weekends) shortCount.set(weekend.label.short, (shortCount.get(weekend.label.short) ?? 0) + 1);
-  const placed = weekends.map((weekend) => {
-    const cx = (xs[weekend.from] + xs[weekend.to]) / 2;
-    const short = shortCount.get(weekend.label.short) === 1 ? weekend.label.short : null;
-    const names = (phone ? [short ?? weekend.label.long] : [weekend.label.long, short]).filter((text, k, all): text is string => !!text && all.indexOf(text) === k);
-    /* a name may slide a little off its bracket's middle, never off the bracket */
-    const reach = Math.max((xs[weekend.to] - xs[weekend.from]) / 2, 0) + 4;
-    for (const text of names) {
+  /* Weekend names, in up to three rows (five on a phone). One form for the
+   * whole chart: every full name ("Brands Hatch, 12 September") where they
+   * all fit, else every short one ("Brands 12 Sep", "Oulton"), so an axis never
+   * mixes "Castle Combe, 1 August" with "Combe 31 Aug". A name sits centred on
+   * its bracket, slides within it, or ends at the bracket's own end; it is
+   * never pushed off its bracket by the edge of the chart. */
+  const ROWS = phone ? 5 : 3;
+  const layout = (form: 'long' | 'short') => {
+    const labelRows: Array<Array<[number, number]>> = Array.from({ length: ROWS }, () => []);
+    return weekends.map((weekend) => {
+      const text = weekend.label[form];
       const w = textW(text, fs - 0.5) + 10;
+      const left = xs[weekend.from] - 3;
+      const right = xs[weekend.to] + 3;
+      const cx = (left + right) / 2;
+      /* a slide keeps the bracket's middle under the name */
+      const reach = Math.min(Math.max((right - left) / 2 - 3, 0) + 4, w / 2 - 8);
+      /* [where the text is anchored, how]: centred, slid within the bracket,
+       * then ending at the bracket's right end or starting at its left */
+      const spots: Array<[number, 'middle' | 'end' | 'start']> = [
+        [cx, 'middle'],
+        [cx - reach / 2, 'middle'],
+        [cx + reach / 2, 'middle'],
+        [cx - reach, 'middle'],
+        [cx + reach, 'middle'],
+        [right, 'end'],
+        [left, 'start']
+      ];
       for (let row = 0; row < ROWS; row += 1) {
-        for (const nudge of [0, -reach / 2, reach / 2, -reach, reach]) {
-          const lc = Math.min(Math.max(cx + nudge, w / 2 + 2), width - w / 2 - 2);
-          const lo = lc - w / 2;
-          const hi = lc + w / 2;
+        for (const [at, anchor] of spots) {
+          const lo = anchor === 'middle' ? at - w / 2 : anchor === 'end' ? at - w + 5 : at - 5;
+          const hi = lo + w;
+          if (lo < 2 || hi > width - 2) continue;
           if (labelRows[row].every(([a, b]) => hi <= a || lo >= b)) {
             labelRows[row].push([lo, hi]);
-            return { cx: lc, row, text };
+            return { x: at, anchor, row, text };
           }
         }
       }
-    }
-    return null;
-  });
+      return null;
+    });
+  };
+  const count = (list: ReturnType<typeof layout>) => list.filter(Boolean).length;
+  const shorts = weekends.map((weekend) => weekend.label.short);
+  const shortsUnique = new Set(shorts).size === shorts.length;
+  const long = layout('long');
+  const short = count(long) < weekends.length && shortsUnique ? layout('short') : null;
+  const placed = short && count(short) > count(long) ? short : long;
   const usedRows = Math.max(1, ...placed.map((value) => (value ? value.row + 1 : 0)));
   const labelsBottom = bracketY + 6 + usedRows * (fs + 5);
 
@@ -436,6 +481,7 @@ export const FieldSeason = ({
                 <g key={`w${w}`}>
                   <path
                     className="fseason__bracket"
+                    data-w={w}
                     d={x1 > x0 ? `M${x0 - 3} ${bracketY - 5} V${bracketY} H${x1 + 3} V${bracketY - 5}` : `M${x0} ${bracketY - 5} V${bracketY}`}
                     fill="none"
                     stroke="var(--ink)"
@@ -445,9 +491,10 @@ export const FieldSeason = ({
                   {where ? (
                     <text
                       className="fseason__wk"
-                      x={where.cx}
+                      data-w={w}
+                      x={where.x}
                       y={bracketY + 6 + (where.row + 1) * (fs + 5) - 5}
-                      textAnchor="middle"
+                      textAnchor={where.anchor}
                       fontFamily={chartFont}
                       fontSize={fs - 0.5}
                       fontWeight={lit ? 600 : 400}

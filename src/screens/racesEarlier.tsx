@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { Fragment, useMemo, useRef, useState, type ReactNode } from 'react';
 import { wetPhraseFor } from '../app/wetDry';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Card, SourcePill } from '../app/components';
@@ -240,15 +240,31 @@ export const YearSpine = ({ races, year }: { races: ArchiveRace[]; year: number 
 
 /* Says which way is good before the reader meets the axis: the front of the
  * field is the top. Only what the year's chart draws is named. */
-export const FieldLegend = ({ races, share }: { races: ArchiveRace[]; share: boolean }) => {
-  const parts = [
-    share ? 'Dot: the share of the field he beat, a win at the top' : 'Dot: his finish, P1 at the top · line below it: the cars he beat',
+/* Each item of the key holds together: the line wraps between items, never
+ * inside one (proxy review 6: "track · click any race" left alone at 1440). */
+export const FieldLegend = ({ races, share, tail }: { races: ArchiveRace[]; share: boolean; tail?: ReactNode }) => {
+  const parts: ReactNode[] = [
+    share ? 'Dot: the share of the field he beat, a win at the top' : 'Dot: his finish, P1 at the top',
+    share ? null : 'line below it: the cars he beat',
     'grey line: his weekend average',
     races.some((race) => race.finish === 1) ? 'ring: a win' : null,
     races.some((race) => race.finish === null) ? '✕ no finish' : null,
-    anyWet(races.map((race) => race.sessionId)) ? 'streaks: a wet track' : null
-  ];
-  return <>{parts.filter(Boolean).join(' · ')}</>;
+    anyWet(races.map((race) => race.sessionId)) ? 'streaks: a wet track' : null,
+    tail ?? null
+  ].filter((part) => part !== null);
+  return (
+    <>
+      {parts.map((part, k) => (
+        <Fragment key={k}>
+          <span className="races-key__part">
+            {part}
+            {k < parts.length - 1 ? ' ·' : ''}
+          </span>
+          {k < parts.length - 1 ? ' ' : null}
+        </Fragment>
+      ))}
+    </>
+  );
 };
 
 /* ---------- one row ---------- */
@@ -402,7 +418,7 @@ export const EarlierSeason = ({ year, races, firstWins }: { year: number; races:
             <span className="races-key__how">Each dot a race, by date · a ring marks a win{anyWet(races.map((race) => race.sessionId)) ? ' · rain streaks a wet track' : ''} · <PointerOpen what="any race" /></span>
           ) : (
             <span className="races-key__how">
-              <FieldLegend races={races} share={look === 'share'} /> · <PointerOpen what="any race" />
+              <FieldLegend races={races} share={look === 'share'} tail={<PointerOpen what="any race" />} />
             </span>
           )}
         </p>
