@@ -98,18 +98,8 @@ const TouchStillCard = ({ venue, x, y, r, action = 'open the race', tap, ...body
   const picture = useVenuePicture(venue);
   const ref = useRef<HTMLDivElement | null>(null);
   const place = useTouchPlacement(ref, x, y - r, y + r, `${body.title}|${picture?.src600 ?? ''}|${tap?.openArmed ? 1 : 0}`);
-  /* The card can open under the finger (the finger may be anywhere up the
-   * dot's column), and the tap's own click lands after it renders: without
-   * this, one tap would read the race and press "Open" at once. So the card
-   * lets touches through for a moment after it appears or changes race. */
-  const [settled, setSettled] = useState(false);
-  useEffect(() => {
-    setSettled(false);
-    const timer = window.setTimeout(() => setSettled(true), 450);
-    return () => window.clearTimeout(timer);
-  }, [body.title]);
   return (
-    <div ref={ref} className="tap-card rsc-tap" style={tap && settled ? place : { ...place, pointerEvents: 'none' }} {...{ [TAP_CARD]: '' }} role="status">
+    <div ref={ref} className="tap-card rsc-tap" style={place} {...{ [TAP_CARD]: '' }} role="status">
       {picture ? <CardStill className="rsc__still rsc-tap__still" venue={venue} picture={picture} /> : null}
       <div className="rsc-tap__body">
         <CardBody {...body} />

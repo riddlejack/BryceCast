@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 import type { TrackOutline } from '../assets/tracks';
 import { useCoarsePointer, type ChartTip } from './charts';
-import { TAP_CARD, TapAction, type TapPreview } from './tapPreview';
+import { TAP_CARD, TapAction, useTouchPlacement, type TapPreview } from './tapPreview';
 import { CardStill, useVenuePicture, venueOutlineFor, type VenueRef } from './venuePeek';
 import { switchValue } from '../review/switches';
 import './venueCard.css';
@@ -121,13 +121,11 @@ export const VenueTipCard = ({ tip, tap }: { tip: VenueTip; width?: number; tap?
   const picture = useVenuePicture(tip.venue ?? {});
   const still = size !== 'off' && tip.venue && picture ? picture : null;
   const outline = !still && tip.venue ? venueOutlineFor(tip.venue) : null;
-  const place = usePlacement(
-    ref,
-    tip.x,
-    tip.over ?? tip.y,
-    tip.under ?? tip.y + 16,
-    `${tip.title}|${tip.detail ?? ''}|${tip.note ?? ''}|${tip.flag ?? ''}|${tip.lines?.length ?? 0}|${still?.src600 ?? ''}|${touch ? 1 : 0}|${tap?.openArmed ? 1 : 0}`
-  );
+  const placeKey = `${tip.title}|${tip.detail ?? ''}|${tip.note ?? ''}|${tip.flag ?? ''}|${tip.lines?.length ?? 0}|${still?.src600 ?? ''}|${touch ? 1 : 0}|${tap?.openArmed ? 1 : 0}`;
+  const mousePlace = usePlacement(ref, tip.x, tip.over ?? tip.y, tip.under ?? tip.y + 16, placeKey);
+  /* On a touch screen the shared placement keeps the card off the chart's marks (proxy review 3). */
+  const touchPlace = useTouchPlacement(ref, tip.x, tip.over ?? tip.y, tip.under ?? tip.y + 16, placeKey);
+  const place = touch ? touchPlace : mousePlace;
   const kind = still ? `vcard--still vcard--${size}` : outline ? 'vcard--outline' : 'vcard--text';
   const words = (
     <>
