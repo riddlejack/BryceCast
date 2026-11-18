@@ -40,6 +40,30 @@
       "anchor": "",
       "added": "2026-11-18T00:30",
       "reviewed": false
+    },
+    {
+      "id": "r2-rain-marks",
+      "page": "/races",
+      "title": "Rain on the race marks: a wet race's dot gets short rain streaks (three for wet, two fainter for damp or drying) on the INDY NXT season charts, the earlier seasons' charts and the 'His \u2026 races' chart on each race page; the card says 'wet track', with '(modelled)' when the call comes from the weather model",
+      "switch": "rainmarks",
+      "values": [
+        {
+          "value": null,
+          "label": "on (default): streaks in the rain dive's blue"
+        },
+        {
+          "value": "ink",
+          "label": "ink: the same streaks in grey, so they never sit near a series colour (Formula Ford's navy is close to the rain blue)"
+        },
+        {
+          "value": "off",
+          "label": "off: no marks; cards fall back to the old wet/dry words"
+        }
+      ],
+      "look": "Races \u2192 2026 (Indianapolis Race 1 and World Wide Technology Raceway, both modelled wet) and 2020 (10 of 24 Formula Ford races wet or damp, from the official TSL reports). Also /career/race/session_gb3_2021_212905_race_1_result \u2192 His GB3 races. Point at (or tap) a streaked dot.",
+      "anchor": "",
+      "added": "2026-11-18T01:00",
+      "reviewed": false
     }
   ]
 }

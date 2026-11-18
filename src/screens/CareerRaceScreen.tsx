@@ -16,6 +16,7 @@ import { switchValue } from '../review/switches';
 import { chapterTint, raceHref, seriesShort } from './careerExplorer';
 import { enteredBySeries, statusShort, useArchiveRaces, statusWords, unclassifiedRaceFor, unclassifiedTitle, useSheetRaces, type SheetRace } from './careerRaceList';
 import { DeepTip } from './deepDives/frame';
+import { RainStreaks, wetFor } from './raceWet';
 import './careerRace.css';
 
 /* ============================================================================
@@ -437,8 +438,11 @@ const ChapterChart = ({
     detail: [
       shortDay(race),
       race.row.start !== null ? `P${race.row.start} → P${race.row.finish}` : `finished P${race.row.finish}`,
-      `beat ${Math.round(race.row.percentile * 100)}% of the field`
-    ].join(' · '),
+      `beat ${Math.round(race.row.percentile * 100)}% of the field`,
+      wetFor(race.row.sessionId)?.words ?? null
+    ]
+      .filter(Boolean)
+      .join(' · '),
     action: race.row.sessionId === current.row.sessionId ? undefined : 'open the race page'
   });
 
@@ -495,6 +499,24 @@ const ChapterChart = ({
               />
             );
           })}
+          {/* rain streaks over a wet race's dot (round 2, intersections; switch rainmarks) */}
+          {career
+            ? null
+            : races.map((race, index) => {
+                const wet = wetFor(race.row.sessionId);
+                if (!wet) return null;
+                const isThis = index === currentIndex;
+                return (
+                  <RainStreaks
+                    key={`wet-${race.row.sessionId}`}
+                    cx={x(index)}
+                    cy={y(race.row.percentile)}
+                    r={isThis ? 8 : narrow ? 3.8 : 4.6}
+                    read={wet}
+                    dim={hover !== null && hover !== race.row.sessionId}
+                  />
+                );
+              })}
           {currentIndex >= 0 ? (
             <g>
               <line x1={x(currentIndex)} x2={x(currentIndex)} y1={m.top + plotH} y2={y(current.row.percentile)} stroke="var(--ink)" strokeOpacity={0.25} />

@@ -17,6 +17,7 @@ import { fieldSizeFor, useArchiveRaces, type ArchiveRace } from './careerRaceLis
 import { beatLine, placeLine } from '../app/raceFacts';
 import { RaceStillCard, RowPicture } from './racesPeek';
 import { AlsoInYear, EarlierSeason } from './racesEarlier';
+import { anyWet, RainStreaks, wetFor } from './raceWet';
 import './race.css';
 
 /** Archive labels drop the series prefix (everything here is INDY NXT) and
@@ -64,7 +65,8 @@ const SpineCard = ({ row, x, y, width, tap }: { row: UiSeasonIndexRow; x: number
           row.startPosition !== null && row.finishPosition !== null && row.startPosition !== row.finishPosition ? `started P${row.startPosition}` : null,
           row.points !== null ? `${row.points} pts` : null,
           row.standingRank !== null ? `P${row.standingRank} in points` : null,
-          !clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null
+          !clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null,
+          wetFor(row.sessionId)?.words ?? null
         ]
           .filter(Boolean)
           .join(' · ') || null
@@ -248,6 +250,10 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
                   strokeWidth={1.6}
                   style={{ transition: 'r 120ms ease' }}
                 />
+                {(() => {
+                  const wet = wetFor(row.sessionId);
+                  return wet ? <RainStreaks cx={x(index)} cy={pointY} r={topFive ? dotR + 3.4 : dotR} read={wet} /> : null;
+                })()}
               </g>
             );
           })}
@@ -596,7 +602,9 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
                 between it and the completed rows, so the whole card reads as
                 one timeline — future at the top, past running down. */}
             <p className="caption caption--secondary races-index__legend">
-              A ring marks a top-5 finish · a hollow dot a day that ended early · the quiet line is his championship position · <PointerOpen what="any round" />
+              A ring marks a top-5 finish · a hollow dot a day that ended early
+              {anyWet(rows.map((row) => row.sessionId)) ? ' · rain streaks a wet track' : ''} · the quiet line is his championship position ·{' '}
+              <PointerOpen what="any round" />
             </p>
             <SeasonSpine rows={rows} />
             {remaining.length > 0 ? <RemainingSeason season={season} rounds={remaining} livePayload={livePayload} /> : null}
