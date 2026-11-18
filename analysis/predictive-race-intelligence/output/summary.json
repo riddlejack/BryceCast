@@ -7,15 +7,15 @@
     "analysis/predictive-race-intelligence/output/charts/career_track_type_priors.svg",
     "analysis/predictive-race-intelligence/output/charts/upcoming_track_indy_nxt_history.svg"
   ],
-  "generatedAt": "2026-11-18T08:08:53Z",
+  "generatedAt": "2026-11-18T09:48:21Z",
   "indyNxtRaceRows": 45,
   "inventoryItems": 77,
   "liveRaceDayPacks": 1,
   "modelRows": 14,
   "raceDebriefPacks": 45,
-  "repoHead": "642deb4",
+  "repoHead": "edd1d1d",
   "schemaVersion": "brycecast.predictiveRaceIntelligence.summary.v1",
-  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
   "upcomingEventPacks": 0,
   "upstreamCoverage": {
     "asOfDate": "2026-09-19",
@@ -72,7 +72,7 @@
         "rows": 167
       }
     ],
-    "datasetSourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+    "datasetSourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
     "refreshedBy": [
       {
         "bytes": 58341,

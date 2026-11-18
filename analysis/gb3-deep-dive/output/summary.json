@@ -28,7 +28,7 @@
   "gb3SectionMetricRows": 0,
   "gb3TeamContextRows": 48,
   "gb3WeatherRows": 44,
-  "generatedAt": "2026-11-18T08:07:28Z",
+  "generatedAt": "2026-11-18T09:47:15Z",
   "generatedFrom": "data/career/career.dataset.json",
   "lapShapeAvailable": false,
   "ok": true,
@@ -40,7 +40,7 @@
   ],
   "sectionPaceAvailable": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
   "tables": [
     "gb3_bryce_race_results.csv",
     "gb3_event_summary.csv",
@@ -77,7 +77,7 @@
       "weatherObservations": 252
     },
     "datasetUpdatedAt": "2026-11-18T07:35:39.711Z",
-    "ingestionGeneratedAt": "2026-11-18T08:07:06.026Z",
+    "ingestionGeneratedAt": "2026-11-18T09:47:01.874Z",
     "openGapCount": 11,
     "openGapIds": [
       "gap_euroformula_2023_championship_classification_pdf_current_mismatch",

@@ -1,6 +1,6 @@
 {
   "claimStrength": "post_race_descriptive_only",
-  "generatedAt": "2026-11-18T08:08:12Z",
+  "generatedAt": "2026-11-18T09:47:48Z",
   "note": "Per-section field time distributions (each car's median clean-lap section time) and Bryce's per-lap derived remainder with real full-field percentiles. Consumed by build-ui-data-package.mjs.",
   "sessions": {
     "session_indy_nxt_2024_6314": {
@@ -17724,5 +17724,5 @@
       "uncoveredLapCount": 0
     }
   },
-  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600"
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc"
 }

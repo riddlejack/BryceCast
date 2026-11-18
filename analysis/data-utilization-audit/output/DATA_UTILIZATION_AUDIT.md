@@ -1,9 +1,9 @@
 # BryceCast Data Utilization Audit
 
-Generated: `2026-11-18T08:09:43Z`
-Canonical dataset hash: `5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600`
+Generated: `2026-11-18T09:49:05Z`
+Canonical dataset hash: `e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc`
 Canonical dataset updated: `2026-11-18T07:35:39.711Z`
-Ingestion summary generated: `2026-11-18T08:07:06.026Z`
+Ingestion summary generated: `2026-11-18T09:47:01.874Z`
 Validation: `ok=True`, errors `0`, warnings `1`
 
 ## Decision

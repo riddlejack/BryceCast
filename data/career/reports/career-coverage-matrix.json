@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-11-18T08:07:07.413Z",
+  "generatedAt": "2026-11-18T09:47:02.822Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-11-18T08:07:05.104Z",
+    "checkedAt": "2026-11-18T09:47:01.183Z",
     "errors": [],
     "warnings": [
       {

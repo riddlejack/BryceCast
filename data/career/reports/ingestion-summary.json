@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-11-18T08:07:06.026Z",
+  "generatedAt": "2026-11-18T09:47:01.874Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-11-18T08:07:05.104Z",
+    "checkedAt": "2026-11-18T09:47:01.183Z",
     "errors": [],
     "warnings": [
       {
