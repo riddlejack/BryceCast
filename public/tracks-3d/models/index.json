@@ -168,8 +168,73 @@
     "2400": "/tracks-3d/nashville-superspeedway-plain.jpg"
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "brands-hatch-indy": {
+   "file": "/tracks-3d/models/brands-hatch-indy.json",
+   "kind": "venue",
+   "bytes": 94369,
+   "gzipBytes": 33492,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/brands-hatch-indy-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "brands-hatch-gp": {
+   "file": "/tracks-3d/models/brands-hatch-gp.json",
+   "kind": "venue",
+   "bytes": 233382,
+   "gzipBytes": 79961,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/brands-hatch-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "silverstone-national": {
+   "file": "/tracks-3d/models/silverstone-national.json",
+   "kind": "venue",
+   "bytes": 142285,
+   "gzipBytes": 44981,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/silverstone-national-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "silverstone-international": {
+   "file": "/tracks-3d/models/silverstone-international.json",
+   "kind": "venue",
+   "bytes": 174502,
+   "gzipBytes": 55339,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/silverstone-international-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "silverstone-gp": {
+   "file": "/tracks-3d/models/silverstone-gp.json",
+   "kind": "venue",
+   "bytes": 311723,
+   "gzipBytes": 96085,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/silverstone-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
- "generated": "2026-11-16",
+ "generated": "2026-11-18",
  "by": "scripts/build-track-models.mjs"
 }

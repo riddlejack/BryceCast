@@ -7418,5 +7418,132 @@
     }
    ]
   }
+ },
+ "career": {
+  "by": "stills-tools/finish_career.py (run.sh career)",
+  "venues": {
+   "brands-hatch-indy": {
+    "camera": {
+     "azim": 0,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -4.153925473125841,
+      12.0705975164758,
+      11.165519643975124
+     ],
+     "D": 1253.447506215486,
+     "elev": 40,
+     "azim": 0
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.0152052130525404,
+    "layout": "Indy",
+    "trackIds": [
+     "track_brands_hatch_indy"
+    ],
+    "call": "Indy (1.944 km): FF1600 2019-2020 (laps 50.1-51.3 s) and the four GB3 2022 Friday sessions, re-measured by the life-stats ledger from field lap speeds (1.207 mi a lap). OSM loop 1929 m; start/finish OSM node 1825805766."
+   },
+   "brands-hatch-gp": {
+    "camera": {
+     "azim": 0,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      46.23149636627721,
+      -50.31110732438345,
+      45.76065515408286
+     ],
+     "D": 2085.9660372194103,
+     "elev": 40,
+     "azim": 0
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.3699704582864802,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_brands_hatch_gp"
+    ],
+    "call": "Grand Prix (3.916 km): GB3 2021 R1 and 2022 R7 (qualifying 1:21.6 / 1:19.3) and the 2020 Champion of Brands British GT support meeting (1:36.1). OSM loop 3900 m; start/finish OSM node 1825805766 (shared with Indy)."
+   },
+   "silverstone-national": {
+    "camera": {
+     "azim": 0,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      45.51647916581599,
+      -41.99938479193009,
+      21.368151188711813
+     ],
+     "D": 1601.6724155088039,
+     "elev": 40,
+     "azim": 0
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.83007186275508,
+    "layout": "National",
+    "trackIds": [
+     "track_silverstone_national"
+    ],
+    "call": "National (2.64 km): Walter Hayes Trophy 2020 (ledger track_silverstone_national; FF1600 laps 65.8-69.4 s fit the 2.64 km National). OSM loop 2638 m via the National Pit Straight."
+   },
+   "silverstone-international": {
+    "camera": {
+     "azim": 0,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -40.533557146326345,
+      -66.84495304452962,
+      51.66612473232663
+     ],
+     "D": 2029.5041067051645,
+     "elev": 40,
+     "azim": 0
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.4325757460483937,
+    "layout": "International",
+    "trackIds": [
+     "track_silverstone_international"
+    ],
+    "call": "International (2.979 km): BRSCC FF1600 2020, the result book prints the layout (ledger track_silverstone_international). Route Abbey, Farm, Village, the Link, Becketts, Stowe, Vale, Club (official layout; research notes item 7); OSM loop 2979 m, start/finish on the Hamilton Straight (the Wing)."
+   },
+   "silverstone-gp": {
+    "camera": {
+     "azim": 0,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -34.64805459751471,
+      -163.18615557539073,
+      -2.725036081380474
+     ],
+     "D": 3335.702324548249,
+     "elev": 40,
+     "azim": 0
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.0524925098822493,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_silverstone_gp"
+    ],
+    "call": "Grand Prix: GB3 2021 R2/R6 and 2022 R2 qualifying 1:54.5-2:09.8 fit only the 5.891 km GP; ledger track id track_silverstone_gp. OSM loop: Chapel Curve onto the Hangar Straight (candidate 0), Vale, start/finish on the Hamilton Straight (OSM node 13036050130)."
+   }
+  },
+  "generated": "2026-11-17",
+  "centreline": "t is the model's own lap fraction from its start/finish (identity map: these venues have no site outline)"
  }
 }

@@ -19,6 +19,12 @@
 //   node scripts/build-track-models.mjs                  all venues
 //   node scripts/build-track-models.mjs --only mid-ohio-sports-car-course,iowa-speedway
 //   STILLS=<stills-tools dir> RIG=<film-rig dir> node scripts/build-track-models.mjs
+// --career (career round 2, Nov 17 2026): the career venues outside INDY NXT (stills-tools/career-venues.json "layouts",
+// models from models-src/build_career.py). They have no site outline and no timing sections, so map is the identity
+// (u = t: the model's own lap fraction from its start/finish; map.identity true); the poster is the plain still in
+// public/tracks-3d/stills/ (run.sh career makes it), and the attribution is the model's own credits. Merged into
+// index.json beside the INDY NXT venues, which it leaves as they are:
+//   node scripts/build-track-models.mjs --career [--only brands-hatch-indy,brands-hatch-gp]
 // Reads the stills tools and the rig read-only; writes only public/tracks-3d/models/.
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
@@ -35,6 +41,7 @@ const args = process.argv.slice(2);
 // stills-tools/out/icon-models/ with their own index, never into public/tracks-3d/models/index.json
 const ICONS = args.includes('--icons');
 const OUT = ICONS ? join(STILLS, 'out/icon-models') : join(ROOT, 'public/tracks-3d/models');
+const CAREER = args.includes('--career');
 const only = args.includes('--only') ? new Set(args[args.indexOf('--only') + 1].split(',')) : null;
 
 const NS = 1200;   // site outline samples (page.js NS)
@@ -47,7 +54,7 @@ const RIG_MODELS = {
   'streets-of-detroit': { kind: 'city', file: join(RIG_DATA, 'city-detroit.json') },
 };
 
-const venues = Object.fromEntries(Object.entries(JSON.parse(readFileSync(join(STILLS, 'venues.json'), 'utf8'))[ICONS ? 'icons' : 'built']).filter(([k]) => !k.startsWith('_')));
+const venues = CAREER ? {} : Object.fromEntries(Object.entries(JSON.parse(readFileSync(join(STILLS, 'venues.json'), 'utf8'))[ICONS ? 'icons' : 'built']).filter(([k]) => !k.startsWith('_')));
 const stillsManifest = JSON.parse(readFileSync(join(ROOT, 'public/tracks-3d/manifest.json'), 'utf8'));
 
 // ---------- centrelines (the same parameterisation the runtime draws with) ----------
@@ -107,7 +114,7 @@ function align(sitePts, modelPts) {
 
 mkdirSync(OUT, { recursive: true });
 const indexPath = join(OUT, 'index.json');
-const index = existsSync(indexPath) && only ? JSON.parse(readFileSync(indexPath, 'utf8')) : { venues: {} };
+const index = existsSync(indexPath) && (only || CAREER) ? JSON.parse(readFileSync(indexPath, 'utf8')) : { venues: {} };
 for (const [slug, vc] of Object.entries(venues)) {
   if (only && !only.has(slug)) continue;
   const src = vc.loader && vc.data ? { kind: vc.loader, file: join(STILLS, vc.data) } : RIG_MODELS[slug];
@@ -142,6 +149,35 @@ for (const [slug, vc] of Object.entries(venues)) {
   const gz = gzipSync(text, { level: 9 }).length;
   index.venues[slug] = { file: `/tracks-3d/models/${slug}.json`, kind: src.kind, bytes: text.length, gzipBytes: gz, rmsM: out.map.rmsM, worstM: out.map.worstM, poster: out.poster, attribution: out.attribution };
   console.log(`${slug.padEnd(42)} ${src.kind.padEnd(6)} ${(text.length / 1024).toFixed(0).padStart(5)} KB  gz ${(gz / 1024).toFixed(0).padStart(4)} KB  fit rms ${out.map.rmsM} m, worst ${out.map.worstM} m, dir ${A.dir}${A.mirror ? ' mirrored' : ''}`);
+}
+// ---------- career venues (no site outline: identity map) ----------
+if (CAREER) {
+  const cfg = JSON.parse(readFileSync(join(STILLS, 'career-venues.json'), 'utf8'));
+  const stillsIndexPath = join(ROOT, 'public/tracks-3d/stills/index.json');
+  const stillsIndex = existsSync(stillsIndexPath) ? JSON.parse(readFileSync(stillsIndexPath, 'utf8')) : { venues: {} };
+  for (const [slug, lc] of Object.entries(cfg.layouts)) {
+    if (slug.startsWith('_') || (only && !only.has(slug))) continue;
+    const file = join(STILLS, 'models', `venue-${slug}.json`);
+    if (!existsSync(file)) { console.warn('no model yet for', slug); continue; }
+    const data = JSON.parse(readFileSync(file, 'utf8'));
+    const u = Array.from({ length: NS }, (_, i) => +(i / NS).toFixed(5));
+    const plain = stillsIndex.venues?.[slug]?.plain;
+    const out = {
+      v: 1, slug, name: lc.name, kind: 'venue',
+      source: { model: file.replace(homedir(), '~'), outline: null, built: new Date().toISOString().slice(0, 10), career: data.meta.career },
+      camera: { azim: lc.azim ?? 0, elev: lc.elev ?? 40, fill: 0.9 },
+      terrain: true,
+      map: { ns: NS, dir: 1, mirror: false, rotDeg: 0, metresPerSiteUnit: null, rmsM: 0, worstM: 0, refinedOffMaxM: 0, identity: true, u },
+      attribution: (data.meta.credits || ['© OpenStreetMap contributors (ODbL 1.0)']).join('. ').replace(/^©/, 'Map data ©') + '.',
+      poster: plain ? { 1200: plain['1200'] } : null,
+      model: data,
+    };
+    const text = JSON.stringify(out);
+    writeFileSync(join(OUT, slug + '.json'), text);
+    const gz = gzipSync(text, { level: 9 }).length;
+    index.venues[slug] = { file: `/tracks-3d/models/${slug}.json`, kind: 'venue', bytes: text.length, gzipBytes: gz, rmsM: 0, worstM: 0, poster: out.poster, attribution: out.attribution, career: true };
+    console.log(`${slug.padEnd(42)} venue  ${(text.length / 1024).toFixed(0).padStart(5)} KB  gz ${(gz / 1024).toFixed(0).padStart(4)} KB  (career, identity map)`);
+  }
 }
 index.generated = new Date().toISOString().slice(0, 10);
 index.by = 'scripts/build-track-models.mjs';
