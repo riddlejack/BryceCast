@@ -1439,7 +1439,9 @@ const VenueDossierModule = ({
       </div>
       <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         ▲▽ compare each year against the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
-        Conditions are modeled near-track, never official series weather.
+        Air, humidity, wind and sky are the Open-Meteo reanalysis for the race hour at the track, modelled, not the
+        series’ own weather. Whether the track was wet is on each race’s page, from the series report or a nearby
+        station where there is one.
       </p>
     </Card>
   );

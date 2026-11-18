@@ -51,7 +51,7 @@ const QualiMini = () => (
     <li>Combined</li>
     <li>Reverse grid</li>
     <li>Two-lap average</li>
-    <li className="hp-chips__off">Canceled</li>
+    <li className="hp-chips__off">Cancelled</li>
   </ul>
 );
 
@@ -132,7 +132,7 @@ const PARTS: Part[] = [
   },
   {
     title: 'Every qualifying format, kept as it ran',
-    body: 'Group sessions, combined grids, reverse grids, oval two-lap averages. A qualifying result is tied to a race only when the grid matches it, and a canceled session stays canceled.',
+    body: 'Group sessions, combined grids, reverse grids, oval two-lap averages. A qualifying result is tied to a race only when the grid matches it, and a cancelled session stays cancelled.',
     to: '/career',
     label: 'Career',
     visual: <QualiMini />

@@ -2282,8 +2282,9 @@ export const VenueYearsCard = ({
   const measured = visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
 
   /* Per-visit labels: a double-header year ("2026 · Race 1" / "2026 · Race 2")
-   * never renders two bare "2026" shapes (finding #18). Prefer the official race
-   * number from the label; fall back to chronological order (visits oldest-first). */
+   * never renders two bare "2026" shapes (finding #18). The official race number
+   * from the label wins wherever it gives one; a year of two unnumbered visits
+   * falls back to chronological order (visits oldest-first). */
   const visitLabels = (() => {
     const yearCounts = new Map<number, number>();
     for (const visit of visits) {
@@ -2297,13 +2298,15 @@ export const VenueYearsCard = ({
         out.set(visit.sessionId, '—');
         continue;
       }
-      if ((yearCounts.get(year) ?? 0) <= 1) {
-        out.set(visit.sessionId, String(year));
-        continue;
-      }
-      const raceMatch = /race\s*(\d+)/i.exec(visit.raceLabel ?? '');
+      /* A race its label numbers keeps the number even when its doubleheader partner has no
+       * section data (Indianapolis 2024: Race 1 alone would read a bare "2024"). */
+      const raceMatch = /\brace\s*(\d+)/i.exec(visit.raceLabel ?? '');
       if (raceMatch) {
         out.set(visit.sessionId, `${year} · Race ${raceMatch[1]}`);
+        continue;
+      }
+      if ((yearCounts.get(year) ?? 0) <= 1) {
+        out.set(visit.sessionId, String(year));
         continue;
       }
       const next = (seen.get(year) ?? 0) + 1;

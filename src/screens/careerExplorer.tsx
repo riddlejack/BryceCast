@@ -9,7 +9,7 @@ import { uiDataPackage, type UiSeasonCampaign } from '../data/uiDataPackage';
 import { useImsaDaytonaStint } from '../data/imsaDaytonaStint';
 import { beatLine } from '../app/raceFacts';
 import { wetDryCall } from '../app/wetDry';
-import { raceFieldOf } from './raceCardFacts';
+import { raceFieldOf, raceTitleOf } from './raceCardFacts';
 
 export interface CareerRow {
   raceLabel: string;
@@ -143,7 +143,7 @@ const explorerWetWords = (row: CareerRow): string | null => {
 };
 
 export const tipFor = (row: CareerRow): Omit<ChartTip, 'x' | 'y'> => ({
-  title: row.raceLabel,
+  title: raceTitleOf(row.sessionId, row.raceLabel),
   detail: [
     row.seriesShort,
     row.start !== null ? `P${row.start} → P${row.finish}` : `finished P${row.finish}`,
@@ -1039,7 +1039,7 @@ export const CareerRestarts = () => {
     setTip({
       x: x(best.index),
       y: y(net),
-      title: `${row.raceLabel}${row.seasonYear ? ` · ${row.seasonYear}` : ''}`,
+      title: `${raceTitleOf(row.sessionId, row.raceLabel)}${row.seasonYear ? ` · ${row.seasonYear}` : ''}`,
       detail: `${restartCount} restart${restartCount === 1 ? '' : 's'} · ${move}${rank}`,
       action: 'open the race'
     });
@@ -1582,7 +1582,7 @@ export const BestClimbs = () => {
               ▲ {row.gain}
             </span>
             <span className="tower__name" style={{ whiteSpace: 'normal' }}>
-              {row.raceLabel}
+              {raceTitleOf(row.sessionId, row.raceLabel)}
               <span className="tower__team"> {row.seasonYear ?? ''}</span>
             </span>
             <span className="tower__gap">

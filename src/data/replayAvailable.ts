@@ -61,18 +61,21 @@ export const isBryceCastCaptureTier = (tier: ReplaySourceTier): boolean =>
  *  never "official", never confusable with live. */
 export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProvenance => {
   const tier = session?.sourceTier ?? 'brycecast_capture';
+  /* The site says its own tier names (British spelling); a feed's tierLabel is the fallback
+   *  for a tier this file doesn't know. */
   const label =
-    session?.tierLabel ??
-    (tier === 'racetools_capture'
+    tier === 'racetools_capture'
       ? 'RaceTools race-weekend capture'
       : tier === 'timing71_normalized'
-        ? 'third-party normalized (Timing71)'
-        : 'BryceCast Race Control capture');
+        ? 'third-party normalised (Timing71)'
+        : tier === 'brycecast_capture'
+          ? 'BryceCast Race Control capture'
+          : session?.tierLabel ?? 'BryceCast Race Control capture';
   if (tier === 'racetools_capture') {
     return {
       tier,
       label,
-      detail: 'Reconstructed from a RaceTools race-weekend timing capture: a third-party capture of the series timing feed, normalized into a second-by-second replay.',
+      detail: 'Reconstructed from a RaceTools race-weekend timing capture: a third-party capture of the series timing feed, normalised into a second-by-second replay.',
       caveat: session?.asRaced ? 'Shown as-raced; the official result is the reference.' : 'A third-party capture; not official timing, and not our own live capture.'
     };
   }
@@ -80,8 +83,8 @@ export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProve
     return {
       tier,
       label,
-      detail: 'Reconstructed from Timing71 normalized timing states: third-party normalized observations of the 2026 season, replayed second by second.',
-      caveat: session?.asRaced ? 'Shown as-raced; a post-race change means the official result differs.' : 'Third-party normalized data; not official timing, and not our own live capture.'
+      detail: 'Reconstructed from Timing71 normalised timing states: third-party normalised observations of the 2026 season, replayed second by second.',
+      caveat: session?.asRaced ? 'Shown as-raced; a post-race change means the official result differs.' : 'Third-party normalised data; not official timing, and not our own live capture.'
     };
   }
   return {
