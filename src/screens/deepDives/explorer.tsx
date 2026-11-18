@@ -10,6 +10,7 @@ import { switchValue } from '../../review/switches';
 import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
 import { DeepDive } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
+import { ExplorerDeepDiveOld } from './explorerOld';
 import './explorer.css';
 
 /* ============================================================================
@@ -27,7 +28,22 @@ import './explorer.css';
  *
  * Switch `ddexplorer`: default opens as one pile that splits into the series
  * rows on a clock; `one` opens on the single pile and leaves the split to him.
+ *
+ * Round 3 (November 18, 2026). Jack: "I like the animation of the graph … I
+ * don't really like the colors or the visual. I think the spacing is also a
+ * little bit weird … the dots are just very basic." The motion is kept as it
+ * was. The dots now sit on an even lattice (columns one dot wide, stacked
+ * from the row's centre line), every row in a view has the same height, and
+ * the header says which way is better. Switch `ddxdots`:
+ *   (default) beads — each dot a small bead in its series colour, lit from
+ *             the top left, with a paper rim and a soft shadow;
+ *   flat      — the same lattice with flat, quieter dots;
+ *   old       — round 2's version.
+ * A column is one dot wide, so a dot sits within half a dot of its exact
+ * share (under 0.6% at 1440 px); the card always gives the exact finish.
  * ==========================================================================*/
+
+type DotStyle = 'beads' | 'flat';
 
 type Grouping = 'all' | 'series' | 'season' | 'track' | 'weather';
 
@@ -137,46 +153,25 @@ interface Layout {
   pos: Map<string, { x: number; y: number; row: number }>;
 }
 
-/** Classic beeswarm: dots left to right, each at the offset nearest the centre
- *  line that touches no dot already placed. */
-const swarm = (xs: number[], r: number, gap: number): number[] => {
-  const order = xs.map((x, index) => ({ x, index })).sort((a, b) => a.x - b.x);
-  const placed: Array<{ x: number; y: number }> = [];
-  const ys = new Array<number>(xs.length).fill(0);
-  const d = 2 * r + gap;
-  for (const { x, index } of order) {
-    const near = placed.filter((other) => Math.abs(other.x - x) < d);
-    const candidates = [0];
-    for (const other of near) {
-      const dy = Math.sqrt(d * d - (other.x - x) ** 2);
-      candidates.push(other.y + dy, other.y - dy);
-    }
-    candidates.sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);
-    let chosen = 0;
-    for (const y of candidates) {
-      if (near.every((other) => Math.hypot(other.x - x, other.y - y) >= d - 0.01)) {
-        chosen = y;
-        break;
-      }
-    }
-    placed.push({ x, y: chosen });
-    ys[index] = chosen;
-  }
-  return ys;
-};
-
 const layoutFor = (width: number, grouping: Grouping, rows: CareerRow[]): Layout => {
   const narrow = width < 640;
-  const r = clamp(width * 0.004, 4.3, 7);
-  const gap = 1.4;
+  const r = narrow ? 4.4 : clamp(width * 0.0042, 5, 7.4);
+  const gap = narrow ? 1.6 : 2.2;
+  const pitch = 2 * r + gap;
   const labelW = narrow ? 0 : width >= 900 ? 168 : 128;
-  const plotL = labelW + r + (narrow ? 4 : 14);
+  const plotL = labelW + r + (narrow ? 4 : 22);
   const plotR = width - r - (narrow ? 4 : 14);
   const x = (share: number) => plotL + share * (plotR - plotL);
-  const axisH = narrow ? 40 : 52;
-  const headPad = narrow ? 26 : 24;
-  const footPad = narrow ? 12 : 16;
-  const minRow = narrow ? 0 : 50;
+  const axisH = narrow ? 52 : 64;
+  const headPad = narrow ? 30 : 24;
+  const footPad = narrow ? 10 : 14;
+
+  /* Columns one dot wide across the plot; a race goes to the column nearest its exact share. */
+  const columns = Math.max(1, Math.floor((plotR - plotL) / pitch));
+  const colX = (share: number) => {
+    const index = Math.round(share * columns);
+    return { index, x: plotL + (index / columns) * (plotR - plotL) };
+  };
 
   const buckets = new Map<string, CareerRow[]>();
   for (const row of rows) {
@@ -184,26 +179,47 @@ const layoutFor = (width: number, grouping: Grouping, rows: CareerRow[]): Layout
     buckets.set(key, [...(buckets.get(key) ?? []), row]);
   }
   const keys = orderKeys(grouping, [...buckets.keys()], rows);
+
+  /* Stack each column from the centre line out: 0, above, below, two above … */
+  const stacks = keys.map((key) => {
+    const members = [...buckets.get(key)!].sort((a, b) => a.percentile - b.percentile || a.date.localeCompare(b.date));
+    const byCol = new Map<number, CareerRow[]>();
+    members.forEach((row) => {
+      const { index } = colX(row.percentile);
+      byCol.set(index, [...(byCol.get(index) ?? []), row]);
+    });
+    const tallest = Math.max(...[...byCol.values()].map((list) => list.length));
+    return { key, members, byCol, tallest };
+  });
+  /* Columns stack 0, above, below, two above …: a column of n reaches floor(n / 2) above
+   * and floor((n − 1) / 2) below. Every row gets at least one step each way, so short
+   * rows keep the same rhythm as tall ones without the empty bands a shared height leaves. */
+  const reachOf = (count: number) => ({
+    up: Math.max(Math.floor(count / 2), 1) * pitch + r,
+    down: Math.max(Math.floor((count - 1) / 2), 1) * pitch + r
+  });
+
   const pos = new Map<string, { x: number; y: number; row: number }>();
   const groups: RowLayout[] = [];
   let cursor = axisH;
-  keys.forEach((key, index) => {
-    const members = buckets.get(key)!;
-    const xs = members.map((row) => x(row.percentile));
-    const ys = swarm(xs, r, gap);
-    const extent = Math.max(...ys.map(Math.abs)) + r;
+  stacks.forEach(({ key, members, byCol, tallest }, index) => {
     const top = cursor;
-    let centerY = top + headPad + extent;
-    let bottom = centerY + extent + footPad;
-    if (bottom - top < minRow) {
-      const pad = (minRow - (bottom - top)) / 2;
-      centerY += pad;
-      bottom += pad * 2;
-    }
-    members.forEach((row, at) => pos.set(row.sessionId, { x: xs[at], y: centerY + ys[at], row: index }));
+    const { up, down } = reachOf(tallest);
+    const extent = Math.max(up, down);
+    const rowH = headPad + up + down + footPad;
+    const centerY = top + headPad + up;
+    byCol.forEach((list, col) => {
+      const cx = plotL + (col / columns) * (plotR - plotL);
+      list.forEach((row, at) => {
+        const step = Math.ceil(at / 2) * (at % 2 === 1 ? -1 : 1);
+        pos.set(row.sessionId, { x: cx, y: centerY + step * pitch, row: index });
+      });
+    });
+    const bottom = top + rowH;
     groups.push({ key, name: displayName(grouping, key), index, top, centerY, extent, bottom, rows: members });
     cursor = bottom;
   });
+  void x;
   return { height: cursor + 2, axisH, r, plotL, plotR, labelW, narrow, groups, pos };
 };
 
@@ -226,13 +242,15 @@ const Swarm = ({
   grouping,
   focus,
   onFocus,
-  animate
+  animate,
+  dots
 }: {
   rows: CareerRow[];
   grouping: Grouping;
   focus: Focus | null;
   onFocus: (key: string) => void;
   animate: boolean;
+  dots: DotStyle;
 }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -244,6 +262,7 @@ const Swarm = ({
   const preload = useVenuePreload(() => venuesOf(rows));
 
   const layout = useMemo(() => (width > 0 ? layoutFor(width, grouping, rows) : null), [width, grouping, rows]);
+  const seriesIds = useMemo(() => [...new Set(rows.map((row) => row.seriesId))], [rows]);
   const byId = useMemo(() => new Map(rows.map((row) => [row.sessionId, row])), [rows]);
   const inFocus = (row: CareerRow) => focus === null || keyFor(focus.grouping, row) === focus.key;
   const winCount = rows.filter((row) => row.finish === 1 && inFocus(row)).length;
@@ -278,7 +297,7 @@ const Swarm = ({
   const xOf = (share: number) => (layout ? layout.plotL + share * (layout.plotR - layout.plotL) : 0);
 
   return (
-    <div ref={ref} className={`ddx${animate ? '' : ' ddx--still'}`} onPointerEnter={preload}>
+    <div ref={ref} className={`ddx ddx--${dots}${animate ? '' : ' ddx--still'}`} onPointerEnter={preload}>
       {layout ? (
         <svg
           ref={svgRef}
@@ -292,33 +311,57 @@ const Swarm = ({
           data-hovering={hovered ? '' : undefined}
           data-following={focus ? '' : undefined}
         >
-          {/* axis: words at the ends, percentages between */}
+          <defs>
+            {/* one bead per series: lit from the top left, its own colour at the middle, a shade at the rim */}
+            {seriesIds.map((id) => (
+              <radialGradient key={id} id={`ddx-bead-${id}`} cx="0.36" cy="0.3" r="0.78">
+                <stop offset="0" style={{ stopColor: `color-mix(in srgb, ${chapterTint(id)} 38%, #fff)` }} />
+                <stop offset="0.55" style={{ stopColor: `color-mix(in srgb, ${chapterTint(id)} 88%, var(--paper))` }} />
+                <stop offset="1" style={{ stopColor: `color-mix(in srgb, ${chapterTint(id)} 80%, var(--ink))` }} />
+              </radialGradient>
+            ))}
+            <radialGradient id="ddx-bead-win" cx="0.36" cy="0.3" r="0.78">
+              <stop offset="0" style={{ stopColor: 'color-mix(in srgb, var(--bryce) 35%, #fff)' }} />
+              <stop offset="0.55" style={{ stopColor: 'var(--bryce)' }} />
+              <stop offset="1" style={{ stopColor: 'color-mix(in srgb, var(--bryce) 78%, var(--ink))' }} />
+            </radialGradient>
+            <filter id="ddx-shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="0.8" stdDeviation="0.8" floodColor="#1e1c1a" floodOpacity="0.22" />
+            </filter>
+            <linearGradient id="ddx-better" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" style={{ stopColor: 'var(--grey-hair)' }} />
+              <stop offset="1" style={{ stopColor: 'var(--ink)' }} />
+            </linearGradient>
+          </defs>
+
+          {/* axis: words at the ends, percentages between, and which way is better */}
           <g className="ddx__axis" fontFamily={chartFont}>
+            <rect x={xOf(0)} y={layout.axisH - 12} width={Math.max(xOf(1) - xOf(0), 0)} height={2.5} rx={1.25} fill="url(#ddx-better)" />
             {[0, 0.25, 0.5, 0.75, 1].map((tick) => (
               <line
                 key={tick}
                 x1={xOf(tick)}
                 x2={xOf(tick)}
-                y1={layout.axisH - 8}
+                y1={layout.axisH - 4}
                 y2={layout.height - 2}
                 stroke={tick === 0.5 ? 'var(--axis-baseline)' : 'var(--grid-hairline)'}
               />
             ))}
             {[0.25, 0.5, 0.75].map((tick) =>
               layout.narrow && tick !== 0.5 ? null : (
-                <text key={tick} x={xOf(tick)} y={layout.axisH - 15} textAnchor="middle" className="ddx__tick">
+                <text key={tick} x={xOf(tick)} y={layout.axisH - 20} textAnchor="middle" className="ddx__tick">
                   {pct(tick)}%
                 </text>
               )
             )}
-            <text x={xOf(0) - layout.r} y={layout.axisH - 15} textAnchor="start" className="ddx__tick">
+            <text x={xOf(0) - layout.r} y={layout.axisH - 20} textAnchor="start" className="ddx__tick">
               0% <tspan className="ddx__end">beat nobody</tspan>
             </text>
-            <text x={xOf(1) + layout.r} y={layout.axisH - 15} textAnchor="end" className="ddx__tick">
-              <tspan className="ddx__end">beat everyone</tspan> 100%
+            <text x={xOf(1) + layout.r} y={layout.axisH - 20} textAnchor="end" className="ddx__tick">
+              <tspan className="ddx__end">beat everyone · better →</tspan> {layout.narrow ? '' : '100%'}
             </text>
             {layout.narrow ? null : (
-              <text x={xOf(0.5)} y={layout.axisH - 34} textAnchor="middle" className="ddx__axis-title">
+              <text x={xOf(0.5)} y={layout.axisH - 40} textAnchor="middle" className="ddx__axis-title">
                 share of the field he finished ahead of
               </text>
             )}
@@ -351,7 +394,7 @@ const Swarm = ({
               <g key={`${grouping}:${group.key}`} className={`ddx__row${dimmed ? ' ddx__row--dim' : ''}`}>
                 {median !== null ? (
                   <g className="ddx__median" style={{ animationDelay: animate ? '0.8s' : '0s' }}>
-                    <line x1={mx} x2={mx} y1={swarmTop - 5} y2={group.centerY + group.extent + 4} />
+                    <line x1={mx} x2={mx} y1={swarmTop - 5} y2={group.centerY + group.extent + 5} />
                     {layout.narrow ? null : (
                       <text x={mx} y={swarmTop - 9} textAnchor={mx > layout.plotR - 80 ? 'end' : 'middle'}>
                         {medianWords}
@@ -407,7 +450,7 @@ const Swarm = ({
           })}
 
           {/* the dots: one per race, keyed by race, so a regroup moves them */}
-          <g className="ddx__dots">
+          <g className="ddx__dots" filter={dots === 'beads' ? 'url(#ddx-shadow)' : undefined}>
             {rows.map((row) => {
               const point = layout.pos.get(row.sessionId);
               if (!point) return null;
@@ -425,16 +468,23 @@ const Swarm = ({
                   cy={0}
                   r={isHovered ? layout.r + 2 : layout.r}
                   style={{ transform: `translate(${point.x}px, ${point.y}px)`, transitionDelay: `${delay}ms, 0ms, 0ms` }}
-                  fill={win ? 'var(--bryce)' : early ? 'var(--paper)' : tint}
-                  fillOpacity={win || early ? 1 : 0.8}
-                  stroke={win || isHovered ? 'var(--ink)' : early ? tint : 'none'}
-                  strokeWidth={win ? 1 : 1.5}
+                  fill={
+                    early
+                      ? 'var(--paper)'
+                      : dots === 'beads'
+                        ? `url(#ddx-bead-${win ? 'win' : row.seriesId})`
+                        : win
+                          ? 'var(--bryce)'
+                          : `color-mix(in srgb, ${tint} 74%, var(--paper))`
+                  }
+                  stroke={isHovered ? 'var(--ink)' : win ? 'var(--ink)' : early ? tint : 'var(--paper)'}
+                  strokeWidth={isHovered ? 1.6 : win ? 1 : early ? 1.5 : dots === 'beads' ? 0.9 : 0.8}
                 />
               );
             })}
           </g>
           {winCount > 0 && !layout.narrow ? (
-            <text x={xOf(1) + layout.r} y={layout.axisH - 34} textAnchor="end" className="ddx__wins" fontFamily={chartFont}>
+            <text x={xOf(1) + layout.r} y={layout.axisH - 40} textAnchor="end" className="ddx__wins" fontFamily={chartFont}>
               {winCount} {winCount === 1 ? 'win' : 'wins'} <tspan className="ddx__win-arrow">↓</tspan>
             </text>
           ) : null}
@@ -448,6 +498,12 @@ const Swarm = ({
 /* ---------- the section ---------- */
 
 export const ExplorerDeepDive = () => {
+  const dots = switchValue('ddxdots');
+  if (dots === 'old') return <ExplorerDeepDiveOld />;
+  return <ExplorerDeepDiveNew dots={dots === 'flat' ? 'flat' : 'beads'} />;
+};
+
+const ExplorerDeepDiveNew = ({ dots }: { dots: DotStyle }) => {
   const rows = useCareerRows();
   const coarse = useCoarsePointer();
   const reduced = useReducedMotion();
@@ -509,7 +565,7 @@ export const ExplorerDeepDive = () => {
               {
                 label: 'Career result conversion table',
                 path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-                note: `${rows.length} races with an official or source-backed finishing position. Each dot sits at the share of the rest of the field he finished ahead of, (field − place) ÷ (field − 1) (a win is 100%). Within a row a dot moves up or down only to clear its neighbours; across is exact. "Typical day" is the median race, taken as the old explorer took it: races sorted by that share, the one at position floor(n / 2), so with an even count it is the upper of the two middle races; a group of one race has no median mark. Gold is a win (P1); a hollow dot is a day that ended early (contact or mechanical).`
+                note: `${rows.length} races with an official or source-backed finishing position. Each dot sits at the share of the rest of the field he finished ahead of, (field − place) ÷ (field − 1) (a win is 100%). Within a row the dots sit in columns one dot wide, so a dot is within half a dot of its exact share (the card gives the exact finish); up and down only stacks a column. "Typical day" is the median race, taken as the old explorer took it: races sorted by that share, the one at position floor(n / 2), so with an even count it is the upper of the two middle races; a group of one race has no median mark. Gold is a win (P1); a hollow dot is a day that ended early (contact or mechanical).`
               },
               {
                 label: 'Weather rows',
@@ -562,7 +618,7 @@ export const ExplorerDeepDive = () => {
           </>
         }
       >
-        <Swarm rows={rows} grouping={shown} focus={focus} onFocus={follow} animate={!reduced} />
+        <Swarm rows={rows} grouping={shown} focus={focus} onFocus={follow} animate={!reduced} dots={dots} />
       </DeepDive>
     </div>
   );

@@ -1,6 +1,6 @@
 /* The explorer deep dive (November 17, 2026): one beeswarm that regroups. */
 
-.ddx { position: relative; width: 100%; }
+.ddx { position: relative; width: 100%; -webkit-tap-highlight-color: transparent; }
 .ddx__svg {
   display: block;
   overflow: visible;
