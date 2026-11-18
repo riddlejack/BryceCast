@@ -191,6 +191,46 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   const base = new THREE.Mesh(ribbonGeometry(0, 1, model.bandHalf, model.bandHalf, model.bandDy * 0.5), bandMat(PALE, -4));
   base.receiveShadow = true; base.renderOrder = 2; base.visible = false; bandRoot.add(base);
 
+  // ---------- markers on the track (round 2): a box laid on the asphalt at a site t, e.g. a driver's grid box on the
+  // start straight. setMarkers([{ id, t, color, lengthM, widthM, lat, lineM, fill, minPx }]):
+  //   t        the site outline's arc parameter (as projectT and the section spans read it)
+  //   color    any CSS colour the caller resolves (series colours come from chapterTint / --chapter-*)
+  //   lengthM  along the track (default 7), widthM across it (default 3), lat its centre's offset across the track in
+  //            metres (positive to the left of the driving direction; a grid's two files sit at about +-2.5)
+  //   lineM    the outline's width in metres (default 0.5); fill 0..1 a tint inside it (default 0)
+  //   minPx    the box is never drawn smaller than this many CSS px along the track (default 10), so it reads far off
+  // Drawn over the heat bands, under the hover; rebuilt when the camera's distance changes the minimum.
+  const markerRoot = new THREE.Group(); markerRoot.renderOrder = 6; scene.add(markerRoot);
+  let markers = [], markerScale = 1;
+  const markerMat = (color, opacity = 1) => new THREE.MeshBasicMaterial({ color: hex(color), side: THREE.DoubleSide, transparent: opacity < 1, opacity,
+    depthWrite: opacity >= 1, polygonOffset: true, polygonOffsetFactor: -7, polygonOffsetUnits: -7, toneMapped: false });
+  const markerScaleFor = (D) => Math.max(1, ...markers.map((m) => ((m.minPx ?? 10) * mppAt(D)) / (m.lengthM ?? 7)));
+  function buildMarkers() {
+    for (const o of [...markerRoot.children]) { o.traverse((c) => { if (c.geometry) c.geometry.dispose(); if (c.material) c.material.dispose(); }); markerRoot.remove(o); }
+    markerScale = markerScaleFor(pose.D);
+    for (const mk of markers) {
+      if (typeof mk.t !== 'number' || !Number.isFinite(mk.t)) continue;
+      const k = markerScale, len = (mk.lengthM ?? 7) * k, wid = (mk.widthM ?? 3) * k, line = Math.max(mk.lineM ?? 0.5, 1.2 * mppAt(pose.D)), lat = mk.lat ?? 0;
+      let uc = uOf(mk.t); const du = len / model.length / 2, dl = line / model.length;
+      if (uc - du < 0) uc += 1;
+      const u0 = uc - du, u1 = uc + du, dy = model.bandDy * 1.6, left = lat + wid / 2, right = lat - wid / 2;
+      const g = new THREE.Group(); g.userData.id = mk.id;
+      const mat = markerMat(mk.color ?? INK);
+      for (const geo of [stripGeometry(u0, u1, left, left - line, dy), stripGeometry(u0, u1, right + line, right, dy),
+        stripGeometry(u0, u0 + dl, left, right, dy), stripGeometry(u1 - dl, u1, left, right, dy)]) {
+        const m = new THREE.Mesh(geo, mat); m.renderOrder = 6; g.add(m);
+      }
+      if (mk.fill) { const f = new THREE.Mesh(stripGeometry(u0, u1, left, right, dy * 0.9), markerMat(mk.color ?? INK, Math.min(1, mk.fill))); f.renderOrder = 5; g.add(f); }
+      markerRoot.add(g);
+    }
+    invalidate();
+  }
+  function setMarkers(list) {
+    const next = Array.isArray(list) ? list : [];
+    if (JSON.stringify(next) === JSON.stringify(markers)) return;
+    markers = next; buildMarkers();
+  }
+
   let sections = [], sectionMeshes = new Map(), spanSig = '', active = null, hoverKey, wx = null;
   const ranges = [];   // [u0, u1, key] for picking
   function setSections(list, force = false) {
@@ -303,6 +343,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   function checkBandWidth() {
     const want = bandHalfFor(pose.D), wantEdge = edgeFor(pose.D);
     const bandMoved = Math.abs(want - bandHalfNow) / bandHalfNow >= 0.15, edgeMoved = Math.abs(wantEdge - edgeNow) / edgeNow >= 0.2;
+    if (markers.length && Math.abs(markerScaleFor(pose.D) - markerScale) / markerScale >= 0.15) buildMarkers();
     if (!bandMoved && !edgeMoved) return;
     bandHalfNow = want; edgeNow = wantEdge;
     edge.geometry.dispose(); edge.geometry = ribbonGeometry(0, 1, want + wantEdge, want + wantEdge, model.bandDy * 0.4);
@@ -495,6 +536,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   checkBandWidth();
   wx = createWeather({
     scene, camera, stage, model, invalidate, cssW, cssH, applyPose, centre,
+    latLon: data.kind === 'laguna' ? M.originLatLon ?? null : M.meta?.centre ?? null,   // [lat, lon] of the venue, for the race hour's sun
     ribbon: (u0, u1, hl, hr, dy) => ribbonGeometry(u0, u1, hl, hr, dy),
     northWorld: model.north ?? [0, -1],   // venue and city models: x east, north toward -z
     getHome: () => home,
@@ -534,7 +576,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   }
 
   return {
-    setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect, projectT, trackHalfWidth: model.half,
+    setSections, setActive, resetView, zoomBy, resize, dispose, naturalAspect, projectT, trackHalfWidth: model.half, setMarkers,
     setWeather(w, opts) { wx.set(w, opts); recolour(); invalidate(); kick(); },
     windScreen: () => wx.windScreen(),
     weatherInfo: () => wx.info(),

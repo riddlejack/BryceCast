@@ -15,6 +15,26 @@ export interface TrackSceneHover {
   y: number;
   pinned: boolean;
 }
+/** A box laid on the asphalt at a point of the lap (trackScene.js setMarkers). */
+export interface TrackSceneMarker {
+  id: string;
+  /** The site outline's arc parameter, as projectT and the section spans read it. */
+  t: number;
+  /** A resolved CSS colour (series colours from chapterTint / --chapter-*); the ink when left out. */
+  color?: string;
+  /** Along the track, metres (default 7). */
+  lengthM?: number;
+  /** Across the track, metres (default 3). */
+  widthM?: number;
+  /** The box centre's offset across the track, metres, positive to the left of the driving direction (default 0). */
+  lat?: number;
+  /** The outline's width, metres (default 0.5; never under about a pixel). */
+  lineM?: number;
+  /** 0..1, a tint of the colour inside the outline (default 0). */
+  fill?: number;
+  /** Never drawn under this many CSS px along the track (default 10), so it reads far off. */
+  minPx?: number;
+}
 export interface TrackModelData {
   v: number;
   slug: string;
@@ -44,7 +64,9 @@ export interface TrackScene {
   /** Half the track's width, in metres. */
   trackHalfWidth: number;
   /** The race hour's weather on the model (weather/weatherScene.js); null clears it. */
-  setWeather(weather: import('./weather/sceneWeather').SceneWeather | null, opts?: { take?: string; reduced?: boolean }): void;
+  setWeather(weather: import('./weather/sceneWeather').SceneWeather | null, opts?: { take?: string; reduced?: boolean; sun?: 'race' | 'fixed' }): void;
+  /** Boxes on the track at site positions; [] clears them. */
+  setMarkers(markers: TrackSceneMarker[]): void;
   /** The downwind ground direction on screen now, as a unit [dx, dy] in CSS px axes; null in still air or no bearing. */
   windScreen(): [number, number] | null;
   weatherInfo(): Record<string, unknown>;

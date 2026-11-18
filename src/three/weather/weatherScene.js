@@ -17,7 +17,14 @@
 //            model's true north.
 //
 //   const wx = createWeather(ctx)        ctx: see trackScene.js
-//   wx.set(weather | null, { take, reduced })    weather: a SceneWeather (src/three/weather/sceneWeather.tsx)
+//   sun      the sun stands where it stood at the race hour (sun.js, from the venue's latitude and longitude and the
+//            source's race hour; switch wxsun=fixed keeps the kit's sun), so a morning race at Barber is lit from the
+//            east and an evening one at IMS from low in the west. It is never drawn under 15 degrees (shadows longer
+//            than that cross the whole model); the light a low sun loses on level ground is half made up by the sky
+//            (the ambient), and the paper and the bands are compensated as for the sky. Cloud still softens it.
+//
+//   wx.set(weather | null, { take, reduced, sun })    weather: a SceneWeather (src/three/weather/sceneWeather.tsx);
+//                                                      sun: 'race' (default) or 'fixed'
 //   wx.animating                          true while something moves (sway, the sock's flutter)
 //   wx.tick(seconds)                      advance the motion; trackScene renders after it
 //   wx.bandComp                           a THREE.Color the band colours are multiplied by
@@ -26,6 +33,7 @@
 //   wx.dispose()
 import { THREE, hex } from '../rig/lib/rig.js';
 import { KIT, SUN_DIR, labels } from '../rig/shots/brycecast-film/kit.js';
+import { solarPosition } from './sun.js';
 
 const ASPHALT = ['45413d'];
 const PRESET = {
@@ -39,7 +47,10 @@ const PRESET = {
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 export function createWeather(ctx) {
-  const { scene, camera, stage, model, invalidate, cssW, cssH, ribbon, northWorld, getHome, frameBox } = ctx;
+  const { scene, camera, stage, model, invalidate, cssW, cssH, ribbon, northWorld, getHome, frameBox, latLon = null } = ctx;
+  const SUN_MIN_ELEV = 15;
+  const sunDir = SUN_DIR.clone();
+  let sunNow = null;   // { azimuthDeg, elevationDeg, drawnElevDeg, at } while the race's own sun is drawn
   const sunBase = { color: stage.sun.color.clone(), intensity: stage.sun.intensity, shadow: stage.sun.shadow.intensity, radius: stage.sun.shadow.radius };
   const ambBase = { color: stage.amb.color.clone(), intensity: stage.amb.intensity };
   const ambShare = stage.ambI / Math.PI, sunShare = (stage.sunI * SUN_DIR.y) / Math.PI;
@@ -303,6 +314,7 @@ export function createWeather(ctx) {
 
   function set(w, opts = {}) {
     weather = w; take = opts.take ?? 'arrow'; reduced = Boolean(opts.reduced);
+    const sunMode = opts.sun ?? 'race';
     if (w && !fontReady() && !fontWait) {
       fontWait = document.fonts.load(FACE).catch(() => null).then(() => { if (!disposed && weather === w && markerKind === 'arrow') set(w, opts); });
     }
@@ -316,11 +328,31 @@ export function createWeather(ctx) {
       sun.color.copy(hex(P.sunCol)); sun.intensity = sunBase.intensity * P.sun; sun.shadow.intensity = P.shadow; sun.shadow.radius = P.radius;
       amb.color.copy(hex(P.ambCol)); amb.intensity = ambBase.intensity * P.amb;
     }
+    // the race hour's sun: its bearing on the model's true north, its height (never under SUN_MIN_ELEV for the look)
+    sunNow = null; sunDir.copy(SUN_DIR);
+    if (P && sunMode !== 'fixed' && w?.raceAt && latLon) {
+      const pos = solarPosition(latLon[0], latLon[1], w.raceAt.utcMs);
+      if (pos.elevationDeg > 0) {
+        const drawn = Math.max(SUN_MIN_ELEV, pos.elevationDeg), el = (drawn * Math.PI) / 180, az = (pos.azimuthDeg * Math.PI) / 180;
+        const [nx, nz] = northWorld, ex = -nz, ez = nx;
+        const hx = nx * Math.cos(az) + ex * Math.sin(az), hz = nz * Math.cos(az) + ez * Math.sin(az);
+        sunDir.set(hx * Math.cos(el), Math.sin(el), hz * Math.cos(el)).normalize();
+        sunNow = { azimuthDeg: +pos.azimuthDeg.toFixed(1), elevationDeg: +pos.elevationDeg.toFixed(1), drawnElevDeg: +drawn.toFixed(1), at: w.raceAt.local, zone: w.raceAt.zone };
+      }
+    }
+    const tgt = sun.target.position, dist = sun.position.distanceTo(tgt) || 1000;
+    sun.position.set(tgt.x + sunDir.x * dist, tgt.y + sunDir.y * dist, tgt.z + sunDir.z * dist);
+    sun.updateMatrixWorld();
+    // what a level surface loses of the sun when it stands lower than the kit's: half of it comes back from the sky
+    const lowK = sunDir.y / SUN_DIR.y;
+    // (a sun higher than the kit's gives level ground more; the sky gives that much less, so a clear noon stays the kit's)
+    const lost = sunShare * (1 - lowK) * (sun.intensity / sunBase.intensity);
+    amb.intensity += ambBase.intensity * ((lost > 0 ? 0.5 * lost : lost) / ambShare);
     // what a level surface now shows of its colour, per channel; the paper and the bands are divided by it
     const f = new THREE.Color(
-      amb.color.r * ambShare * (amb.intensity / ambBase.intensity) + sun.color.r * sunShare * (sun.intensity / sunBase.intensity),
-      amb.color.g * ambShare * (amb.intensity / ambBase.intensity) + sun.color.g * sunShare * (sun.intensity / sunBase.intensity),
-      amb.color.b * ambShare * (amb.intensity / ambBase.intensity) + sun.color.b * sunShare * (sun.intensity / sunBase.intensity));
+      amb.color.r * ambShare * (amb.intensity / ambBase.intensity) + sun.color.r * sunShare * lowK * (sun.intensity / sunBase.intensity),
+      amb.color.g * ambShare * (amb.intensity / ambBase.intensity) + sun.color.g * sunShare * lowK * (sun.intensity / sunBase.intensity),
+      amb.color.b * ambShare * (amb.intensity / ambBase.intensity) + sun.color.b * sunShare * lowK * (sun.intensity / sunBase.intensity));
     bandComp.setRGB(1 / f.r, 1 / f.g, 1 / f.b);
     stage.desk.material.color.copy(deskBase).multiply(bandComp);
     // wet asphalt
@@ -407,7 +439,7 @@ export function createWeather(ctx) {
     dispose() {
       disposed = true; clearMarker(); arrowMat.dispose(); sheenMat.dispose(); if (sheen) sheen.geometry.dispose();
     },
-    info: () => ({ sky: weather?.sky ?? null, wet: Boolean(weather?.wet), marker: markerKind, down: hasDir ? [downWorld.x, downWorld.y] : null,
+    info: () => ({ sun: sunNow, sky: weather?.sky ?? null, wet: Boolean(weather?.wet), marker: markerKind, down: hasDir ? [downWorld.x, downWorld.y] : null,
       markerAt: markerParts ? markerParts.group.position.toArray() : null, crowns: crowns.length, asphalt: asphalt.length }),
   };
 }

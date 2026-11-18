@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useCoarsePointer, useReducedMotion } from '../app/charts';
-import { useTrackWeather, weatherCaption, weatherTake, type SceneWeather } from './weather/sceneWeather';
+import { sunTake, useTrackWeather, weatherCaption, weatherTake, type SceneWeather } from './weather/sceneWeather';
 import { WeatherRain } from './weather/WeatherRain';
-import type { TrackModelData, TrackScene, TrackSceneHover } from './trackScene.js';
+import type { TrackModelData, TrackScene, TrackSceneHover, TrackSceneMarker } from './trackScene.js';
 import { POSTER_SIZES, hasWebgl, loadIndex, loadModel, posterSrcSet, type ModelIndexEntry } from './trackModelLoad';
 import './track3d.css';
 
@@ -57,7 +57,8 @@ export const TrackModel3D = ({
   caption,
   overlay,
   hint: hintOverride,
-  weather: ownWeather
+  weather: ownWeather,
+  markers
 }: {
   slug: string;
   name: string;
@@ -76,6 +77,8 @@ export const TrackModel3D = ({
   /** The race hour's weather to draw on the model (null: none). Left out, the
    *  page's TrackWeatherProvider decides (the Tracks page's selected race). */
   weather?: SceneWeather | null;
+  /** Boxes laid on the track at a site t (a driver's grid box on the start straight): see TrackSceneMarker. */
+  markers?: TrackSceneMarker[];
 }) => {
   const coarse = useCoarsePointer();
   const reduced = useReducedMotion();
@@ -183,8 +186,14 @@ export const TrackModel3D = ({
    * in the wind, and the wind's marker in the world. */
   useEffect(() => {
     if (status !== 'ready') return;
-    sceneRef.current?.setWeather(weather, { take, reduced });
+    sceneRef.current?.setWeather(weather, { take, reduced, sun: sunTake() });
   }, [weather, take, reduced, status]);
+  const markerSig = JSON.stringify(markers ?? []);
+  useEffect(() => {
+    if (status !== 'ready') return;
+    sceneRef.current?.setMarkers(markers ?? []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [markerSig, status]);
   const windDrift = useCallback(() => {
     const dir = sceneRef.current?.windScreen();
     const kph = weather?.windKph ?? 0;

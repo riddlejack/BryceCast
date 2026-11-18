@@ -36,11 +36,67 @@ export interface SceneWeather {
   windFromDeg: number | null;
   tempC: number | null;
   source: { name: string; tier: 'observed' | 'modelled'; url: string | null };
+  /** The race hour as a moment, for the sun's position: the source's local hour in the venue's time zone, as UTC
+   *  milliseconds. Null where the source gives no hour or no zone is known (the model keeps the kit's own sun). */
+  raceAt: { utcMs: number; local: string; zone: string | null } | null;
 }
 
 type Row = Record<string, unknown>;
 const num = (value: unknown): number | null => (typeof value === 'number' && Number.isFinite(value) ? value : null);
 const str = (value: unknown): string | null => (typeof value === 'string' && value.trim() ? value.trim() : null);
+
+/* The venues' time zones, exactly as the weather producer asked Open-Meteo for each venue's hours (timezone= in
+ * every request, analysis/context-event-narrative-layer/output/source_evidence_lineage.csv), so `observedAt` is
+ * the local wall-clock hour in that zone. Keyed by the venue dossier's venueId. */
+const VENUE_ZONE: Record<string, string> = {
+  track_barber_motorsports_park: 'America/Chicago',
+  track_indianapolis_motor_speedway_road_course: 'America/Indiana/Indianapolis',
+  track_iowa_speedway: 'America/Chicago',
+  track_mid_ohio_sports_car_course: 'America/New_York',
+  track_nashville_superspeedway: 'America/Chicago',
+  track_portland_international_raceway: 'America/Los_Angeles',
+  track_road_america: 'America/Chicago',
+  track_streets_of_arlington: 'America/Chicago',
+  track_streets_of_detroit: 'America/Detroit',
+  track_streets_of_st_petersburg: 'America/New_York',
+  track_the_milwaukee_mile: 'America/Chicago',
+  track_weathertech_raceway_laguna_seca: 'America/Los_Angeles',
+  track_world_wide_technology_raceway: 'America/Chicago'
+};
+
+/** The zone's offset from UTC at a moment, in ms. */
+const zoneOffsetMs = (utcMs: number, zone: string): number => {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).formatToParts(new Date(utcMs));
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? 0);
+  return Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second')) - utcMs;
+};
+
+/** "2024-04-28T10:00" on the clocks of a zone, as a UTC moment (ms); null if it does not parse. */
+const wallToUtc = (wall: string, zone: string): number | null => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(wall);
+  if (!m) return null;
+  try {
+    const guess = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+    const first = guess - zoneOffsetMs(guess, zone);
+    const off = zoneOffsetMs(first, zone);
+    return guess - off;
+  } catch {
+    return null;
+  }
+};
+
+/** A race-hour moment from the source: an ISO time with its own offset is taken as it is; a bare local hour needs the zone. */
+const raceAtOf = (value: unknown, zone: string | null): SceneWeather['raceAt'] => {
+  const text = typeof value === 'string' ? value : value && typeof value === 'object' ? str((value as Row).start) ?? str((value as Row).startsAt) : null;
+  if (!text) return null;
+  if (/(Z|[+-]\d{2}:?\d{2})$/.test(text)) {
+    const t = Date.parse(text);
+    return Number.isFinite(t) ? { utcMs: t, local: text, zone } : null;
+  }
+  if (!zone) return null;
+  const t = wallToUtc(text, zone);
+  return t === null ? null : { utcMs: t, local: text, zone };
+};
 
 /** Sky words (Open-Meteo's WMO descriptions, or a category name) to a sky category. */
 export const skyOf = (words: string | null, wet = false): Sky | null => {
@@ -65,7 +121,7 @@ const rainIntensityOf = (sky: Sky, words: string | null, rainMm: number | null, 
 };
 
 /** One row of careerLab.raceWeather (the data lane's shape) to a scene state. */
-const fromRaceWeather = (row: Row): SceneWeather | null => {
+const fromRaceWeather = (row: Row, zone: string | null, fallbackAt: SceneWeather['raceAt']): SceneWeather | null => {
   const sessionId = str(row.sessionId);
   if (!sessionId) return null;
   const wet = str(row.wetDry) === 'wet';
@@ -86,12 +142,13 @@ const fromRaceWeather = (row: Row): SceneWeather | null => {
     gustKph: num(row.gustKph),
     windFromDeg: num(row.windFromDeg),
     tempC: num(row.tempC),
-    source: { name: str(source.name) ?? 'Race-hour weather', tier: source.tier === 'observed' ? 'observed' : 'modelled', url: str(source.url) }
+    source: { name: str(source.name) ?? 'Race-hour weather', tier: source.tier === 'observed' ? 'observed' : 'modelled', url: str(source.url) },
+    raceAt: raceAtOf(row.window, zone) ?? fallbackAt
   };
 };
 
 /** One venue-dossier visit's conditions to a scene state. */
-const fromDossier = (sessionId: string, c: Row): SceneWeather | null => {
+const fromDossier = (sessionId: string, c: Row, zone: string | null): SceneWeather | null => {
   const words = str(c.sky);
   const wet = str(c.wetDry) === 'wet';
   const sky = skyOf(words, wet);
@@ -112,7 +169,8 @@ const fromDossier = (sessionId: string, c: Row): SceneWeather | null => {
       name: str(c.source) ?? 'Open-Meteo Historical Weather API hourly archive',
       tier: c.sourceType === 'observed_station' || c.sourceType === 'trackside_official' ? 'observed' : 'modelled',
       url: 'https://open-meteo.com/en/docs/historical-weather-api'
-    }
+    },
+    raceAt: raceAtOf(c.observedAt, zone)
   };
 };
 
@@ -122,11 +180,14 @@ const weatherTable = (): Map<string, SceneWeather> => {
   table = new Map();
   const screens = (uiDataPackage as unknown as { screens?: Row }).screens ?? {};
   // the venue dossier first, so the career-wide block (when it lands) overrides it race by race
-  const dossier = (screens.venueDossier ?? {}) as { venues?: Array<{ visits?: Array<{ sessionId: string; conditions: Row | null }> }> };
+  const dossier = (screens.venueDossier ?? {}) as { venues?: Array<{ venueId: string; visits?: Array<{ sessionId: string; conditions: Row | null }> }> };
+  const zoneOf = new Map<string, string | null>();
   for (const venue of dossier.venues ?? []) {
+    const zone = VENUE_ZONE[venue.venueId] ?? null;
     for (const visit of venue.visits ?? []) {
+      zoneOf.set(visit.sessionId, zone);
       if (!visit.conditions) continue;
-      const w = fromDossier(visit.sessionId, visit.conditions);
+      const w = fromDossier(visit.sessionId, visit.conditions, zone);
       if (w) table.set(w.sessionId, w);
     }
   }
@@ -138,7 +199,8 @@ const weatherTable = (): Map<string, SceneWeather> => {
       ? Object.entries(block as Record<string, Row>).map(([key, row]) => ({ sessionId: key, ...(row ?? {}) }))
       : [];
   for (const row of rows) {
-    const w = fromRaceWeather(row);
+    const id = str(row.sessionId);
+    const w = fromRaceWeather(row, id ? zoneOf.get(id) ?? null : null, id ? table.get(id)?.raceAt ?? null : null);
     if (w) table.set(w.sessionId, w);
   }
   return table;
@@ -146,12 +208,12 @@ const weatherTable = (): Map<string, SceneWeather> => {
 
 /* A small local fixture for checks (review copy only): ?wxfixture=rain|overcast|sun|wind|storm|calm */
 const FIXTURE: Record<string, Omit<SceneWeather, 'sessionId'>> = {
-  sun: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 5, windKph: 9, gustKph: 18, windFromDeg: 225, tempC: 27, source: { name: 'fixture', tier: 'modelled', url: null } },
-  overcast: { sky: 'overcast', skyWords: 'overcast', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 100, windKph: 14, gustKph: 26, windFromDeg: 300, tempC: 16, source: { name: 'fixture', tier: 'modelled', url: null } },
-  rain: { sky: 'rain', skyWords: 'moderate rain', wet: true, rainIntensity: 0.6, rainMm: 2.2, cloudPct: 100, windKph: 16, gustKph: 34, windFromDeg: 200, tempC: 14, source: { name: 'fixture', tier: 'modelled', url: null } },
-  storm: { sky: 'storm', skyWords: 'thunderstorm', wet: true, rainIntensity: 1, rainMm: 7, cloudPct: 100, windKph: 30, gustKph: 62, windFromDeg: 250, tempC: 22, source: { name: 'fixture', tier: 'modelled', url: null } },
-  wind: { sky: 'partly', skyWords: 'partly cloudy', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 45, windKph: 38, gustKph: 64, windFromDeg: 270, tempC: 19, source: { name: 'fixture', tier: 'modelled', url: null } },
-  calm: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 0, windKph: 0, gustKph: 4, windFromDeg: null, tempC: 24, source: { name: 'fixture', tier: 'modelled', url: null } }
+  sun: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 5, windKph: 9, gustKph: 18, windFromDeg: 225, tempC: 27, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null },
+  overcast: { sky: 'overcast', skyWords: 'overcast', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 100, windKph: 14, gustKph: 26, windFromDeg: 300, tempC: 16, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null },
+  rain: { sky: 'rain', skyWords: 'moderate rain', wet: true, rainIntensity: 0.6, rainMm: 2.2, cloudPct: 100, windKph: 16, gustKph: 34, windFromDeg: 200, tempC: 14, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null },
+  storm: { sky: 'storm', skyWords: 'thunderstorm', wet: true, rainIntensity: 1, rainMm: 7, cloudPct: 100, windKph: 30, gustKph: 62, windFromDeg: 250, tempC: 22, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null },
+  wind: { sky: 'partly', skyWords: 'partly cloudy', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 45, windKph: 38, gustKph: 64, windFromDeg: 270, tempC: 19, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null },
+  calm: { sky: 'clear', skyWords: 'clear sky', wet: false, rainIntensity: 0, rainMm: 0, cloudPct: 0, windKph: 0, gustKph: 4, windFromDeg: null, tempC: 24, source: { name: 'fixture', tier: 'modelled', url: null }, raceAt: null }
 };
 
 /** The weather for a race, or null where no source has it. */
@@ -159,7 +221,8 @@ export const sceneWeatherFor = (sessionId: string | null | undefined): SceneWeat
   if (!sessionId) return null;
   if (REVIEW_HOST) {
     const fixture = switchValue('wxfixture');
-    if (fixture && FIXTURE[fixture]) return { sessionId, ...FIXTURE[fixture] };
+    // a fixture keeps the race's own hour, so its sun still stands where it stood that day
+    if (fixture && FIXTURE[fixture]) return { sessionId, ...FIXTURE[fixture], raceAt: weatherTable().get(sessionId)?.raceAt ?? null };
   }
   return weatherTable().get(sessionId) ?? null;
 };
@@ -170,6 +233,9 @@ export const weatherTake = (search?: URLSearchParams): WeatherTake => {
   const value = switchValue('wx', search);
   return value === 'sock' || value === 'off' ? value : 'arrow';
 };
+
+/** The sun review switch: 'race' (default), the sun where it stood at the race hour; 'fixed', the kit's own sun. */
+export const sunTake = (search?: URLSearchParams): 'race' | 'fixed' => (switchValue('wxsun', search) === 'fixed' ? 'fixed' : 'race');
 
 /** "light drizzle, wind 8 mph WSW, gusts 27" in the house wind grammar. */
 export const weatherWords = (w: SceneWeather): string => {
