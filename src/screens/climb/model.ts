@@ -165,7 +165,7 @@ export const useClimbModel = (): ClimbModel | null => {
         percentile: null,
         status: (u.status ?? 'dnf').toLowerCase(),
         wetDry: null,
-        hasPage: false,
+        hasPage: true, // the Races lane gives every unclassified race its own page
         order: u.raceNumber ?? Number(u.sessionId.match(/race[_-]?(\d+)/i)?.[1] ?? 0)
       });
     }

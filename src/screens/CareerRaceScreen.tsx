@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { SourcePill } from '../app/components';
-import { chartFont, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen, type ChartTip } from '../app/charts';
-import { asNumber, asString, formatDate } from '../app/format';
+import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen, type ChartTip } from '../app/charts';
+import { formatDate } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { useTapPreview } from '../app/tapPreview';
 import { uiDataPackage } from '../data/uiDataPackage';
 import { TrackArt } from '../app/trackArt';
-import { TrackStill } from '../app/trackStill';
+import { TrackStill, useStillIndex } from '../app/trackStill';
+import { venueSlugFor } from '../app/venuePeek';
+import { TrackModelSlot } from '../three/TrackModelSlot';
+import { loadIndex } from '../three/trackModelLoad';
 import { trackOutlineFor } from '../assets/tracks';
 import { switchValue } from '../review/switches';
-import { chapterTint, raceHref, useCareerRows, type CareerRow } from './careerExplorer';
-import { raceName } from './careerRaceNames';
+import { chapterTint, raceHref, seriesShort } from './careerExplorer';
+import { enteredBySeries, statusShort, useArchiveRaces, statusWords, unclassifiedRaceFor, unclassifiedTitle, useSheetRaces, type SheetRace } from './careerRaceList';
 import { DeepTip } from './deepDives/frame';
 import './careerRace.css';
 
@@ -34,112 +37,6 @@ import './careerRace.css';
  * the finishing percentile, as the Biggest climbs dive does).
  * `?racesheet=row` lays the field on its side at every width.
  * ==========================================================================*/
-
-type Conversion = Record<string, unknown>;
-
-interface SheetRace {
-  row: CareerRow;
-  seriesId: string;
-  title: string;
-  round: number | null;
-  /** The day the race ran, where the season campaign gives it. */
-  raceDay: string | null;
-  /** The meeting's first day (the conversion table's date). */
-  meetingDay: string;
-  /** Sort key within a day: the programme's race number, else the race's place in its round. */
-  order: number;
-  team: string | null;
-  points: number | null;
-  /** Classified cars, read back from the finishing percentile; null where it can't be (a win). */
-  field: number | null;
-}
-
-/* ---------- reading the rows ---------- */
-
-/** The site's percentile is (field − finish + 1) / field, so field = (finish − 1) / (1 − p).
- *  Accepted only when it lands on a whole number; a win (p = 1) gives none.
- *  The same rule as the Biggest climbs dive. */
-const fieldFromPercentile = (finish: number, percentile: number): number | null => {
-  if (!(percentile < 1) || finish < 2) return null;
-  const n = (finish - 1) / (1 - percentile);
-  const whole = Math.round(n);
-  return Math.abs(n - whole) < 0.05 && whole >= finish ? whole : null;
-};
-
-/** Heats and semi-finals run before a final on the same day. */
-const stageRank = (sessionId: string): number => {
-  const id = sessionId.toLowerCase();
-  if (id.includes('grand_final')) return 3;
-  if (id.includes('semi_final')) return 2;
-  if (id.includes('last_chance')) return 1;
-  return 0;
-};
-
-let campaignCache: { inRound: Map<string, number>; day: Map<string, string> } | null = null;
-const campaignIndex = () => {
-  if (campaignCache) return campaignCache;
-  const inRound = new Map<string, number>();
-  const day = new Map<string, string>();
-  for (const campaign of uiDataPackage.screens.careerLab.seasonCampaigns?.campaigns ?? []) {
-    const seen = new Map<number, number>();
-    for (const race of campaign.races) {
-      if (race.roundIndex != null) {
-        const n = (seen.get(race.roundIndex) ?? 0) + 1;
-        seen.set(race.roundIndex, n);
-        inRound.set(race.sessionId, n);
-      }
-      if (race.raceDate) day.set(race.sessionId, race.raceDate);
-    }
-  }
-  campaignCache = { inRound, day };
-  return campaignCache;
-};
-
-/** Races entered per series, from the life-stats weeks grid: the count the
- *  Career page's chapter panels and series bar read ("23 classified of 26 entered"). */
-const enteredBySeries = (): Map<string, number> => {
-  const counts = new Map<string, number>();
-  for (const week of uiDataPackage.screens.careerLab.lifeStats?.weeksGrid?.weeks ?? []) {
-    for (const race of week.races) counts.set(race.seriesId, (counts.get(race.seriesId) ?? 0) + race.raceCount);
-  }
-  return counts;
-};
-
-const useSheetRaces = (): SheetRace[] => {
-  const rows = useCareerRows();
-  return useMemo(() => {
-    const raw = new Map<string, Conversion>();
-    for (const entry of uiDataPackage.screens.careerLab.resultConversion ?? []) {
-      const id = asString((entry as Conversion).sessionId);
-      if (id) raw.set(id, entry as Conversion);
-    }
-    const { inRound, day } = campaignIndex();
-    return rows
-      .map((row): SheetRace => {
-        const source = raw.get(row.sessionId) ?? {};
-        const name = raceName({
-          eventName: asString(source.eventName) ?? row.raceLabel,
-          sessionId: row.sessionId,
-          trackName: row.trackName,
-          raceInRound: inRound.get(row.sessionId) ?? null
-        });
-        const programme = row.sessionId.match(/race[_-]?(\d+)/i);
-        return {
-          row,
-          seriesId: asString(source.seriesId) ?? '',
-          title: name.title,
-          round: name.round,
-          raceDay: day.get(row.sessionId) ?? null,
-          meetingDay: row.date,
-          order: (programme ? Number(programme[1]) : inRound.get(row.sessionId) ?? 0) + stageRank(row.sessionId) * 1000,
-          team: asString(source.teamName),
-          points: asNumber(source.points),
-          field: fieldFromPercentile(row.finish, row.percentile)
-        };
-      })
-      .sort((a, b) => (a.raceDay ?? a.meetingDay).localeCompare(b.raceDay ?? b.meetingDay) || a.order - b.order);
-  }, [rows]);
-};
 
 /* ---------- words ---------- */
 
@@ -720,7 +617,224 @@ const RaceNav = ({ race, previous, next }: { race: SheetRace; previous: SheetRac
     </nav>
   ) : null;
 
+/* ---------- the track: the 3D model where the venue has one ----------
+ * Career round 2 (Jack, Nov 17: "if we could have the 3D modeled tracks for all
+ * of the races that he's ever done"). The venue resolves through venuePeek's
+ * aliases (the layout he raced that day, then the venue), so a model the 3D
+ * venue lane adds lights this page with no code change. A venue in the Tracks
+ * page's model index gets the interactive model (TrackModelSlot: lazy, never
+ * in the first-load bundle); one with only a still gets the still; one with a
+ * traced outline only, the 2D drawing; none, nothing. */
+
+let modelSlugs: Set<string> | null | undefined;
+const useModelSlugs = (): Set<string> | null | undefined => {
+  const [value, setValue] = useState(modelSlugs);
+  useEffect(() => {
+    if (modelSlugs !== undefined) return undefined;
+    let live = true;
+    loadIndex().then((index) => {
+      modelSlugs = index ? new Set(Object.keys(index)) : null;
+      if (live) setValue(modelSlugs);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  return value;
+};
+
+interface SheetTrackInfo {
+  slug: string | null;
+  name: string;
+  /** The venue's model (interactive), its still, its drawing, or nothing. */
+  kind: 'model' | 'still' | 'line' | 'none' | 'wait';
+  /** The picture is the layout he raced that day (a per-session alias). */
+  raced: boolean;
+}
+
+const useSheetTrack = (sessionId: string, trackName: string): SheetTrackInfo => {
+  const stillIndex = useStillIndex();
+  const models = useModelSlugs();
+  const outline = trackOutlineFor(trackName);
+  const slug = venueSlugFor(stillIndex, { sessionId, trackName }) ?? outline?.slug ?? null;
+  const raced = Boolean(stillIndex && (stillIndex as { bySession?: Record<string, string> }).bySession?.[sessionId]);
+  const name = outline?.name ?? trackName;
+  if (stillIndex === undefined || models === undefined) return { slug, name, kind: 'wait', raced };
+  const kind = slug && models?.has(slug) ? 'model' : slug && stillIndex?.venues[slug] ? 'still' : outline ? 'line' : 'none';
+  return { slug, name, kind, raced };
+};
+
+const layoutWords = (track: SheetTrackInfo, seriesShort: string, year: number | null): string =>
+  track.raced
+    ? `${track.name}, in the layout he raced.`
+    : `${track.name} as it is today. The layout ${seriesShort} ran in ${year ?? 'that year'} isn’t in the source data.`;
+
+/** The interactive model, full width under the race. */
+const SheetModel = ({ track, words }: { track: SheetTrackInfo; words: string }) => {
+  /* No sections are shaded on these races, so the hint leaves out "point at a section". */
+  const coarse = useCoarsePointer();
+  return (
+  <section className="crs-model" aria-label={`${track.name} in 3D`}>
+    <h2 className="crs-model__title">The track</h2>
+    <TrackModelSlot
+      slug={track.slug!}
+      name={track.name}
+      sections={[]}
+      caption={words}
+      hint={coarse ? 'Drag sideways to turn it, pinch to zoom.' : 'Drag to turn it, hold ⌘ or Ctrl and scroll to zoom.'}
+      fallback={<TrackStill slug={track.slug} interactive={false} alt={`${track.name}: the 3D track.`} sizes="100vw" />}
+    />
+  </section>
+  );
+};
+
+/** The still (or drawing) in the race's own column. */
+const SheetStill = ({ track, words, trackName }: { track: SheetTrackInfo; words: string; trackName: string }) => {
+  const outline = trackOutlineFor(trackName);
+  if (track.kind !== 'still' && track.kind !== 'line') return null;
+  return (
+    <figure className="crs-track">
+      <TrackStill
+        slug={track.slug}
+        interactive={false}
+        alt={`${track.name}: the 3D track.`}
+        sizes="(max-width: 900px) 100vw, 420px"
+        fallback={outline ? <TrackArt outline={outline} showCornerLabels={false} maxHeight={260} /> : null}
+      />
+      <figcaption>{words}</figcaption>
+    </figure>
+  );
+};
+
+/* ---------- a race with no classified finish ---------- */
+
+const unclassifiedLede = (status: string): string => {
+  const s = status.toLowerCase();
+  if (s === 'dns') return 'He didn’t take the start.';
+  if (s === 'dnf') return 'He didn’t make it to the flag.';
+  if (s === 'dsq') return 'He was disqualified from the result.';
+  return 'He has no finishing position in this race.';
+};
+
+/** The other races of the same meeting (same series, venue and season, within
+ *  four days), so a race with no result still leads somewhere. */
+const SameWeekend = ({ sessionId }: { sessionId: string }) => {
+  const all = useArchiveRaces();
+  const here = all.find((race) => race.sessionId === sessionId);
+  if (!here) return null;
+  const t0 = Date.parse(here.day);
+  const weekend = all.filter(
+    (race) =>
+      race.seriesName === here.seriesName &&
+      race.trackName === here.trackName &&
+      race.seasonYear === here.seasonYear &&
+      Math.abs(Date.parse(race.day) - t0) <= 4 * 86400000
+  );
+  if (weekend.length < 2) return null;
+  return (
+    <figure className="crs-panel crs-weekend">
+      <figcaption className="crs-panel__title">The weekend</figcaption>
+      <ol className="crs-weekend__list">
+        {weekend.map((race) => {
+          const isHere = race.sessionId === sessionId;
+          const result = race.finish !== null ? `P${race.finish}${race.field !== null ? ` of ${race.field}` : ''}` : statusShort(race.status);
+          const body = (
+            <>
+              <span className="crs-weekend__title">{race.title.replace(`${here.title.split(' · ')[0]} · `, '')}</span>
+              <span className={`crs-weekend__result${race.finish === null ? ' crs-weekend__result--none' : ''}`}>{result}</span>
+            </>
+          );
+          return (
+            <li key={race.sessionId}>
+              {isHere ? (
+                <span className="crs-weekend__row crs-weekend__row--here" aria-current="page">
+                  {body}
+                  <span aria-hidden />
+                </span>
+              ) : (
+                <Link to={race.href} className="crs-weekend__row">
+                  {body}
+                  <ArrowRight size={14} aria-hidden />
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </figure>
+  );
+};
+
+const Unclassified = ({ sessionId }: { sessionId: string }) => {
+  const race = unclassifiedRaceFor(sessionId);
+  const track = useSheetTrack(sessionId, race?.trackName ?? '');
+  if (!race) return null;
+  const { title, round } = unclassifiedTitle(race);
+  const short = seriesShort(race.seriesName ?? '');
+  const words = layoutWords(track, short, race.seasonYear);
+  return (
+    <div className="page crs crs--unclassified" style={{ ['--tint' as string]: chapterTint(race.seriesName ?? '') }}>
+      <header className="crs-head">
+        <div>
+          <span className="kicker crs-head__kicker">
+            <span className="crs-head__swatch" aria-hidden />
+            {[short, race.seasonYear, round !== null ? `Round ${round}` : null].filter(Boolean).join(' · ')}
+          </span>
+          <h1 className="screen-head__title crs-head__title">{title.replace(' · ', '\u00a0· ')}</h1>
+          <p className="crs-head__sub">
+            {race.eventStartDate ? `Weekend of ${formatDate(race.eventStartDate, { month: 'long', day: 'numeric', year: 'numeric' })}` : null}
+            {race.trackName ? ` · ${race.trackName}` : null}
+          </p>
+        </div>
+        <SourcePill
+          title={title}
+          entries={[
+            {
+              label: 'Career miles ledger',
+              path: 'analysis/career-life-stats/output/tables/miles_raced.csv',
+              note: 'Every canonical race row of his career, with its date, venue, series and result status. This race has no classified finish, so the result table has no row for it.'
+            }
+          ]}
+          caveats={[]}
+        />
+      </header>
+      <section className="crs-stage crs-stage--unclassified">
+        <div className="crs-words">
+          <div className="dd__figure">
+            <span className="dd__num">{statusShort(race.status ?? '')}</span>
+            <span className="dd__unit">{(statusWords(race.status ?? '') || 'No classified finish').toLowerCase()}</span>
+          </div>
+          <p className="dd__lede crs-words__lede">{unclassifiedLede(race.status ?? '')}</p>
+          <dl className="crs-facts">
+            {[
+              ['Series', race.seriesName],
+              ['Track', race.trackName],
+              ['Country', race.country]
+            ]
+              .filter((entry): entry is [string, string] => Boolean(entry[1]))
+              .map(([label, value]) => (
+                <div key={label} className="crs-facts__row">
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+          </dl>
+        </div>
+        {track.kind === 'still' || track.kind === 'line' ? (
+          <SheetStill track={track} words={words} trackName={race.trackName ?? ''} />
+        ) : (
+          <SameWeekend sessionId={sessionId} />
+        )}
+      </section>
+      {track.kind === 'still' || track.kind === 'line' ? <SameWeekend sessionId={sessionId} /> : null}
+      {track.kind === 'model' ? <SheetModel track={track} words={words} /> : null}
+      <BackToCareer seriesId={race.seriesId ?? ''} />
+    </div>
+  );
+};
+
 const Missing = ({ sessionId }: { sessionId: string }) => {
+  if (unclassifiedRaceFor(sessionId)) return <Unclassified sessionId={sessionId} />;
   const counted = (uiDataPackage.screens.careerLab.lifeStats?.coveredSessionIds ?? []).includes(sessionId);
   return (
     <div className="page crs">
@@ -767,6 +881,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
   const race = useMemo(() => races.find((candidate) => candidate.row.sessionId === sessionId) ?? null, [races, sessionId]);
   const chapter = useMemo(() => (race ? races.filter((candidate) => candidate.seriesId === race.seriesId) : []), [races, race]);
   const entered = useMemo(enteredBySeries, []);
+  const track = useSheetTrack(sessionId, race?.row.trackName ?? '');
 
   if (!race) return <Missing sessionId={sessionId} />;
 
@@ -776,6 +891,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
   const oneRace = chapter.length < 2;
   const enteredCount = entered.get(race.seriesId) ?? null;
   const outline = trackOutlineFor(race.row.trackName);
+  const words = layoutWords(track, race.row.seriesShort, race.row.seasonYear);
   const { depth } = fieldGeometry(race);
   const column = layout === 'ladder' && wide;
   /* With neither a grid slot nor a field size there is no field to draw: the chapter takes the room. */
@@ -790,20 +906,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
     ...(race.points !== null ? ([['Points', String(race.points)]] as Array<[string, string]>) : [])
   ];
 
-  const still = outline ? (
-    <figure className="crs-track">
-      <TrackStill
-        slug={outline.slug}
-        interactive={false}
-        alt={`${outline.name}: the 3D track as it is today.`}
-        sizes="(max-width: 900px) 100vw, 420px"
-        fallback={<TrackArt outline={outline} showCornerLabels={false} maxHeight={260} />}
-      />
-      <figcaption>
-        {outline.name} as it is today. The layout {race.row.seriesShort} ran in {race.row.seasonYear ?? 'that year'} isn’t in the source data.
-      </figcaption>
-    </figure>
-  ) : null;
+  const still = track.kind === 'still' || track.kind === 'line' ? <SheetStill track={track} words={words} trackName={race.row.trackName} /> : null;
 
   return (
     <div className={`page crs${column ? ' crs--column' : ' crs--row'}${showField ? '' : ' crs--nofield'}`} style={{ ['--tint' as string]: chapterTint(race.row.seriesName) }}>
@@ -847,11 +950,15 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
                   }
                 ]
               : []),
-            ...(outline
+            ...(track.kind !== 'none' && track.kind !== 'wait'
               ? [
                   {
-                    label: 'Track picture',
-                    note: `${outline.source.attribution} The picture is today’s ${outline.name}; the layout this series ran in ${race.row.seasonYear ?? 'that year'} is not in the source data.`
+                    label: track.kind === 'model' ? 'Track model' : 'Track picture',
+                    note: `${outline ? `${outline.source.attribution} ` : ''}${
+                      track.raced
+                        ? `The ${track.kind === 'model' ? 'model' : 'picture'} is ${track.name} in the layout he raced that day.`
+                        : `The ${track.kind === 'model' ? 'model' : 'picture'} is today’s ${track.name}; the layout this series ran in ${race.row.seasonYear ?? 'that year'} is not in the source data.`
+                    }`
                   }
                 ]
               : [])
@@ -914,6 +1021,8 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
 
         {!column && still ? still : null}
       </section>
+
+      {track.kind === 'model' ? <SheetModel track={track} words={words} /> : null}
 
       <RaceNav race={race} previous={previous} next={next} />
       <BackToCareer seriesId={race.seriesId} />

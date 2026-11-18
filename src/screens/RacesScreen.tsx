@@ -1,9 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Card, ScreenHead, SourcePill, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, useMeasuredWidth, PointerOpen, type ChartTip } from '../app/charts';
+import { chartFont, useMeasuredWidth, PointerOpen } from '../app/charts';
 import { useTapPreview } from '../app/tapPreview';
-import { trackOutlineFor } from '../assets/tracks';
 import { formatDate, formatGain, formatNumber, formatPosition } from '../app/format';
 import { Link, useRouter } from '../app/router';
 import { displayRaceLabelText } from '../data/debriefArchive';
@@ -13,7 +12,10 @@ import { liveArchiveUpgradeFor, type LiveArchiveUpgrade } from '../data/liveRace
 import type { LiveReadiness } from '../app/useReadiness';
 import type { UiSeasonIndexRow } from '../data/uiDataPackage';
 import { DataFreshness } from '../app/dataFreshness';
-import { TrackIcon } from '../app/trackArt';
+import { chapterTint } from './careerExplorer';
+import { useArchiveRaces, type ArchiveRace } from './careerRaceList';
+import { RaceStillCard, RowPicture } from './racesPeek';
+import { AlsoInYear, EarlierSeason } from './racesEarlier';
 import './race.css';
 
 /** Archive labels drop the series prefix (everything here is INDY NXT) and
@@ -24,41 +26,59 @@ const archiveLabel = (raceLabel: string): string =>
     .replace(/^INDY NXT by Firestone at (the )?/i, '')
     .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
 
-/* ---------- tiny venue mark: the 3D model from above ----------
- * Round 7 (Jack's review of Nov 16): every row's mark is the venue's 3D model
- * seen from straight above, the track a bold ink ribbon (TrackIcon in
- * app/trackArt.tsx). A venue with no model keeps the line drawing; ?icons=line
- * shows the line drawings for comparison. */
+/* ---------- the row's track ----------
+ * Career round 2 (Jack, Nov 17: "change the 2D track shape on the races page
+ * … to maybe the 3D model somehow, the same way it appears in the pop-ups"):
+ * each row shows the venue's 3D still (racesPeek RowPicture); the bird's-eye
+ * icon and then the line drawing stay only where no model exists.
+ * ?racepic=icon shows round seven's bird's-eye icons for comparison. */
 
-const MiniTrack = ({ trackName, muted = false }: { trackName: string | null; muted?: boolean }) => {
-  const outline = trackOutlineFor(trackName);
-  const line = outline ? (
-        <svg viewBox={outline.viewBox} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden>
-          <path
-            d={outline.mainPath}
-            fill="none"
-            stroke={muted ? 'var(--ink-muted)' : 'var(--ink-secondary)'}
-            strokeWidth={1.5}
-            vectorEffect="non-scaling-stroke"
-            strokeLinejoin="round"
-          />
-        </svg>
-      ) : null;
-  return (
-    <span className={`race-row__mini${muted ? ' race-row__mini--muted' : ''}`}>
-      <TrackIcon slug={outline?.slug} box="row" muted={muted} fallback={line} />
-    </span>
-  );
-};
+const MiniTrack = ({ trackName, sessionId = null, muted = false }: { trackName: string | null; sessionId?: string | null; muted?: boolean }) => (
+  <RowPicture venue={{ sessionId, trackName }} muted={muted} />
+);
 
 /* ---------- the season spine: finishes + standing, one shared x-axis ---------- */
+
+/* The dot's card: the track's 3D still over the round's numbers, in the
+ * Career explorer's grammar (Jack, Nov 17: "when you hover on the 2026 season
+ * or the 2025 season, can we make it so that the dot also has the hover
+ * behavior of the track shape popping up?"). */
+const SpineCard = ({ row, x, y, width, tap }: { row: UiSeasonIndexRow; x: number; y: number; width: number; tap: ReturnType<typeof useTapPreview> }) => {
+  const clean = row.officialStatus === 'running';
+  const day = row.raceDate ?? row.eventStartDate;
+  return (
+    <RaceStillCard
+      venue={{ sessionId: row.sessionId, trackName: row.trackName }}
+      x={x}
+      y={y}
+      r={7}
+      width={width}
+      swatch={chapterTint('INDY NXT')}
+      meta={[`INDY NXT · Round ${row.roundIndex ?? '—'}`, day ? formatDate(day, { month: 'short', day: 'numeric' }) : null].filter(Boolean).join(' · ')}
+      title={archiveLabel(row.raceLabel)}
+      nums={[
+        row.startPosition !== null && row.finishPosition !== null && row.startPosition !== row.finishPosition
+          ? `P${row.startPosition} → P${row.finishPosition}`
+          : row.finishPosition !== null
+            ? `Finished P${row.finishPosition}`
+            : null,
+        row.points !== null ? `${row.points} pts` : null,
+        row.standingRank !== null ? `P${row.standingRank} in points` : null
+      ]
+        .filter(Boolean)
+        .join(' · ')}
+      note={!clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null}
+      action="open the race page"
+      tap={tap}
+    />
+  );
+};
 
 const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
   /* Round 9: on a phone the first tap on a round reads it, the second (or the card's button) opens it. */
   const tap = useTapPreview();
 
@@ -68,7 +88,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
 
   /* Round 4 (Jack, Nov 15: "the text on this page needs to be increased a few
    * points"): labels at 14-15 px, the panels a little taller to match. */
-  const margin = { top: 30, right: 18, bottom: 30, left: 56 };
+  const margin = { top: 30, right: 18, bottom: 30, left: 68 };
   const finishPanelHeight = 180;
   const panelGap = 42;
   const standingPanelHeight = 86;
@@ -109,10 +129,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
     }
   });
 
-  const clearHover = () => {
-    setHovered(null);
-    setTip(null);
-  };
+  const clearHover = () => setHovered(null);
 
   const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
@@ -123,24 +140,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
       return null;
     }
     const index = Math.min(n - 1, Math.max(0, Math.round(((mouseX - margin.left) / plotWidth) * (n - 1))));
-    const row = ordered[index];
     setHovered(index);
-    const clean = row.officialStatus === 'running';
-    setTip({
-      x: x(index),
-      y: yFinish(row.finishPosition ?? worstFinish),
-      title: archiveLabel(row.raceLabel),
-      detail: [
-        row.startPosition !== null ? `started P${row.startPosition}` : null,
-        row.finishPosition !== null ? `finished P${row.finishPosition}` : null,
-        !clean && row.officialStatus && row.officialStatus !== 'unknown' ? row.officialStatus : null,
-        row.points !== null ? `${row.points} pts` : null,
-        row.standingRank !== null ? `P${row.standingRank} in points` : null
-      ]
-        .filter(Boolean)
-        .join(' · '),
-      action: 'open the race page'
-    });
     return index;
   };
 
@@ -270,7 +270,7 @@ const SeasonSpine = ({ rows }: { rows: UiSeasonIndexRow[] }) => {
           </text>
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
+      {hovered !== null ? <SpineCard row={ordered[hovered]} x={x(hovered)} y={yFinish(ordered[hovered].finishPosition ?? worstFinish)} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -289,7 +289,7 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
         {formatPosition(row.finishPosition)}
         {topFive ? <span aria-label="top five" className="race-row__top5" /> : null}
       </span>
-      <MiniTrack trackName={row.trackName} />
+      <MiniTrack trackName={row.trackName} sessionId={row.sessionId} />
       {/* Name + status stack vertically (#24): the shared .tower__name is a
           centered flex row, so we flip it to a left-aligned column here. Status
           then sits on its own line under the race name — a long venue never
@@ -316,6 +316,9 @@ const RaceRow = ({ row }: { row: UiSeasonIndexRow }) => {
     </Link>
   );
 };
+
+const yearSpan = (years: Array<{ year: number }>): string =>
+  years.length > 1 ? `${years[years.length - 1].year} to ${years[0].year}` : years.length ? String(years[0].year) : '';
 
 const seasonSummary = (rows: UiSeasonIndexRow[]): string => {
   const finishes = rows.map((row) => row.finishPosition).filter((value): value is number => value !== null);
@@ -431,8 +434,51 @@ const RemainingSeason = ({
   </div>
 );
 
+/* ---------- the years, as one line of jump links ----------
+ * Eight seasons, newest first: the year, how many races, a swatch per series.
+ * A link scrolls to its season card. */
+const YearIndex = ({ years }: { years: Array<{ year: number; count: number; series: string[] }> }) => (
+  <nav className="races-years" aria-label="Seasons">
+    {years.map(({ year, count, series }) => (
+      <a
+        key={year}
+        href={`#season-${year}`}
+        className="races-years__year"
+        onClick={(event) => {
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          const target = document.getElementById(`season-${year}`);
+          if (!target) return;
+          event.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}
+      >
+        <span className="races-years__label">{year}</span>
+        <span className="races-years__count">
+          <span className="races-years__swatches" aria-hidden>
+            {series.map((name) => (
+              <i key={name} style={{ background: chapterTint(name) }} />
+            ))}
+          </span>
+          {count}
+        </span>
+      </a>
+    ))}
+  </nav>
+);
+
 export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadiness | null }) => {
   const index = getSeasonIndex();
+  const archive = useArchiveRaces();
+  const archiveByYear = useMemo(() => {
+    const byYear = new Map<number, ArchiveRace[]>();
+    for (const race of archive) {
+      const list = byYear.get(race.seasonYear) ?? [];
+      list.push(race);
+      byYear.set(race.seasonYear, list);
+    }
+    return byYear;
+  }, [archive]);
+  const total = index.length + archive.length;
 
   const seasons = useMemo(() => {
     const bySeason = new Map<number, UiSeasonIndexRow[]>();
@@ -461,28 +507,41 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
     return bySeason;
   }, []);
 
+  const indyYears = new Set(seasons.map(([season]) => season));
+  const allYears = [...new Set([...indyYears, ...archiveByYear.keys()])].sort((a, b) => b - a);
+  const years = allYears.map((year) => {
+    const others = archiveByYear.get(year) ?? [];
+    const series = [...(indyYears.has(year) ? ['INDY NXT'] : []), ...new Set(others.map((race) => race.seriesName))];
+    const indyCount = seasons.find(([season]) => season === year)?.[1].length ?? 0;
+    return { year, count: indyCount + others.length, series };
+  });
+
   return (
     <div className="page stack races-index">
       <ScreenHead
         kicker="The archive"
         title="Races"
         sub={
-          index.length > 0
-            ? `All ${formatNumber(index.length, 0)} of his INDY NXT races, from the official results and timing.`
-            : 'His INDY NXT races, from the official results and timing.'
+          total > 0
+            ? `All ${formatNumber(total, 0)} of his races, ${yearSpan(years)}: INDY NXT from the official results and timing, the years before from each series’ results.`
+            : 'His races, from the official results and timing.'
         }
       />
       <DataFreshness />
-      {index.length === 0 ? (
+      {years.length > 1 ? <YearIndex years={years} /> : null}
+      {total === 0 ? (
         <Card>
           <Unavailable>No completed races in the package yet.</Unavailable>
         </Card>
       ) : (
-        seasons.map(([season, rows]) => {
+        allYears.map((season) => {
+          const rows = seasons.find(([year]) => year === season)?.[1] ?? null;
+          const others = archiveByYear.get(season) ?? [];
+          if (!rows) return <EarlierSeason key={season} year={season} races={others} />;
           const remaining = remainingRoundsFor(rows, upcomingBySeason.get(season) ?? []);
           return (
+          <div key={season} id={`season-${season}`} className="races-season">
           <Card
-            key={season}
             title={`${season} season`}
             action={
               <span className="row" style={{ gap: 12 }}>
@@ -538,7 +597,9 @@ export const RacesScreen = ({ livePayload = null }: { livePayload?: LiveReadines
                 <RaceRow key={row.sessionId} row={row} />
               ))}
             </div>
+            {others.length > 0 ? <AlsoInYear year={season} races={others} /> : null}
           </Card>
+          </div>
           );
         })
       )}

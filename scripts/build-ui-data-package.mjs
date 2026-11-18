@@ -2152,7 +2152,7 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
  * conversion table needs a finishing position for its percentile, so these
  * stay out of it; the climb draws them as their own mark so the chart counts
  * every one of the 173 races. Straight from the canonical result rows. */
-const buildUnclassifiedRaces = (canonicalDataset, conversionRows) => {
+const buildUnclassifiedCanonical = (canonicalDataset, conversionRows) => {
   const covered = new Set(conversionRows.map((row) => row.sessionId));
   const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
   const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
@@ -2202,6 +2202,33 @@ const careerMomentKindOrder = [
 const compareCareerMomentChronology = (left, right) =>
   String(left?.eventStartDate ?? '').localeCompare(String(right?.eventStartDate ?? '')) ||
   String(left?.sessionId ?? '').localeCompare(String(right?.sessionId ?? ''));
+
+/** Every ledger race the conversion table leaves out (no classified finish),
+ *  with the event name the weeks grid gives its event and the series name the
+ *  conversion rows give its series. Chronological; nothing is invented: a field
+ *  the ledger lacks stays null. */
+const buildUnclassifiedRaces = ({ ledger, conversion, weeks }) => {
+  const classified = new Set(conversion.map((row) => String(row.sessionId ?? '')));
+  const seriesNames = new Map(conversion.map((row) => [String(row.seriesId ?? ''), String(row.seriesName ?? '')]));
+  const eventNames = new Map();
+  for (const week of weeks) for (const race of week.races ?? []) if (race.eventId) eventNames.set(race.eventId, race.eventName ?? null);
+  return ledger
+    .filter((row) => row.sessionId && !classified.has(String(row.sessionId)))
+    .map((row) => ({
+      sessionId: String(row.sessionId),
+      eventId: row.eventId || null,
+      eventName: eventNames.get(row.eventId) ?? null,
+      eventStartDate: row.eventStartDate || null,
+      seriesId: row.seriesId || null,
+      seriesName: seriesNames.get(String(row.seriesId)) || null,
+      seasonYear: numberOrNull(row.seasonYear),
+      trackId: row.trackId || null,
+      trackName: row.trackName || null,
+      country: row.country || null,
+      status: row.status || null
+    }))
+    .sort((a, b) => String(a.eventStartDate).localeCompare(String(b.eventStartDate)) || a.sessionId.localeCompare(b.sessionId));
+};
 
 const buildCareerMoments = ({ resultConversion, seasonIndex }) => {
   const chronologicalRows = resultConversion
@@ -3738,7 +3765,28 @@ const buildPackage = () => {
         resultConversionRows: careerLabPayload.resultConversionRows,
         resultConversion: careerConversionEnriched,
         resultConversionSample: careerConversionEnriched.slice(0, 25),
-        unclassifiedRaces: buildUnclassifiedRaces(canonicalDataset, careerConversionEnriched),
+        // The races he entered with no classified finish (DNS, DNF, DSQ), which
+        // the conversion table leaves out: the A2 miles ledger's rows (every
+        // canonical race row; the Races page lists them), each with the grid,
+        // field and laps its canonical result row carries (the climb draws them).
+        unclassifiedRaces: (() => {
+          const canonical = new Map(buildUnclassifiedCanonical(canonicalDataset, careerConversionEnriched).map((row) => [row.sessionId, row]));
+          return buildUnclassifiedRaces({
+            ledger: careerLifeStatsMilesRaced,
+            conversion: careerConversionEnriched,
+            weeks: careerFigures.weeksGrid?.weeks ?? []
+          }).map((row) => {
+            const extra = canonical.get(row.sessionId);
+            return {
+              ...row,
+              raceNumber: extra?.raceNumber ?? null,
+              startPosition: extra?.startPosition ?? null,
+              fieldSize: extra?.fieldSize ?? null,
+              lapsCompleted: extra?.lapsCompleted ?? null,
+              trackType: extra?.trackType ?? null
+            };
+          });
+        })(),
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
         headToHead: buildCareerHeadToHead(headToHeadRows, headToHeadRaceRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),

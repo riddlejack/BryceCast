@@ -22986,6 +22986,112 @@
           "weatherConfidence": "official"
         }
       ],
+      "unclassifiedRaces": [
+        {
+          "sessionId": "session_frp_f1600_2019_r2_06_race_3",
+          "eventId": "event_frp_f1600_2019_r2_watkins_glen_international",
+          "eventName": "FRP F1600 2019 Round 2 - Watkins Glen International",
+          "eventStartDate": "2019-05-10",
+          "seriesId": "series_frp_f1600",
+          "seriesName": "F1600 Championship Series",
+          "seasonYear": 2019,
+          "trackId": "track_watkins_glen_international",
+          "trackName": "Watkins Glen International",
+          "country": "United States",
+          "status": "dns"
+        },
+        {
+          "sessionId": "session_formula_ford_2019_festival_race_13_semi_final_1_sponsored_by_avon_tyres",
+          "eventId": "event_formula_ford_2019_formula_ford_festival",
+          "eventName": "BRSCC Formula Ford Festival 2019",
+          "eventStartDate": "2019-10-26",
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seasonYear": 2019,
+          "trackId": "track_brands_hatch_indy",
+          "trackName": "Brands Hatch Circuit",
+          "country": "United Kingdom",
+          "status": "dnf"
+        },
+        {
+          "sessionId": "session_formula_ford_2020_champion_brands_203851_race_16",
+          "eventId": "event_formula_ford_2020_champion_brands_203851",
+          "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+          "eventStartDate": "2020-09-20",
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seasonYear": 2020,
+          "trackId": "track_brands_hatch_indy",
+          "trackName": "Brands Hatch Circuit",
+          "country": "United Kingdom",
+          "status": "dnf"
+        },
+        {
+          "sessionId": "session_formula_ford_2020_champion_brands_203851_race_20",
+          "eventId": "event_formula_ford_2020_champion_brands_203851",
+          "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+          "eventStartDate": "2020-09-20",
+          "seriesId": "series_formula_ford",
+          "seriesName": "Formula Ford",
+          "seasonYear": 2020,
+          "trackId": "track_brands_hatch_indy",
+          "trackName": "Brands Hatch Circuit",
+          "country": "United Kingdom",
+          "status": "dnf"
+        },
+        {
+          "sessionId": "session_gb3_2021_212505_race_3_result",
+          "eventId": "event_gb3_2021_r2_silverstone",
+          "eventName": "GB3 2021 Round 2 - Silverstone",
+          "eventStartDate": "2021-06-26",
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seasonYear": 2021,
+          "trackId": "track_silverstone_gp",
+          "trackName": "Silverstone Circuit",
+          "country": "United Kingdom",
+          "status": "dsq"
+        },
+        {
+          "sessionId": "session_gb3_2022_1305",
+          "eventId": "event_gb3_2022_r4_snetterton",
+          "eventName": "GB3 2022 Round 4 - Snetterton",
+          "eventStartDate": "2022-06-25",
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seasonYear": 2022,
+          "trackId": "track_snetterton_300",
+          "trackName": "Snetterton Circuit",
+          "country": "United Kingdom",
+          "status": "dsq"
+        },
+        {
+          "sessionId": "session_gb3_2022_1376",
+          "eventId": "event_gb3_2022_r6_silverstone",
+          "eventName": "GB3 2022 Round 6 - Silverstone",
+          "eventStartDate": "2022-07-30",
+          "seriesId": "series_gb3",
+          "seriesName": "GB3 Championship",
+          "seasonYear": 2022,
+          "trackId": "track_silverstone_gp",
+          "trackName": "Silverstone Circuit",
+          "country": "United Kingdom",
+          "status": "dnf"
+        },
+        {
+          "sessionId": "session_euroformula_2023_06-monza-race-2",
+          "eventId": "event_euroformula_2023_r6_monza",
+          "eventName": "Euroformula Open 2023 Round 6 - Monza",
+          "eventStartDate": "2023-09-23",
+          "seriesId": "series_euroformula_open",
+          "seriesName": "Euroformula Open",
+          "seasonYear": 2023,
+          "trackId": "track_autodromo_nazionale_monza",
+          "trackName": "Autodromo Nazionale Monza",
+          "country": "Italy",
+          "status": "dnf"
+        }
+      ],
       "moments": [
         {
           "sessionId": "session_rcffs_2019_mid_ohio_race_3",

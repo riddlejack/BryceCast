@@ -25,6 +25,25 @@ export type UiCareerMomentKind =
   | 'daytona_24'
   | 'wwtr_mechanical';
 
+export interface UiUnclassifiedRace {
+  sessionId: string;
+  eventId: string | null;
+  eventName: string | null;
+  eventStartDate: string | null;
+  seriesId: string | null;
+  seriesName: string | null;
+  seasonYear: number | null;
+  trackId: string | null;
+  trackName: string | null;
+  country: string | null;
+  status: string | null;
+  raceNumber?: number | null;
+  startPosition?: number | null;
+  fieldSize?: number | null;
+  lapsCompleted?: number | null;
+  trackType?: string | null;
+}
+
 export interface UiCareerMoment {
   sessionId: string;
   shortLabel: string;
@@ -1402,6 +1421,8 @@ export interface UiDataPackage {
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
       resultConversion: Array<Record<string, string | number | null>>;
       resultConversionSample: Array<Record<string, string | number | null>>;
+      /** Races he entered with no classified finish (DNS, DNF, DSQ), from the A2 miles ledger. */
+      unclassifiedRaces?: UiUnclassifiedRace[];
       moments: UiCareerMoment[];
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
