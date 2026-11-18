@@ -13,6 +13,7 @@
  *
  * Review switch `?chapters=old` shows round 2's chapters (tiles and strip). */
 
+import { isKnownVenue, venueShort } from '../../app/venueNames';
 import { useMemo, useState, type ReactNode } from 'react';
 import { useInViewOnce, useReducedMotion } from '../../app/charts';
 import { useTapPreview } from '../../app/tapPreview';
@@ -98,7 +99,7 @@ const SHORT_PLACES: Array<[RegExp, string]> = [
 ];
 
 export const placeName = (trackName: string): string =>
-  SHORT_PLACES.find(([pattern]) => pattern.test(trackName))?.[1] ?? (placeNameOf(trackName) || trackName);
+  isKnownVenue(trackName) ? venueShort(trackName) : SHORT_PLACES.find(([pattern]) => pattern.test(trackName))?.[1] ?? (placeNameOf(trackName) || trackName);
 
 const MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

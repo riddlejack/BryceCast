@@ -16,7 +16,7 @@ export const sourceUrls = {
 };
 
 export const seedHeartbeat: RaceHeartbeat = {
-  eventName: 'INDY NXT by Firestone at WWT Raceway',
+  eventName: 'INDY NXT by Firestone at World Wide Technology Raceway',
   trackName: 'World Wide Technology Raceway',
   trackLength: 1.25,
   trackType: 'O',

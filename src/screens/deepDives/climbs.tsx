@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FocusEvent, type KeyboardEvent } from 'react';
+import { isKnownVenue, venueName, venueShort } from '../../app/venueNames';
 import { SourcePill } from '../../app/components';
 import {
   PointerOpen,
@@ -51,28 +52,23 @@ interface Climb {
   shortPlace: string;
 }
 
-const placeNames: Record<string, string> = {
-  'World Wide Technology Raceway': 'WWT Raceway',
-  'Brands Hatch Circuit': 'Brands Hatch'
-};
+/* Known venues read from app/venueNames; these are the fallbacks for any other name. */
+const placeNames: Record<string, string> = {};
 
 /* A phone column is about 65 px wide: the venue's short name. */
 const shortPlaceNames: Record<string, string> = {
-  'World Wide Technology Raceway': 'WWT',
-  'Streets of St. Petersburg': 'St. Pete',
-  'Brands Hatch Circuit': 'Brands',
-  'Donington Park': 'Donington',
-  'Oulton Park': 'Oulton'
 };
 
 const placeOf = (trackName: string): string =>
+  (isKnownVenue(trackName) ? venueName(trackName) : null) ??
   placeNames[trackName] ??
   trackName
     .replace(/^Streets of /, '')
     .replace(/ Street Circuit$/, '')
     .replace(/ Circuit$/, '');
 
-const shortPlaceOf = (trackName: string): string => shortPlaceNames[trackName] ?? placeOf(trackName);
+const shortPlaceOf = (trackName: string): string =>
+  isKnownVenue(trackName) ? venueShort(trackName) : shortPlaceNames[trackName] ?? placeOf(trackName);
 
 /** The classified field a share was taken over: the career rows' share is the
  *  field beaten, (field − finish) / (field − 1), so field = (finish − p) / (1 − p).

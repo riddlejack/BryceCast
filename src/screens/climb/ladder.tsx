@@ -107,7 +107,7 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
     const W = width;
     const S = Math.round(clamp(W * 0.06, 50, 92));
     const topPad = phone ? 64 : Math.max(Math.round(clamp(W * 0.05, 64, 96)), 18 + topRows * 16);
-    const H = topPad + steps.length * S + (phone ? 50 : 58);
+    const H = topPad + steps.length * S + (phone ? 56 : 64);
     const padL = 2;
     const padR = 2;
     const colW = (W - padL - padR) / n;
@@ -226,8 +226,12 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
               <text x={3} y={figureY + 24} fontSize={13} fill="var(--ink-secondary)">
                 races, from a club race
               </text>
+              {/* three lines: on a phone the second ran into the INDY NXT dots */}
               <text x={3} y={figureY + 41} fontSize={13} fill="var(--ink-secondary)">
-                at {firstPlace} to INDY NXT
+                at {firstPlace}
+              </text>
+              <text x={3} y={figureY + 58} fontSize={13} fill="var(--ink-secondary)">
+                to INDY NXT
               </text>
             </>
           ) : (
@@ -270,7 +274,9 @@ export const Staircase = ({ model, width, p }: { model: ClimbModel; width: numbe
           const fl = floor(s);
           const lit = activeStep === s;
           const lx = face ? Math.min(stepX[s].x0 + (phone ? 5 : 8), W - w - 2) : Math.max(4, stepX[s].x0 - 10 - w);
-          const ly = face ? fl + 12 + nameF * 0.82 : fl - S * 0.5 - (nameF + subF) / 2 + nameF * 0.82;
+          /* a face label starts 18 px under the tread: the crosses (races with no
+             classified finish) hang 5 to 11 px under it, so they keep 7 px clear */
+          const ly = face ? fl + 18 + nameF * 0.82 : fl - S * 0.5 - (nameF + subF) / 2 + nameF * 0.82;
           return (
             <g key={step.key} opacity={a} transform={`translate(0 ${(1 - a) * 5})`} fontFamily={chartFont} aria-hidden>
               <text x={lx} y={ly} fontSize={nameF} fontWeight={lit ? 700 : 630} letterSpacing="-0.015em" fill="var(--ink)">
