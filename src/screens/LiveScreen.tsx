@@ -190,7 +190,7 @@ const sourceEntries = {
   ],
   battle: [
     {
-      label: 'Race Control timing feed · Bryce-centered corridor',
+      label: 'Race Control timing feed · Bryce-centred corridor',
       path: '/api/readiness → liveTiming.rows[].liveGap',
       note: 'The corridor walks Race Control’s live interval to the preceding ranked car around Bryce. Missing intervals break the chain; no gap is filled with zero and no GPS position is inferred. The frame width steps along a fixed ladder (±1s to ±8s) to fit the nearest cars, and only rescales when the pack meaningfully compresses or spreads.'
     },

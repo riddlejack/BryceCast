@@ -1929,7 +1929,7 @@ export const RaceDetailScreen = ({ sessionId }: { sessionId: string }) => {
         if (hasPdfSections) parts.push('official section reports');
         if (hasOwnCapture) parts.push('our Race Control timing capture');
         if (hasRaceTools) parts.push('the RaceTools race-weekend capture');
-        if (hasTiming71) parts.push('Timing71 normalized timing');
+        if (hasTiming71) parts.push('Timing71 normalised timing');
         if (story?.weather) parts.push('modelled weather (the Open-Meteo reanalysis)');
         const sources =
           parts.length === 1

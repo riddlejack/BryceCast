@@ -69,7 +69,7 @@
     {
       "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
       "path": "data/career/career.dataset.json",
-      "sha256": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600"
+      "sha256": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc"
     },
     {
       "note": "Curated track lengths and coordinates with named sources.",
@@ -79,7 +79,7 @@
     {
       "note": "Al Kamel-derived Bryce driver stints used for Daytona attribution.",
       "path": "analysis/imsa-daytona-stint-class-pace/output/bryce_imsa_stint_context.csv",
-      "sha256": "9c64c871f62cc378842bce0e6f9ad0084eb19cedbd972a1002294e94caa0f0ca"
+      "sha256": "b3fcc22875f071ffce40eb997936f54e9ccf731adf484247260785d17432ce30"
     },
     {
       "note": "Explicit low/base/high fuel and tire model assumptions with source URLs.",
@@ -99,7 +99,7 @@
     {
       "note": "Career page figures, share of his life, weeks grid and ordered travel legs.",
       "path": "analysis/career-life-stats/output/career_figures.json",
-      "sha256": "b3b3ecff4276d387fc1c0646e4dc63f93acaca81a0489a5732c030f61394f9bd"
+      "sha256": "1d9b4d8f5cea6d29cfd1d1ab26a5428e452100e40279efb49749008f7a809dd6"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",

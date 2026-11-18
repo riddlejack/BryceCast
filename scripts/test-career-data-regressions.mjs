@@ -2660,4 +2660,9 @@ console.log(JSON.stringify({
     assert.ok(moved.every((row) => row.driverId === alias.to && row.provenanceRefs.includes('source_driver_identity_aliases')), `${alias.from} rows must sit on ${alias.to} and cite the alias table`);
   }
   assert.equal(dataset.results.filter((row) => row.driverId === 'driver_tommy_smith' && row.sessionId.startsWith('session_gb3_2022_')).length, 76, 'GB3 2022 car 16 (the "TBC TBC" rows) is Tommy Smith');
+  /* RCFFS 2019 Mid-Ohio: the results sheet's "Michaeol" is the series report's Michael Neylon. */
+  const neylon = dataset.drivers.find((row) => row.id === 'driver_michaeol_neylon');
+  assert.equal(neylon?.displayName, 'Michael Neylon', 'the RCFFS race report spells him Michael Neylon');
+  assert.equal(neylon?.sourceDisplayName, 'Michaeol Neylon', 'the sheet spelling is kept on the record');
+  assert.ok(neylon?.provenanceRefs.includes('source_rcffs_2019_mid_ohio_race_report'), 'the spelling cites the race report');
 }

@@ -80,7 +80,7 @@
       "observationRows": 21,
       "sectionFamily": "Turn 9",
       "sessionType": "qualifying",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.6190476190476191,
       "trackName": "Portland International Raceway"
     },
@@ -91,7 +91,7 @@
       "observationRows": 19,
       "sectionFamily": "BS 2",
       "sessionType": "practice",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 1.0,
       "trackName": "Streets of Arlington"
     },
@@ -102,7 +102,7 @@
       "observationRows": 21,
       "sectionFamily": "Turn 2",
       "sessionType": "qualifying",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.6666666666666666,
       "trackName": "Portland International Raceway"
     },
@@ -113,7 +113,7 @@
       "observationRows": 19,
       "sectionFamily": "BS 3",
       "sessionType": "practice",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.631578947368421,
       "trackName": "Streets of Arlington"
     },
@@ -124,7 +124,7 @@
       "observationRows": 52,
       "sectionFamily": "Turn 12/13",
       "sessionType": "qualifying",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.5384615384615384,
       "trackName": "Indianapolis Motor Speedway Road Course"
     }
@@ -144,7 +144,7 @@
     "Suppress rows with low comparison counts or show denominator badges.",
     "Keep pit/timing-line sections separate from true track sections."
   ],
-  "generatedAt": "2026-11-18T08:08:26Z",
+  "generatedAt": "2026-11-18T09:47:59Z",
   "id": "indy-nxt-section-lap-context",
   "primaryUseCases": [
     "race_week_prep",
@@ -154,7 +154,7 @@
   ],
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
   "transferCorrelations": [
     {
       "caveat": "Exploratory association only; no public point prediction and no post-race leakage for upcoming events.",
@@ -183,7 +183,7 @@
       "observationRows": 19,
       "sectionFamily": "Turn 2",
       "sessionType": "practice",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.0,
       "trackName": "Streets of Arlington"
     },
@@ -194,7 +194,7 @@
       "observationRows": 19,
       "sectionFamily": "BS 5",
       "sessionType": "practice",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.0,
       "trackName": "Streets of Arlington"
     },
@@ -205,7 +205,7 @@
       "observationRows": 19,
       "sectionFamily": "Turn 5",
       "sessionType": "practice",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.0,
       "trackName": "Streets of Arlington"
     },
@@ -216,7 +216,7 @@
       "observationRows": 23,
       "sectionFamily": "I8 to I9",
       "sessionType": "qualifying",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.21739130434782608,
       "trackName": "Road America"
     },
@@ -227,7 +227,7 @@
       "observationRows": 23,
       "sectionFamily": "Turn 10",
       "sessionType": "qualifying",
-      "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600",
+      "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
       "topQuartileShare": 0.13043478260869565,
       "trackName": "Streets of St. Petersburg"
     }

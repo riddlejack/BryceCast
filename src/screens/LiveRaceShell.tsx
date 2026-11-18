@@ -84,7 +84,7 @@ const RaceSoFarCard = ({
     {chart ? (
       <>
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
-          Bryce in ink · the field in light gray · shaded = caution · the newest lap touches the right edge
+          Bryce in ink · the field in light grey · shaded = caution · the newest lap touches the right edge
           {paused ? ' · paused, holding the last good laps' : ''}
         </p>
         <LapChart story={chart} building={{ cautionSpans: chart.cautionSpans }} />

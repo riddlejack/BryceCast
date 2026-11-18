@@ -498,7 +498,7 @@ const main = () => {
     const result = assembleSession(records, {
       source: 'timing71',
       sourceTier: 'timing71_normalized',
-      sourceTierLabel: 'third-party normalized (Timing71)',
+      sourceTierLabel: 'third-party normalised (Timing71)',
       timeField: 'endObservedAtEpoch',
       bryceCar: bryceMapping.car,
       canonicalEventId: identity.canonicalEventId || null,
@@ -609,7 +609,7 @@ const main = () => {
     sourceTiers: [
       { tier: 'official_section_results', label: 'Official qualifying section report', note: 'Published per-lap and timing-loop observations; no wall-clock replay inferred' },
       { tier: 'racetools_capture', label: 'RaceTools race-weekend capture', note: 'third-party capture of the timing feed; not official timing' },
-      { tier: 'timing71_normalized', label: 'third-party normalized (Timing71)', note: 'third-party normalized display-state replay; 2026 rows gated by the validated identity crosswalk' }
+      { tier: 'timing71_normalized', label: 'third-party normalised (Timing71)', note: 'third-party normalised display-state replay; 2026 rows gated by the validated identity crosswalk' }
     ],
     rankSource: 'canonical official qualifying classification (qualifyingResults)',
     method: [

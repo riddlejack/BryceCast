@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T08:08:44Z",
+  "generatedAt": "2026-11-18T09:48:12Z",
   "methodology": {
     "claimPolicy": "Use source-bounded historical prior bands, paths, and analog races. Do not publish point predictions from this sample.",
     "promotionPolicy": "Product prediction requires out-of-sample lift over the relevant naive baseline and no leakage.",
@@ -272,5 +272,5 @@
     }
   ],
   "schemaVersion": "brycecast.predictiveRaceIntelligence.modelScorecard.v1",
-  "sourceHash": "5a06df282a620e6ace31865c95f16372ab854c5865573be0a00d0cd41b54e600"
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc"
 }

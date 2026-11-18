@@ -1,19 +1,6 @@
 {
   "table": "data/career/identity/driver-aliases.json",
-  "foldedThisRun": [
-    {
-      "from": "driver_david_h_livingston_jr",
-      "to": "driver_david_livingston",
-      "results": 2,
-      "qualifying": 0
-    },
-    {
-      "from": "driver_milan_de_lart",
-      "to": "driver_milan_de_laet",
-      "results": 1,
-      "qualifying": 0
-    }
-  ],
+  "foldedThisRun": [],
   "aliases": [
     {
       "from": "driver_1",
@@ -147,6 +134,14 @@
       "kind": "misspelling",
       "results": 1,
       "qualifying": 0
+    }
+  ],
+  "spelling": [
+    {
+      "id": "driver_michaeol_neylon",
+      "from": "Michaeol Neylon",
+      "to": "Michael Neylon",
+      "evidence": "source_rcffs_2019_mid_ohio_race_report"
     }
   ],
   "heldApart": [
