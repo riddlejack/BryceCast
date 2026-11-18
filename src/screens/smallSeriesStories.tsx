@@ -15,6 +15,7 @@
  *  (none of these is the current chapter). Every number is sourced; every fact
  *  carries a source drawer. */
 
+import { venueName } from '../app/venueNames';
 import { Fragment, useMemo } from 'react';
 import { Card, SourcePill, Stat, Unavailable, type SourceEntry } from '../app/components';
 import { ordinal } from '../app/format';
@@ -72,7 +73,7 @@ const F1600EventRow = ({ event }: { event: UiF1600Event }) => {
     <div className="ss-event">
       <div className="ss-event__head">
         <span className="ss-event__round">R{event.roundIndex}</span>
-        <span className="ss-event__venue">{event.trackName}</span>
+        <span className="ss-event__venue">{venueName(event.trackName)}</span>
       </div>
       <div className="ss-event__quali">
         {quali && quali.rank !== null ? (
@@ -93,7 +94,7 @@ const F1600EventRow = ({ event }: { event: UiF1600Event }) => {
               <span className={`ss-race__mark${race.isPodium ? ' ss-race__mark--on' : ''}`} aria-hidden style={race.isPodium ? { background: F1600_TINT } : undefined} />
             </>
           );
-          const title = `${event.trackName} · Race ${race.raceNumber} · ${label}`;
+          const title = `${venueName(event.trackName)} · Race ${race.raceNumber} · ${label}`;
           return race.hasRacePage ? (
             <Link key={race.sessionId} to={raceHref(race.sessionId)} className="ss-race ss-race--link">
               {inner}
@@ -199,7 +200,7 @@ const FrocEventRow = ({ event }: { event: UiFrocEvent }) => {
     <div className="ss-event">
       <div className="ss-event__head">
         <span className="ss-event__round">R{event.roundIndex}</span>
-        <span className="ss-event__venue">{event.trackName}</span>
+        <span className="ss-event__venue">{venueName(event.trackName)}</span>
       </div>
       <div className="ss-event__quali">
         {bestRank !== null ? (
@@ -223,7 +224,7 @@ const FrocEventRow = ({ event }: { event: UiFrocEvent }) => {
               <span className={`ss-race__mark${race.isPodium ? ' ss-race__mark--on' : ''}`} aria-hidden style={race.isPodium ? { background: FROC_TINT } : undefined} />
             </>
           );
-          const title = `${event.trackName} · Race ${race.raceNumber}${race.startPosition !== null ? ` · P${race.startPosition} → ${finish}` : ` · ${finish}`}${race.isWin ? ' · win' : ''}`;
+          const title = `${venueName(event.trackName)} · Race ${race.raceNumber}${race.startPosition !== null ? ` · P${race.startPosition} → ${finish}` : ` · ${finish}`}${race.isWin ? ' · win' : ''}`;
           return race.hasRacePage ? (
             <Link key={race.sessionId} to={raceHref(race.sessionId)} className="ss-race ss-race--wide ss-race--link">
               {inner}

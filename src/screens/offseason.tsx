@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { ArrowRight, CalendarDays, LineChart, Map as MapIcon, PlayCircle, Radio } from 'lucide-react';
 import { Card, Countdown, HeroPanel, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { formatDate, formatPosition } from '../app/format';
@@ -111,7 +112,7 @@ export const HeatTrack = ({
         sessionId={shaded?.sessionId ?? null}
         sections={shaded?.sections ?? []}
         interactive={interactive && maxHeight >= 120}
-        alt={`${outline.name}: the 3D track${shaded ? ', shaded section by section by his pace' : ''}.`}
+        alt={`${venueName(outline.name)}: the 3D track${shaded ? ', shaded section by section by his pace' : ''}.`}
         sizes={`${Math.round((maxHeight * 1200) / 676)}px`}
         fallback={
           fallback ?? (
@@ -188,7 +189,7 @@ export const TrackShowcase = ({ venues, seasonYear }: { venues: SeasonVenue[]; s
               type="button"
               role="tab"
               aria-selected={slideIndex === index}
-              aria-label={venue.trackName}
+              aria-label={venueName(venue.trackName)}
               className={`showcase__dot${slideIndex === index ? ' showcase__dot--active' : ''}`}
               onClick={() => {
                 setIndex(slideIndex);

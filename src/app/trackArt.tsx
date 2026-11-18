@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { venueName } from './venueNames';
 import type { TrackOutline } from '../assets/tracks';
 import type { ResolvedHeatSection } from '../data/sectionObservations';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from './charts';
@@ -633,8 +634,8 @@ export const TrackArt = ({
           role="img"
           aria-label={
             hasHeat
-              ? `${outline.name} track outline, sections shaded by Bryce's pace ${sections?.contextLabel ?? 'this race'}`
-              : `${outline.name} track outline`
+              ? `${venueName(outline.name)} track outline, sections shaded by Bryce's pace ${sections?.contextLabel ?? 'this race'}`
+              : `${venueName(outline.name)} track outline`
           }
           style={{ overflow: 'visible', display: 'block' }}
         >

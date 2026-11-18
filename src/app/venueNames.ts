@@ -96,7 +96,12 @@ const VENUES: Record<string, Venue> = {
   'milwaukee mile': v('The Milwaukee Mile', 'Milwaukee'),
   'nashville superspeedway': v('Nashville Superspeedway', 'Nashville'),
   'grand prix of arlington street circuit': v('Streets of Arlington', 'Arlington'),
-  'streets of arlington': v('Streets of Arlington', 'Arlington')
+  'streets of arlington': v('Streets of Arlington', 'Arlington'),
+  /* traced outlines the site draws but he has not raced */
+  'indianapolis motor speedway': v('Indianapolis Motor Speedway', 'Indianapolis'),
+  'phoenix raceway': v('Phoenix Raceway', 'Phoenix'),
+  'streets of long beach': v('Streets of Long Beach', 'Long Beach'),
+  'streets of toronto': v('Streets of Toronto', 'Toronto')
 };
 
 const venueOf = (trackName: string): Venue | null => VENUES[trackName.trim().toLowerCase()] ?? null;

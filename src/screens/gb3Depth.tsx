@@ -19,6 +19,7 @@ import { useTapPreview } from '../app/tapPreview';
 import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext, type Gb3EventSummary } from '../data/gb3DeepDive';
 import { chapterTint, raceHref } from './careerExplorer';
 import { finishLine, placeNameOf, raceFieldOf, raceTitleOf } from './raceCardFacts';
+import { venueName } from '../app/venueNames';
 import { placeLine } from '../app/raceFacts';
 
 /* The card's series line and clean race name (one grammar across the site's race cards). */
@@ -40,7 +41,7 @@ const chronoKey = <T extends { seasonYear: number; eventName: string; raceNumber
 
 const cleanSessionName = (name: string): string => name.replace(/ Result$/, '').trim();
 const raceLabel = (row: { seasonYear: number; eventName: string; trackName: string; sessionName: string }): string =>
-  `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName} · ${cleanSessionName(row.sessionName)}`;
+  `${row.seasonYear} R${roundOf(row.eventName)} · ${venueName(row.trackName)} · ${cleanSessionName(row.sessionName)}`;
 
 const pctBeaten = (value: number | null): number | null => (value === null ? null : Math.round(value * 100));
 
@@ -370,7 +371,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   aria-hidden
                   style={{ width: 7, height: 7, borderRadius: '50%', background: GB3_TINT, opacity: 0.6, flex: 'none' }}
                 />
-                {venue.trackName}
+                {venueName(venue.trackName)}
               </span>
               <span className="tower__gap">{venue.raceRows}</span>
               <span className="tower__gap">P{venue.bestFinish}</span>

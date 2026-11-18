@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { isKnownVenue, venueShort as siteVenueShort } from '../app/venueNames';
+import { isKnownVenue, venueName, venueShort as siteVenueShort } from '../app/venueNames';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
@@ -328,7 +328,7 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
     return (
       <Card title="His restart record here">
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-          His past {trackName} visits had restarts, but his lap-chart line didn't reach them, so there is no restart read to show here yet.
+          His past {venueName(trackName)} visits had restarts, but his lap-chart line didn't reach them, so there is no restart read to show here yet.
         </p>
       </Card>
     );
@@ -347,12 +347,12 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
       title="His restart record here"
       action={
         <SourcePill
-          title={`Restarts at ${trackName}`}
+          title={`Restarts at ${venueName(trackName)}`}
           entries={[
             {
               label: 'Restart report · per race',
               path: 'analysis/restart-report/output/tables/restart_by_race.csv',
-              note: `Green-lap movement after each restart at ${trackName}, Bryce against the full field.`
+              note: `Green-lap movement after each restart at ${venueName(trackName)}, Bryce against the full field.`
             },
             {
               label: 'Official caution summaries and lap chart',
@@ -653,12 +653,12 @@ const CautionPrior = ({ trackName }: { trackName: string }) => {
 
   const sourcePill = (
     <SourcePill
-      title={`Cautions at ${trackName}`}
+      title={`Cautions at ${venueName(trackName)}`}
       entries={[
         {
           label: 'Official caution summaries',
           path: 'data/career/career.dataset.json',
-          note: `Full-course cautions at ${trackName} from the official INDY NXT Results-PDF caution summaries: start and end lap, and cause.`
+          note: `Full-course cautions at ${venueName(trackName)} from the official INDY NXT Results-PDF caution summaries: start and end lap, and cause.`
         },
         {
           label: 'Caution atlas · per venue',
@@ -678,7 +678,7 @@ const CautionPrior = ({ trackName }: { trackName: string }) => {
     return (
       <Card title="Cautions here" action={sourcePill}>
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-          His {restartCountWord(races)} {trackName} race{races === 1 ? '' : 's'} ran clean, with no full-course cautions on the books here.
+          His {restartCountWord(races)} {venueName(trackName)} race{races === 1 ? '' : 's'} ran clean, with no full-course cautions on the books here.
         </p>
       </Card>
     );
@@ -1548,7 +1548,7 @@ const LaterThisSeason = ({ events }: { events: UpcomingPrepEvent[] }) => {
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 560 }}>{event.eventName}</div>
                 <div style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
-                  {event.trackName} · {trackTypeLabel(event.trackType)}
+                  {venueName(event.trackName)} · {trackTypeLabel(event.trackType)}
                 </div>
               </div>
               {/* The race's own date, so the day count beside it agrees. */}
@@ -1660,7 +1660,7 @@ export const RaceWeekScreen = () => {
           <p className="screen-head__sub row row--wrap" style={{ gap: 6 }}>
             <span className="row" style={{ gap: 5, whiteSpace: 'nowrap' }}>
               <MapPin size={13} aria-hidden />
-              {primary.trackName}
+              {venueName(primary.trackName)}
             </span>
             · {trackTypeName}
             {asNumber(primary.trackLengthMi) !== null ? <> · {formatNumber(primary.trackLengthMi, 2)} mi</> : null}

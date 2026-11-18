@@ -13,6 +13,7 @@ import { TrackModelSlot } from '../three/TrackModelSlot';
 import { sceneWeatherFor } from '../three/weather/sceneWeather';
 import { loadIndex } from '../three/trackModelLoad';
 import { trackOutlineFor } from '../assets/tracks';
+import { venueName } from '../app/venueNames';
 import { switchValue } from '../review/switches';
 import { chapterTint, raceHref, seriesShort } from './careerExplorer';
 import { enteredBySeries, statusShort, useArchiveRaces, statusWords, unclassifiedRaceFor, unclassifiedTitle, useSheetRaces, type SheetRace } from './careerRaceList';
@@ -686,7 +687,8 @@ const useSheetTrack = (sessionId: string, trackName: string): SheetTrackInfo => 
   const outline = trackOutlineFor(trackName);
   const slug = venueSlugFor(stillIndex, { sessionId, trackName }) ?? outline?.slug ?? null;
   const raced = Boolean(stillIndex && (stillIndex as { bySession?: Record<string, string> }).bySession?.[sessionId]);
-  const name = outline?.name ?? trackName;
+  /* The venue's one name (app/venueNames), the same the race title and every label use. */
+  const name = venueName(outline?.name ?? trackName);
   if (stillIndex === undefined || models === undefined) return { slug, name, kind: 'wait', raced, sessionId };
   const kind = slug && models?.has(slug) ? 'model' : slug && stillIndex?.venues[slug] ? 'still' : outline ? 'line' : 'none';
   return { slug, name, kind, raced, sessionId };
@@ -817,7 +819,7 @@ const Unclassified = ({ sessionId }: { sessionId: string }) => {
               : race.eventStartDate
                 ? `Weekend of ${formatDate(race.eventStartDate, { month: 'long', day: 'numeric', year: 'numeric' })}`
                 : null}
-            {race.trackName ? ` · ${race.trackName}` : null}
+            {race.trackName && !title.startsWith(venueName(race.trackName)) ? ` · ${venueName(race.trackName)}` : null}
           </p>
         </div>
         <SourcePill
@@ -842,7 +844,7 @@ const Unclassified = ({ sessionId }: { sessionId: string }) => {
           <dl className="crs-facts">
             {[
               ['Series', race.seriesName],
-              ['Track', race.trackName],
+              ['Track', venueName(race.trackName ?? '')],
               ['Country', race.country]
             ]
               .filter((entry): entry is [string, string] => Boolean(entry[1]))
@@ -938,7 +940,7 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
   const facts: Array<[string, string]> = [
     ...(race.row.seriesName !== race.row.seriesShort ? ([['Series', race.row.seriesName]] as Array<[string, string]>) : []),
     ...(race.team ? ([['Team', race.team]] as Array<[string, string]>) : []),
-    ['Track', `${race.row.trackName}${race.row.trackType === 'oval' ? ', oval' : ''}`],
+    ['Track', `${venueName(race.row.trackName)}${race.row.trackType === 'oval' ? ', oval' : ''}`],
     ...(conditions ? ([['Conditions', conditions]] as Array<[string, string]>) : []),
     ...(race.points !== null ? ([['Points', String(race.points)]] as Array<[string, string]>) : [])
   ];
@@ -955,7 +957,8 @@ const RaceSheet = ({ sessionId }: { sessionId: string }) => {
           </span>
           <h1 className="screen-head__title crs-head__title">{race.title.replace(' · ', '\u00a0· ')}</h1>
           <p className="crs-head__sub">
-            {dayText(race)} · {race.row.trackName}
+            {dayText(race)}
+            {race.title.startsWith(venueName(race.row.trackName)) ? null : ` · ${venueName(race.row.trackName)}`}
           </p>
         </div>
         <SourcePill

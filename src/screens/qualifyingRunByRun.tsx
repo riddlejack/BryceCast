@@ -13,6 +13,7 @@
  *  The resolution is hoisted into RaceDetailScreen (so the page footer can name
  *  this module's source tier) and passed in; this file only renders it. */
 
+import { venueName } from '../app/venueNames';
 import { useEffect, useMemo, useState } from 'react';
 import { Card, SourcePill, Unavailable } from '../app/components';
 import { ChartTipCard, chartFont, useCoarsePointer, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
@@ -128,7 +129,7 @@ const RunByRunChart = ({ session, height = 208 }: { session: QualiLabSession; he
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label={`Bryce's ${session.venueName} ${session.seasonYear} qualifying laps in session order, fastest lap ${formatLapTime(session.bryceBestSeconds)}`}
+        aria-label={`Bryce's ${venueName(session.venueName)} ${session.seasonYear} qualifying laps in session order, fastest lap ${formatLapTime(session.bryceBestSeconds)}`}
         style={{ fontFamily: chartFont, display: 'block' }}
         onMouseLeave={() => setTip(null)}
         onClick={() => setTip(null)}
@@ -298,7 +299,7 @@ const QualiModule = ({
 
   const totalSessions = coverage.coveredSessions + coverage.excludedSessions;
   const coverageNote = `The lab covers ${coverage.coveredSessions} of ${totalSessions} INDY NXT qualifying sessions across 2024–2026. The other ${coverage.excludedSessions} are set aside: ${coverage.exclusions
-    .map((exclusion) => `${exclusion.venueName} ${exclusion.seasonYear} (${exclusion.note})`)
+    .map((exclusion) => `${venueName(exclusion.venueName)} ${exclusion.seasonYear} (${exclusion.note})`)
     .join('; ')}.`;
 
   const is2026 = session.source === 'timing71';
@@ -337,7 +338,7 @@ const QualiModule = ({
       title={cancelled ? 'His interrupted qualifying run' : 'His qualifying, run by run'}
       action={
         <SourcePill
-          title={`${session.venueName} ${session.seasonYear} qualifying`}
+          title={`${venueName(session.venueName)} ${session.seasonYear} qualifying`}
           entries={entries}
           caveats={runIsOfficial ? ['Official Section Results are time-based timing-loop records, not GPS.'] : ['Third-party derived analytics, never official timing.']}
         />
@@ -419,7 +420,7 @@ const QualiModule = ({
               : `The session’s fastest lap was ${formatLapTime(session.sessionBestSeconds)}.`}
           {captureGap ? ` ${captureGap}` : ''}{' '}
           <span style={{ color: 'var(--ink-muted)' }}>
-            {coarse ? 'Tap' : 'Hover'} a lap for its time. Laps in session order; the line is his best lap so far, the gold dot his fastest. {session.sourceTierLabel}.
+            {coarse ? 'Tap' : 'Hover'} a lap for its time. Laps in session order; the line is his best lap so far, the gold dot his fastest. Source: {session.sourceTierLabel}.
           </span>
         </p>
       </div>
@@ -433,7 +434,7 @@ const QualiPairedNoteCard = ({ note }: { note: QualiPairedNote }) => (
   <Card title="His qualifying, run by run">
     <div>
       <p style={{ margin: 0, fontSize: 13, color: 'var(--ink-secondary)', lineHeight: 1.55 }}>
-        This is {note.notedRaceLabel ?? 'the second race'} of the {note.venueName} {note.seasonYear} doubleheader. Only{' '}
+        This is {note.notedRaceLabel ?? 'the second race'} of the {venueName(note.venueName)} {note.seasonYear} doubleheader. Only{' '}
         {note.capturedRaceLabel ?? 'the first race'}’s qualifying run was captured, and it set a different grid, so there’s
         no separate run-by-run to show for {note.notedRaceLabel ?? 'this race'}.
       </p>

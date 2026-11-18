@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { CalendarClock, ExternalLink, Flag, History, Pause, Play, Radio, RotateCcw, Tv, X } from 'lucide-react';
 import { switchValue } from '../review/switches';
 import {
@@ -1373,7 +1374,7 @@ const LiveOffAir = ({ loading }: { loading: boolean }) => {
           <span className="caption">Next up · {[eventName, sessionName].filter(Boolean).join(' · ')}</span>
           {trackName ? (
             <p style={{ margin: '4px 0 0', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-              {trackName}
+              {venueName(trackName)}
               {raceDay ? ` · race day ${raceDay}` : ''}
             </p>
           ) : null}

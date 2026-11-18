@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { useCoarsePointer, useReducedMotion } from '../app/charts';
 import { sunTake, useTrackWeather, weatherCaption, weatherTake, type SceneWeather } from './weather/sceneWeather';
 import { WeatherRain } from './weather/WeatherRain';
@@ -300,7 +301,7 @@ export const TrackModel3D = ({
           ref={canvasRef}
           className="track3d__canvas"
           tabIndex={0}
-          aria-label={`${name}, a 3D model of the track${sections.length ? ', each section shaded by his pace' : ''}. Arrow keys turn it, plus and minus zoom, 0 goes back to the start view.`}
+          aria-label={`${venueName(name)}, a 3D model of the track${sections.length ? ', each section shaded by his pace' : ''}. Arrow keys turn it, plus and minus zoom, 0 goes back to the start view.`}
           role="img"
         />
         {weather && weather.rainIntensity > 0 && status === 'ready' ? (

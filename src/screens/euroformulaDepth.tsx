@@ -10,6 +10,7 @@
  *
  *  No lap, sector, weather, or team-pace claims: Euro's records hold none. */
 
+import { venueName } from '../app/venueNames';
 import { useMemo, useState } from 'react';
 import { chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord } from '../app/charts';
 import { VenueTipCard, type VenueTip } from '../app/venueCard';
@@ -232,7 +233,7 @@ const EuroVenues = ({ races }: { races: EuroRace[] }) => {
             <>
               <span className="tower__name" style={{ whiteSpace: 'normal' }}>
                 <span aria-hidden style={{ width: 7, height: 7, borderRadius: '50%', background: EURO_TINT, opacity: 0.6, flex: 'none' }} />
-                {venue.trackName}
+                {venueName(venue.trackName)}
               </span>
               <span className="tower__gap">{venue.races}</span>
               <span className="tower__gap">{venue.bestFinish !== null ? `P${venue.bestFinish}` : '—'}</span>
