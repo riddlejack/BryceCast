@@ -65,6 +65,8 @@ const sources = {
   careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
   careerLifeStatsFigures: 'analysis/career-life-stats/output/career_figures.json',
   careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv',
+  careerRaceWeatherOutput: 'analysis/career-weather/output/race-weather.json',
+  careerRaceWeatherBuilderScript: 'scripts/build-career-race-weather.mjs',
   careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
   careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
   careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
@@ -3450,6 +3452,10 @@ const buildPackage = () => {
   const careerLifeStatsTireEstimate = readCsv(sources.careerLifeStatsTireEstimate);
   const careerFigures = readJson(sources.careerLifeStatsFigures);
   const careerAtlas = readJson(sources.careerAtlasOutput);
+  /* Weather for every race, one record per race session (scripts/build-career-race-weather.mjs):
+   * Open-Meteo reanalysis over the official session window, modelled; an official
+   * series report decides wet or dry where one exists. */
+  const careerRaceWeather = readJson(sources.careerRaceWeatherOutput);
   const restartReportSummary = readJson(sources.restartReportSummary);
   const restartByRaceRows = readCsv(sources.restartReportByRace);
   const qualifyingLayerSummary = readJson(sources.qualifyingLayerSummary);
@@ -3865,6 +3871,34 @@ const buildPackage = () => {
             sourceRef('careerResultConversion', 'Career Lab conversion context; A2 restores four unclassified canonical race rows for atlas counts.'),
             sourceRef('careerAtlasBuilderScript', 'Deterministic career crop, full-world globe texture, projection, clipping, and simplification.'),
             sourceRef('careerAtlasValidatorScript', 'Provenance, globe-texture determinism, coordinate coverage, and lineage gates.')
+          ]
+        },
+        raceWeather: Object.fromEntries((careerRaceWeather.races ?? []).map((row) => [row.sessionId, {
+          sessionId: row.sessionId,
+          window: row.window,
+          sky: row.sky,
+          wetDry: row.wetDry ?? null,
+          wetDrySource: row.wetDrySource ?? null,
+          rainMm: numberOrNull(row.rainMm),
+          cloudPct: numberOrNull(row.cloudPct),
+          windKph: numberOrNull(row.windKph),
+          gustKph: numberOrNull(row.gustKph),
+          windFromDeg: numberOrNull(row.windFromDeg),
+          tempC: numberOrNull(row.tempC),
+          source: row.source,
+          /* The official condition words, where the series reported them. */
+          seriesReport: row.seriesReport ? { conditionRaw: row.seriesReport.conditionRaw ?? null, source: row.seriesReport.source ?? null, url: row.seriesReport.url ?? null } : null
+        }])),
+        raceWeatherSummary: {
+          schemaVersion: careerRaceWeather.schemaVersion,
+          source: careerRaceWeather.source,
+          grain: careerRaceWeather.grain,
+          rules: careerRaceWeather.rules,
+          coverage: careerRaceWeather.coverage,
+          calibration: careerRaceWeather.calibration,
+          sourceRefs: [
+            sourceRef('careerRaceWeatherOutput', 'Per-race weather over the official session window: Open-Meteo reanalysis (modelled) with the official series condition report deciding wet or dry where one exists.'),
+            sourceRef('careerRaceWeatherBuilderScript', 'Windowing, hourly aggregation, sky and wet/dry rules, and the calibration against official reports.')
           ]
         },
         lifeStats: {

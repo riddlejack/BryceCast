@@ -46,6 +46,56 @@ export interface UiUnclassifiedRace {
   trackType?: string | null;
 }
 
+/** Weather over one race, from its official start to start + its length (`window.basis`
+ *  'session_sheet'), or 09:00-18:00 local on race day ('race_day'). The figures are
+ *  Open-Meteo hourly reanalysis (ERA5), always `source.tier` 'modelled'. Wet or dry comes
+ *  from the official series condition report where one exists (`wetDrySource`
+ *  'series_report'), else from the reanalysis rain (wet at 0.5 mm or more; it never says
+ *  mixed). A modelled dry is weak evidence: see raceWeatherSummary.calibration. */
+export interface UiRaceWeather {
+  sessionId: string;
+  window: { start: string; end: string; basis: 'session_sheet' | 'race_day' };
+  sky: 'clear' | 'partly' | 'overcast' | 'rain' | 'storm';
+  wetDry: 'wet' | 'dry' | 'mixed' | null;
+  wetDrySource: 'series_report' | 'reanalysis' | null;
+  rainMm: number | null;
+  cloudPct: number | null;
+  windKph: number | null;
+  gustKph: number | null;
+  /** The direction the wind blows FROM, degrees clockwise from north. */
+  windFromDeg: number | null;
+  tempC: number | null;
+  source: { name: string; tier: 'observed' | 'modelled'; url: string | null };
+  /** The official condition words ("Wet", "Damp"), where the series reported them. */
+  seriesReport: { conditionRaw: string | null; source: string | null; url: string | null } | null;
+}
+
+export interface UiRaceWeatherSummary {
+  schemaVersion: string;
+  source: string;
+  grain: string;
+  rules: Record<string, string>;
+  coverage: {
+    races: number;
+    byBasis: Record<string, number>;
+    byWetDrySource: Record<string, number>;
+    bySky: Record<string, number>;
+    skipped: Array<{ sessionId: string; reason: string }>;
+  };
+  calibration: {
+    races: number;
+    agree: number;
+    officialWetOrMixed: number;
+    modelCaughtWetOrMixed: number;
+    officialDry: number;
+    modelCalledDry: number;
+    allDryBaselineAgree: number;
+    skyRainAgree: number;
+    note: string;
+  };
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiCareerMoment {
   sessionId: string;
   shortLabel: string;
@@ -1440,6 +1490,9 @@ export interface UiDataPackage {
       qualifyingLayer: UiQualifyingLayer;
       cautionAtlas: UiCautionAtlas;
       atlas: UiCareerAtlas;
+      /** Every race of the record, INDY NXT included, keyed by sessionId. */
+      raceWeather: Record<string, UiRaceWeather>;
+      raceWeatherSummary: UiRaceWeatherSummary;
       lifeStats: UiCareerLifeStats;
       caveats: string[];
       sourceRefs: UiSourceRef[];
