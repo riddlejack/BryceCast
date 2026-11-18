@@ -1,0 +1,20 @@
+{
+  "lane": "career-round2-climb",
+  "entries": [
+    {
+      "id": "r2-climb",
+      "page": "/career",
+      "title": "The climb, race by race, redone: a staircase that builds itself, every one of the 173 races on it",
+      "switch": "climb",
+      "values": [
+        { "value": null, "label": "the staircase (default): a step per series in the order he raced them, every race a dot on its step, higher the more of the field he beat; it builds race by race when it scrolls in" },
+        { "value": "field", "label": "the field: every race's field as a bar hanging from P1, his place notched, the cars he beat in his series' colour" },
+        { "value": "old", "label": "the climb as it was (percentile dots, chapter bands, form line)" }
+      ],
+      "look": "Career → The climb, race by race. Scroll it in and watch the stairs build (the count ticks to 173). Point at (or tap) any dot: its card, with the track's 3D still where the venue is modelled; click (or tap again) to open the race. The crosses are the 8 races with no classified finish.",
+      "anchor": ".climb-section",
+      "added": "2026-11-17T23:30",
+      "reviewed": false
+    }
+  ]
+}
