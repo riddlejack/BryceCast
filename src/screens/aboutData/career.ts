@@ -23,14 +23,14 @@ export const SERIES_ORDER = [
 /* The Career page's chapter tints (careerExplorer.tsx chapterTints), by series id.
  * Kept here, not imported, so these light pages don't pull the Career modules in. */
 const TINT: Record<string, string> = {
-  series_scca_super_tour: 'var(--chapter-f1600)',
+  series_scca_super_tour: 'var(--chapter-scca)',
   series_frp_f1600: 'var(--chapter-f1600)',
-  series_rcffs: 'var(--chapter-f1600)',
+  series_rcffs: 'var(--chapter-rcffs)',
   series_formula_ford: 'var(--chapter-ff)',
   series_gb3: 'var(--chapter-gb3)',
   series_euroformula_open: 'var(--chapter-euro)',
   series_froc: 'var(--chapter-fro)',
-  series_usf_pro_2000: 'var(--chapter-fro)',
+  series_usf_pro_2000: 'var(--chapter-usf)',
   series_imsa_weathertech: 'var(--chapter-imsa)',
   series_indy_nxt: 'var(--chapter-indy)'
 };
