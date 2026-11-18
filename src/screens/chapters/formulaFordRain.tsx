@@ -119,7 +119,14 @@ export const FormulaFordRain = () => {
   const longBreak = Math.max(0, ...groups.map((group) => group.breakBefore));
   const breakMonths = Math.round(longBreak / 30.44);
 
-  const phone = width > 0 && width < 520;
+  /* The columns' width at this size (as the desktop layout below lays them out). A column narrower than its finish
+   * label ("DNF", "P11": about 25 px at 12 px) can't hold it without running into the next, so below that the
+   * chart turns to a row per race, as on a phone. */
+  const MEETING_GAP = 8;
+  const BREAK_W = 70;
+  const breakCount = groups.filter((group) => group.breakBefore).length;
+  const columnW = (width - MEETING_GAP * (groups.length - 1 - breakCount) - BREAK_W * breakCount) / Math.max(marks.length, 1);
+  const phone = width > 0 && (width < 520 || columnW < 26);
   const eventOf = (sessionId: string): string =>
     String(
       (lab.resultConversion ?? []).find((row) => row.sessionId === sessionId)?.eventName ??
@@ -152,7 +159,12 @@ export const FormulaFordRain = () => {
     </p>
   );
 
-  const foot = (
+  const foot = phone ? (
+    <>
+      A row for every race he started, the rain as the series reported the track falling across it: dense for wet, sparse for damp, thinning for drying, none for
+      dry; his finish on the right. <PointerWord mouse="Hover" touch="Tap" /> a race for its track.
+    </>
+  ) : (
     <>
       A column of sky for every race he started, the rain as the series reported the track: dense for wet, sparse for damp, thinning for drying, none for dry; his
       finish underneath. <PointerWord mouse="Hover" touch="Tap" /> a race for its track.
@@ -163,16 +175,21 @@ export const FormulaFordRain = () => {
   if (phone) {
     const rowH = 22;
     const breakH = 24;
+    const meetingH = 20;
     const dateW = 56;
     const finishW = 40;
     let yy = 4;
     const placed = groups.flatMap((group, g) => {
       if (group.breakBefore) yy += breakH;
       else if (g > 0) yy += 6;
-      return group.marks.map((mark) => {
+      /* The big meetings get their name above their rows, so the weekends can be found. */
+      const meeting = meetingLabel(group);
+      const meetingAt = meeting ? yy : null;
+      if (meeting) yy += meetingH;
+      return group.marks.map((mark, k) => {
         const y = yy;
         yy += rowH;
-        return { mark, y, breakAt: group.breakBefore && mark === group.marks[0] ? y - breakH : null };
+        return { mark, y, breakAt: group.breakBefore && k === 0 ? (meetingAt ?? y) - breakH : null, meeting: k === 0 ? meeting : null, meetingAt: k === 0 ? meetingAt : null };
       });
     });
     const height = yy + 6;
@@ -186,7 +203,7 @@ export const FormulaFordRain = () => {
             <Signature className="chs-rain" tip={card.tip} width={width} tap={card.tap} venues={() => marks.map((mark) => ({ sessionId: mark.sessionId, trackName: mark.kind === 'race' ? mark.row.trackName : mark.race.trackName }))} foot={foot}>
               {width > 0 ? (
                 <svg width={width} height={height} role="img" aria-label={`Formula Ford: ${marks.length} races, the rain in each as the series reported it`}>
-                  {placed.map(({ mark, y, breakAt }, i) => {
+                  {placed.map(({ mark, y, breakAt, meeting, meetingAt }, i) => {
                     const hot = card.hot === mark.sessionId;
                     const delay = reduced ? 0 : 150 + i * 40;
                     return (
@@ -194,6 +211,11 @@ export const FormulaFordRain = () => {
                         {breakAt !== null ? (
                           <text x={bandX} y={breakAt + 15} className="chs-axis">
                             {countWord(breakMonths)} months
+                          </text>
+                        ) : null}
+                        {meeting && meetingAt !== null ? (
+                          <text x={bandX} y={meetingAt + 14} className="chs-label">
+                            {meeting}
                           </text>
                         ) : null}
                         <text x={0} y={y + 15} className="chs-axis">
@@ -231,8 +253,8 @@ export const FormulaFordRain = () => {
 
   /* Desktop: a column per race, left to right in time, meetings spaced apart, the long winter folded. */
   const left = 0;
-  const meetingGap = 8;
-  const breakW = 70;
+  const meetingGap = MEETING_GAP;
+  const breakW = BREAK_W;
   const inner = width - left;
   const nBreaks = groups.filter((group) => group.breakBefore).length;
   const colW = Math.min(30, (inner - meetingGap * (groups.length - 1 - nBreaks) - breakW * nBreaks) / marks.length);
