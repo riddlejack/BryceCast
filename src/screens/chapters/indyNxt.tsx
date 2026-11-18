@@ -6,7 +6,7 @@
 
 import { useMemo } from 'react';
 import { PointerWord, useMeasuredWidth } from '../../app/charts';
-import { useCareerRows } from '../careerExplorer';
+import { useCareerRows, type CareerRow } from '../careerExplorer';
 import { openOf, rowTip, Signature, tintOf, useEntrance, useRaceCard, EASE } from './common';
 
 const SERIES = 'series_indy_nxt';
@@ -32,11 +32,29 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
   const phone = width > 0 && width < 520;
   const left = phone ? 44 : 52;
   const right = 10;
-  const rowH = phone ? 40 : 44;
+  const rowH = phone ? 56 : 44;
   const top = 8;
   const height = top + rowH * seasons.length + 26;
   const r = 3.6;
   const x = (share: number) => left + r + Math.min(1, Math.max(0, share)) * (width - left - right - 2 * r);
+  /* Beeswarm within the row: a race whose dot would land on another's moves across the row (up, then down,
+   * further each time), never along the share scale, so every race keeps its own dot and its own tap. */
+  const spacing = phone ? 13 : 10;
+  const reach = rowH / 2 - 6;
+  const swarm = (list: CareerRow[]) => {
+    const placed: Array<{ row: CareerRow; cx: number; dy: number }> = [];
+    for (const row of [...list].sort((a, b) => a.percentile - b.percentile || a.date.localeCompare(b.date))) {
+      const cx = x(row.percentile);
+      const offsets = [0, -0.5, 0.5, -1, 1, -1.5, 1.5, -2, 2].map((k) => k * spacing).filter((dy) => Math.abs(dy) <= reach);
+      const dy = offsets.find((o) => placed.every((p) => Math.hypot(p.cx - cx, p.dy - o) >= spacing)) ?? offsets[offsets.length - 1];
+      placed.push({ row, cx, dy });
+    }
+    /* Each race's tap reaches halfway to its nearest neighbour, so no target covers another's dot. */
+    return placed.map((p) => {
+      const nearest = Math.min(...placed.filter((q) => q !== p).map((q) => Math.hypot(q.cx - p.cx, q.dy - p.dy)), 40);
+      return { ...p, hit: Math.max(r + 1, Math.min(phone ? 12 : 9, nearest / 2)) };
+    });
+  };
 
   return (
     <>
@@ -51,7 +69,7 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
             venues={() => seasons.flatMap((season) => season.rows.map((row) => ({ sessionId: row.sessionId, trackName: row.trackName })))}
             foot={
               <>
-                A row a season; each race placed by how many of the other cars he finished ahead of, the dark tick the season’s middle race.{' '}
+                A row a season; each race placed by how many of the other cars he finished ahead of (races that tie step up or down the row), the dark tick the season’s middle race.{' '}
                 <PointerWord mouse="Hover" touch="Tap" /> a race for its track.
               </>
             }
@@ -66,15 +84,15 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
                         {season.year}
                       </text>
                       <line x1={left} x2={width - right} y1={cy} y2={cy} className="chs-hair" strokeOpacity={0.14} />
-                      {season.rows.map((row, k) => {
-                        const cx = x(row.percentile);
+                      {swarm(season.rows).map(({ row, cx, dy, hit }, k) => {
                         const hot = card.hot === row.sessionId;
                         const running = row.status === 'running';
+                        const y = cy + dy;
                         return (
                           <g key={row.sessionId}>
                             <circle
                               cx={cx}
-                              cy={cy}
+                              cy={y}
                               r={hot ? r + 1.4 : r}
                               fill={running ? tint : 'var(--surface-0)'}
                               fillOpacity={running ? (hot ? 1 : 0.6) : 1}
@@ -82,18 +100,18 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
                               strokeWidth={1.2}
                               style={{
                                 opacity: settled ? 1 : 0,
-                                transform: settled ? 'none' : `translateX(${x(season.median) - cx}px)`,
+                                transform: settled ? 'none' : `translate(${x(season.median) - cx}px, ${-dy}px)`,
                                 transition: `opacity 200ms ease ${reduced ? 0 : s * 200}ms, transform 700ms ${EASE} ${reduced ? 0 : s * 200 + k * 12}ms`
                               }}
                             />
-                            <rect
-                              x={cx - 5}
-                              y={cy - rowH / 2 + 6}
-                              width={10}
-                              height={rowH - 12}
+                            <circle
+                              cx={cx}
+                              cy={y}
+                              r={hit}
                               fill="transparent"
                               style={{ cursor: 'pointer' }}
-                              {...card.bind(row.sessionId, () => rowTip(row, cx, cy - 8, cy + 8), openOf(row))}
+                              data-race={row.sessionId}
+                              {...card.bind(row.sessionId, () => rowTip(row, cx, y - 8, y + 8), openOf(row))}
                             />
                           </g>
                         );
