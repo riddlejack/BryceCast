@@ -1,18 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { SourcePill, Stat, TickerValue, Unavailable } from '../app/components';
-import {
-  ChartTipCard,
-  PointerWord,
-  sentence,
-  useCoarsePointer,
-  useInViewOnce,
-  useMeasuredWidth,
-  useReducedMotion,
-  type ChartTip
-} from '../app/charts';
-import { TAP_CARD, TapAction, useTapPreview, useTouchPlacement, type TapPreview } from '../app/tapPreview';
-import { useVenuePicture, type VenueRef } from '../app/venuePeek';
+import { PointerWord, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../app/charts';
+import { useTapPreview } from '../app/tapPreview';
 import { useRouter } from '../app/router';
+import { VenueTipCard } from '../app/venueCard';
+import { beatLine, placeLine } from '../app/raceFacts';
+import { raceName } from './careerRaceNames';
 import { asNumber, asString, formatNumber, formatPct } from '../app/format';
 import {
   uiDataPackage,
@@ -388,59 +381,6 @@ const racesBySeries = (lifeStats: UiCareerLifeStats): Array<{ seriesId: string; 
 
 type Hot = string | null;
 
-/** The card a mark at a track opens: its still where one exists, then the words. */
-const OdoCard = ({
-  x,
-  y,
-  under,
-  tap,
-  venue,
-  swatch,
-  meta,
-  title,
-  action,
-  children
-}: {
-  x: number;
-  y: number;
-  under: number;
-  tap: TapPreview;
-  venue?: VenueRef;
-  swatch?: string;
-  meta?: ReactNode;
-  title: ReactNode;
-  action?: string;
-  children?: ReactNode;
-}) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const picture = useVenuePicture(venue ?? {});
-  const coarse = useCoarsePointer();
-  const touch = coarse || tap.armed !== null;
-  const place = useTouchPlacement(ref, x, y, under, `${String(title)}|${String(meta)}|${picture ? picture.src600 : String(picture)}|${tap.openArmed ? 1 : 0}`);
-  return (
-    <div
-      ref={ref}
-      className="odo-card"
-      style={{ ...place, pointerEvents: tap.armed !== null ? 'auto' : 'none' }}
-      {...{ [TAP_CARD]: '' }}
-      role="status"
-    >
-      {picture ? <img className="odo-card__still" src={picture.src600} width={picture.width} height={picture.height} alt="" decoding="async" /> : null}
-      <div className="odo-card__body">
-        {meta ? (
-          <span className="odo-card__meta">
-            {swatch ? <i aria-hidden style={{ background: swatch }} /> : null}
-            {meta}
-          </span>
-        ) : null}
-        <strong className="odo-card__title">{title}</strong>
-        {children}
-        {touch ? <TapAction tap={tap} label={null} fallback={action ?? 'open the race'} /> : action ? <span className="odo-card__action">Click to {action}</span> : null}
-      </div>
-    </div>
-  );
-};
-
 /** Where a mark sits inside the figure: its centre-top and its bottom. */
 const markBox = (mark: Element, figure: Element | null) => {
   const box = mark.getBoundingClientRect();
@@ -499,7 +439,7 @@ const SeriesVisual = ({ lifeStats }: { lifeStats: UiCareerLifeStats }) => {
         ))}
         {hotRow ? (
           <span className="odo-read odo-legend__line">
-            <b>{seriesMetaById(hotRow.seriesId).name}</b>
+            <b>{seriesMetaById(hotRow.seriesId).short}</b>
             {': '}
             {hotRow.races} {hotRow.races === 1 ? 'race' : 'races'}
             {years.get(hotRow.seriesId) ? `, ${yearsOf(years.get(hotRow.seriesId)!.from, years.get(hotRow.seriesId)!.to)}` : ''}
@@ -786,7 +726,14 @@ const PlacesVisual = () => {
     setHot({ country, venue, ...markBox(target, figureRef.current) });
   };
   const hotList = hot ? countries.find(([name]) => name === hot.country)?.[1] ?? [] : [];
-  const shown = hot ? hot.venue ?? hotList[0] ?? null : null;
+  /* A country's card shows the track he raced most there; a dot's, its own. */
+  const mostRaced = hotList.reduce<AtlasVenue | null>((best, venue) => (!best || venue.raceCount > best.raceCount ? venue : best), null);
+  const shown = hot ? hot.venue ?? mostRaced : null;
+  const countryRaces = hotList.reduce((sum, venue) => sum + venue.raceCount, 0);
+  const countryYears = hotList.length
+    ? yearsOf(Math.min(...hotList.map((venue) => venue.firstYear)), Math.max(...hotList.map((venue) => venue.lastYear)))
+    : '';
+  const plural = (n: number, word: string) => `${n} ${n === 1 ? word : `${word}s`}`;
   return (
     <figure
       ref={figureRef}
@@ -834,34 +781,32 @@ const PlacesVisual = () => {
         <span className="odo-legend__note">One dot is one track, coloured by country</span>
       </figcaption>
       {hot && shown ? (
-        <OdoCard
-          x={hot.x}
-          y={hot.y}
-          under={hot.under}
+        <VenueTipCard
           tap={tap}
-          venue={{ trackName: shown.trackName, trackId: shown.trackIds[0] ?? null }}
-          swatch={countryTint(hot.country)}
-          meta={`${hot.country} · ${hotList.length} ${hotList.length === 1 ? 'track' : 'tracks'}`}
-          title={shown.trackName}
-        >
-          <span className="odo-card__nums">
-            {shown.raceCount} {shown.raceCount === 1 ? 'race' : 'races'}, {yearsOf(shown.firstYear, shown.lastYear)} ·{' '}
-            {shown.seriesSpans.map((span) => span.seriesShort).join(', ')}
-          </span>
-          {hotList.length > 1 ? (
-            <span className="odo-card__list">
-              {hotList.map((venue) => (
-                <span key={venue.venueId} className={venue.venueId === shown.venueId ? 'odo-card__list-on' : undefined}>
-                  {venue.trackName}
-                </span>
-              ))}
-            </span>
-          ) : null}
-        </OdoCard>
+          tip={{
+            x: hot.x,
+            y: hot.y,
+            under: hot.under,
+            venue: { trackName: shown.trackName, trackId: shown.trackIds[0] ?? null },
+            meta: hot.venue ? hot.country : plural(hotList.length, 'track'),
+            tint: countryTint(hot.country),
+            title: hot.venue ? shown.trackName : hot.country,
+            detail: hot.venue
+              ? `${plural(shown.raceCount, 'race')}, ${yearsOf(shown.firstYear, shown.lastYear)} · ${shown.seriesSpans.map((span) => span.seriesShort).join(', ')}`
+              : `${plural(countryRaces, 'race')}, ${countryYears}`,
+            note: hot.venue ? null : `Pictured: ${shown.trackName}, where he raced most`
+          }}
+        />
       ) : null}
     </figure>
   );
 };
+
+/** Display only: the results sheets' "RobinsonII" and "McCULLOUGH" read as names. */
+const driverName = (name: string): string =>
+  name
+    .replace(/([a-z])(II|III|IV|Jr\.?|Sr\.?)$/, '$1 $2')
+    .replace(/\b(Mc|Mac)([A-Z])([A-Z]+)\b/g, (_m, pre: string, first: string, rest: string) => `${pre}${first}${rest.toLowerCase()}`);
 
 const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers: UiCareerOtherDrivers | undefined }) => {
   const all = figureById(figures, 'otherDriverRecords')?.value ?? 0;
@@ -869,6 +814,9 @@ const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const tap = useTapPreview();
   const [hot, setHot] = useState<number | null>(null);
+  /* A series chip in the key lights the drivers he first raced there. */
+  const chipTap = useTapPreview();
+  const [focus, setFocus] = useState<string | null>(null);
   if (!all) return <div className="odo-visual" />;
   const daytonaOnly = all - single;
   const pitch = 7;
@@ -889,26 +837,32 @@ const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers
     return index;
   };
   const hotRow = hot !== null ? rowsData[hot] : undefined;
-  const tip: ChartTip | null =
-    hot !== null && hotRow
+  const hotSeries = hotRow ? seriesMetaById(drivers!.series[hotRow[1]]) : null;
+  const tip =
+    hot !== null && hotRow && hotSeries
       ? {
           ...(({ cx, cy }) => ({ x: cx, y: cy - 4, under: cy + 6 }))(at(hot)),
-          title: hotRow[4] === 'artifact' ? `“${hotRow[0]}”` : hotRow[0],
+          meta: `${hotSeries.short} · ${hotRow[2]}`,
+          tint: hotSeries.tint,
+          title: hotRow[4] === 'artifact' ? `“${hotRow[0]}”` : driverName(hotRow[0]),
           detail:
             hotRow[4] === 'artifact'
               ? 'a misread line on one results sheet, not a person'
-              : `${hot < single ? 'first raced him' : 'only at'} ${hot < single ? `in ${seriesMetaById(drivers!.series[hotRow[1]]).short}, ${hotRow[2]}` : `Daytona, ${hotRow[2]}`}${
-                  hotRow[3] > 1 ? ` · ${hotRow[3]} races together` : ''
-                }${hotRow[4] === 'variant' ? ' · likely one driver under two spellings' : ''}`
+              : hot < single
+                ? `first raced him here · ${hotRow[3]} ${hotRow[3] === 1 ? 'race' : 'races'} together`
+                : `met only at the Daytona 24 Hours`,
+          note: hotRow[4] === 'variant' ? 'likely one driver under two spellings' : null
         }
       : null;
   const firstSeries = drivers ? seriesOrder.filter((id) => drivers.series.includes(id) && id !== 'series_imsa_weathertech') : [];
+  const seriesOf = (index: number) => (rowsData[index] ? drivers!.series[rowsData[index][1]] : null);
+  const metHere = (id: string) => rowsData.filter((row, index) => index < single && drivers!.series[row[1]] === id).length;
   return (
     <figure
       className="odo-visual"
       aria-label={`${all} other driver names: ${single} in his single-seater races, ${daytonaOnly} met only at the Daytona 24-hour race.`}
     >
-      <div ref={ref} className="odo-people" style={{ position: 'relative' }}>
+      <div ref={ref} className={`odo-people${focus ? ' odo-people--focus' : ''}`} style={{ position: 'relative' }}>
         {width > 0 ? (
           <svg
             width={cols * pitch}
@@ -930,21 +884,38 @@ const PeopleVisual = ({ figures, drivers }: { figures: UiCareerFigure[]; drivers
                 cy={at(index).cy}
                 r={2.4}
                 fill={tint(index)}
-                className={index < single ? 'odo-people__dot' : 'odo-people__dot odo-people__dot--daytona'}
+                className={`odo-people__dot${index < single ? '' : ' odo-people__dot--daytona'}${focus && seriesOf(index) !== focus ? ' odo-people__dot--off' : ''}`}
               />
             ))}
             {hot !== null ? (
-              <circle cx={at(hot).cx} cy={at(hot).cy} r={4.6} fill={tint(hot)} stroke="var(--paper)" strokeWidth={1.5} pointerEvents="none" />
+              <g pointerEvents="none">
+                <circle cx={at(hot).cx} cy={at(hot).cy} r={6.2} fill="none" stroke="var(--ink)" strokeWidth={1.4} />
+                <circle cx={at(hot).cx} cy={at(hot).cy} r={4.6} fill={tint(hot)} stroke="var(--paper)" strokeWidth={1.2} />
+              </g>
             ) : null}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={cols * pitch} tap={tap} /> : null}
+        {tip ? <VenueTipCard tip={tip} tap={tap} /> : null}
       </div>
       <figcaption className="odo-legend">
-        <span title={firstSeries.map((id) => seriesMetaById(id).short).join(', ')}>
-          <i aria-hidden className="odo-key odo-key--spectrum" />
-          coloured by the series they first raced him in
+        <span className="odo-chips">
+          {firstSeries.map((id) => (
+            <i
+              key={id}
+              className={`odo-chip${focus === id ? ' odo-chip--on' : ''}`}
+              style={{ background: seriesMetaById(id).tint }}
+              aria-label={seriesMetaById(id).short}
+              {...chipTap.target(id, { show: () => setFocus(id), hide: () => setFocus(null) })}
+            />
+          ))}
         </span>
+        {focus ? (
+          <span className="odo-read">
+            <b>{seriesMetaById(focus).short}</b>: {metHere(focus)} drivers first raced him here
+          </span>
+        ) : (
+          <span>the series they first raced him in</span>
+        )}
         <span>
           <i aria-hidden className="odo-key odo-key--dot-daytona" />
           only at Daytona ({daytonaOnly})
@@ -967,8 +938,10 @@ const IncidentsVisual = () => {
           trackName: asString(row.trackName) ?? '',
           date: asString(row.eventStartDate) ?? '',
           label: asString(row.raceLabel) ?? '',
+          event: asString(row.eventName) ?? asString(row.raceLabel) ?? '',
           status: asString(row.status) ?? 'running',
-          finish: asNumber(row.finishPosition)
+          finish: asNumber(row.finishPosition),
+          field: asNumber(row.fieldSize)
         }))
         .sort((a, b) => a.date.localeCompare(b.date) || a.label.localeCompare(b.label, 'en', { numeric: true })),
     []
@@ -977,8 +950,9 @@ const IncidentsVisual = () => {
   const years = [...new Set(rows.map((row) => row.date.slice(0, 4)))];
   const contact = rows.filter((row) => row.status === 'contact').length;
   const mechanical = rows.filter((row) => row.status === 'mechanical').length;
-  const outcome = (row: (typeof rows)[number]) =>
-    row.status === 'running' ? (row.finish ? `finished ${ordinal(row.finish)}` : 'finished') : row.status === 'contact' ? 'out after contact' : 'out with a mechanical failure';
+  const ending = (row: (typeof rows)[number]) => (row.status === 'running' ? null : `ended early: ${row.status}`);
+  const finishLine = (row: (typeof rows)[number]) =>
+    [placeLine(row.finish, row.field), row.status === 'running' ? beatLine(row.finish, row.field) : null].filter(Boolean).join(' · ') || null;
   const hotRow = hot ? rows[hot.index] : null;
   return (
     <figure
@@ -1025,19 +999,21 @@ const IncidentsVisual = () => {
         <span className="odo-legend__note">One square is one INDY NXT race</span>
       </figcaption>
       {hot && hotRow ? (
-        <OdoCard
-          x={hot.x}
-          y={hot.y}
-          under={hot.under}
+        <VenueTipCard
           tap={tap}
-          venue={{ sessionId: hotRow.sessionId, trackName: hotRow.trackName }}
-          swatch="var(--chapter-indy)"
-          meta={`INDY NXT · ${hotRow.date.slice(0, 4)}`}
-          title={hotRow.label}
-          action="open the race"
-        >
-          <span className={`odo-card__nums${hotRow.status !== 'running' ? ' odo-card__nums--out' : ''}`}>{sentence(outcome(hotRow))}</span>
-        </OdoCard>
+          tip={{
+            x: hot.x,
+            y: hot.y,
+            under: hot.under,
+            venue: { sessionId: hotRow.sessionId, trackName: hotRow.trackName },
+            meta: `INDY NXT · ${hotRow.date.slice(0, 4)}`,
+            tint: 'var(--chapter-indy)',
+            title: raceName({ eventName: hotRow.event, sessionId: hotRow.sessionId, trackName: hotRow.trackName }).title,
+            detail: finishLine(hotRow),
+            note: ending(hotRow),
+            action: hotRow.sessionId ? 'open the race' : null
+          }}
+        />
       ) : null}
     </figure>
   );

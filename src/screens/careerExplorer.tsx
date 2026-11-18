@@ -51,21 +51,20 @@ const seriesShortNames: Record<string, string> = {
 
 export const seriesShort = (name: string): string => seriesShortNames[name] ?? name;
 
-/* Chapter identity color: one tint per era, gold for INDY NXT, the current
- * chapter (round 2). Values live in theme.css ("the road", with other versions
- * behind the `palette` switch) and pass the dataviz six-checks validator. The
- * three one-off series fold into their era's tint rather than adding hues:
- * the 2019 Formula F races (SCCA, RCFFS) share F1600's, the 2024 USF Pro 2000
- * race shares FR Oceania's. */
+/* Series identity colour: one swatch per series, gold for INDY NXT, the
+ * current chapter (round 2 fix pass). Values live in theme.css ("the road",
+ * with other versions behind the `palette` switch) and pass the dataviz
+ * six-checks validator. The three 2019 Formula F series (SCCA, F1600, RCFFS)
+ * are dark, mid and light steps of one hue: one car class. */
 const chapterTints: Record<string, string> = {
-  'Hoosier SCCA Super Tour': 'var(--chapter-f1600)',
+  'Hoosier SCCA Super Tour': 'var(--chapter-scca)',
   'F1600 Championship Series': 'var(--chapter-f1600)',
-  'Right Coast Formula F Series': 'var(--chapter-f1600)',
+  'Right Coast Formula F Series': 'var(--chapter-rcffs)',
   'Formula Ford': 'var(--chapter-ff)',
   'GB3 Championship': 'var(--chapter-gb3)',
   'Euroformula Open': 'var(--chapter-euro)',
   'Castrol Toyota Formula Regional Oceania Championship': 'var(--chapter-fro)',
-  'USF Pro 2000 Championship': 'var(--chapter-fro)',
+  'USF Pro 2000 Championship': 'var(--chapter-usf)',
   'IMSA WeatherTech SportsCar Championship': 'var(--chapter-imsa)',
   'INDY NXT': 'var(--chapter-indy)'
 };
