@@ -1,4 +1,4 @@
-import { createReadStream, statSync } from 'node:fs';
+import { createReadStream } from 'node:fs';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { gzipSync, brotliCompressSync, constants as zlibConstants } from 'node:zlib';
@@ -9,6 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { bryceCarNumber, isBryceProfile, isBryceTimingRow, isIndyNxtTimingHeartbeat, liveSourceEndpoints, raceSnapshotEndpoints } from './live-source-endpoints.mjs';
 import { buildPointsProjectionState } from './live-points-state.mjs';
+import { archiveSignatureOf } from './lib/archive-signature.mjs';
 import { createReplayOverlay } from './lib/replay-overlay.mjs';
 import { createLakeReplayFeeds } from './lib/replay-lake-feeds.mjs';
 import { createReplayRouter } from './lib/replay-router.mjs';
@@ -1209,6 +1210,33 @@ const buildReplaySummary = (rows) => {
   };
 };
 
+// The archived sample columns every replay reader returns. Older archives lack
+// some of the later columns; those read as NULL.
+const replaySampleSelectList = (db) => {
+  const sampleColumns = new Set(db.prepare('PRAGMA table_info(bryce_samples)').all().map((column) => column.name));
+  const sampleColumn = (column) => (sampleColumns.has(column) ? `b.${column}` : `NULL AS ${column}`);
+  return `b.checked_at, b.session_key, b.rank, b.live_rank, b.start_position, b.laps, b.status, b.comment,
+                 b.gap, b.live_gap, b.diff, b.best_lap_time, ${sampleColumn('best_lap')}, b.last_lap_time,
+                 b.best_speed, b.last_speed, ${sampleColumn('average_speed')}, b.passes, b.passed,
+                 b.pit_stops, ${sampleColumn('last_pit_lap')}, ${sampleColumn('since_pit_lap')},
+                 ${sampleColumn('tire')}, ${sampleColumn('overtake_remain')}, ${sampleColumn('overtake_active')},
+                 ${sampleColumn('lap_distance')}, ${sampleColumn('live_diff_ahead')}, ${sampleColumn('live_diff_behind')},
+                 ${sampleColumn('total_driver_points')}, ${sampleColumn('total_entrant_points')},
+                 ${sampleColumn('running_driver_points')}, ${sampleColumn('radiofrequency')}, s.source_state, s.flag`;
+};
+
+// What a replay answer reports beside its rows, given the rows the archive
+// selected for it.
+const replayRowsWarnings = (archiveState, rows) => {
+  const warnings = [];
+  if (archiveState === 'empty') warnings.push('No Bryce samples found. Run npm run poll:race or npm run poll:race:watch during a session.');
+  if (archiveState === 'tiny') warnings.push('Archive has fewer than 10 samples. Treat this as coverage proof, not a full race trend.');
+  if (rows.length > 1 && new Set(rows.map((row) => `${row.rank}-${row.status}-${row.gap}-${row.laps}`)).size === 1) {
+    warnings.push('No movement detected across returned samples. This is likely a repeated cold/post-race archive slice.');
+  }
+  return warnings;
+};
+
 export const queryReplay = ({
   limit: limitValue,
   offset: offsetValue,
@@ -1226,8 +1254,6 @@ export const queryReplay = ({
       const totalCount = Number(total?.count ?? 0);
       const latest = db.prepare('SELECT session_key FROM bryce_samples ORDER BY id DESC LIMIT 1').get();
       const sessionKey = requestedSessionKey || latest?.session_key || null;
-      const sampleColumns = new Set(db.prepare('PRAGMA table_info(bryce_samples)').all().map((column) => column.name));
-      const sampleColumn = (column) => (sampleColumns.has(column) ? `b.${column}` : `NULL AS ${column}`);
       const sessions = db
         .prepare(
           `
@@ -1252,14 +1278,7 @@ export const queryReplay = ({
       const rows = db
         .prepare(
           `
-          SELECT b.checked_at, b.session_key, b.rank, b.live_rank, b.start_position, b.laps, b.status, b.comment,
-                 b.gap, b.live_gap, b.diff, b.best_lap_time, ${sampleColumn('best_lap')}, b.last_lap_time,
-                 b.best_speed, b.last_speed, ${sampleColumn('average_speed')}, b.passes, b.passed,
-                 b.pit_stops, ${sampleColumn('last_pit_lap')}, ${sampleColumn('since_pit_lap')},
-                 ${sampleColumn('tire')}, ${sampleColumn('overtake_remain')}, ${sampleColumn('overtake_active')},
-                 ${sampleColumn('lap_distance')}, ${sampleColumn('live_diff_ahead')}, ${sampleColumn('live_diff_behind')},
-                 ${sampleColumn('total_driver_points')}, ${sampleColumn('total_entrant_points')},
-                 ${sampleColumn('running_driver_points')}, ${sampleColumn('radiofrequency')}, s.source_state, s.flag
+          SELECT ${replaySampleSelectList(db)}
           FROM bryce_samples b
           LEFT JOIN race_snapshots s ON s.id = b.snapshot_id
           WHERE (? IS NULL OR b.session_key = ?)
@@ -1281,12 +1300,7 @@ export const queryReplay = ({
       const selectedCount = Number(selected?.count ?? rows.length);
       const returnedRows = buildReplayRows(rows);
       const archiveState = replayArchiveState(true, selectedCount, selectedCount);
-      const warnings = [];
-      if (archiveState === 'empty') warnings.push('No Bryce samples found. Run npm run poll:race or npm run poll:race:watch during a session.');
-      if (archiveState === 'tiny') warnings.push('Archive has fewer than 10 samples. Treat this as coverage proof, not a full race trend.');
-      if (rows.length > 1 && new Set(rows.map((row) => `${row.rank}-${row.status}-${row.gap}-${row.laps}`)).size === 1) {
-        warnings.push('No movement detected across returned samples. This is likely a repeated cold/post-race archive slice.');
-      }
+      const warnings = replayRowsWarnings(archiveState, rows);
 
       return {
         available: true,
@@ -1331,26 +1345,107 @@ export const queryReplay = ({
 // other API call) waits while it runs. Each open tab asks for readiness every
 // 15 s off-season. Its answer changes only when the archive does, so keep it
 // until the SQLite file or its WAL changes size or modification time.
-const archiveSignature = () => {
-  const part = (path) => {
-    try {
-      const info = statSync(path);
-      return `${info.size}:${info.mtimeMs}`;
-    } catch {
-      return '-';
-    }
-  };
-  return `${part(sqlitePath)}|${part(`${sqlitePath}-wal`)}`;
-};
+const archiveSignature = () => archiveSignatureOf(sqlitePath);
 // Nothing downstream writes to the summary (buildReadinessPayloadFromParts
 // embeds it, buildReadinessGates reads archiveState, sendJson serializes it),
 // but every caller gets its own copy all the same: a few KB, so one response
 // can never change what the next one sends.
 let readinessReplayMemo = null;
-export const readinessReplaySummary = () => {
-  const signature = archiveSignature();
+const readinessReplayMemoFor = (signature) => {
   if (readinessReplayMemo?.signature !== signature) readinessReplayMemo = { signature, value: queryReplay({ limit: 5 }) };
-  return structuredClone(readinessReplayMemo.value);
+  return readinessReplayMemo.value;
+};
+export const readinessReplaySummary = () => structuredClone(readinessReplayMemoFor(archiveSignature()));
+
+// A replay frame's readiness carries the same block for one session: the five
+// archived Bryce samples at or before the frame, and that session's sample
+// count. Each replay viewer asks for it about once a second for the whole race,
+// and queryReplay answered it with the same archive-wide scans as above plus
+// two more over bryce_samples, which has no index at all in the archive the
+// runner writes: about 130 ms a frame on a 162k-sample test archive, and 0.6 to
+// 4.7 s on the production one, with the whole server waiting each time. The
+// archive-wide parts (count, sessions) are the memo's; the session's samples are
+// read once, in order, and kept until the archive changes, so a frame is a
+// binary search. A few sessions at a time, most recently asked first.
+const REPLAY_FRAME_SESSIONS_MAX = Math.max(1, Number(process.env.BRYCECAST_REPLAY_FRAME_SESSIONS ?? 8) || 8);
+const replayFrameSessions = new Map();
+const replayFrameSessionSamples = (sessionKey, signature) => {
+  const cached = replayFrameSessions.get(sessionKey);
+  if (cached?.signature === signature) {
+    replayFrameSessions.delete(sessionKey);
+    replayFrameSessions.set(sessionKey, cached);
+    return cached;
+  }
+  const db = new DatabaseSync(sqlitePath, { readOnly: true });
+  let entry;
+  try {
+    const samples = db
+      .prepare(
+        `
+        SELECT ${replaySampleSelectList(db)}
+        FROM bryce_samples b
+        LEFT JOIN race_snapshots s ON s.id = b.snapshot_id
+        WHERE b.session_key = ?
+        ORDER BY b.checked_at ASC, b.id ASC
+      `
+      )
+      .all(sessionKey);
+    entry = { signature, samples };
+  } finally {
+    db.close();
+  }
+  replayFrameSessions.delete(sessionKey);
+  replayFrameSessions.set(sessionKey, entry);
+  while (replayFrameSessions.size > REPLAY_FRAME_SESSIONS_MAX) replayFrameSessions.delete(replayFrameSessions.keys().next().value);
+  return entry;
+};
+
+/** queryReplay({ limit, sessionKey, beforeCheckedAt }), answered from the memo
+ * and the session's kept samples: the same fields and values (generatedAt is
+ * this call's). */
+export const replayFrameSummary = ({ sessionKey: requestedSessionKey, beforeCheckedAt = null, limit = 5 }) => {
+  const signature = archiveSignature();
+  const archive = readinessReplayMemoFor(signature);
+  if (!archive.available) return { ...structuredClone(archive), generatedAt: new Date().toISOString() };
+  const sessionKey = requestedSessionKey || archive.sessionKey || null;
+  if (!sessionKey) return queryReplay({ limit, beforeCheckedAt });
+  let samples;
+  try {
+    ({ samples } = replayFrameSessionSamples(sessionKey, signature));
+  } catch {
+    return queryReplay({ limit, sessionKey, beforeCheckedAt });
+  }
+  // The samples are in checked_at order: find the first one after the frame.
+  let end = samples.length;
+  if (beforeCheckedAt !== null && beforeCheckedAt !== undefined) {
+    const bound = String(beforeCheckedAt);
+    let low = 0;
+    let high = samples.length;
+    while (low < high) {
+      const middle = (low + high) >>> 1;
+      if (samples[middle].checked_at <= bound) low = middle + 1;
+      else high = middle;
+    }
+    end = low;
+  }
+  const take = Math.min(Math.max(Number(limit) || 100, 1), 500);
+  const rows = samples.slice(Math.max(0, end - take), end).map((row) => ({ ...row }));
+  const selectedCount = samples.length;
+  const archiveState = replayArchiveState(true, selectedCount, selectedCount);
+  return {
+    available: true,
+    sqlite: archive.sqlite,
+    generatedAt: new Date().toISOString(),
+    archiveState,
+    count: archive.count,
+    returned: rows.length,
+    selectedCount,
+    sessionKey,
+    sessions: structuredClone(archive.sessions),
+    summary: buildReplaySummary(rows),
+    rows: buildReplayRows(rows),
+    warnings: replayRowsWarnings(archiveState, rows)
+  };
 };
 
 export const compactTimingRowForReadiness = (row, heartbeat = null) => ({
@@ -1915,7 +2010,10 @@ const buildReadinessPayloadFromReplayRecord = async (record) => {
     // Data page fetches `/api/replay/bryce` for itself. Nothing downstream can
     // tell a replay poll from a live one by this field any more, which is the
     // point: one shape, one budget.
-    ...queryReplay({
+    // Answered by replayFrameSummary, which returns what this call used to
+    // (queryReplay with the same three arguments) without rescanning the
+    // archive for every frame.
+    ...replayFrameSummary({
       limit: 5,
       sessionKey: record.sessionKey,
       beforeCheckedAt: record.archiveCheckedAt
