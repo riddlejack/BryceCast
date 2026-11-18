@@ -21,7 +21,7 @@
     "genuineGapSessions": 0,
     "note": "The derived remainder (lapTotal minus racing-line sections) is shipped only for sessions whose racing sections leave a genuine untimed stretch (>2% of the lap). Sessions at or below that threshold are classified as fully timed and do not ship a derived row."
   },
-  "generatedAt": "2026-11-18T03:58:34Z",
+  "generatedAt": "2026-11-18T04:02:08Z",
   "ok": true,
   "publicPointPrediction": false,
   "sectionSourceStateCounts": {
