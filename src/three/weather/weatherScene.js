@@ -203,9 +203,11 @@ export function createWeather(ctx) {
   // ---------- where the arrow lies: free paper in the home framing, clear of the slab and of the stage's buttons ----------
   const v3 = new THREE.Vector3(), scratch = new THREE.PerspectiveCamera(25, 1, 0.1, 1e6);
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), deskPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.3), hitV = new THREE.Vector3();
-  function placeArrow() {
+  // home: the opening view (the arrow always shows there); a turned or zoomed view (strict): the arrow moves to clear
+  // paper in that view, or steps out of it where the model fills the frame
+  function placeArrow(home = getHome(), strict = false) {
     if (!markerParts?.quad) return;
-    const W = cssW(), Hh = cssH(), home = getHome();
+    const W = cssW(), Hh = cssH();
     scratch.aspect = W / Hh; ctx.applyPose(scratch, home);
     const proj = (p) => { v3.set(p[0], p[1], p[2]).project(scratch); return [(v3.x * 0.5 + 0.5) * W, (-v3.y * 0.5 + 0.5) * Hh]; };
     const polys = ctx.silhouettes().map((ring) => ring.map(proj));
@@ -239,7 +241,8 @@ export function createWeather(ctx) {
       if (found && (!best || found.score < best.score)) { best = found; showText = t.text; lenPx = len; reach = rch; textW = tw; textDy = tdy; }
       if (found && found.clash === 0) break;
     }
-    if (!best) return;
+    if (!best || (strict && best.clash > 0)) { if (strict) markerParts.group.visible = false; return; }
+    markerParts.group.visible = true;
     // the spot, the arrow's length and the words' size from where it lands: nearer the camera a metre is more pixels
     const hit = (x, y) => { ndc.set((x / W) * 2 - 1, -(y / Hh) * 2 + 1); ray.setFromCamera(ndc, scratch); return ray.ray.intersectPlane(deskPlane, new THREE.Vector3()); };
     const at = hit(best.x, best.y);
@@ -386,6 +389,21 @@ export function createWeather(ctx) {
       return [dx / l, dy / l];
     },
     relayout() { if (markerKind === 'arrow') placeArrow(); },
+    // after the camera settles: keep the arrow in view, on clear paper (it stays where it lies while it is)
+    settled(pose, atHome) {
+      if (markerKind !== 'arrow' || !markerParts) return;
+      if (atHome) { placeArrow(); return; }
+      const W = cssW(), Hh = cssH(), p = markerParts.group.position;
+      v3.set(p.x, p.y, p.z).project(camera);
+      const x = (v3.x * 0.5 + 0.5) * W, y = (-v3.y * 0.5 + 0.5) * Hh;
+      let clear = markerParts.group.visible && v3.z < 1 && x > 40 && x < W - 40 && y > 30 && y < Hh - 30;
+      if (clear) {
+        const inPoly = (px, py, P) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > py) !== (yj > py) && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi) c = !c; } return c; };
+        const polys = ctx.silhouettes().map((ring) => ring.map((q) => { v3.set(q[0], q[1], q[2]).project(camera); return [(v3.x * 0.5 + 0.5) * W, (-v3.y * 0.5 + 0.5) * Hh]; }));
+        clear = !polys.some((P) => inPoly(x, y, P));
+      }
+      if (!clear) placeArrow(pose, true);
+    },
     dispose() {
       disposed = true; clearMarker(); arrowMat.dispose(); sheenMat.dispose(); if (sheen) sheen.geometry.dispose();
     },

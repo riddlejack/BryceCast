@@ -309,13 +309,15 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
     base.geometry.dispose(); base.geometry = ribbonGeometry(0, 1, want, want, model.bandDy * 0.5);
     if (bandMoved && sections.length) setSections(sections, true); else invalidate();
   }
+  let settleTimer = 0;
   function changed() {
     atHome = false; clampPose(); placeCamera(); refreshPick(); invalidate(); onView({ home: false });
     clearTimeout(widthTimer); widthTimer = setTimeout(checkBandWidth, 140);
+    clearTimeout(settleTimer); settleTimer = setTimeout(() => { if (!disposed) { wx?.settled({ ...pose, target: [...pose.target] }, atHome); invalidate(); } }, 450);
   }
   function resetView() {
     pose = { ...home, target: [...home.target] }; atHome = true; placeCamera(); invalidate(); onView({ home: true });
-    checkBandWidth();
+    checkBandWidth(); clearTimeout(settleTimer); wx?.relayout();
   }
   function zoomBy(f, at = null) {
     const before = pose.D;
@@ -508,7 +510,7 @@ export async function createTrackScene({ canvas, data, coarse = false, onHover =
   render();
 
   function dispose() {
-    disposed = true; clearTimeout(widthTimer); if (loopId) cancelAnimationFrame(loopId); seen?.disconnect();
+    disposed = true; clearTimeout(widthTimer); clearTimeout(settleTimer); if (loopId) cancelAnimationFrame(loopId); seen?.disconnect();
     document.removeEventListener('visibilitychange', onVis); wx?.dispose();
     canvas.removeEventListener('pointerdown', onDown); canvas.removeEventListener('pointermove', onMove);
     canvas.removeEventListener('pointerup', onUp); canvas.removeEventListener('pointercancel', onCancel);
