@@ -480,6 +480,32 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
+  },
+  "lucas-oil-irp-oval": {
+   "file": "/tracks-3d/models/lucas-oil-irp-oval.json",
+   "kind": "venue",
+   "bytes": 117638,
+   "gzipBytes": 33070,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/lucas-oil-irp-oval-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "euromarque-ruapuna-full": {
+   "file": "/tracks-3d/models/euromarque-ruapuna-full.json",
+   "kind": "venue",
+   "bytes": 98804,
+   "gzipBytes": 30856,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/euromarque-ruapuna-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from LINZ (CC BY 4.0), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",

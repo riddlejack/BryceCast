@@ -7998,6 +7998,54 @@
      "track_new_jersey_motorsports_park_thunderbolt"
     ],
     "call": "Thunderbolt, 2019 Classic route with both chicanes (2.25 mi, 3.621 km): F1600 Championship Series, September 2019. The 2023-24 repave widened the Turn 1 entry by an unconfirmed amount and the 2025-26 'Devil's Pass' branch came after; this model is today's OSM line along the Classic route, so the Turn 1 entry width is approximate (research notes table). OSM's loop measures 3504 m, 3.2% under the published length."
+   },
+   "lucas-oil-irp-oval": {
+    "camera": {
+     "azim": 275,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -30.276977791108152,
+      -30.398152566169205,
+      2.077940079846541
+     ],
+     "D": 985.5827799031056,
+     "elev": 40,
+     "azim": 275
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.6794690716585983,
+    "layout": "Oval",
+    "trackIds": [
+     "track_lucas_oil_indianapolis_raceway_park"
+    ],
+    "call": "0.686-mile oval: USF Pro 2000 Freedom 90, 25 May 2024 (official results PDF; research notes item 9). OSM's oval line measures 1062 m against the published 1104 m (ovals are usually measured 15 ft off the inside wall, not on the centreline). The July 2026 Formula DRIFT pavement is not part of the oval."
+   },
+   "euromarque-ruapuna-full": {
+    "camera": {
+     "azim": 150,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -23.553997927654564,
+      2.4770629936951316,
+      17.943489531309996
+     ],
+     "D": 1546.7974894628276,
+     "elev": 40,
+     "azim": 150
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.783287136575295,
+    "layout": "Full Circuit",
+    "trackIds": [
+     "track_euromarque_motorsport_park"
+    ],
+    "call": "Full circuit, 11 turns, 3.330 km, anticlockwise: Castrol Toyota FR Oceania, February 2024. Euromarque became Ruapuna's naming sponsor in February 2023; this is Ruapuna Park, Christchurch, not Pukekohe (research notes item 2). OSM loop: the three 'Raceway Ruapuna Park' ways (3286 m, 1.3% under), not the short connector that multiplies OSM's loops."
    }
   },
   "generated": "2026-11-17",
