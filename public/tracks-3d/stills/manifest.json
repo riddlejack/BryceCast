@@ -7418,5 +7418,729 @@
     }
    ]
   }
+ },
+ "career": {
+  "by": "stills-tools/finish_career.py (run.sh career)",
+  "venues": {
+   "brands-hatch-indy": {
+    "camera": {
+     "azim": 200,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -11.228710727113635,
+      -13.586402367142489,
+      -18.245350307761225
+     ],
+     "D": 1242.7576949849506,
+     "elev": 40,
+     "azim": 200
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.184417929507937,
+    "layout": "Indy",
+    "trackIds": [
+     "track_brands_hatch_indy"
+    ],
+    "call": "Indy (1.944 km): FF1600 2019-2020 (laps 50.1-51.3 s) and the four GB3 2022 Friday sessions, re-measured by the life-stats ledger from field lap speeds (1.207 mi a lap). OSM loop 1929 m; start/finish OSM node 1825805766."
+   },
+   "brands-hatch-gp": {
+    "camera": {
+     "azim": 125,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      74.97249532893922,
+      -4.945541619890538,
+      -19.88706537855211
+     ],
+     "D": 1782.0318879811089,
+     "elev": 40,
+     "azim": 125
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.1390131947128452,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_brands_hatch_gp"
+    ],
+    "call": "Grand Prix (3.916 km): GB3 2021 R1 and 2022 R7 (qualifying 1:21.6 / 1:19.3) and the 2020 Champion of Brands British GT support meeting (1:36.1). OSM loop 3900 m; start/finish OSM node 1825805766 (shared with Indy)."
+   },
+   "silverstone-national": {
+    "camera": {
+     "azim": 155,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      66.24603684736326,
+      -78.74159768715049,
+      -75.42969584292939
+     ],
+     "D": 1583.7441171019836,
+     "elev": 40,
+     "azim": 155
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.9670335855009466,
+    "layout": "National",
+    "trackIds": [
+     "track_silverstone_national"
+    ],
+    "call": "National (2.64 km): Walter Hayes Trophy 2020 (ledger track_silverstone_national; FF1600 laps 65.8-69.4 s fit the 2.64 km National). OSM loop 2638 m via the National Pit Straight."
+   },
+   "silverstone-international": {
+    "camera": {
+     "azim": 230,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -7.885061201445996,
+      -41.66612398859771,
+      -74.84830538938796
+     ],
+     "D": 1792.4561042775968,
+     "elev": 40,
+     "azim": 230
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.0183838973308434,
+    "layout": "International",
+    "trackIds": [
+     "track_silverstone_international"
+    ],
+    "call": "International (2.979 km): BRSCC FF1600 2020, the result book prints the layout (ledger track_silverstone_international). Route Abbey, Farm, Village, the Link, Becketts, Stowe, Vale, Club (official layout; research notes item 7); OSM loop 2979 m, start/finish on the Hamilton Straight (the Wing)."
+   },
+   "silverstone-gp": {
+    "camera": {
+     "azim": 260,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -61.50185977951121,
+      22.015164163781538,
+      -59.85279534767231
+     ],
+     "D": 2758.74368599194,
+     "elev": 40,
+     "azim": 260
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.565137598751295,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_silverstone_gp"
+    ],
+    "call": "Grand Prix: GB3 2021 R2/R6 and 2022 R2 qualifying 1:54.5-2:09.8 fit only the 5.891 km GP; ledger track id track_silverstone_gp. OSM loop: Chapel Curve onto the Hangar Straight (candidate 0), Vale, start/finish on the Hamilton Straight (OSM node 13036050130)."
+   },
+   "oulton-park-international": {
+    "camera": {
+     "azim": 100,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      57.423737538780394,
+      21.033853998227265,
+      5.1097665549129365
+     ],
+     "D": 2513.1224798538183,
+     "elev": 40,
+     "azim": 100
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.8157879750156405,
+    "layout": "International",
+    "trackIds": [
+     "track_oulton_park_international"
+    ],
+    "call": "International (4.332 km) for all three meetings: the BRSCC programme for 18 July 2020 prints \"International Circuit (2.69 miles / 4.33 km)\"; GB3 2021-22 qualifying 1:32.6 / 1:34.4 fit the International (research notes item 8). OSM loop: with Britten's and Hislop's chicanes (both in place well before 2020); OSM's older unchicaned alignment (way 27299256, source Yahoo) and Britten's bypass forbidden."
+   },
+   "snetterton-300": {
+    "camera": {
+     "azim": 355,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -23.13348255917533,
+      -11.902139681275195,
+      26.107152247321515
+     ],
+     "D": 2205.3965378913217,
+     "elev": 40,
+     "azim": 355
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 3.1002426388631514,
+    "layout": "300",
+    "trackIds": [
+     "track_snetterton_300"
+    ],
+    "call": "300 circuit (4.779 km): GB3 2021 and 2022 (qualifying 2:01.0 wet / 1:42.5); research notes item 8."
+   },
+   "donington-park-gp": {
+    "camera": {
+     "azim": 355,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      21.19864700263337,
+      -19.513647215466356,
+      44.55347878193953
+     ],
+     "D": 2315.9089676575204,
+     "elev": 40,
+     "azim": 355
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.964489125201483,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_donington_park_gp"
+    ],
+    "call": "Grand Prix (4.020 km): all four GB3 rounds 2021-22 (qualifying 1:23.9-1:25.7); research notes item 8. Resurfaced for 2023 and new Fogarty Esses kerbs in 2024: surface and kerbs only."
+   },
+   "spa-francorchamps-gp": {
+    "camera": {
+     "azim": 100,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -20.957085197050873,
+      -19.888655763054732,
+      57.22833477992871
+     ],
+     "D": 3508.021266591144,
+     "elev": 40,
+     "azim": 100
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.401816381572145,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_spa_gp",
+     "track_circuit_de_spa_francorchamps"
+    ],
+    "call": "Grand Prix (7.004 km): GB3 2021-22 and Euroformula Open 2023 (qualifying 2:11.7-2:20.4). Run-off works at Raidillon, La Source, Les Combes, Blanchimont and Stavelot between his 2021 and 2022 races; the track line is unchanged (research notes item 11). OSM loop through Speaker's Corner (the car layout), not OSM's 'Moto layout' chicane."
+   },
+   "castle-combe-full": {
+    "camera": {
+     "azim": 210,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -65.57104177111871,
+      -71.2497156623261,
+      -112.72111017628332
+     ],
+     "D": 1814.6059063818388,
+     "elev": 40,
+     "azim": 210
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.7701820660280128,
+    "layout": "Full Circuit with Chicanes",
+    "trackIds": [
+     "track_castle_combe"
+    ],
+    "call": "Full circuit with the two 1999 chicanes, Bobbies and the Esses (2.977 km): CCRC Formula Ford 1600, July and August 2020. Resurfaced 2015 and partly 2018, surface only; corner renames since 2020 (Hammerdown to Howard's Way, Tower to Gooch's) are names only (research notes item 4). OSM loop through both chicane ways, 'Bobbies' and 'The Esses'."
+   },
+   "circuit-of-the-americas-gp": {
+    "camera": {
+     "azim": 200,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      25.942699231276194,
+      56.19627520706149,
+      -98.7954721366694
+     ],
+     "D": 2975.7219658329877,
+     "elev": 40,
+     "azim": 200
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 3.1675022605376815,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_circuit_of_the_americas"
+    ],
+    "call": "Grand Prix circuit, 20 turns (5.513 km): SCCA Hoosier Super Tour, February 2019. 2022-24 repaving, concrete slabs and verge changes moved no corner (research notes table). OSM loop without the MotoGP long-lap loop and the short-course links. Start/finish at OSM's 'finish' node (the timing line), as at the Algarve; OSM also has an older 'start-finish' node about 300 m away."
+   },
+   "cadwell-park-full": {
+    "camera": {
+     "azim": 60,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      98.60319738213958,
+      3.843428351195447,
+      -24.201144496376706
+     ],
+     "D": 1790.3246326398437,
+     "elev": 40,
+     "azim": 60
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.7141646764773,
+    "layout": "Full Circuit",
+    "trackIds": [
+     "track_cadwell_park_full"
+    ],
+    "call": "Full circuit (3.520 km): Formula Ford 1600, August 2020. No layout change found since the mid-2000s resurfacing (research notes table). OSM's smooth line onto the start straight, not the unnamed 92 m spur beside it that ends in a square corner."
+   },
+   "algarve-gp": {
+    "camera": {
+     "azim": 285,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      3.556283492848864,
+      13.34928210456169,
+      -10.603414861437368
+     ],
+     "D": 2146.5861523889735,
+     "elev": 40,
+     "azim": 285
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.6489827003765485,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_autodromo_internacional_do_algarve"
+    ],
+    "call": "Grand Prix circuit (4.653 km): Euroformula Open, April 2023. 2024 kerb and run-off works (T4, T8, T14, T15) came after his race; no layout change (research notes table). OSM loop through the named Curva da Torre VIP and Curva Galp, not OSM's unnamed cut-throughs; 4652.9 m against 4653 m official. Start/finish at OSM's 'finish' node (the timing line); OSM's separate 'start' node marks the grid."
+   },
+   "road-atlanta-full": {
+    "camera": {
+     "azim": 75,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -102.3583856006073,
+      17.100245424676107,
+      15.727170931030114
+     ],
+     "D": 2656.885216868182,
+     "elev": 40,
+     "azim": 75
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.514335615641151,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_michelin_raceway_road_atlanta"
+    ],
+    "call": "Full course, 12 turns (4.088 km): SCCA Hoosier Super Tour and F1600 Championship Series, March and April 2019. The Turn 4 chicane went in 2017 and the last full repave was 2007, both before (research notes table). OSM's main line (4095 m), not its 'Motorcycle Turn 12' or two other unnamed bike-course ways."
+   },
+   "watkins-glen-long": {
+    "camera": {
+     "azim": 275,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -64.40892482707142,
+      45.85168485646564,
+      -24.884763209791753
+     ],
+     "D": 2889.288654592743,
+     "elev": 40,
+     "azim": 275
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.8627273290988704,
+    "layout": "Long course (Grand Prix)",
+    "trackIds": [
+     "track_watkins_glen_international"
+    ],
+    "call": "Long course with the Boot, 3.370 mi (5.423 km), through the Inner Loop (Bus Stop): F1600 Championship Series, May 2019 (official timing sheet prints 3.370 mi; research notes item 5). The 2024 Bus Stop rework was kerbs and paving only."
+   },
+   "hungaroring-gp": {
+    "camera": {
+     "azim": 260,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -3.01226586842505,
+      -10.365496167934623,
+      -27.851582776070988
+     ],
+     "D": 2237.587085204688,
+     "elev": 40,
+     "azim": 260
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.567294042186763,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_hungaroring"
+    ],
+    "call": "Grand Prix circuit (4.381 km): Euroformula Open, June 2023. 2024-26 rebuilds of the pit building, paddock and grandstands and 2025-26 resurfacing changed no corner (research notes table). OSM's other loop runs down 'Bokszutca' (the pit lane), drawn here as the pit."
+   },
+   "paul-ricard-gp": {
+    "camera": {
+     "azim": 330,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      38.795498729298025,
+      55.38258359233176,
+      -43.77066146030253
+     ],
+     "D": 3664.729047587244,
+     "elev": 40,
+     "azim": 330
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 5.330744122402193,
+    "layout": "Grand Prix Circuit",
+    "trackIds": [
+     "track_circuit_paul_ricard"
+    ],
+    "call": "Grand Prix layout with the Mistral chicane, 15 turns, 1C-V2 (5.842 km nominal; 2023 timing sheets print 5.822 km): Euroformula Open, July 2023 (research notes item 1, from the FRECA and GT Open timing of the same weekends). OSM loop through both 'Chicane Nord' ways on the Mistral straight (5853 m); OSM's loop without the chicane measures 5771 m, the 13-turn 1A-V2 (5.770 km). Driving Center, skid pan and test areas excluded; the 'Stand' ways drawn as the pit lane."
+   },
+   "vir-full": {
+    "camera": {
+     "azim": 275,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      42.73632556326512,
+      -80.69841068053047,
+      -29.85348278575578
+     ],
+     "D": 3022.0605337601264,
+     "elev": 40,
+     "azim": 275
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.757452685529941,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_virginia_international_raceway"
+    ],
+    "call": "Full course, 17 turns (5.263 km): F1600 Championship Series, July 2019. Last full repave and widening was 2014, before (research notes table). OSM's main line (5268 m), not the 'Madison Avenue' and north-course links beside it."
+   },
+   "red-bull-ring-gp": {
+    "camera": {
+     "azim": 335,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -34.65261926869189,
+      -16.601280396664027,
+      -18.263820431447403
+     ],
+     "D": 2155.2116105865102,
+     "elev": 40,
+     "azim": 335
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.9872873438959717,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_red_bull_ring"
+    ],
+    "call": "Grand Prix circuit (4.318 km): Euroformula Open, September 2023. 2024 gravel strips at T9-T10 and moved white lines; centreline unchanged (research notes table). OSM loop without the 'Moto GP chicane' and 'MotoGP Long Lap Penalty' ways (motorcycle-only); 'Boxenstraße' drawn as the pit."
+   },
+   "pittsburgh-full": {
+    "camera": {
+     "azim": 285,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      26.163631277565905,
+      -43.65124765749184,
+      20.445869827493503
+     ],
+     "D": 2192.6017567689382,
+     "elev": 40,
+     "azim": 285
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.62418159400247,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_pittsburgh_international_race_complex"
+    ],
+    "call": "Full course, North and South tracks combined, 19 turns, 2.8 mi (4.506 km): F1600 Championship Series, August 2019. The 2017 repave's chicane before T16 predates his race. The venue closed on 9 November 2025 and was sold; OSM still carried the circuit when read on 17 November 2026 (research notes table). OSM's one loop measures 4386 m, 2.7% under the published length."
+   },
+   "highlands-full": {
+    "camera": {
+     "azim": 280,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -42.595136689109,
+      -27.21627790891508,
+      2.4948534307309465
+     ],
+     "D": 1507.1079253161133,
+     "elev": 40,
+     "azim": 280
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.0038916178011976,
+    "layout": "Full Circuit",
+    "trackIds": [
+     "track_highlands_motorsport_park"
+    ],
+    "call": "Full circuit, 22 turns, 4.1 km, clockwise: Castrol Toyota FR Oceania, February 2024 (research notes item 3; the career data's 4.0 km is kept on the site). OSM's main line with the bridge crossover (4146 m, +1.1%), not its short cut-throughs; the crossover is drawn flat, both roads at ground level."
+   },
+   "monza-gp": {
+    "camera": {
+     "azim": 245,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -231.97675997257792,
+      -55.5771617798111,
+      -113.44404453137552
+     ],
+     "D": 3612.40761113798,
+     "elev": 40,
+     "azim": 245
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.9988546628855217,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_autodromo_nazionale_monza"
+    ],
+    "call": "Grand Prix circuit (5.793 km): Euroformula Open, September 2023. August 2024 resurface, kerbs and gravel strips came after his race; the centreline is not reported changed (research notes table). OSM loop through the full Variante del Rettifilo, not its two escape roads."
+   },
+   "summit-point-main": {
+    "camera": {
+     "azim": 95,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      48.16876964129162,
+      -66.48525390147842,
+      -47.50295846202875
+     ],
+     "D": 1971.9543331212897,
+     "elev": 40,
+     "azim": 95
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.2489715395252814,
+    "layout": "Main Circuit",
+    "trackIds": [
+     "track_summit_point_motorsports_park"
+    ],
+    "call": "Main circuit, 10 turns, 2.0 mi (3.219 km): F1600 Championship Series, August 2019. Repaved October 2017, before (research notes table). OSM loop 3222 m; the other loops are the Shenandoah circuit."
+   },
+   "njmp-thunderbolt": {
+    "camera": {
+     "azim": 330,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      6.016208965590748,
+      -9.740017254397625,
+      2.697116778891099
+     ],
+     "D": 2187.426430596199,
+     "elev": 40,
+     "azim": 330
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 3.5300894614021803,
+    "layout": "Thunderbolt",
+    "trackIds": [
+     "track_new_jersey_motorsports_park_thunderbolt"
+    ],
+    "call": "Thunderbolt, 2019 Classic route with both chicanes (2.25 mi, 3.621 km): F1600 Championship Series, September 2019. The 2023-24 repave widened the Turn 1 entry by an unconfirmed amount and the 2025-26 'Devil's Pass' branch came after; this model is today's OSM line along the Classic route, so the Turn 1 entry width is approximate (research notes table). OSM's loop measures 3504 m, 3.2% under the published length."
+   },
+   "lucas-oil-irp-oval": {
+    "camera": {
+     "azim": 275,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -30.276977791108152,
+      -30.398152566169205,
+      2.077940079846541
+     ],
+     "D": 985.5827799031056,
+     "elev": 40,
+     "azim": 275
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.6794690716585983,
+    "layout": "Oval",
+    "trackIds": [
+     "track_lucas_oil_indianapolis_raceway_park"
+    ],
+    "call": "0.686-mile oval: USF Pro 2000 Freedom 90, 25 May 2024 (official results PDF; research notes item 9). OSM's oval line measures 1062 m against the published 1104 m (ovals are usually measured 15 ft off the inside wall, not on the centreline). The July 2026 Formula DRIFT pavement is not part of the oval."
+   },
+   "euromarque-ruapuna-full": {
+    "camera": {
+     "azim": 150,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -23.553997927654564,
+      2.4770629936951316,
+      17.943489531309996
+     ],
+     "D": 1546.7974894628276,
+     "elev": 40,
+     "azim": 150
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.783287136575295,
+    "layout": "Full Circuit",
+    "trackIds": [
+     "track_euromarque_motorsport_park"
+    ],
+    "call": "Full circuit, 11 turns, 3.330 km, anticlockwise: Castrol Toyota FR Oceania, February 2024. Euromarque became Ruapuna's naming sponsor in February 2023; this is Ruapuna Park, Christchurch, not Pukekohe (research notes item 2). OSM loop: the three 'Raceway Ruapuna Park' ways (3286 m, 1.3% under), not the short connector that multiplies OSM's loops."
+   },
+   "sebring-full": {
+    "camera": {
+     "azim": 20,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      6.732256714933261,
+      -84.50925018105549,
+      141.30896292767028
+     ],
+     "D": 2236.7589046014073,
+     "elev": 40,
+     "azim": 20
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.6705861711118004,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_sebring_international_raceway"
+    ],
+    "call": "Full course, 17 turns, 3.74 mi (6.019 km): SCCA Hoosier Super Tour, January 2019 (research notes item 6; Sebring has not been repaved since). OSM loop through every named corner (Sunset Bend, Ullman Straight, Le Mans Curve, Gendebien, Bishop, Tower, Collier, Cunningham, Fangio, Hairpin, Gurney); it measures 5872 m, 2.4% under the published length, OSM's line being drawn with few nodes."
+   },
+   "daytona-road-course": {
+    "camera": {
+     "azim": 55,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -33.643774447166706,
+      -16.198985381143284,
+      -14.997410896680627
+     ],
+     "D": 2767.037634188392,
+     "elev": 40,
+     "azim": 55
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.7932860984962797,
+    "layout": "Sports car road course",
+    "trackIds": [
+     "track_daytona_international_speedway"
+    ],
+    "call": "Sports-car road course, 12 turns, 3.56 mi (5.729 km), counterclockwise: 2025 Rolex 24 (research notes item 10). OSM loop through the International and West Horseshoes and the Le Mans (Bus Stop) chicane, not the '2021 NASCAR chicane' (5768 m). One OSM link way is tagged oneway=alternating, so this layout searches every kept way, not only oneway ones. Post-2023 kerb and paving changes at the Bus Stop left the layout unchanged. Pit lane: the main pit road along the tri-oval (OSM way 352067003), not the infield road-course pit lane; start/finish beside its middle (approximate: OSM has no start/finish node)."
+   },
+   "homestead-miami-road-course": {
+    "camera": {
+     "azim": 210,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -14.964360636847776,
+      -27.094047167275885,
+      -21.822961336159313
+     ],
+     "D": 1609.8823886643045,
+     "elev": 40,
+     "azim": 210
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.35404547950062,
+    "layout": "Road course using oval turns 3 and 4",
+    "trackIds": [],
+    "call": "2.300-mile road course using oval turns 3 and 4 (not the 2.21-mile all-infield course): SCCA U.S. Majors Tour Southeast Conference, Formula F, 4-6 January 2019, two races recorded as gaps. The official results PDF prints 2.300 miles for every group that weekend, Bryce's Group 7 included."
+   },
+   "mugello-gp": {
+    "camera": {
+     "azim": 235,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      3.8342036914566617,
+      62.08653142971308,
+      8.818395455275594
+     ],
+     "D": 2381.181265596822,
+     "elev": 40,
+     "azim": 235
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.79504278217347,
+    "layout": "Grand Prix",
+    "trackIds": [],
+    "call": "The one Mugello circuit, 5.245 km, 15 turns, clockwise: Euroformula Open 2023 Round 7, 30 September and 1 October, two races recorded as gaps (reported results only)."
+   }
+  },
+  "generated": "2026-11-17",
+  "centreline": "t is the model's own lap fraction from its start/finish (identity map: these venues have no site outline)"
  }
 }
