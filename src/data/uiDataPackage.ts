@@ -817,8 +817,38 @@ export interface UiCareerLifeStats {
   lifeShare: UiCareerLifeShare;
   weeksGrid: UiCareerWeeksGrid;
   travelLegs: UiCareerTravelLegs;
+  otherDrivers: UiCareerOtherDrivers;
+  timeBreakdown: UiCareerTimeBreakdown;
   caveats: string[];
   sourceRefs: UiSourceRef[];
+}
+
+/** One row per other driver record in his races (the odometer's dots):
+ *  [name, index into `series` of the first race they shared, its year,
+ *  races shared, '' | 'artifact' (a garbled entry) | 'variant' (a likely
+ *  second spelling)]. Single-seater rivals first, then Daytona only. */
+export interface UiCareerOtherDrivers {
+  how: string;
+  columns: string[];
+  singleSeaterCount: number;
+  series: string[];
+  rows: Array<[string, number, number, number, '' | 'artifact' | 'variant']>;
+}
+
+export interface UiCareerTimePart {
+  display: string;
+  hours: number;
+  count: number;
+}
+
+/** The parts behind the time-in-the-car figures, formatted as their figures are. */
+export interface UiCareerTimeBreakdown {
+  how: string;
+  timedRaces: UiCareerTimePart;
+  untimedRaces: UiCareerTimePart;
+  racesWithoutLaps: number;
+  otherSessions: UiCareerTimePart;
+  raceCount: number;
 }
 
 /** counted: exact from the data. lower_bound: the true figure is at least this

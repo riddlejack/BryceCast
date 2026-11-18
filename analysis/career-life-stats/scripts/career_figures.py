@@ -280,6 +280,61 @@ def build_career_figures(
     all_people = people(race_ids)
     single_seater_people = people(race_ids - {daytona_session})
 
+    # The odometer's 619 dots, one per driver record (round 2, November 17):
+    # single-seater rivals first, in the order he first raced them, each with
+    # the series of that first race; then the drivers met only at Daytona.
+    def session_start(session_id: str) -> str:
+        session = sessions[session_id]
+        return session.get("actualStart") or session.get("scheduledStart") or events[session["eventId"]]["eventStartDate"]
+
+    def display_name(raw: str) -> str:
+        def word(token: str) -> str:
+            if len(token) > 1 and token.isupper():
+                return re.sub(r"[A-Z]+", lambda m: m.group(0).capitalize(), token)
+            return token
+        return " ".join(word(token) for token in raw.split())
+
+    variant_kind = {row["driverId"]: row["kind"] for row in variant_rows}
+    first_met: dict[str, str] = {}
+    together: Counter[str] = Counter()
+    results_by_race: dict[str, list[str]] = defaultdict(list)
+    for row in dataset["results"]:
+        if row["sessionId"] in race_ids and row.get("driverId") and row["driverId"] != bryce_id:
+            results_by_race[row["sessionId"]].append(row["driverId"])
+    for session_id in sorted(race_ids, key=lambda sid: (session_start(sid), sid)):
+        for driver_id in set(results_by_race[session_id]):
+            together[driver_id] += 1
+            if session_id != daytona_session:
+                first_met.setdefault(driver_id, session_id)
+    single_ids = sorted(first_met, key=lambda did: (session_start(first_met[did]), first_met[did], display_name(drivers[did]["displayName"])))
+    daytona_ids = sorted(set(together) - set(first_met), key=lambda did: display_name(drivers[did]["displayName"]))
+    if len(single_ids) != single_seater_people["records"] or len(single_ids) + len(daytona_ids) != all_people["records"]:
+        raise ValueError("Driver dots disagree with the driver-record counts")
+    dot_series: list[str] = []
+    dot_rows: list[list[Any]] = []
+    for driver_id in [*single_ids, *daytona_ids]:
+        session_id = first_met.get(driver_id, daytona_session)
+        series_id = events[sessions[session_id]["eventId"]]["seriesId"]
+        if series_id not in dot_series:
+            dot_series.append(series_id)
+        kind = variant_kind.get(driver_id, "")
+        dot_rows.append([
+            display_name(drivers[driver_id]["displayName"]),
+            dot_series.index(series_id),
+            int(session_start(session_id)[:4]),
+            together[driver_id],
+            {"parsing_artifact": "artifact", "possible_variant": "variant"}.get(kind, ""),
+        ])
+    other_drivers = {
+        "how": "One row per other driver record on the results of his races: name, the series of the first race they shared "
+        "(single-seaters first, in the order he met them; then the drivers met only at Daytona), its year, the races they shared, "
+        "and a flag for a garbled entry ('artifact') or a likely second spelling of one person ('variant').",
+        "columns": ["name", "seriesIndex", "year", "racesTogether", "flag"],
+        "singleSeaterCount": len(single_ids),
+        "series": dot_series,
+        "rows": dot_rows,
+    }
+
     # ---- Venues and travel --------------------------------------------------
     venues = {row["trackName"] for row in race_rows}
     countries = {row["country"] for row in race_rows}
@@ -707,6 +762,23 @@ def build_career_figures(
         "legs": legs,
     }
 
+    # ---- Time in the car, by part (the odometer's time bars) -----------------
+    # The parts of raceTimeAll and sessionHours, each formatted the way its
+    # figure is: a counted part to the minute, a floor rounded down with a "+".
+    time_breakdown = {
+        "how": "The parts behind 'Racing' and 'In every official session'. Official race times are counted; races with no "
+        "official time and the other sessions are his laps times his best lap, so each is a floor.",
+        "timedRaces": {"display": hm(timed_seconds), "hours": round(timed_seconds / 3600, 2), "count": timed_races},
+        "untimedRaces": {"display": f"{hm_floor(untimed_seconds)}+", "hours": round(untimed_seconds / 3600, 2), "count": untimed_races},
+        "racesWithoutLaps": race_count - races_with_time,
+        "otherSessions": {
+            "display": f"{hm_floor(other_session_seconds)}+",
+            "hours": round(other_session_seconds / 3600, 2),
+            "count": other_sessions,
+        },
+        "raceCount": race_count,
+    }
+
     checks = {
         "timedRaces": timed_races,
         "untimedRaces": untimed_races,
@@ -730,5 +802,7 @@ def build_career_figures(
         "lifeShare": life_share,
         "weeksGrid": weeks_grid,
         "travelLegs": travel_legs,
+        "otherDrivers": other_drivers,
+        "timeBreakdown": time_breakdown,
         "checks": checks,
     }

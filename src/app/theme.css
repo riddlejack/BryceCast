@@ -86,16 +86,32 @@
   --series-4: #4a3aa7;
   --series-5: #8e2f5d;
 
-  /* Career chapter tints — validated with the dataviz six-checks script
-   * (2026-07-12): lightness band, chroma floor, CVD separation, contrast.
-   * Rendered quiet (≈0.55 opacity) at rest; full hue on hover. The current
-   * chapter (INDY NXT) stays ink — the story arrives at now. */
-  --chapter-f1600: #5581c2;
-  --chapter-ff: #2f9377;
-  --chapter-gb3: #b98a3f;
-  --chapter-euro: #992f52;
-  --chapter-fro: #6c9455;
-  --chapter-imsa: #2e9ac2;
+  /* Career chapter tints, "the road" (round 2, November 17, 2026). One family:
+   * the chapters walk round the colour wheel in the order he raced them,
+   * violet (2019) through blue, teal and green, and arrive at Bryce gold for
+   * INDY NXT, the current chapter. Light and dark alternate down the walk so
+   * neighbours stay apart. Validated with the dataviz six checks on paper
+   * (#FDFCFA), adjacent pairs: L 0.47-0.66, C >= 0.10, worst CVD dE 13.1,
+   * worst normal dE 15.5, every mark >= 3:1. The other versions sit under
+   * the `palette` switch just after this block. Series colour comes only
+   * from these tokens (chapterTint() in careerExplorer.tsx maps series to them). */
+  --chapter-f1600: #807cc6;
+  --chapter-ff: #255b9c;
+  --chapter-gb3: #2c94b0;
+  --chapter-euro: #046f4b;
+  --chapter-fro: #579c5a;
+  --chapter-imsa: #4d6510;
+  --chapter-indy: #c18211;
+  /* Places, by country: four of the palette's colours, validated all-pairs
+   * (road: worst CVD dE 14.1, normal 16.6). The US is home: INDY NXT gold. */
+  --place-us: #c18211;
+  --place-uk: #255b9c;
+  --place-nz: #2c94b0;
+  --place-eu: #4d6510;
+  /* The odometer's touches of colour: his own miles and hours wear the
+   * current chapter's gold; the miles between tracks wear the travel colour. */
+  --odo-race: var(--chapter-indy);
+  --odo-travel: #2c94b0;
 
   /* Sequential ramp (blue, magnitude only) */
   --seq-100: #cde2fb;
@@ -124,6 +140,43 @@
   --measure: 70ch;          /* prose stays readable inside the wide column */
   --section-gap: clamp(40px, 4.4vw, 72px);
   --card-gap: clamp(28px, 3vw, 48px);
+}
+
+/* Review switch `palette` (round 2): the same tokens, other versions. Set on
+ * <html data-palette> by applyCssSwitches(), so one flip recolours every
+ * chart on the site. */
+/* atlas: seven distinct editorial hues at one weight, gold for INDY NXT.
+ * Adjacent: worst CVD dE 9.9, normal 19.9, all >= 3:1. Places all-pairs:
+ * worst CVD dE 6.8 (gold/green; every country is labelled), normal 17.2. */
+:root[data-palette="atlas"] {
+  --chapter-f1600: #3a69ad;
+  --chapter-ff: #3d9461;
+  --chapter-gb3: #984260;
+  --chapter-euro: #0893a8;
+  --chapter-fro: #b35537;
+  --chapter-imsa: #694b96;
+  --chapter-indy: #c18211;
+  --place-us: #c18211;
+  --place-uk: #984260;
+  --place-nz: #3d9461;
+  --place-eu: #3a69ad;
+  --odo-travel: #3a69ad;
+}
+/* old: the palette before round 2 (INDY NXT in ink), kept to compare. */
+:root[data-palette="old"] {
+  --chapter-f1600: #5581c2;
+  --chapter-ff: #2f9377;
+  --chapter-gb3: #b98a3f;
+  --chapter-euro: #992f52;
+  --chapter-fro: #6c9455;
+  --chapter-imsa: #2e9ac2;
+  --chapter-indy: var(--ink);
+  --place-us: var(--ink);
+  --place-uk: #5581c2;
+  --place-nz: #6c9455;
+  --place-eu: #992f52;
+  --odo-race: var(--ink);
+  --odo-travel: var(--grey-ink3);
 }
 
 @media (max-width: 899px) {

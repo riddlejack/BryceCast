@@ -99,7 +99,7 @@
     {
       "note": "Career page figures, share of his life, weeks grid and ordered travel legs.",
       "path": "analysis/career-life-stats/output/career_figures.json",
-      "sha256": "1a0f6307b69820c2fe087ea199a3148fcf855809963ea4e2c8adb1875516db65"
+      "sha256": "42bf24af15d38201888f2c6404fabc2f49a976e42cd9421e26392c58bc0427a8"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",

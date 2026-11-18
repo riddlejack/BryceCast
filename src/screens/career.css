@@ -240,7 +240,7 @@
 .odo-wheel__strip > span { display: block; height: 1.1em; line-height: 1.1em; }
 .odo-wheel--rest { color: var(--grey-line); }
 .odo-unit {
-  font-size: 0.4em;
+  font-size: max(0.4em, 12px);
   font-weight: 500;
   letter-spacing: 0;
   color: var(--ink-secondary);
@@ -265,7 +265,10 @@
 
 /* ---------- the drawings ---------- */
 
-.odo-visual { margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.odo-visual { position: relative; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+/* A tile whose card is open sits above its neighbours (each tile is a size
+ * container, so its own stacking context). */
+.odo-group:has(.odo-card, .tap-card, [data-tap-card]) { position: relative; z-index: 6; }
 .odo-legend {
   display: flex;
   flex-wrap: wrap;
@@ -288,10 +291,44 @@
 .odo-key--hatch { background: repeating-linear-gradient(135deg, var(--ink) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--ink); }
 .odo-key--dot { background: var(--ink); border-radius: 50%; width: 8px; height: 8px; }
 .odo-key--dot-soft { background: var(--grey-line); border-radius: 50%; width: 8px; height: 8px; }
+/* Round 2: his own miles and hours in the INDY NXT gold, travel in its colour,
+ * the INDY NXT races that ended early in the status red. */
+.odo-key--race { background: var(--odo-race); }
+.odo-key--race-hatch { background: repeating-linear-gradient(135deg, var(--odo-race) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--odo-race); }
+.odo-key--race-soft { background: color-mix(in srgb, var(--odo-race) 32%, var(--paper)); }
+.odo-key--travel { background: var(--odo-travel); }
+.odo-key--out { background: var(--status-bad); }
+.odo-key--out-hatch { background: repeating-linear-gradient(135deg, var(--status-bad) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--status-bad); }
+.odo-key--spectrum {
+  width: 26px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--chapter-f1600), var(--chapter-ff) 20%, var(--chapter-gb3) 40%, var(--chapter-euro) 55%, var(--chapter-fro) 70%, var(--chapter-indy) 88%);
+}
+.odo-key--dot-daytona { background: var(--chapter-imsa); opacity: 0.45; border-radius: 50%; width: 8px; height: 8px; }
+
+/* A drawing's key line doubles as its readout: the hovered (or tapped) mark
+ * reads here, in text ink, its swatch beside it. */
+.odo-read { color: var(--ink-secondary); text-wrap: pretty; }
+.odo-read b { color: var(--ink); font-weight: 620; font-variant-numeric: tabular-nums; }
+.odo-read i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+.odo-legend__item { cursor: default; transition: opacity 160ms ease, color 160ms ease; }
+.odo-series--hot .odo-legend__item { opacity: 0.45; }
+.odo-series--hot .odo-legend__item--hot { opacity: 1; color: var(--ink); }
+/* the note line under a key: its own line, which the readout takes over */
+.odo-legend__line { flex-basis: 100%; }
 
 /* Races by series: one bar, a segment per series. */
-.odo-bar { display: flex; gap: 2px; height: 22px; }
-.odo-bar__seg { display: block; min-width: 3px; }
+.odo-bar { display: flex; gap: 2px; height: 22px; align-items: center; }
+.odo-bar__seg {
+  display: block;
+  min-width: 3px;
+  height: 22px;
+  border-radius: 3px;
+  cursor: default;
+  transition: height 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 160ms ease;
+}
+.odo-series--hot .odo-bar__seg { opacity: 0.32; }
+.odo-series--hot .odo-bar__seg--hot { opacity: 1; height: 30px; }
 
 /* Bars on one scale, with a dashed run where a figure is only a floor. */
 .odo-scale { position: relative; display: flex; flex-direction: column; gap: 9px; padding-top: 18px; }
@@ -299,10 +336,22 @@
 .odo-scale__label { font-size: 13px; color: var(--ink-secondary); white-space: nowrap; }
 .odo-scale__track { position: relative; height: 16px; }
 .odo-scale__fill { position: absolute; inset: 0 auto 0 0; display: flex; }
-.odo-scale__part { display: block; height: 100%; }
-.odo-scale__part--ink { background: var(--ink); }
-.odo-scale__part--soft { background: var(--grey-line); }
-.odo-scale__part--hatch { background: repeating-linear-gradient(135deg, var(--ink) 0 1.5px, var(--paper) 1.5px 4px); box-shadow: inset 0 0 0 1px var(--ink); }
+.odo-scale__part { display: block; height: 100%; cursor: default; transition: opacity 160ms ease, filter 160ms ease; }
+.odo-scale__part--race { background: var(--odo-race); }
+.odo-scale__part--race-hatch {
+  background: repeating-linear-gradient(135deg, var(--odo-race) 0 1.5px, var(--paper) 1.5px 4px);
+  box-shadow: inset 0 0 0 1px var(--odo-race);
+}
+.odo-scale__part--race-soft { background: color-mix(in srgb, var(--odo-race) 32%, var(--paper)); }
+.odo-scale__part--travel { background: var(--odo-travel); }
+/* Hover: the bar in hand goes bolder, its part (or the whole bar from its
+ * label) stays full, everything else steps back. */
+.odo-scale__fill { transform-origin: left center; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.odo-scale__row--hot .odo-scale__fill { transform: scaleY(1.45); }
+.odo-scale--hot .odo-scale__part { opacity: 0.4; filter: grayscale(1); }
+.odo-scale--hot .odo-scale__part--hot { opacity: 1; filter: none; }
+.odo-scale__label { cursor: default; transition: color 160ms ease; }
+.odo-scale__row--hot .odo-scale__label { color: var(--ink); font-weight: 600; }
 .odo-scale__more {
   position: absolute;
   top: 50%;
@@ -333,21 +382,52 @@
 .odo-places { display: flex; flex-wrap: nowrap; gap: 0 14px; align-items: flex-end; }
 .odo-places__country { display: flex; flex-direction: column; gap: 4px; }
 .odo-places__dots { display: flex; flex-wrap: wrap-reverse; gap: 3px; max-width: 128px; }
-.odo-places__dots i { display: block; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); }
-.odo-places__name { font-size: 13px; color: var(--ink-secondary); white-space: nowrap; }
+.odo-places__dots i {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--place, var(--ink));
+  cursor: default;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), opacity 140ms ease;
+}
+.odo-places__name { font-size: 13px; color: var(--ink-secondary); white-space: nowrap; cursor: default; }
+.odo-places--hot .odo-places__country { opacity: 0.35; transition: opacity 140ms ease; }
+.odo-places--hot .odo-places__country--hot { opacity: 1; }
+.odo-places__country--hot .odo-places__name { color: var(--ink); font-weight: 600; }
+.odo-places__dots i.odo-places__dot--hot { transform: scale(1.5); box-shadow: 0 0 0 1.5px var(--paper); }
 
 /* The other drivers: a dot per name. */
 .odo-people svg { display: block; }
-.odo-people__dot { fill: var(--ink); }
-.odo-people__dot--daytona { fill: var(--grey-line); }
+.odo-people svg { cursor: default; touch-action: manipulation; }
+.odo-people__dot { fill-opacity: 0.9; }
+/* Daytona-only drivers: the IMSA colour, stepped back, so the single-seater
+ * rivals lead. */
+.odo-people__dot--daytona { fill-opacity: 0.4; }
 
 /* INDY NXT races: a square per race, by season. */
-.odo-races { display: flex; flex-wrap: wrap; gap: 6px 14px; }
-.odo-races__year { display: flex; flex-direction: column; gap: 4px; }
+/* The seasons share one row, each as wide as its race count, so a fourth
+ * season still fits (round 2: 45 races no longer fit at a fixed width). */
+.odo-races { display: flex; flex-wrap: nowrap; gap: 6px 12px; }
+.odo-races__year { display: flex; flex-direction: column; gap: 4px; flex: var(--n) 1 0; min-width: 0; }
 .odo-races__cells { display: flex; gap: 2px; }
-.odo-races__cell { display: block; width: 8px; height: 22px; box-shadow: inset 0 0 0 1px var(--grey-line); }
-.odo-races__cell--contact { background: var(--ink); box-shadow: none; }
-.odo-races__cell--mechanical { background: repeating-linear-gradient(135deg, var(--ink) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--ink); }
+.odo-races__cells > .odo-races__cell { flex: 1 1 0; min-width: 3px; max-width: 10px; }
+.odo-races__cell {
+  display: block;
+  width: 8px;
+  height: 22px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--chapter-indy) 30%, var(--paper));
+  cursor: pointer;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), opacity 140ms ease;
+}
+.odo-races__cell--contact { background: var(--status-bad); }
+.odo-races__cell--mechanical {
+  background: repeating-linear-gradient(135deg, var(--status-bad) 0 1.5px, var(--paper) 1.5px 4px);
+  box-shadow: inset 0 0 0 1px var(--status-bad);
+}
+.odo-races--hot .odo-races__cell { opacity: 0.45; }
+.odo-races--hot .odo-races__cell--hot { opacity: 1; transform: scaleY(1.3); }
 .odo-races__label { font-size: 13px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
 
 /* Round 9 (Jack on an iPhone: the spacing in these blocks): a label that has to
@@ -368,11 +448,44 @@
   .odo-races { flex-direction: column; flex-wrap: nowrap; gap: 8px; }
   .odo-races__year { flex-direction: row; align-items: center; gap: 10px; }
   .odo-races__label { order: -1; flex: none; width: 4ch; }
+  /* a thumb-sized square per race on a phone */
+  .odo-races__year { flex: none; }
+  .odo-races__cells { gap: 3px; flex-wrap: wrap; }
+  .odo-races__cells > .odo-races__cell { flex: none; width: 12px; max-width: none; height: 24px; }
 }
+
+/* The card a mark at a track opens (the Career explorer's mouse card). */
+.odo-card {
+  position: absolute;
+  z-index: 8;
+  width: min(300px, calc(100vw - 16px));
+  background: var(--surface-0);
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(30, 28, 26, 0.13);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.odo-card__still { display: block; width: 100%; height: auto; background: var(--grey-fill); border-bottom: 1px solid var(--divider); }
+.odo-card__body { display: flex; flex-direction: column; gap: 3px; padding: 9px 12px 10px; }
+.odo-card__meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.odo-card__meta i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.odo-card__title { font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+.odo-card__nums { color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+.odo-card__nums--out { color: var(--status-bad); font-weight: 560; }
+.odo-card__list { display: block; margin-top: 5px; padding-top: 6px; border-top: 1px solid var(--grey-hair); font-size: 12px; line-height: 1.5; color: var(--ink-muted); text-wrap: pretty; }
+.odo-card__list > span + span::before { content: ' · '; color: var(--grey-ink3); font-weight: 400; }
+.odo-card__list-on { color: var(--ink); font-weight: 600; }
+.odo-card__action { color: var(--link); font-size: 12px; margin-top: 2px; }
 
 .career-odometer .odometer-live { margin-top: clamp(28px, 2.4vw, 44px); }
 
 /* ---------- 2. his life in weeks ---------- */
+
+.series-key__series { cursor: default; transition: opacity 160ms ease, color 160ms ease; }
+.series-key--focus .series-key__series { opacity: 0.45; }
+.series-key--focus .series-key__series--on { opacity: 1; color: var(--ink); }
 
 .life-layout {
   display: grid;
