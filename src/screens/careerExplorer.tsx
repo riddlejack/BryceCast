@@ -235,7 +235,7 @@ export const FilterChip = ({ label, active, onClick }: { label: string; active: 
   </button>
 );
 
-/** One labeled row of controls, so each kind of filtering names itself. */
+/** One labelled row of controls, so each kind of filtering names itself. */
 export const ControlRow = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="row" style={{ gap: 10, alignItems: 'flex-start' }}>
     <span className="caption caption--secondary" style={{ width: 62, flex: 'none', paddingTop: 6 }}>
@@ -590,7 +590,7 @@ export const CareerExplorer = () => {
             {
               label: 'Career result conversion table',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: 'Official/source-backed results across all series. Start-position views exclude races without a sourced grid position; condition lanes come from official series reports plus labeled modeled observations.'
+              note: 'Official/source-backed results across all series. Start-position views exclude races without a sourced grid position; condition lanes use each race’s wet/dry call: the series’ own report, else NOAA stations and race reports, else the Open-Meteo reanalysis (labelled modelled).'
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
@@ -1477,7 +1477,7 @@ export const RainDays = () => {
             {
               label: 'Per-session condition reports',
               path: 'analysis/context-event-narrative-layer/output/weather_condition_context.csv',
-              note: `Official series weather lines plus labeled modeled observations, joined by session. ${reported.length} of ${rows.length} career races carry a sourced report; the rest stay out of both lanes.`
+              note: `Each race's wet/dry call: the series' own report, else NOAA stations and race reports, else the Open-Meteo reanalysis (labelled modelled). ${reported.length} of ${rows.length} career races carry a sourced report; the rest stay out of both lanes.`
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}

@@ -625,7 +625,7 @@ const ExplorerDeepDiveNew = ({ dots }: { dots: DotStyle }) => {
               },
               {
                 label: 'Weather rows',
-                note: `Wet, damp and drying share one row, "wet or mixed". Conditions come from official series reports plus labelled modeled observations; the ${noReport} races with no sourced report sit in their own row rather than being guessed.`
+                note: `Wet, damp and drying share one row, "wet or mixed". Each race's call is the series' own condition report where it printed one, else NOAA weather stations near the track and race reports, else the Open-Meteo reanalysis rain over the race window (labelled modelled).${noReport > 0 ? ` The ${noReport} races with no call sit in their own row rather than being guessed.` : ''}`
               },
               {
                 label: 'Start → finish',

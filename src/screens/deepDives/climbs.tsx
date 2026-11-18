@@ -27,8 +27,8 @@ import './climbs.css';
  * ladders, one per race, drawn to one scale: each ladder is as long as the
  * field he raced (the classified cars behind the race's finishing percentile),
  * and his marker rises from his grid slot to his finish, once, as the section
- * comes into view. 14 places up a 21-car ladder reads differently from 7 up an
- * 18-car one. `?ddclimbs=rows` lays the same five out as rows: the field as a
+ * comes into view. A gain up a long ladder reads differently from the same gain
+ * up a short one. `?ddclimbs=rows` lays the same five out as rows: the field as a
  * line of grid slots, front on the right, his marker running forward.
  * Selection is the old component's: the five largest positive gains among the
  * career rows, ties in race-date order (the rows arrive date-sorted and the
