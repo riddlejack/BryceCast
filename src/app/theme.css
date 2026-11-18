@@ -2349,14 +2349,7 @@ a.ss-race--link:hover { background: var(--fill-quiet); }
   .ss-ribbon__seg { flex: 1 1 44%; }
 }
 
-/* Named climb moments are a visual overlay only; nearest-dot hover remains
-   owned by the chart SVG underneath at every viewport. */
-.climb-moments,
-.climb-moments * { pointer-events: none; }
-
-@media (max-width: 639px) {
-  .climb-moment__annotation { display: none; }
-}
+/* The climb's rules live in src/screens/climb/climb.css. */
 
 /* ---------- career atlas: a quiet, package-fed venue map ---------- */
 

@@ -1,0 +1,57 @@
+/* The climb, race by race (career round 2, November 17, 2026). */
+
+.climb { position: relative; width: 100%; }
+.climb-caption { margin: 0 0 10px; }
+.climb-stage { position: relative; width: 100%; }
+.climb-svg {
+  display: block;
+  overflow: visible;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.climb-svg[data-hovering] { cursor: pointer; }
+.climb-note, .climb-figure { pointer-events: none; }
+
+/* the race card: the explorer's mouse card, with the track's 3D still */
+.climb-card {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: var(--surface-0);
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(30, 28, 26, 0.12);
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-align: left;
+}
+.climb-card--below { transform: translate(-50%, 0); }
+.climb-card--touch {
+  transform: none;
+  width: min(280px, calc(100vw - 16px));
+  pointer-events: auto;
+  font-size: 13px;
+  -webkit-tap-highlight-color: transparent;
+}
+.climb-card__still { display: block; width: 100%; height: auto; background: var(--grey-fill); border-bottom: 1px solid var(--divider); }
+.climb-card__body { display: flex; flex-direction: column; gap: 3px; padding: 9px 12px 10px; }
+.climb-card--touch .climb-card__body { padding: 8px 12px; }
+.climb-card__meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.climb-card__meta i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.climb-card__title { font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+.climb-card__nums { color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+.climb-card__nums b { color: var(--ink); font-weight: 650; }
+.climb-card__note { color: var(--ink-muted); font-size: 12px; }
+.climb-card__action { color: var(--link); font-size: 12px; margin-top: 2px; }
+
+/* the old chart (?climb=old): named moments are a visual overlay only;
+   nearest-dot hover stays with the chart SVG underneath */
+.climb-moments,
+.climb-moments * { pointer-events: none; }
+
+@media (max-width: 639px) {
+  .climb-moment__annotation { display: none; }
+}
