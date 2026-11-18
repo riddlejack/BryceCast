@@ -16,7 +16,7 @@
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": null,
@@ -34,7 +34,7 @@
       "seriesId": "series_frp_f1600",
       "seriesName": "F1600 Championship Series",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 4.1,
@@ -52,7 +52,7 @@
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 10.067,
@@ -70,7 +70,7 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": null,
@@ -88,7 +88,7 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 4.857,
@@ -106,7 +106,7 @@
       "seriesId": "series_euroformula_open",
       "seriesName": "Euroformula Open",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 6.5,
@@ -124,7 +124,7 @@
       "seriesId": "series_froc",
       "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 11.917,
@@ -142,7 +142,7 @@
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 5.0,
@@ -160,7 +160,7 @@
       "seriesId": "series_usf_pro_2000",
       "seriesName": "USF Pro 2000 Championship",
       "sourceFamily": "qualifying_session_result",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 12.182,
@@ -178,7 +178,7 @@
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     },
     {
       "avgFinishConverted": 13.294,
@@ -196,7 +196,7 @@
       "seriesId": "series_indy_nxt",
       "seriesName": "INDY NXT",
       "sourceFamily": "official_qualifying",
-      "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     }
   ],
   "career": {
@@ -223,21 +223,21 @@
       "official_qualifying": 99,
       "qualifying_session_result": 32
     },
-    "bryceRaces": 173,
+    "bryceRaces": 175,
     "conversionRaces": 77,
-    "excludedRaces": 96,
+    "excludedRaces": 98,
     "excludedReasons": {
       "no_finish": 8,
       "no_grid_column": 37,
-      "no_qualifying_in_event": 15,
+      "no_qualifying_in_event": 17,
       "reverse_grid_no_quali_match": 36
     },
     "qualifyingAppearances": 131,
     "seriesWithConversion": 6,
     "seriesWithQualifying": 7
   },
-  "datasetSha256": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
-  "generatedAt": "2026-11-17T22:24:38Z",
+  "datasetSha256": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
+  "generatedAt": "2026-11-18T04:02:31Z",
   "method": {
     "currency": "grid positions and place counts; qualifying lap times are context strings, never differenced into a pace claim.",
     "linkage": "A qualifying set a race's grid when Bryce's race grid equals his qualifying rank in the same event; that race is the grid_confirmed conversion. Reverse-grid races carry no matching rank and are recorded as excluded, never estimated. Where a source has no grid column, the qualifying position is recorded but conversion is left unconfirmed.",
@@ -247,7 +247,7 @@
     },
     "sourceFamilyDiscipline": "Each qualifying session is read from exactly one family; qualifyingResults wins per session and the results rows for that same session are never blended in."
   },
-  "runDate": "2026-09-19",
+  "runDate": "2026-11-17",
   "schemaVersion": "brycecast.qualifyingLayer.v1",
   "sourceFamilyMap": [
     {

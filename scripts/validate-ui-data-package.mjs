@@ -737,6 +737,72 @@ const undatedConversionRows = conversionRows.filter((row) => !row.eventStartDate
 if (conversionRows.length === 0 || undatedConversionRows > 0) {
   fail(`careerLab.resultConversion must carry eventStartDate on every row (${undatedConversionRows} missing of ${conversionRows.length}).`);
 }
+/* The race's own day, not the meeting's first day (SCCA Saturday and Sunday
+ * races were dated the Friday), and the field-beaten share that does not count
+ * him in his own field. */
+const isoDay = /^\d{4}-\d{2}-\d{2}$/;
+const badRaceDateRows = conversionRows.filter((row) => !isoDay.test(String(row.raceDate ?? '')) || String(row.raceDate) < String(row.eventStartDate));
+if (badRaceDateRows.length) {
+  fail(`careerLab.resultConversion must carry a raceDate on or after eventStartDate on every row (${badRaceDateRows.length} bad, e.g. ${badRaceDateRows[0].sessionId}).`);
+}
+const badBeatenRows = conversionRows.filter((row) => {
+  const place = Number(row.finishPosition);
+  const field = Number(row.fieldSize);
+  if (!(field > 1 && place >= 1 && place <= field)) return row.fieldBeatenShare !== null && row.fieldBeatenShare !== undefined;
+  return Math.abs(Number(row.fieldBeatenShare) - (field - place) / (field - 1)) > 0.0001;
+});
+if (badBeatenRows.length) {
+  fail(`careerLab.resultConversion fieldBeatenShare must be (field - place) / (field - 1) (${badBeatenRows.length} bad, e.g. ${badBeatenRows[0].sessionId}).`);
+}
+const badUnclassifiedDates = (dataPackage.screens.careerLab.unclassifiedRaces ?? []).filter((row) => row.raceDate != null && !isoDay.test(String(row.raceDate)));
+if (badUnclassifiedDates.length) fail(`careerLab.unclassifiedRaces raceDate must be YYYY-MM-DD (${badUnclassifiedDates.length} bad).`);
+
+/* ---------- weather for every race ---------- */
+
+{
+  const raceWeather = dataPackage.screens.careerLab.raceWeather ?? {};
+  const raceSessionIds = new Set([
+    ...conversionRows.map((row) => row.sessionId),
+    ...(dataPackage.screens.careerLab.unclassifiedRaces ?? []).map((row) => row.sessionId)
+  ]);
+  const missingWeather = [...raceSessionIds].filter((sessionId) => !raceWeather[sessionId]);
+  if (missingWeather.length) fail(`careerLab.raceWeather must cover every race (${missingWeather.length} missing, e.g. ${missingWeather[0]}).`);
+  const skies = new Set(['clear', 'partly', 'overcast', 'rain', 'storm']);
+  const wetDries = new Set(['wet', 'dry', 'mixed', null]);
+  const wetDrySources = new Set(['series_report', 'reanalysis', null]);
+  const isWindowTime = (value) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(String(value ?? ''));
+  for (const [sessionId, row] of Object.entries(raceWeather)) {
+    if (row.sessionId !== sessionId) fail(`careerLab.raceWeather key ${sessionId} carries sessionId ${row.sessionId}.`);
+    if (!raceSessionIds.has(sessionId)) fail(`careerLab.raceWeather ${sessionId} is not a race of the record.`);
+    if (!isWindowTime(row.window?.start) || !isWindowTime(row.window?.end) || row.window.end < row.window.start || !['session_sheet', 'race_day'].includes(row.window.basis)) {
+      fail(`careerLab.raceWeather ${sessionId} has a bad window.`);
+    }
+    if (!skies.has(row.sky) || !wetDries.has(row.wetDry ?? null) || !wetDrySources.has(row.wetDrySource ?? null)) fail(`careerLab.raceWeather ${sessionId} has an unexpected sky or wet/dry value.`);
+    if ((row.wetDry == null) !== (row.wetDrySource == null)) fail(`careerLab.raceWeather ${sessionId} must name a wet/dry source exactly when it has a wet/dry call.`);
+    if (row.wetDrySource === 'reanalysis' && row.wetDry === 'mixed') fail(`careerLab.raceWeather ${sessionId}: the reanalysis never calls a race mixed.`);
+    if (row.wetDrySource === 'series_report' && !row.seriesReport) fail(`careerLab.raceWeather ${sessionId} cites a series report it does not carry.`);
+    if (row.source?.tier !== 'modelled' || !/Open-Meteo/.test(row.source?.name ?? '')) fail(`careerLab.raceWeather ${sessionId} must label the reanalysis as modelled Open-Meteo.`);
+    for (const key of ['rainMm', 'cloudPct', 'windKph', 'gustKph', 'tempC']) {
+      if (row[key] !== null && !Number.isFinite(row[key])) fail(`careerLab.raceWeather ${sessionId}.${key} must be a number or null.`);
+    }
+    if (row.rainMm < 0 || row.cloudPct < 0 || row.cloudPct > 100 || row.tempC < -30 || row.tempC > 50 || (row.windFromDeg !== null && (row.windFromDeg < 0 || row.windFromDeg >= 360))) {
+      fail(`careerLab.raceWeather ${sessionId} has an out-of-range value.`);
+    }
+  }
+  /* The official reports decide wet or dry wherever the conversion rows already
+   * join one, so the two blocks never disagree. */
+  const tierClash = conversionRows.filter((row) => {
+    const weather = raceWeather[row.sessionId];
+    if (!weather || !row.wetDry || row.weatherConfidence !== 'official') return false;
+    const official = row.wetDry === 'wet' ? 'wet' : row.wetDry === 'dry' ? 'dry' : 'mixed';
+    return weather.wetDrySource !== 'series_report' || weather.wetDry !== official;
+  });
+  if (tierClash.length) fail(`careerLab.raceWeather ignores the series report on ${tierClash.length} races (e.g. ${tierClash[0].sessionId}).`);
+  const summary = dataPackage.screens.careerLab.raceWeatherSummary;
+  if (!summary || summary.coverage?.races !== Object.keys(raceWeather).length || !summary.calibration || summary.calibration.races < 1) {
+    fail('careerLab.raceWeatherSummary must carry coverage matching raceWeather and the calibration against official reports.');
+  }
+}
 
 /* ---------- career named moments: deterministic semantics + referential integrity ---------- */
 

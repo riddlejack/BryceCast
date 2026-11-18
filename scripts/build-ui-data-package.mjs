@@ -65,6 +65,8 @@ const sources = {
   careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
   careerLifeStatsFigures: 'analysis/career-life-stats/output/career_figures.json',
   careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv',
+  careerRaceWeatherOutput: 'analysis/career-weather/output/race-weather.json',
+  careerRaceWeatherBuilderScript: 'scripts/build-career-race-weather.mjs',
   careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
   careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
   careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
@@ -2137,14 +2139,36 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
     const session = sessionById.get(row.sessionId);
     const event = session ? eventById.get(session.eventId) : null;
     const weather = weatherBySession.get(row.sessionId) ?? null;
+    const fieldSize = fieldBySession.get(row.sessionId) ?? null;
     return {
       ...row,
       eventStartDate: event?.eventStartDate ?? null,
-      fieldSize: fieldBySession.get(row.sessionId) ?? null,
+      raceDate: sessionDay(session),
+      fieldSize,
+      fieldBeatenShare: fieldBeatenShare(row.finishPosition, fieldSize),
       wetDry: weather?.wetDry ?? null,
       weatherConfidence: weather?.weatherConfidence ?? null
     };
   });
+};
+
+/* The race's own day: the session's actual start, else its scheduled start, else
+ * null (never the meeting's first day, which is eventStartDate). SCCA Saturday and
+ * Sunday races used to read as the Friday because only eventStartDate was carried. */
+const sessionDay = (session) => {
+  const start = session?.actualStart ?? session?.scheduledStart ?? null;
+  return typeof start === 'string' && /^\d{4}-\d{2}-\d{2}/.test(start) ? start.slice(0, 10) : null;
+};
+
+/* The share of the OTHER cars he finished ahead of: (field - place) / (field - 1).
+ * finishPercentile ((field - place + 1) / field) counts Bryce himself, so last of
+ * 7 reads 14%; it stays as the analysis layer's normalised finish, but a reader
+ * claim ("beat N% of the field") must use this share. Null without a field. */
+const fieldBeatenShare = (finishPosition, fieldSize) => {
+  const place = numberOrNull(finishPosition);
+  const field = numberOrNull(fieldSize);
+  if (place === null || field === null || field <= 1 || place < 1 || place > field) return null;
+  return Number(((field - place) / (field - 1)).toFixed(4));
 };
 
 /* The races the conversion table leaves out because they have no classified
@@ -2176,6 +2200,7 @@ const buildUnclassifiedCanonical = (canonicalDataset, conversionRows) => {
           trackName: track.canonicalName ?? track.name ?? null,
           trackType: track.trackType ?? null,
           eventStartDate: event.eventStartDate ?? null,
+          raceDate: sessionDay(session),
           raceNumber: numberOrNull(session.raceNumber),
           startPosition: numberOrNull(result.startPosition ?? result.gridPosition),
           fieldSize: numberOrNull(result.fieldSize),
@@ -3427,6 +3452,10 @@ const buildPackage = () => {
   const careerLifeStatsTireEstimate = readCsv(sources.careerLifeStatsTireEstimate);
   const careerFigures = readJson(sources.careerLifeStatsFigures);
   const careerAtlas = readJson(sources.careerAtlasOutput);
+  /* Weather for every race, one record per race session (scripts/build-career-race-weather.mjs):
+   * Open-Meteo reanalysis over the official session window, modelled; an official
+   * series report decides wet or dry where one exists. */
+  const careerRaceWeather = readJson(sources.careerRaceWeatherOutput);
   const restartReportSummary = readJson(sources.restartReportSummary);
   const restartByRaceRows = readCsv(sources.restartReportByRace);
   const qualifyingLayerSummary = readJson(sources.qualifyingLayerSummary);
@@ -3754,6 +3783,14 @@ const buildPackage = () => {
           medianFinish: numberOrNull(row.medianFinish),
           avgGain: numberOrNull(row.avgGain),
           avgFinishPercentile: percentOrNull(row.avgFinishPercentile),
+          /* Mean share of the other cars he finished ahead of, in percent: the
+           * figure for "field beaten, on average". avgFinishPercentile counts him. */
+          avgFieldBeatenPct: (() => {
+            const shares = careerConversionEnriched
+              .filter((race) => race.seriesId === row.seriesId && race.fieldBeatenShare !== null)
+              .map((race) => race.fieldBeatenShare);
+            return shares.length ? Math.round((shares.reduce((sum, value) => sum + value, 0) / shares.length) * 1000) / 10 : null;
+          })(),
           top5RatePct: percentOrNull(row.top5Rate),
           top10RatePct: percentOrNull(row.top10Rate),
           issueLikeStatusRatePct: percentOrNull(row.issueLikeStatusRate)
@@ -3779,6 +3816,7 @@ const buildPackage = () => {
             const extra = canonical.get(row.sessionId);
             return {
               ...row,
+              raceDate: extra?.raceDate ?? null,
               raceNumber: extra?.raceNumber ?? null,
               startPosition: extra?.startPosition ?? null,
               fieldSize: extra?.fieldSize ?? null,
@@ -3833,6 +3871,34 @@ const buildPackage = () => {
             sourceRef('careerResultConversion', 'Career Lab conversion context; A2 restores four unclassified canonical race rows for atlas counts.'),
             sourceRef('careerAtlasBuilderScript', 'Deterministic career crop, full-world globe texture, projection, clipping, and simplification.'),
             sourceRef('careerAtlasValidatorScript', 'Provenance, globe-texture determinism, coordinate coverage, and lineage gates.')
+          ]
+        },
+        raceWeather: Object.fromEntries((careerRaceWeather.races ?? []).map((row) => [row.sessionId, {
+          sessionId: row.sessionId,
+          window: row.window,
+          sky: row.sky,
+          wetDry: row.wetDry ?? null,
+          wetDrySource: row.wetDrySource ?? null,
+          rainMm: numberOrNull(row.rainMm),
+          cloudPct: numberOrNull(row.cloudPct),
+          windKph: numberOrNull(row.windKph),
+          gustKph: numberOrNull(row.gustKph),
+          windFromDeg: numberOrNull(row.windFromDeg),
+          tempC: numberOrNull(row.tempC),
+          source: row.source,
+          /* The official condition words, where the series reported them. */
+          seriesReport: row.seriesReport ? { conditionRaw: row.seriesReport.conditionRaw ?? null, source: row.seriesReport.source ?? null, url: row.seriesReport.url ?? null } : null
+        }])),
+        raceWeatherSummary: {
+          schemaVersion: careerRaceWeather.schemaVersion,
+          source: careerRaceWeather.source,
+          grain: careerRaceWeather.grain,
+          rules: careerRaceWeather.rules,
+          coverage: careerRaceWeather.coverage,
+          calibration: careerRaceWeather.calibration,
+          sourceRefs: [
+            sourceRef('careerRaceWeatherOutput', 'Per-race weather over the official session window: Open-Meteo reanalysis (modelled) with the official series condition report deciding wet or dry where one exists.'),
+            sourceRef('careerRaceWeatherBuilderScript', 'Windowing, hourly aggregation, sky and wet/dry rules, and the calibration against official reports.')
           ]
         },
         lifeStats: {

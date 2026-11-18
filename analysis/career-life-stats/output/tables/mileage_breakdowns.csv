@@ -1,5 +1,5 @@
 dimensionType,dimensionValue,confidenceClass,sessionCount,lapsFloor,milesFloor
-season,2019,observed_exact,32,445,1108.767
+season,2019,observed_exact,34,467,1159.367
 season,2019,observed_lower_bound,14,149,360.540
 season,2019,unknown,2,0,0.000
 season,2020,observed_exact,38,436,704.194
@@ -26,7 +26,7 @@ series,series_imsa_weathertech,observed_exact,1,142,505.520
 series,series_indy_nxt,observed_exact,135,3625,6722.378
 series,series_indy_nxt,unknown,10,0,0.000
 series,series_rcffs,observed_exact,1,18,40.644
-series,series_scca_super_tour,observed_exact,6,71,224.039
+series,series_scca_super_tour,observed_exact,8,93,274.639
 series,series_usf_pro_2000,observed_exact,1,90,61.740
 series,series_usf_pro_2000,unknown,1,0,0.000
 session_type,heat,observed_exact,3,38,49.360
@@ -36,7 +36,7 @@ session_type,practice,unknown,7,0,0.000
 session_type,qualifying,observed_exact,69,677,1619.737
 session_type,qualifying,observed_lower_bound,5,56,139.516
 session_type,qualifying,unknown,17,0,0.000
-session_type,race,observed_exact,172,3566,7899.932
+session_type,race,observed_exact,174,3588,7950.532
 session_type,race,unknown,1,0,0.000
 session_type,test,observed_exact,7,100,366.000
 session_type,test,unknown,3,0,0.000
@@ -57,6 +57,7 @@ venue,Euromarque Motorsport Park,unknown,6,0,0.000
 venue,Grand Prix of Arlington Street Circuit,observed_exact,4,42,114.660
 venue,Highlands Motorsport Park,observed_exact,3,63,156.555
 venue,Highlands Motorsport Park,unknown,8,0,0.000
+venue,Homestead-Miami Speedway,observed_exact,2,22,50.600
 venue,Hungaroring,observed_exact,4,62,168.764
 venue,Indianapolis Motor Speedway Road Course,observed_exact,15,331,807.309
 venue,Iowa Speedway,observed_exact,4,219,195.786
@@ -105,9 +106,9 @@ country,New Zealand,unknown,14,0,0.000
 country,Portugal,observed_exact,4,64,185.024
 country,United Kingdom,observed_exact,136,1681,4163.818
 country,United Kingdom,unknown,1,0,0.000
-country,United States,observed_exact,165,4258,8345.253
+country,United States,observed_exact,167,4280,8395.853
 country,United States,observed_lower_bound,14,149,360.540
 country,United States,unknown,13,0,0.000
-confidence_class,observed_exact,observed_exact,345,6556,14541.958
+confidence_class,observed_exact,observed_exact,347,6578,14592.558
 confidence_class,observed_lower_bound,observed_lower_bound,14,149,360.540
 confidence_class,unknown,unknown,28,0,0.000

@@ -443,7 +443,12 @@ def main() -> None:
     gaps = [(g, r) for g, r in gaps if g is not None and g > 0]
     out["racesWithGapToAhead"] = len(gaps)
     out["racesWithGapToAheadBySeries"] = by(lambda p: ev(p[1])["seriesId"], gaps)
-    out["closestFinishes"] = [(g, r["sessionId"], fin(r)) for g, r in sorted(gaps, key=lambda p: p[0])[:4]]
+    # A close finish is a gap at the flag: on the winner's lap count. Homestead
+    # 2019 race 2 lists him 0.083 s behind the car ahead, but both had stopped
+    # after 7 of the winner's 19 laps.
+    winner_laps = {x["sessionId"]: x.get("lapsCompleted") for x in data["results"] if x.get("finishPosition") == 1}
+    at_flag = [(g, r) for g, r in gaps if r.get("lapsCompleted") is not None and r.get("lapsCompleted") == winner_laps.get(r["sessionId"])]
+    out["closestFinishes"] = [(g, r["sessionId"], fin(r)) for g, r in sorted(at_flag, key=lambda p: p[0])[:4]]
     margins = []
     for w in [r for r in races if fin(r) == 1]:
         second = next((x for x in data["results"] if x["sessionId"] == w["sessionId"] and x.get("finishPosition") == 2), None)

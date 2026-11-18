@@ -1,8 +1,8 @@
 # Formula Ford Lap Shape
 
-Generated: `2026-11-16T17:56:49Z`
+Generated: `2026-11-18T03:48:24Z`
 Source dataset: `data/career/career.dataset.json`
-Source hash: `b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5`
+Source hash: `53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161`
 
 ## Source Scope
 

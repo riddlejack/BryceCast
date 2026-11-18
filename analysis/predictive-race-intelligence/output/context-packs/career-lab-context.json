@@ -38,7 +38,7 @@
       "type": "small_multiple"
     }
   ],
-  "generatedAt": "2026-11-17T22:23:58Z",
+  "generatedAt": "2026-11-18T04:01:49Z",
   "id": "career_lab_context",
   "metricFamilyParity": [
     {
@@ -608,7 +608,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_scca_super_tour",
       "seriesName": "Hoosier SCCA Super Tour",
-      "sourceRowsOrSessions": "6",
+      "sourceRowsOrSessions": "8",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -628,7 +628,7 @@
       "parityStatus": "production_safe",
       "seriesId": "series_scca_super_tour",
       "seriesName": "Hoosier SCCA Super Tour",
-      "sourceRowsOrSessions": "3",
+      "sourceRowsOrSessions": "4",
       "uiUse": "Use in Career Analytics Lab."
     },
     {
@@ -658,7 +658,7 @@
       "parityStatus": "source_bounded_partial",
       "seriesId": "series_scca_super_tour",
       "seriesName": "Hoosier SCCA Super Tour",
-      "sourceRowsOrSessions": "146",
+      "sourceRowsOrSessions": "184",
       "uiUse": "Use with coverage badge and denominators."
     },
     {
@@ -3624,6 +3624,42 @@
       "trackType": "road"
     },
     {
+      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "finishPercentile": "0.75",
+      "finishPosition": "6.0",
+      "points": "",
+      "positionGain": "",
+      "raceLabel": "2019 SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_homestead_race_1",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Homestead-Miami Speedway",
+      "trackType": "road"
+    },
+    {
+      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "finishPercentile": "0.35",
+      "finishPosition": "14.0",
+      "points": "",
+      "positionGain": "",
+      "raceLabel": "2019 SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "seasonYear": "2019",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "sessionId": "session_scca_super_tour_2019_homestead_race_2",
+      "sourceState": "official_or_source_backed_result",
+      "startPosition": "",
+      "status": "running",
+      "teamName": "",
+      "trackName": "Homestead-Miami Speedway",
+      "trackType": "road"
+    },
+    {
       "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
       "finishPercentile": "0.9063",
       "finishPosition": "4.0",
@@ -3714,7 +3750,7 @@
       "trackType": "oval"
     }
   ],
-  "resultConversionRows": 165,
+  "resultConversionRows": 167,
   "schemaVersion": "brycecast.careerLabContextPack.v1",
   "seriesSummary": [
     {
@@ -3778,6 +3814,18 @@
       "top5Rate": "0.7058823529411765"
     },
     {
+      "avgFinish": "8.75",
+      "avgFinishPercentile": "0.6761",
+      "avgGain": "-2.5",
+      "issueLikeStatusRate": "0.0",
+      "medianFinish": "8.0",
+      "raceRows": "8",
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "Hoosier SCCA Super Tour",
+      "top10Rate": "0.75",
+      "top5Rate": "0.375"
+    },
+    {
       "avgFinish": "6.166666666666667",
       "avgFinishPercentile": "0.6762",
       "avgGain": "-0.5",
@@ -3788,18 +3836,6 @@
       "seriesName": "Castrol Toyota Formula Regional Oceania Championship",
       "top10Rate": "1.0",
       "top5Rate": "0.3333333333333333"
-    },
-    {
-      "avgFinish": "8.333333333333334",
-      "avgFinishPercentile": "0.7181333333333333",
-      "avgGain": "-2.5",
-      "issueLikeStatusRate": "0.0",
-      "medianFinish": "7.0",
-      "raceRows": "6",
-      "seriesId": "series_scca_super_tour",
-      "seriesName": "Hoosier SCCA Super Tour",
-      "top10Rate": "0.8333333333333334",
-      "top5Rate": "0.5"
     },
     {
       "avgFinish": "6.0",
@@ -3845,31 +3881,31 @@
     "Formula Ford lap/weather context is source-bounded and should be labeled separately.",
     "IMSA Daytona remains a standalone sports-car feature."
   ],
-  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
+  "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161",
   "sourceRefs": [
     {
-      "bytes": 1243,
+      "bytes": 1206,
       "path": "analysis/career-parity/output/tables/career_series_result_summary.csv",
       "role": "career summary",
-      "sha256": "c91752692d3f18a4ca62f880db65fab4e9dc572d16fa1703c73c1b7e431d52ec"
+      "sha256": "ccf66ecd1007e400cb88c6f0ea08b17fd700ecd0959da764dae58a83fe638bf5"
     },
     {
       "bytes": 17456,
       "path": "analysis/career-parity/output/tables/career_metric_family_parity.csv",
       "role": "metric parity",
-      "sha256": "20b34f29e6d5cc00a9d9fc240b07117fef9e347b316a6a81f3fb7184740506d5"
+      "sha256": "6181af2d09064398bd5eb2e3517c7a890fdfb575776102b6ff47ea0adf17a187"
     },
     {
-      "bytes": 43147,
+      "bytes": 43914,
       "path": "analysis/career-parity/output/tables/career_result_conversion.csv",
       "role": "result conversion",
-      "sha256": "58fc146de9b8c0fbd48fc16456aaa1706bf2b5197154912a89ce0a0abe3aaa54"
+      "sha256": "b5265a6b17a8941aa7ac9c592b7329aac98ff9b300b9809f36fe47f964cf2073"
     },
     {
-      "bytes": 32756,
+      "bytes": 32759,
       "path": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "role": "career prior matrix chart source",
-      "sha256": "769f4e63bdfad404adf6636e117aa0dad4b4c9375eb230e862cb70328529bcfb"
+      "sha256": "41b5e37d65c8a9901c99a69dc97f744f85d4bdd5ec1576aadc3edf5872ed39a7"
     }
   ],
   "topCareerStories": [
@@ -3886,7 +3922,7 @@
       "story": "Track-type prior"
     },
     {
-      "detail": "2019 Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend); 2024 FROC 2024 Round 5 - Highlands Motorsport Park; 2023 Euroformula Open 2023 Round 2 - Spa-Francorchamps",
+      "detail": "2023 Euroformula Open 2023 Round 4 - Paul Ricard; 2020 The Champion of Cadwell for FF1600 2020; 2022 GB3 2022 Round 3 - Donington Park",
       "story": "Best finish-percentile races"
     }
   ],

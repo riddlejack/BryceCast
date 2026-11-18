@@ -3,12 +3,12 @@
 <text x="28" y="30" font-family="Inter, Arial" font-size="19" font-weight="700" fill="#1f2933">Career Track-Type Priors</text>
 <text x="28" y="52" font-family="Inter, Arial" font-size="12" fill="#5d6875">Normalized finish percentile by track type.</text>
 <text x="28" y="91" font-family="Inter, Arial" font-size="12" fill="#39434d">oval (12)</text>
-<rect x="280" y="76" width="645.8" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="933.8064516129032" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.616</text>
-<text x="28" y="125" font-family="Inter, Arial" font-size="12" fill="#39434d">road (146)</text>
+<rect x="280" y="76" width="646.8" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="934.8497576736672" y="91" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.616</text>
+<text x="28" y="125" font-family="Inter, Arial" font-size="12" fill="#39434d">road (148)</text>
 <rect x="280" y="110" width="650.0" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="938.0" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.620</text>
+<text x="938.0" y="125" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.619</text>
 <text x="28" y="159" font-family="Inter, Arial" font-size="12" fill="#39434d">street (7)</text>
-<rect x="280" y="144" width="375.3" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
-<text x="663.3225806451612" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.358</text>
+<rect x="280" y="144" width="375.9" height="20" rx="3" fill="#2d6f8f" opacity="0.88"/>
+<text x="663.9289176090468" y="159" font-family="Inter, Arial" font-size="12" fill="#1f2933">0.358</text>
 </svg>

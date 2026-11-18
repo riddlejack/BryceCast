@@ -40,6 +40,13 @@ const layouts = {
     col('make', /Make\/Model/), col('hometown', /Hometown/), col('laps', /Laps/, 'right'), col('best', /Best Tm/, 'right'),
     col('member', /Member_ID/), col('region', /Region/), col('sponsor', /Sponsor/)
   ],
+  // Homestead-Miami 2019 (Palm Tree Winter Majors): Pos, PIC, Class, No. in that order.
+  // The sheet's right-hand City/State column is cut off at the page edge.
+  sccaHomestead: [
+    col('pos', /Pos/, 'right'), col('pic', /PIC/, 'right'), col('class', /Class/), col('no', /No\./, 'right'), col('name', /Name/),
+    col('laps', /Laps/, 'right'), col('best', /Best Tm/, 'right'), col('total', /Total Tm/, 'right'), col('diff', /Gap/, 'right', 6),
+    col('make', /Make-Model/), col('member', /Member_ID/), col('region', /Reg\./), col('hometown', /City/)
+  ],
   sccaCota: [
     col('pos', /Pos/, 'right'), col('pic', /PIC/, 'right'), col('no', /No\./, 'right'), col('class', /Class/), col('name', /Name/),
     col('make', /Make\/Model/), col('hometown', /Hometown/), col('laps', /Laps/, 'right'), col('best', /Best Tm/, 'right'),
@@ -120,6 +127,19 @@ const families = {
 };
 
 const newTracks = {
+  track_homestead_miami_speedway_road_course: {
+    id: 'track_homestead_miami_speedway_road_course',
+    name: 'Homestead-Miami Speedway',
+    canonicalName: 'Homestead-Miami Speedway',
+    country: 'United States',
+    region: 'Florida',
+    city: 'Homestead',
+    timezone: 'America/New_York',
+    trackType: 'road',
+    configuration: 'Modified Road Course (infield plus oval turns 3 and 4)',
+    lengthMi: 2.3,
+    aliases: ['Homestead-Miami Speedway', 'Homestead-Miami Speedway 2.30', 'Homestead-Miami', 'Homestead']
+  },
   track_sebring_international_raceway: {
     id: 'track_sebring_international_raceway',
     name: 'Sebring International Raceway',
@@ -162,6 +182,48 @@ const newTracks = {
 };
 
 const events = [
+  {
+    // His first car races. Not a Super Tour round: a Southeast Conference event of the
+    // same 2019 U.S. Majors Tour, so it sits in the SCCA family with the Super Tour rounds.
+    family: 'scca',
+    key: 'homestead',
+    eventId: 'event_scca_super_tour_2019_homestead',
+    name: 'SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)',
+    eventStartDate: '2019-01-03',
+    eventEndDate: '2019-01-06',
+    trackId: 'track_homestead_miami_speedway_road_course',
+    timezone: 'America/New_York',
+    country: 'United States',
+    officialEventId: '1992798',
+    eventPageUrl: 'https://growtiming.scca.com/events/1992798-southeast-conference-majors-florida-region',
+    eventPagePath: 'event-pages/homestead-1992798.html',
+    eventDateSource: 'SCCA event page 1992798 (Southeast Conference Majors, Florida Region) dates the meeting from January 3, 2019; the last race sheet is dated January 6, 2019.',
+    supporting: [
+      {
+        id: 'source_scca_2019_southeast_conference_report',
+        url: 'https://growtiming.scca.com/downloads/48003-southeast-2019-conference-report/download',
+        pdf: '2019-southeast-conference-report.pdf',
+        sourceType: 'official_pdf',
+        sourceName: 'SCCA 2019 U.S. Majors Tour Southeast Conference report',
+        coverage: 'Official season standings for the 2019 SCCA Southeast Conference, with per-race Formula F class finishes and qualifying positions in parentheses.',
+        notes: 'Formula F row for Bryce Aron lists the two Homestead-Miami races (HMP1, HMP2) as "(5) 4" and "(4) 8*": qualifying 5th and 4th in class, class finish 4th and 8th; the asterisk marks a race that scored no points. Both class finishes agree with the PIC column of the Orbits sheets.'
+      }
+    ],
+    sessions: [
+      {
+        key: 'race_1', name: 'Group 7 Race 1', raceNumber: 1, layout: 'sccaHomestead', gridOrder: null,
+        url: 'https://www.scca.com/wp-content/uploads/2026/06/2019_0105_M_Homestead_Results.pdf', pdf: 'homestead-palm-tree-winter-majors-results.pdf',
+        pages: [15, 15], text: 'homestead-group-7-race-1.txt',
+        note: 'One combined results book for every group (SCCA results archive, U.S. Majors Tour 2019); Group 7 Race 1 is page 15. No grid sheet was found, so start positions stay empty; the Southeast Conference report gives his Formula F qualifying position (5th).'
+      },
+      {
+        key: 'race_2', name: 'Group 7 Race 2', raceNumber: 2, layout: 'sccaHomestead', gridOrder: null,
+        url: 'https://www.scca.com/wp-content/uploads/2026/06/2019_0105_M_Homestead_Results.pdf', pdf: 'homestead-palm-tree-winter-majors-results.pdf',
+        pages: [16, 16], text: 'homestead-group-7-race-2.txt',
+        note: 'Page 16 of the same book. The race was checkered early "due to track conditions". The conference report gives his Formula F qualifying position (4th) and marks the race as scoring him no points.'
+      }
+    ]
+  },
   {
     family: 'scca',
     key: 'sebring',
@@ -337,7 +399,8 @@ const fetchCached = async (url, path) => {
   return { fromCache: false };
 };
 
-const convertPdf = async (pdfPath, textPath) => {
+// `pages` ([first, last]) converts only those pages of a combined results book.
+const convertPdf = async (pdfPath, textPath, pages = null) => {
   if (!refresh) {
     try {
       return { text: await readFile(textPath, 'utf8'), fromCache: true };
@@ -346,7 +409,8 @@ const convertPdf = async (pdfPath, textPath) => {
     }
   }
   await mkdir(dirname(textPath), { recursive: true });
-  await execFile(pdftotextBin, ['-layout', pdfPath, textPath]);
+  const pageArgs = pages ? ['-f', String(pages[0]), '-l', String(pages[1])] : [];
+  await execFile(pdftotextBin, ['-layout', ...pageArgs, pdfPath, textPath]);
   return { text: await readFile(textPath, 'utf8'), fromCache: false };
 };
 
@@ -506,10 +570,10 @@ const main = async () => {
     for (const sessionConfig of event.sessions) {
       const sessionType = sessionConfig.sessionType ?? 'race';
       const pdfPath = join(family.rawDir, 'pdf', sessionConfig.pdf);
-      const textPath = join(family.rawDir, 'text', sessionConfig.pdf.replace(/\.pdf$/, '.txt'));
+      const textPath = join(family.rawDir, 'text', sessionConfig.text ?? sessionConfig.pdf.replace(/\.pdf$/, '.txt'));
       const fetched = await fetchCached(sessionConfig.url, pdfPath);
       report[fetched.fromCache ? 'cached' : 'fetched'] += 1;
-      const { text } = await convertPdf(pdfPath, textPath);
+      const { text } = await convertPdf(pdfPath, textPath, sessionConfig.pages ?? null);
       report.rawArtifacts.push(relative(pdfPath), relative(textPath));
 
       const parsed = parseOrbitsSheet(text, { columns: layouts[sessionConfig.layout] });
@@ -524,7 +588,7 @@ const main = async () => {
         sourceName: `${event.name} ${sessionConfig.name} official classification`,
         url: sessionConfig.url,
         retrievedAt,
-        coverage: `${event.name} ${sessionConfig.name}: every classified and not-classified row on the official Orbits sheet.`,
+        coverage: `${event.name} ${sessionConfig.name}: every classified and not-classified row on the official Orbits sheet${sessionConfig.pages ? ` (page ${sessionConfig.pages[0]} of the combined results book)` : ''}.`,
         rawArtifactPath: relative(pdfPath),
         notes: [`Sheet header: ${parsed.meta.titleLines.join(' | ')}.`, sessionConfig.note ?? null].filter(Boolean).join(' ')
       }));

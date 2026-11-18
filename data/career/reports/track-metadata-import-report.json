@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-16T17:29:52.196Z",
+  "checkedAt": "2026-11-18T03:45:49.822Z",
   "ok": true,
   "dryRun": false,
   "verifySourceUrls": false,
@@ -7,15 +7,15 @@
   "genericWeatherImported": false,
   "preservedWeatherObservationRows": 252,
   "counts": {
-    "rawTracks": 46,
-    "datasetTracksBefore": 46,
-    "datasetTracksAfter": 46,
-    "tracksUpdated": 33,
-    "sourceEvidenceUpserted": 46,
-    "eventTimezonesBackfilled": 18,
+    "rawTracks": 47,
+    "datasetTracksBefore": 47,
+    "datasetTracksAfter": 47,
+    "tracksUpdated": 5,
+    "sourceEvidenceUpserted": 47,
+    "eventTimezonesBackfilled": 6,
     "sessionTimezonesBackfilled": 0,
     "sessionTimezoneMismatches": 0,
-    "weatherPreciseWindowReadySessions": 445,
+    "weatherPreciseWindowReadySessions": 447,
     "weatherEventDayContextOnlySessions": 78,
     "weatherBlockedSessions": 9
   },
@@ -32,7 +32,7 @@
   },
   "weatherPrep": {
     "readinessCounts": {
-      "precise_window_ready": 445,
+      "precise_window_ready": 447,
       "blocked_missing_session_start": 9,
       "not_applicable_aggregate_classification": 1,
       "event_day_context_only": 78
@@ -399,6 +399,16 @@
       {
         "trackId": "track_highlands_motorsport_park",
         "name": "Highlands Motorsport Park",
+        "hasCoordinates": true,
+        "hasTimezone": true,
+        "hasLength": true,
+        "hasKnownDirection": true,
+        "hasLayoutProfile": true,
+        "confidenceTier": "medium"
+      },
+      {
+        "trackId": "track_homestead_miami_speedway_road_course",
+        "name": "Homestead-Miami Speedway",
         "hasCoordinates": true,
         "hasTimezone": true,
         "hasLength": true,

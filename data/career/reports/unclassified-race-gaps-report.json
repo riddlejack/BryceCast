@@ -1,11 +1,13 @@
 {
-  "checkedAt": "2026-11-16T17:30:00.659Z",
-  "gapsWritten": 4,
-  "sourceEvidenceWritten": 4,
+  "checkedAt": "2026-11-18T03:45:59.258Z",
+  "gapsWritten": 2,
+  "sourceEvidenceWritten": 3,
   "gapIds": [
-    "gap_career_race_scca_2019_homestead_race_1_no_sheet",
-    "gap_career_race_scca_2019_homestead_race_2_no_sheet",
     "gap_career_race_euroformula_2023_mugello_race_1_reported_only",
     "gap_career_race_euroformula_2023_mugello_race_2_reported_only"
+  ],
+  "retiredGapIds": [
+    "gap_career_race_scca_2019_homestead_race_1_no_sheet",
+    "gap_career_race_scca_2019_homestead_race_2_no_sheet"
   ]
 }

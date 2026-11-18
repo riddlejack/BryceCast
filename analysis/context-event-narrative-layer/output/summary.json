@@ -15,19 +15,19 @@
   "claimStrength": "source_bounded_context_narrative_not_telemetry",
   "contextTypeCounts": {
     "incident": 166,
-    "media": 1128,
+    "media": 1130,
     "penalty": 94,
     "racecraft": 44,
     "weather": 252
   },
   "counts": {
     "derivedMetricRows": 453,
-    "gapRows": 13,
-    "mediaRows": 1128,
+    "gapRows": 11,
+    "mediaRows": 1130,
     "seriesCoverageRows": 11,
-    "sessionRollupRows": 479,
-    "sourceEvidenceRows": 1463,
-    "timelineRows": 1684,
+    "sessionRollupRows": 481,
+    "sourceEvidenceRows": 1467,
+    "timelineRows": 1686,
     "weatherRows": 252
   },
   "derivedMetricTypeCounts": {
@@ -42,11 +42,11 @@
     "season_context_milestone": 1
   },
   "gapStatusCounts": {
-    "open": 10,
+    "open": 8,
     "partial": 2,
     "source_broken_preserved": 1
   },
-  "generatedAt": "2026-11-17T22:23:36Z",
+  "generatedAt": "2026-11-18T04:01:32Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceEvidenceTypeCounts": {
@@ -56,11 +56,11 @@
     "official_html": 17,
     "official_image": 5,
     "official_json": 2,
-    "official_page": 130,
-    "official_pdf": 902,
+    "official_page": 132,
+    "official_pdf": 904,
     "press_article": 1,
     "press_results": 2,
     "weather_api": 94
   },
-  "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+  "sourceHash": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
 }

@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-ingestion-summary.v1",
-  "generatedAt": "2026-11-16T17:30:06.446Z",
+  "generatedAt": "2026-11-18T03:46:05.641Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-11-16T17:30:05.770Z",
+    "checkedAt": "2026-11-18T03:46:04.931Z",
     "errors": [],
     "warnings": [
       {
@@ -15,43 +15,43 @@
     ]
   },
   "counts": {
-    "drivers": 683,
+    "drivers": 688,
     "series": 10,
     "teams": 84,
-    "cars": 698,
-    "tracks": 46,
+    "cars": 706,
+    "tracks": 47,
     "seasons": 14,
-    "events": 99,
-    "sessions": 533,
-    "results": 9826,
+    "events": 100,
+    "sessions": 535,
+    "results": 9866,
     "qualifyingResults": 1967,
     "lapSamples": 75740,
     "racecraftEvents": 44,
     "penalties": 94,
     "incidents": 166,
     "weatherObservations": 252,
-    "mediaAssets": 1128,
+    "mediaAssets": 1130,
     "broadcastRoutes": 0,
     "notificationRules": 0,
     "notificationEvents": 0,
     "derivedMetrics": 453,
-    "sourceEvidence": 1463,
-    "gaps": 13
+    "sourceEvidence": 1467,
+    "gaps": 11
   },
   "readiness": {
     "sessions": {
-      "total": 533,
-      "withScheduledStart": 523,
-      "withExactTimestamp": 445,
-      "withTimezone": 533,
+      "total": 535,
+      "withScheduledStart": 525,
+      "withExactTimestamp": 447,
+      "withTimezone": 535,
       "timezoneCoverage": 1
     },
     "tracks": {
-      "total": 46,
-      "withCoordinates": 46,
-      "withTimezone": 46,
-      "withLength": 46,
-      "withDirection": 46,
+      "total": 47,
+      "withCoordinates": 47,
+      "withTimezone": 47,
+      "withLength": 47,
+      "withDirection": 47,
       "coordinateCoverage": 1,
       "timezoneCoverage": 1,
       "lengthCoverage": 1
@@ -73,11 +73,11 @@
     "analyticsBlockedOrPartial": []
   },
   "sourceEvidence": {
-    "total": 1463,
+    "total": 1467,
     "bySourceType": {
       "archived_official_page": 2,
-      "official_pdf": 902,
-      "official_page": 130,
+      "official_pdf": 904,
+      "official_page": 132,
       "official_api": 304,
       "press_article": 1,
       "official_html": 17,
@@ -147,7 +147,7 @@
   "importReports": [
     {
       "name": "euroformula-2023-import-report.json",
-      "checkedAt": "2026-11-16T17:29:36.930Z",
+      "checkedAt": "2026-06-16T18:12:14.672Z",
       "refresh": false,
       "fetched": 0,
       "cached": 32,
@@ -176,7 +176,7 @@
     },
     {
       "name": "formula-ford-2020-import-report.json",
-      "checkedAt": "2026-11-16T17:29:41.114Z",
+      "checkedAt": "2026-11-18T03:44:14.486Z",
       "refresh": false,
       "fetched": 0,
       "cached": 23,
@@ -340,7 +340,7 @@
     },
     {
       "name": "froc-2024-import-report.json",
-      "checkedAt": "2026-11-16T17:29:44.875Z",
+      "checkedAt": "2026-11-18T03:45:41.604Z",
       "refresh": false,
       "fetched": 0,
       "cached": 12,
@@ -373,7 +373,7 @@
     },
     {
       "name": "frp-f1600-import-report.json",
-      "checkedAt": "2026-11-16T17:29:39.275Z",
+      "checkedAt": "2026-11-18T03:43:09.569Z",
       "refresh": false,
       "fetched": 0,
       "cached": 81,
@@ -418,7 +418,7 @@
     },
     {
       "name": "gb3-import-report.json",
-      "checkedAt": "2026-11-16T17:29:32.852Z",
+      "checkedAt": "2026-06-16T18:12:11.217Z",
       "refresh": false,
       "fetched": 0,
       "cached": 78,
@@ -449,7 +449,7 @@
     },
     {
       "name": "imsa-import-report.json",
-      "checkedAt": "2026-11-16T17:29:35.436Z",
+      "checkedAt": "2026-06-16T18:12:13.430Z",
       "refresh": false,
       "fetched": 0,
       "cached": 3,
@@ -463,10 +463,10 @@
     },
     {
       "name": "indy-nxt-import-report.json",
-      "checkedAt": "2026-11-16T17:29:26.089Z",
-      "refresh": false,
-      "fetched": 0,
-      "cached": 220,
+      "checkedAt": "2026-09-19T22:42:04.425Z",
+      "refresh": true,
+      "fetched": 220,
+      "cached": 0,
       "sessionsImported": 213,
       "resultsImported": 3735,
       "bryceResultsImported": 178,
@@ -486,11 +486,11 @@
     },
     {
       "name": "orbits-career-import-report.json",
-      "checkedAt": "2026-11-16T17:29:43.063Z",
+      "checkedAt": "2026-11-18T03:45:39.685Z",
       "refresh": false,
       "fetched": 0,
-      "cached": 19,
-      "sessionsImported": 9,
+      "cached": 23,
+      "sessionsImported": 11,
       "resultsImported": null,
       "bryceResultsImported": null,
       "lapSamplesImported": null,
@@ -500,7 +500,7 @@
     },
     {
       "name": "track-metadata-import-report.json",
-      "checkedAt": "2026-11-16T17:29:52.196Z",
+      "checkedAt": "2026-11-18T03:45:49.822Z",
       "refresh": null,
       "fetched": null,
       "cached": null,
@@ -833,53 +833,6 @@
       "scope": "career_dataset",
       "status": "open",
       "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
-    },
-    {
-      "id": "gap_career_race_scca_2019_homestead_race_1_no_sheet",
-      "scope": "career_dataset:races_without_official_classification",
-      "status": "open",
-      "description": "Homestead-Miami, January 2019, race 1 of the weekend: the official SCCA Southeast Conference report lists Bryce 5th on the Formula F grid and 4th in class at the finish (\"(5) 4\"). No race sheet was found, so laps, time, overall finish and field size are unknown. Counted in no career figure.",
-      "provenanceRefs": [
-        "source_scca_2019_southeast_conference_report"
-      ],
-      "raw": {
-        "evidenceLevel": "B",
-        "date": "2019-01-04/2019-01-06",
-        "venue": "Homestead-Miami Speedway",
-        "country": "United States",
-        "series": "SCCA U.S. Majors Tour, Southeast Conference, Formula F",
-        "known": {
-          "classStart": 5,
-          "classFinish": 4,
-          "overallFinish": null,
-          "fieldSize": null
-        },
-        "countedInCareerFigures": false
-      }
-    },
-    {
-      "id": "gap_career_race_scca_2019_homestead_race_2_no_sheet",
-      "scope": "career_dataset:races_without_official_classification",
-      "status": "open",
-      "description": "Homestead-Miami, January 2019, race 2: the official SCCA Southeast Conference report lists Bryce 4th on the Formula F grid and 8th in class, with no points (\"(4) 8*\"). No race sheet was found. Counted in no career figure.",
-      "provenanceRefs": [
-        "source_scca_2019_southeast_conference_report"
-      ],
-      "raw": {
-        "evidenceLevel": "B",
-        "date": "2019-01-04/2019-01-06",
-        "venue": "Homestead-Miami Speedway",
-        "country": "United States",
-        "series": "SCCA U.S. Majors Tour, Southeast Conference, Formula F",
-        "known": {
-          "classStart": 4,
-          "classFinish": 8,
-          "overallFinish": null,
-          "fieldSize": null,
-          "pointsScored": false
-        },
-        "countedInCareerFigures": false
-      }
     },
     {
       "id": "gap_career_race_euroformula_2023_mugello_race_1_reported_only",

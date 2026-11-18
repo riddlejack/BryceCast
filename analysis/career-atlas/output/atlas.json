@@ -65,7 +65,7 @@
     "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
     "sourceUrl": "https://github.com/nvkelso/natural-earth-vector/blob/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_land.geojson"
   },
-  "raceCount": 173,
+  "raceCount": 175,
   "schemaVersion": "brycecast.careerAtlas.v3",
   "sourceRefs": [
     {
@@ -86,12 +86,12 @@
     {
       "note": "A2 track identity and sourced coordinates for every career venue.",
       "path": "analysis/career-life-stats/data/venue_facts.csv",
-      "sha256": "4b8eb66640ea2a04a673230460e63659d101ad8d04094ee94d98ffee892f681a"
+      "sha256": "309a1b8388f4e0f0b191f2c16dd8a6acae55794a71ac38c0d978cf8d17636bb4"
     },
     {
       "note": "A2 personally attributable ledger covering every canonical Bryce race row.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "cc9b78a452623854d079084081c4ccf1ad3cede192a4f51e9214b1e7ff970995"
+      "sha256": "5225d8a649c59ad7fc924525931a58ae1f7f5705467a1b4cca1a5623bff05b0b"
     },
     {
       "note": "A2 metric-grain and confidence-class contracts.",
@@ -101,10 +101,10 @@
     {
       "note": "Canonical race identity, series, date, and classified finish fields.",
       "path": "data/career/career.dataset.json",
-      "sha256": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5"
+      "sha256": "53bd858eb450e79897bd6c8dc6b47dac5c118e726ae5507bd98f7af9341ed161"
     }
   ],
-  "venueCount": 38,
+  "venueCount": 39,
   "venues": [
     {
       "bestFinish": 4,
@@ -1255,6 +1255,80 @@
       ],
       "trackName": "Highlands Motorsport Park",
       "venueId": "venue_highlands_motorsport_park"
+    },
+    {
+      "bestFinish": 6,
+      "confidence": {
+        "bestFinish": "observed_exact",
+        "coordinates": "observed_exact",
+        "latestRace": "observed_exact",
+        "raceCount": "observed_exact",
+        "seriesSpans": "observed_exact"
+      },
+      "coordinateSources": [
+        "Wikipedia circuit infobox | https://en.wikipedia.org/wiki/Homestead%E2%80%93Miami_Speedway"
+      ],
+      "country": "United States",
+      "dominantChapter": {
+        "bestFinish": 6,
+        "firstRaceDate": "2019-01-03",
+        "firstYear": 2019,
+        "lastYear": 2019,
+        "latestRace": {
+          "eventId": "event_scca_super_tour_2019_homestead",
+          "raceDate": "2019-01-03",
+          "raceHref": "/career/race/session_scca_super_tour_2019_homestead_race_2",
+          "raceLabel": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors) \u00b7 Group 7 Race 2",
+          "sessionId": "session_scca_super_tour_2019_homestead_race_2"
+        },
+        "latestRaceDate": "2019-01-03",
+        "raceCount": 2,
+        "seriesId": "series_scca_super_tour",
+        "seriesName": "Hoosier SCCA Super Tour",
+        "seriesShort": "SCCA"
+      },
+      "firstYear": 2019,
+      "lastYear": 2019,
+      "lat": 25.4519,
+      "latestRace": {
+        "eventId": "event_scca_super_tour_2019_homestead",
+        "raceDate": "2019-01-03",
+        "raceHref": "/career/race/session_scca_super_tour_2019_homestead_race_2",
+        "raceLabel": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors) \u00b7 Group 7 Race 2",
+        "sessionId": "session_scca_super_tour_2019_homestead_race_2"
+      },
+      "lon": -80.4086,
+      "projected": {
+        "x": 523.071,
+        "y": 161.584
+      },
+      "raceCount": 2,
+      "region": "North America",
+      "seriesSpans": [
+        {
+          "bestFinish": 6,
+          "firstRaceDate": "2019-01-03",
+          "firstYear": 2019,
+          "lastYear": 2019,
+          "latestRace": {
+            "eventId": "event_scca_super_tour_2019_homestead",
+            "raceDate": "2019-01-03",
+            "raceHref": "/career/race/session_scca_super_tour_2019_homestead_race_2",
+            "raceLabel": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors) \u00b7 Group 7 Race 2",
+            "sessionId": "session_scca_super_tour_2019_homestead_race_2"
+          },
+          "latestRaceDate": "2019-01-03",
+          "raceCount": 2,
+          "seriesId": "series_scca_super_tour",
+          "seriesName": "Hoosier SCCA Super Tour",
+          "seriesShort": "SCCA"
+        }
+      ],
+      "trackIds": [
+        "track_homestead_miami_speedway_road_course"
+      ],
+      "trackName": "Homestead-Miami Speedway",
+      "venueId": "venue_homestead_miami_speedway"
     },
     {
       "bestFinish": 1,

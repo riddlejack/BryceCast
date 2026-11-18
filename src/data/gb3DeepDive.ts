@@ -60,6 +60,8 @@ export interface Gb3TrackProfile {
   bestFinish: number;
   avgFinish: number;
   avgFinishPercentile: number;
+  /** Mean (field - finish) / (field - 1): the share of the other cars beaten; avgFinishPercentile counts him. */
+  avgFieldBeatenShare?: number | null;
   startKnownRows: number;
   avgPositionGainWhenStartKnown: number | null;
   cornerCount: number | null;
@@ -122,6 +124,8 @@ export interface Gb3EventSummary {
   avgFinish: number | null;
   bestFinish: number | null;
   avgFinishPercentile: number | null;
+  /** Mean (field - finish) / (field - 1): the share of the other cars beaten; avgFinishPercentile counts him. */
+  avgFieldBeatenShare?: number | null;
   avgPositionGainWhenStartKnown: number | null;
   bestQualifyingPosition: number | null;
   top5Count: number;
