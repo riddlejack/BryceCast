@@ -13,7 +13,8 @@ import { raceTipOf, venuesOf } from './raceTip';
 import './rain.css';
 
 /**
- * Rain days (November 17, 2026). Every race with a sourced condition report is
+ * Rain days (November 17, 2026). Every race, with wet or dry from careerLab.raceWeather
+ * (official report, else observed call, else modelled reanalysis), is
  * a dot on one "share of the field beaten" axis. On reveal the days fall like
  * rain: the wet ones stop in the blue-grey sky band, the dry ones fall through
  * to the paper below. The two medians and the step between them are the hero.
@@ -413,18 +414,20 @@ export const RainDeepDive = () => {
       </>
     );
 
+  const tierCount = (source: string) => reported.filter((row) => row.wetDrySource === source).length;
+  const calibration = uiDataPackage.screens.careerLab.raceWeatherSummary?.calibration;
   const smallWet = series.filter((group) => group.wetRows.length > 0 && group.wetRows.length < 6);
   const sources = (
     <SourcePill
       title="Rain days"
       entries={[
         {
-          label: 'Per-session condition reports',
-          path: 'analysis/context-event-narrative-layer/output/weather_condition_context.csv',
-          note: `Official series weather lines plus labeled modeled observations, joined by session. ${reported.length} of ${rows.length} career races carry a sourced report (${dry.length} dry; ${wet.length} wet, damp or drying); the other ${rows.length - reported.length} stay out of both lanes.`
+          label: 'Weather for every race',
+          path: 'analysis/ui-data-package/ui-data-package.json (screens.careerLab.raceWeather)',
+          note: `Wet or dry for each race: the official series condition report where there is one (${tierCount('series_report')}), else an observed call from the nearest weather station and race reports (${tierCount('observed')}), else Open-Meteo reanalysis over the race window, modelled (${tierCount('reanalysis')}). ${dry.length} dry; ${wet.length} wet or mixed. A modelled dry is weak evidence: checked against the official reports, the reanalysis caught ${calibration?.modelCaughtWetOrMixed ?? '?'} of ${calibration?.officialWetOrMixed ?? '?'} wet or damp races.`
         },
         {
-          label: 'Career result conversion · finishing percentile',
+          label: 'Career result conversion · share of the field beaten',
           path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
           note: `Each dot is one race, placed by the share of the field he beat. A lane's median is its middle race (the upper middle for an even count), rounded to a whole percent. Split by series, a strip draws its median only with ${MIN_FOR_MEDIAN} or more races${
             smallWet.length
@@ -481,7 +484,7 @@ export const RainDeepDive = () => {
               className="rain__svg"
               style={{ height: layout.height, transition: phase === 'done' && !reduced ? 'height 720ms cubic-bezier(0.65, 0, 0.35, 1)' : 'none' }}
               role="img"
-              aria-label={`Finishing percentile on ${dry.length} dry and ${wet.length} wet, damp or drying days. Typical wet day beat ${wetMedian}% of the field, typical dry day ${dryMedian}%.`}
+              aria-label={`Share of the field beaten on ${dry.length} dry and ${wet.length} wet or mixed days. Typical wet day beat ${wetMedian}% of the field, typical dry day ${dryMedian}%.`}
               {...tap.surface({
                 find,
                 clear,

@@ -38,12 +38,12 @@ export interface SheetRace {
   field: number | null;
 }
 
-/** The site's percentile is (field − finish + 1) / field, so field = (finish − 1) / (1 − p).
- *  Accepted only when it lands on a whole number; a win (p = 1) gives none.
- *  The same rule as the Biggest climbs dive. */
+/** The career rows' share is the field beaten, (field − finish) / (field − 1), so
+ *  field = (finish − p) / (1 − p). Accepted only when it lands on a whole number; a
+ *  win (p = 1) gives none. The same rule as the Biggest climbs dive. */
 export const fieldFromPercentile = (finish: number, percentile: number): number | null => {
   if (!(percentile < 1) || finish < 2) return null;
-  const n = (finish - 1) / (1 - percentile);
+  const n = (finish - percentile) / (1 - percentile);
   const whole = Math.round(n);
   return Math.abs(n - whole) < 0.05 && whole >= finish ? whole : null;
 };
@@ -63,7 +63,7 @@ const programmeOrder = (sessionId: string, inRound: number | null | undefined): 
 };
 
 /** The day a race's own record names: a session called "…_saturday_race" at a
- *  meeting that opens on Friday ran on that Saturday (the SCCA Super Tour's
+ *  meeting that opens on Friday ran on that Saturday (the SCCA's
  *  weekends). Null where the record names no day. */
 const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 export const namedDay = (sessionId: string, meetingDay: string | null | undefined): string | null => {
@@ -124,8 +124,9 @@ export const useSheetRaces = (): SheetRace[] => {
           seriesId: asString(source.seriesId) ?? '',
           title: name.title,
           round: name.round,
-          raceDay: day.get(row.sessionId) ?? namedDay(row.sessionId, row.date),
-          meetingDay: row.date,
+          /* raceDate is the race's own day from its official start; the meeting's first day is eventStartDate. */
+          raceDay: asString(source.raceDate) ?? day.get(row.sessionId) ?? namedDay(row.sessionId, asString(source.eventStartDate) ?? row.date),
+          meetingDay: asString(source.eventStartDate) ?? row.date,
           order: programmeOrder(row.sessionId, inRound.get(row.sessionId)),
           team: asString(source.teamName),
           points: asNumber(source.points),
@@ -225,7 +226,7 @@ export const useArchiveRaces = (): ArchiveRace[] => {
       .filter((race) => race.seriesName !== 'INDY NXT' && race.eventStartDate)
       .map((race): ArchiveRace => {
         const { title, round } = unclassifiedTitle(race);
-        const raceDay = day.get(race.sessionId) ?? namedDay(race.sessionId, race.eventStartDate);
+        const raceDay = race.raceDate ?? day.get(race.sessionId) ?? namedDay(race.sessionId, race.eventStartDate);
         return {
           sessionId: race.sessionId,
           seasonYear: race.seasonYear ?? Number(race.eventStartDate!.slice(0, 4)),

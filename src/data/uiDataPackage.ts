@@ -50,14 +50,14 @@ export interface UiUnclassifiedRace {
  *  'session_sheet'), or 09:00-18:00 local on race day ('race_day'). The figures are
  *  Open-Meteo hourly reanalysis (ERA5), always `source.tier` 'modelled'. Wet or dry comes
  *  from the official series condition report where one exists (`wetDrySource`
- *  'series_report'), else from the reanalysis rain (wet at 0.5 mm or more; it never says
+ *  'series_report'), then an observed call ('observed'), else from the reanalysis rain (wet at 0.5 mm or more; it never says
  *  mixed). A modelled dry is weak evidence: see raceWeatherSummary.calibration. */
 export interface UiRaceWeather {
   sessionId: string;
   window: { start: string; end: string; basis: 'session_sheet' | 'race_day' };
   sky: 'clear' | 'partly' | 'overcast' | 'rain' | 'storm';
   wetDry: 'wet' | 'dry' | 'mixed' | null;
-  wetDrySource: 'series_report' | 'reanalysis' | null;
+  wetDrySource: 'series_report' | 'observed' | 'reanalysis' | null;
   rainMm: number | null;
   cloudPct: number | null;
   windKph: number | null;
@@ -68,6 +68,11 @@ export interface UiRaceWeather {
   source: { name: string; tier: 'observed' | 'modelled'; url: string | null };
   /** The official condition words ("Wet", "Damp"), where the series reported them. */
   seriesReport: { conditionRaw: string | null; source: string | null; url: string | null } | null;
+  /** Where no series report exists and the reanalysis call was checked: the nearest
+   *  stations' observed reports (NOAA GHCNh) and race reports behind `wetDry`. */
+  observed: { summary: string; evidence: Array<{ kind: 'station' | 'report'; url: string; source?: string; station?: string; distanceKm?: number; path?: string }> } | null;
+  /** What the reanalysis alone calls (wet or dry), kept beside an official or observed call. */
+  modelWetDry: 'wet' | 'dry' | null;
 }
 
 export interface UiRaceWeatherSummary {

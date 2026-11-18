@@ -73,13 +73,18 @@ const layouts = {
   ]
 };
 
-const sccaSourceNote = 'Hoosier SCCA Super Tour official Orbits results, served by SCCA on growtiming.scca.com (the www.scca.com host blocks scripts; the mirror serves the same files).';
+const sccaSourceNote = 'SCCA U.S. Majors Tour official Orbits results (Hoosier Super Tour and conference Majors events), served by SCCA on growtiming.scca.com (the www.scca.com host blocks scripts; the mirror serves the same files).';
 const families = {
   scca: {
     seriesId: 'series_scca_super_tour',
     series: {
       id: 'series_scca_super_tour',
-      name: 'Hoosier SCCA Super Tour',
+      // The sheets: Sebring, COTA and Road Atlanta are Hoosier Super Tour events (event
+      // codes 19-ST-, on the 2019 Super Tour standings); Homestead is a Southeast
+      // Conference Majors event (19-M-5908-S), not on the Super Tour standings. All
+      // are rounds of the 2019 SCCA Majors Championship (the Southeast Conference
+      // report scores Homestead, Sebring and Road Atlanta). The id stays.
+      name: 'SCCA U.S. Majors Tour',
       category: 'formula',
       ladderLevel: 'US national club racing (SCCA Majors), Formula F class',
       governingBody: 'Sports Car Club of America',

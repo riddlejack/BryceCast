@@ -21,7 +21,7 @@ import './before.css';
 /* ============================================================================
  * Before the record (November 17, 2026). The old year-by-year list becomes the
  * run-up: one time line from the first karting year to the first race of the
- * record (the SCCA Super Tour at Sebring, January 12, 2019), with the five
+ * record (the SCCA U.S. Majors Tour at Homestead-Miami, January 5, 2019), with the five
  * sourced karting facts placed on it as marks labelled in place, the lap times
  * as figures. At the flag the line hands off to the record itself: every one
  * of the 173 races as a small square in the month it ran, coloured by series,
@@ -862,14 +862,14 @@ export const BeforeDeepDive = () => {
   const titleYear = titles.length ? new Date(titles[0].t).getUTCFullYear() : null;
 
   /* The package's first caveat still says the record starts with F1600; the
-   * record now starts at Sebring (ledger, November 16, 2026). */
+   * record now starts at Homestead-Miami (ledger, November 17, 2026). */
   const caveats = [
     `The sourced race-by-race record starts with the ${model.firstSeries} at ${model.firstPlace} on ${longDate(model.firstRace)}. The karting years before it survive only as the ${countWord(model.facts.length)} facts drawn here: context, not a scoreboard.`,
     ...origin.caveats.filter((caveat) => !/starts with F1600/.test(caveat)),
     ...(titles.length
       ? [`The ${titleYear} championship and runner-up carry only a year in their source, so each is drawn across the whole of ${titleYear}.`]
       : []),
-    `${model.firstPlace} is the first race with an official classification. His first car races, at Homestead-Miami a week earlier (January 4 to 6, 2019), have none and are recorded as gaps, not results (career ledger, November 16, 2026).`
+    `The record starts with his first car races, at ${model.firstPlace} on January 5 and 6, 2019, from the SCCA's official results book (career ledger, November 17, 2026).`
   ];
   const entries: SourceEntry[] = [
     ...origin.sources.map(citedSourceEntry),

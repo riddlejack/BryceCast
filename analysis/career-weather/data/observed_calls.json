@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "career-race-weather-observed-calls.v1",
+  "purpose": "Observed wet/dry calls for races with no official series condition report, where the reanalysis call was disputed: every race the reanalysis calls wet, and the two where it disagreed with the older INDY NXT single-hour backfill. An observed call outranks the reanalysis; an official series report outranks both. Station observations are NOAA GHCNh (UTC); extracts in data/career/raw/weather/noaa-ghcnh/ (MANIFEST.json gives each by-year source and its sha256).",
+  "checkedOn": "2026-11-17",
+  "calls": [
+    {
+      "sessionId": "session_indy_nxt_2024_6326",
+      "wetDry": "dry",
+      "summary": "Dry. Detroit City airport (KDET, 9 km) reports rain overnight that ended by 10:00 UTC (06:00 local), mist to 12:53 UTC, then 0.0 mm and no present weather at 13:53, 14:53 and 15:53 UTC, bracketing the 14:20-15:16 UTC race; rain returns only at 16:53 UTC. No race report mentions a wet track; Bryce describes oversteer into the Turn 7 wall.",
+      "evidence": [
+        { "kind": "station", "station": "USW00014822 DETROIT CITY AP (KDET)", "distanceKm": 9, "path": "data/career/raw/weather/noaa-ghcnh/indy-nxt/stations/2024/GHCNh_USW00014822_2024.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_USW00014822_2024.psv" },
+        { "kind": "report", "source": "Andretti Global race report", "url": "https://andrettiglobal.com/news/2024/06/andretti-indy-nxt-detroit-grand-prix-race-report" },
+        { "kind": "report", "source": "Motorsport.com", "url": "https://www.motorsport.com/indylights/news/indy-nxt-detroit-louis-foster-dominates-crash-filled-race/10618881/" }
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6760",
+      "wetDry": "dry",
+      "summary": "Dry. Mansfield Lahm airport (KMFD, 18 km) reports no precipitation and no present weather from a thunderstorm in the vicinity at 19:20 UTC on July 4 through the 14:08-14:44 UTC race, with 16 km visibility all morning. The reanalysis's 2.8 mm in the hour before the start is not observed. The race ran all-green (Andretti Global; INDYCAR: 'went ahead without interruption')."
+      ,
+      "evidence": [
+        { "kind": "station", "station": "USW00014891 MANSFIELD LAHM RGNL AP (KMFD)", "distanceKm": 17.6, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00014891_2026-07-04_to_2026-07-05.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00014891_2026.psv" },
+        { "kind": "report", "source": "Andretti Global race report", "url": "https://andrettiglobal.com/news/2026/07/indy-nxt-race-report-grand-prix-at-mid-ohio-race-2/" },
+        { "kind": "report", "source": "INDYCAR", "url": "https://www.indycar.com/news/2026/07/07-05-nxt-race2" }
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6756",
+      "wetDry": "mixed",
+      "summary": "Mixed. Dry at the start: Eagle Creek (KEYE, 6 km) and Indianapolis International (KIND, 10 km) report no present weather to 19:54 UTC, then light rain at 20:53-20:54 UTC, inside the 20:00-20:55 UTC race window, and moderate rain by 21:53. The season record says the race was halted when it started to rain and every driver switched to wet tyres.",
+      "evidence": [
+        { "kind": "station", "station": "USW00053842 INDIANAPOLIS EAGLE CREEK AP (KEYE)", "distanceKm": 6.2, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00053842_2026-05-08_to_2026-05-08.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00053842_2026.psv" },
+        { "kind": "station", "station": "USW00093819 INDIANAPOLIS (KIND)", "distanceKm": 10.3, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00093819_2026-05-08_to_2026-05-08.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00093819_2026.psv" },
+        { "kind": "report", "source": "Wikipedia, 2026 Indy NXT (Indianapolis Race 1)", "url": "https://en.wikipedia.org/wiki/2026_Indy_NXT" }
+      ]
+    },
+    {
+      "sessionId": "session_indy_nxt_2026_6763",
+      "wetDry": "dry",
+      "summary": "Dry. St. Louis Downtown airport (KCPS, 10 km) reports no precipitation and no present weather, with 16 km visibility, from 18:53 to 23:15 UTC, covering the 21:35-22:18 UTC race. Bryce retired on lap 5 (mechanical).",
+      "evidence": [
+        { "kind": "station", "station": "USW00003960 CAHOKIA ST LOUIS DWTN AP (KCPS)", "distanceKm": 9.7, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00003960_2026-06-07_to_2026-06-08.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2026/psv/GHCNh_USW00003960_2026.psv" }
+      ]
+    },
+    {
+      "sessionId": "session_froc_2024_r4_race_1",
+      "wetDry": "dry",
+      "summary": "Dry. Christchurch International (NZCH, 6 km) reports no present weather and 10 km visibility in every half-hourly report from 00:00 to 04:00 UTC, covering the 02:57-03:24 UTC race.",
+      "evidence": [
+        { "kind": "station", "station": "NZI0000NZCH CHRISTCHURCH INTL (NZCH)", "distanceKm": 6.2, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_NZI0000NZCH_2024-02-09_to_2024-02-10.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2024/psv/GHCNh_NZI0000NZCH_2024.psv" }
+      ]
+    },
+    {
+      "sessionId": "session_frp_f1600_2019_r2_05_race_2",
+      "wetDry": "wet",
+      "summary": "Wet. Elmira Corning airport (KELM, 20 km) reports continuous rain from 11:53 UTC, moderate (RA) with 1.5-3.5 mm per report and 2.8-6.4 km visibility through the 14:25-14:55 UTC race.",
+      "evidence": [
+        { "kind": "station", "station": "USW00014748 ELMIRA CORNING RGNL AP (KELM)", "distanceKm": 20.1, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00014748_2019-05-12_to_2019-05-12.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2019/psv/GHCNh_USW00014748_2019.psv" }
+      ]
+    },
+    {
+      "sessionId": "session_frp_f1600_2019_r2_06_race_3",
+      "wetDry": "wet",
+      "summary": "Wet. Elmira Corning airport (KELM, 20 km) reports rain all day: light rain to 17:53 UTC, moderate rain at 18:35 UTC and light rain at 18:51-18:53 UTC, inside the 18:06-18:38 UTC race.",
+      "evidence": [
+        { "kind": "station", "station": "USW00014748 ELMIRA CORNING RGNL AP (KELM)", "distanceKm": 20.1, "path": "data/career/raw/weather/noaa-ghcnh/career/GHCNh_USW00014748_2019-05-12_to_2019-05-12.psv", "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/access/by-year/2019/psv/GHCNh_USW00014748_2019.psv" }
+      ]
+    }
+  ]
+}

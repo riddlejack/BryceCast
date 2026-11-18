@@ -168,12 +168,16 @@ const LastTimeOut = ({
   const finish = row.finishPosition;
   const start = row.startPosition;
   const gain = finish !== null && start !== null ? formatGain(start - finish) : null;
-  /* The share of the field he beat comes from the race's own debrief pack,
-   * shown only once that pack has loaded and is the same race. */
+  /* The share of the other cars he beat, (field − place) ÷ (field − 1), from
+   * the career conversion row; the debrief pack's finishPercentile counts him
+   * in his own field, so it is only the fallback. */
+  const share = (uiDataPackage.screens.careerLab.resultConversion ?? []).find((r) => r.sessionId === row.sessionId)?.fieldBeatenShare;
   const percentile =
-    latestPack && latestPack.pack.sessionId === row.sessionId
-      ? asNumber((latestPack.pack.outcome as unknown as Record<string, unknown>).finishPercentile)
-      : null;
+    typeof share === 'number'
+      ? share
+      : latestPack && latestPack.pack.sessionId === row.sessionId
+        ? asNumber((latestPack.pack.outcome as unknown as Record<string, unknown>).finishPercentile)
+        : null;
   const fieldBeaten = percentile !== null ? Math.round(percentile * 100) : null;
   const capture = watchableCaptureForRace(catalog, row.sessionId);
   const racePath = `/races/${encodeURIComponent(row.sessionId)}`;

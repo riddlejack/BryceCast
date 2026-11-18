@@ -13,6 +13,7 @@ import { raceFieldOf } from './raceCardFacts';
 export interface CareerRow {
   raceLabel: string;
   sessionId: string;
+  seriesId: string;
   seriesName: string;
   seriesShort: string;
   seasonYear: number | null;
@@ -21,10 +22,14 @@ export interface CareerRow {
   start: number | null;
   finish: number;
   gain: number | null;
+  /** Share of the other cars he finished ahead of, (field − place) ÷ (field − 1); a one-car field keeps the stored percentile. */
   percentile: number;
   status: string;
+  /** The race's own day (raceDate), not the meeting's first day. */
   date: string;
+  /** careerLab.raceWeather: the official series report, else an observed call, else the reanalysis. */
   wetDry: string | null;
+  wetDrySource: string | null;
 }
 
 /** INDY NXT races have full debrief pages; every other race gets the light career sheet. */
@@ -38,20 +43,31 @@ const raceNumberOf = (sessionId: string): number | null => {
   return match ? Number(match[1]) : null;
 };
 
+/* Keyed by seriesId, so a series renamed at the source keeps its label and colour.
+ * Callers may pass a series name or id; a name resolves to its id through the
+ * package's own rows. */
+const seriesIdByName = new Map<string, string>(
+  [...(uiDataPackage.screens.careerLab.resultConversion ?? []), ...(uiDataPackage.screens.careerLab.unclassifiedRaces ?? [])]
+    .map((row) => [asString(row.seriesName) ?? '', asString(row.seriesId) ?? ''] as [string, string])
+    .filter(([name, id]) => name && id)
+);
+
+export const seriesIdOf = (nameOrId: string): string => (nameOrId.startsWith('series_') ? nameOrId : seriesIdByName.get(nameOrId) ?? nameOrId);
+
 const seriesShortNames: Record<string, string> = {
-  'Hoosier SCCA Super Tour': 'SCCA',
-  'F1600 Championship Series': 'F1600',
-  'Right Coast Formula F Series': 'RCFFS',
-  'Formula Ford': 'Formula Ford',
-  'GB3 Championship': 'GB3',
-  'Euroformula Open': 'Euroformula',
-  'Castrol Toyota Formula Regional Oceania Championship': 'FR Oceania',
-  'USF Pro 2000 Championship': 'USF Pro 2000',
-  'IMSA WeatherTech SportsCar Championship': 'IMSA',
-  'INDY NXT': 'INDY NXT'
+  series_scca_super_tour: 'SCCA',
+  series_frp_f1600: 'F1600',
+  series_rcffs: 'RCFFS',
+  series_formula_ford: 'Formula Ford',
+  series_gb3: 'GB3',
+  series_euroformula_open: 'Euroformula',
+  series_froc: 'FR Oceania',
+  series_usf_pro_2000: 'USF Pro 2000',
+  series_imsa_weathertech: 'IMSA',
+  series_indy_nxt: 'INDY NXT'
 };
 
-export const seriesShort = (name: string): string => seriesShortNames[name] ?? name;
+export const seriesShort = (nameOrId: string): string => seriesShortNames[seriesIdOf(nameOrId)] ?? nameOrId;
 
 /* Series identity colour: one swatch per series, gold for INDY NXT, the
  * current chapter (round 2 fix pass). Values live in theme.css ("the road",
@@ -59,37 +75,39 @@ export const seriesShort = (name: string): string => seriesShortNames[name] ?? n
  * six-checks validator. The three 2019 Formula F series (SCCA, F1600, RCFFS)
  * are dark, mid and light steps of one hue: one car class. */
 const chapterTints: Record<string, string> = {
-  'Hoosier SCCA Super Tour': 'var(--chapter-scca)',
-  'F1600 Championship Series': 'var(--chapter-f1600)',
-  'Right Coast Formula F Series': 'var(--chapter-rcffs)',
-  'Formula Ford': 'var(--chapter-ff)',
-  'GB3 Championship': 'var(--chapter-gb3)',
-  'Euroformula Open': 'var(--chapter-euro)',
-  'Castrol Toyota Formula Regional Oceania Championship': 'var(--chapter-fro)',
-  'USF Pro 2000 Championship': 'var(--chapter-usf)',
-  'IMSA WeatherTech SportsCar Championship': 'var(--chapter-imsa)',
-  'INDY NXT': 'var(--chapter-indy)'
+  series_scca_super_tour: 'var(--chapter-scca)',
+  series_frp_f1600: 'var(--chapter-f1600)',
+  series_rcffs: 'var(--chapter-rcffs)',
+  series_formula_ford: 'var(--chapter-ff)',
+  series_gb3: 'var(--chapter-gb3)',
+  series_euroformula_open: 'var(--chapter-euro)',
+  series_froc: 'var(--chapter-fro)',
+  series_usf_pro_2000: 'var(--chapter-usf)',
+  series_imsa_weathertech: 'var(--chapter-imsa)',
+  series_indy_nxt: 'var(--chapter-indy)'
 };
 
-export const chapterTint = (seriesName: string): string => chapterTints[seriesName] ?? 'var(--ink-primary)';
+export const chapterTint = (seriesNameOrId: string): string => chapterTints[seriesIdOf(seriesNameOrId)] ?? 'var(--ink-primary)';
 
-const shortToSeriesName = Object.fromEntries(Object.entries(seriesShortNames).map(([full, short]) => [short, full]));
+const shortToSeriesId = Object.fromEntries(Object.entries(seriesShortNames).map(([id, short]) => [short, id]));
 
-export const chapterTintForShort = (shortName: string): string => chapterTint(shortToSeriesName[shortName] ?? shortName);
+export const chapterTintForShort = (shortName: string): string => chapterTint(shortToSeriesId[shortName] ?? shortName);
 
-/** All 141 career races, chronological, straight from the validated package. */
+/** Every classified career race (167), chronological, straight from the validated package. */
 export const useCareerRows = (): CareerRow[] => {
   return useMemo(() => {
     const raw = uiDataPackage.screens.careerLab.resultConversion ?? [];
     return raw
       .map((row): CareerRow | null => {
         const finish = asNumber(row.finishPosition);
-        const percentile = asNumber(row.finishPercentile);
-        const date = asString(row.eventStartDate);
+        const percentile = asNumber(row.fieldBeatenShare) ?? asNumber(row.finishPercentile);
+        const date = asString(row.raceDate) ?? asString(row.eventStartDate);
+        const weather = uiDataPackage.screens.careerLab.raceWeather?.[asString(row.sessionId) ?? ''] ?? null;
         if (finish === null || percentile === null || date === null) return null;
         return {
           raceLabel: (asString(row.raceLabel) ?? '').replace(/^\d{4}\s+/, ''),
           sessionId: asString(row.sessionId) ?? '',
+          seriesId: asString(row.seriesId) ?? '',
           seriesName: asString(row.seriesName) ?? '',
           seriesShort: seriesShort(asString(row.seriesName) ?? ''),
           seasonYear: asNumber(row.seasonYear),
@@ -101,7 +119,8 @@ export const useCareerRows = (): CareerRow[] => {
           percentile,
           status: asString(row.status) ?? 'running',
           date,
-          wetDry: asString(row.wetDry)
+          wetDry: weather ? weather.wetDry : asString(row.wetDry),
+          wetDrySource: weather ? weather.wetDrySource : null
         };
       })
       .filter((row): row is CareerRow => row !== null)
@@ -140,7 +159,8 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
   const tap = useTapPreview();
-  const chapterRows = useMemo(() => rows.filter((row) => row.seriesName === seriesName), [rows, seriesName]);
+  /* seriesName may be a series id or name; matched on the id. */
+  const chapterRows = useMemo(() => rows.filter((row) => row.seriesId === seriesIdOf(seriesName)), [rows, seriesName]);
   if (chapterRows.length === 0) return null;
 
   const height = 44;
@@ -159,7 +179,7 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
   return (
     <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
-        <svg width={width} height={height} role="img" aria-label={`${seriesName} finishing percentiles`}>
+        <svg width={width} height={height} role="img" aria-label={`${chapterRows[0].seriesName}: share of the field beaten, race by race`}>
           <line x1={8} x2={width - 8} y1={axisY} y2={axisY} stroke="var(--grid-hairline)" strokeWidth={1.5} />
           {chapterRows.map((row, index) => (
             <circle
@@ -432,7 +452,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
   return (
     <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
-        <svg width={width} height={height} role="img" aria-label="Finishing percentile by group">
+        <svg width={width} height={height} role="img" aria-label="Share of the field beaten, by group">
           {[0, 0.5, 1].map((tick) => (
             <g key={tick}>
               <line x1={x(tick)} x2={x(tick)} y1={axisHeight - 4} y2={height - 2} stroke="var(--grid-hairline)" />
@@ -918,7 +938,7 @@ const ConditionLane = ({
   const sorted = [...laneRows].sort((a, b) => a.percentile - b.percentile);
   const median = sorted[Math.floor(sorted.length / 2)].percentile;
   return (
-    <svg width={width} height={height} role="img" aria-label={`${label} finishing percentiles`}>
+    <svg width={width} height={height} role="img" aria-label={`${label}: share of the field beaten, race by race`}>
       <text x={8} y={11} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11.5} fontWeight={550}>
         {label}
       </text>
@@ -1579,7 +1599,7 @@ export const CareerBests = () => {
       <Stat label="Wins" value={wins} />
       <Stat label="Podiums" value={podiums} />
       <Stat label="Top-10s" value={topTens} />
-      <Stat label="Typical day" value={`${ordinal(Math.round([...rows].sort((a, b) => a.percentile - b.percentile)[Math.floor(rows.length / 2)].percentile * 100))} pctile`} />
+      <Stat label="Typical day" value={`${Math.round([...rows].sort((a, b) => a.percentile - b.percentile)[Math.floor(rows.length / 2)].percentile * 100)}% beaten`} />
     </div>
   );
 };

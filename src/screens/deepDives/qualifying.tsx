@@ -19,7 +19,7 @@ import './qualifying.css';
  * Jack: "It currently sucks right now. There's text everywhere. The chart
  * itself isn't to the same standard as the rest of the site."
  *
- * Every race where qualifying set his start (77 of 173), drawn one by one.
+ * Every race where qualifying set his start (77 of 175), drawn one by one.
  * The rows are the qualifying layer's own per-race table
  * (analysis/qualifying-layer/output/tables/quali_race_conversion.csv, the
  * file the UI package's totals are built from). They are checked against the

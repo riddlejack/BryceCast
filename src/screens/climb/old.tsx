@@ -190,7 +190,7 @@ export const OldClimb = () => {
             {
               label: 'Career result conversion · all series',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: `${n} source-backed races with a finishing percentile: the share of the field beaten, which stays honest as field sizes change between series. Named moments use deterministic event-date and finish-position rules; the form line is an eleven-race trimmed mean (middle 60% of the window).`
+              note: `${n} source-backed races with a share of the field beaten, (field − place) ÷ (field − 1), which stays honest as field sizes change between series. Named moments use deterministic event-date and finish-position rules; the form line is an eleven-race trimmed mean (middle 60% of the window).`
             },
             {
               label: 'Canonical career results · official status',

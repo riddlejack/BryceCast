@@ -24,7 +24,7 @@ import { beatLine, placeLine } from '../app/raceFacts';
  * no sourced championship progression). The year's shape leads: one dot per
  * race in date order, coloured by series (chapterTint), height his finish,
  * a ring where he had no classified finish. The rows sit folded under it, so
- * eight seasons scan as eight pictures, not 173 lines. `?racesyears=open`
+ * eight seasons scan as eight pictures, not 175 lines. `?racesyears=open`
  * shows every row unfolded.
  * ==========================================================================*/
 
@@ -344,7 +344,7 @@ const archiveSources = (races: ArchiveRace[]) => {
     },
     {
       label: 'Dates',
-      note: 'The race day where the season record gives it, or the day the race’s own record names (the SCCA Super Tour’s Saturday and Sunday races). Otherwise “Weekend of” the meeting’s first day.'
+      note: 'The race day where the season record gives it, or the day the race’s own record names (the SCCA’s Saturday and Sunday races). Otherwise “Weekend of” the meeting’s first day.'
     },
     {
       label: 'Track pictures',
