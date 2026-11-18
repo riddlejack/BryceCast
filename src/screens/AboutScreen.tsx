@@ -106,7 +106,7 @@ export const AboutScreen = () => (
         <div className="about-credit">
           <span className="about-credit__label">Data sources</span>
           <p className="about-credit__detail">
-            Official series timing, results, lap charts, and section reports; modeled near-track NWS weather; and permissioned third-party
+            Official series timing, results, lap charts, and section reports; weather for every race from the Open-Meteo reanalysis, with the series’ own wet or dry call where it prints one and NOAA weather stations where they settle it; and permissioned third-party
             captures: RaceTools race-weekend geometry and Timing71 timing for 2026 replays.{' '}
             <Link to="/data" className="navlink" style={linkStyle}>
               Data &amp; sources

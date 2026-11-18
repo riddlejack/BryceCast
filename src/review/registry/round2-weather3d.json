@@ -39,7 +39,7 @@
         { "value": null, "label": "the race's own sun (default)" },
         { "value": "fixed", "label": "the kit's fixed sun, as before" }
       ],
-      "look": "Laguna Seca 2026 · Race 2 (10:00, sun in the east-south-east) against 2026 · Race 1 (16:00, west-south-west): the shadows fall the other way. Indianapolis 2025 · Race 1 (19:00, the sun 19 degrees up in the west).",
+      "look": "Laguna Seca 2026 · Race 2 (09:30, sun in the east-south-east) against 2026 · Race 1 (15:30, south-west): the shadows fall the other way. Indianapolis 2025 · Race 1 (19:00, the sun 19 degrees up in the west).",
       "anchor": null,
       "added": "2026-11-18T01:00",
       "reviewed": false

@@ -4,7 +4,8 @@
  *
  * One read of "was it wet?" per race, shared by every chart that marks it:
  * careerLab.raceWeather first (the official series condition report where one
- * exists, else the reanalysis rain over the race window), then the older
+ * exists, then weather-station observation and race reports, else the
+ * reanalysis rain over the race window), then the older
  * resultConversion.wetDry for any race raceWeather lacks. A dry or unknown race
  * gets no mark. A reanalysis read says "(modelled)" wherever it is put in words. */
 
@@ -33,7 +34,8 @@ const build = (): Map<string, WetRead> => {
   const weather = lab.raceWeather ?? {};
   for (const [sessionId, row] of Object.entries(weather)) {
     if (row.wetDry !== 'wet' && row.wetDry !== 'mixed') continue;
-    const modelled = row.wetDrySource !== 'series_report';
+    /* Only a reanalysis call is modelled; a series report or a weather station's observation is not. */
+    const modelled = row.wetDrySource === 'reanalysis';
     const base = row.wetDry === 'wet' ? 'wet' : mixedWord(row.seriesReport?.conditionRaw);
     map.set(sessionId, { state: row.wetDry, modelled, words: `${base} track${modelled ? ' (modelled)' : ''}` });
   }

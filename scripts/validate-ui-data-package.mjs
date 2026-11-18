@@ -677,6 +677,11 @@ for (const ref of raceStoryRefs ?? []) {
 
 /* ---------- section-lap packs (Brief H: heat map + drawer traceability) ---------- */
 
+const officialRaceLapsBySession = new Map(
+  (canonicalDataset.results ?? [])
+    .filter((result) => Number(result.finishPosition) === 1 && Number(result.lapsCompleted) > 0)
+    .map((result) => [result.sessionId, Number(result.lapsCompleted)])
+);
 const sectionLapRefs = dataPackage.screens.raceDebrief.sectionLapRefs;
 if (!Array.isArray(sectionLapRefs) || sectionLapRefs.length === 0) {
   fail('raceDebrief.sectionLapRefs must exist (sessions with official per-lap section observations).');
@@ -703,6 +708,17 @@ for (const ref of sectionLapRefs ?? []) {
   }
   if (!Array.isArray(pack.sections) || pack.sections.length === 0) {
     fail(`Section-lap pack ${ref.sessionId} must carry at least one section family.`);
+  }
+  /* totalLaps is the race's official distance (a replay's "Lap N of M"), not
+     the last lap of his section data, which bryceLapsCovered carries. */
+  if (typeof pack.bryceLapsCovered === 'number') {
+    const officialLaps = officialRaceLapsBySession.get(ref.sessionId) ?? null;
+    if (officialLaps !== null && pack.totalLaps !== Math.max(officialLaps, pack.bryceLapsCovered)) {
+      fail(`Section-lap pack ${ref.sessionId} totalLaps ${pack.totalLaps} must be the official race distance (${officialLaps} laps).`);
+    }
+    if (pack.bryceLapsCovered > pack.totalLaps) {
+      fail(`Section-lap pack ${ref.sessionId} bryceLapsCovered exceeds totalLaps.`);
+    }
   }
   const tupleLength = (pack.tupleOrder ?? []).length;
   if (tupleLength < 8) {

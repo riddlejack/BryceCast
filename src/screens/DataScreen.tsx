@@ -24,8 +24,8 @@ import './aboutData/data.css';
 type Row = Record<string, unknown>;
 
 const sourceKinds: Array<{ name: string; detail: string }> = [
-  { name: 'Official', detail: 'Series timing, results, lap charts and section reports: almost every number on the site.' },
-  { name: 'Modeled', detail: 'Labeled estimates where no official feed exists: near-track NWS weather, and the untimed stretch of a lap (lap time minus the timed sections).' },
+  { name: 'Official', detail: 'Series timing, results, lap charts and section reports, and the wet or dry call where a series prints one: almost every number on the site.' },
+  { name: 'Modeled', detail: 'Labeled estimates where no official feed exists: weather for every race from the Open-Meteo reanalysis, checked against NOAA weather stations and race reports where those settle wet or dry; and the untimed stretch of a lap (lap time minus the timed sections).' },
   { name: 'Permissioned third-party', detail: 'Shared with permission and named where used: RaceTools track shapes for street circuits, Timing71 timing for 2026 replays.' }
 ];
 
@@ -45,7 +45,7 @@ const FAMILY: Record<string, { name: string; note: string }> = {
   penalties: { name: 'Penalties', note: 'Official penalties and decisions.' },
   racecraft_events: { name: 'Places gained', note: 'The series’ own most-improved awards. No pass is guessed.' },
   pit_stop_counts: { name: 'Pit stops', note: 'How many each car made; nothing on tires or service.' },
-  weather_observations: { name: 'Weather', note: 'Near-track, for sessions with a known start time.' },
+  weather_observations: { name: 'Weather', note: 'Modelled, from the Open-Meteo reanalysis, for each session with a known start time.' },
   future_schedule: { name: 'Schedule', note: 'Sessions still to come.' }
 };
 
@@ -125,7 +125,7 @@ const plainIssue = (message: string): string => {
   const match = message.match(/^(\d+) physical sessions? do(?:es)? not yet have scheduledStart or actualStart/i);
   if (match) {
     const n = Number(match[1]);
-    return `${countWord(n).replace(/^./, (c) => c.toUpperCase())} ${n === 1 ? 'session has' : 'sessions have'} no start time on record yet, so no weather is joined to ${n === 1 ? 'it' : 'them'}.`;
+    return `${countWord(n).replace(/^./, (c) => c.toUpperCase())} ${n === 1 ? 'session has' : 'sessions have'} no start time on record yet, none of them a race, so no hourly weather is joined to ${n === 1 ? 'it' : 'them'}. Every race has its weather.`;
   }
   return message;
 };
@@ -186,7 +186,7 @@ const WONT_SHOW: Array<{ head: string; why: string }> = [
   { head: 'Car telemetry', why: 'Throttle, brake and speed traces are in none of the sources.' },
   { head: 'In-car video or team radio', why: 'Not available to this project.' },
   { head: 'Win or finish predictions', why: 'History is shown as ranges and paths, never as a forecast.' },
-  { head: 'Official series weather', why: 'The series don’t publish it. Near-track NWS weather is labeled for what it is.' },
+  { head: 'Weather measured at the track', why: 'No series publishes it. Race weather is the Open-Meteo reanalysis, labelled modelled; a series’ own wet or dry call, or a weather station and race reports, overrule it.' },
   { head: 'Pit, tire or fuel strategy calls', why: 'The official feeds don’t carry them. The Career page’s fuel figure is a modelled range, and says how.' }
 ];
 

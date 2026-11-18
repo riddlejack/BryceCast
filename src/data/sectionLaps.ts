@@ -34,7 +34,12 @@ export interface SectionLapsPack {
   seasonYear: number | null;
   venueName: string;
   trackType: string | null;
+  /** The race's laps: its official distance (the winner's laps in the
+   *  classification), or his own last lap where no classification gives it. */
   totalLaps: number;
+  /** The last lap of his own section data: short of totalLaps when he was
+   *  lapped or out early. Absent in packs built before November 18, 2026. */
+  bryceLapsCovered?: number;
   tupleOrder: string[];
   /** Which source fed this pack. Absent/`parsed_pdf_aggregate` = the official
    *  Section Results parse (v1, the fallback path). `lake_loop_crossings` = the

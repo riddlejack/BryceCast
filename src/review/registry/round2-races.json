@@ -4,7 +4,7 @@
     {
       "id": "races-years",
       "page": "/races",
-      "title": "Every season on the Races page, 2019 to 2026 (173 races): the years before INDY NXT folded under their year's dots, or open",
+      "title": "Every season on the Races page, 2019 to 2026 (175 races): the years before INDY NXT folded under their year's dots, or open",
       "switch": "racesyears",
       "values": [
         {
@@ -13,7 +13,7 @@
         },
         {
           "value": "open",
-          "label": "open: every year's rows listed under its dots, all 173 rows on the page"
+          "label": "open: every year's rows listed under its dots, all 175 rows on the page"
         }
       ],
       "look": "Races. Use the year links under the title to jump; point at (or tap) any dot in any season for the track card; open 2019 and click a race; open a DNF/DNS race (2019 Watkins Glen Race 3) to see its own page.",

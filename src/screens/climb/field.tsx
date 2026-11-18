@@ -4,6 +4,7 @@ import { useRouter } from '../../app/router';
 import { useTapPreview } from '../../app/tapPreview';
 import { chapterTint, raceHref } from '../careerExplorer';
 import { ClimbCard } from './card';
+import { useSlide, type Slide } from './slide';
 import { clamp, ease, type ClimbModel, type ClimbRace } from './model';
 
 /* ============================================================================
@@ -32,6 +33,7 @@ export const FieldView = ({ model, width, p }: { model: ClimbModel; width: numbe
   const coarse = useCoarsePointer();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hover, setHover] = useState<number | null>(null);
+  const slideRef = useRef<Slide | null>(null);
   const n = races.length;
   const phone = width < 640;
 
@@ -61,19 +63,28 @@ export const FieldView = ({ model, width, p }: { model: ClimbModel; width: numbe
     if (!box) return null;
     const mx = event.clientX - box.left;
     const my = event.clientY - box.top;
-    if (my < top - 12 || my > H - 20) {
+    /* A finger sliding sideways walks race by race at any height (./slide). */
+    const byX = slideRef.current?.sliding() ?? false;
+    if (!byX && (my < top - 12 || my > H - 20)) {
       setHover(null);
       return null;
     }
     const i = clamp(Math.round((mx - padL) / colW - 0.5), 0, n - 1);
     const d = Math.abs(x(i) - mx);
-    if (d > Math.max(colW, coarse || tap.armed !== null ? 14 : 8)) {
+    /* a finger reaches at least 24 px either side of a bar */
+    if (!byX && d > Math.max(colW, coarse || tap.armed !== null ? 24 : 8)) {
       setHover(null);
       return null;
     }
     setHover(i);
     return i;
   };
+
+  const slide = useSlide(tap, find, () => setHover(null), (key) => {
+    const race = races[key as number];
+    return race?.hasPage ? () => navigate(raceHref(race.sessionId)) : null;
+  });
+  slideRef.current = slide;
 
   /* series bands across the top: one per step, the one-offs called out inside */
   const bandLabelF = phone ? 12 : 13.5;
@@ -89,14 +100,7 @@ export const FieldView = ({ model, width, p }: { model: ClimbModel; width: numbe
         role="img"
         aria-label={`Every race's field, front at the top, with his finishing place marked: ${model.total} races.`}
         data-hovering={hover !== null ? '' : undefined}
-        {...tap.surface({
-          find,
-          clear: () => setHover(null),
-          open: (key) => {
-            const race = races[key as number];
-            return race?.hasPage ? () => navigate(raceHref(race.sessionId)) : null;
-          }
-        })}
+        {...slide.handlers}
       >
         {steps.map((step, s) => {
           const x0 = x(step.from) - colW / 2;

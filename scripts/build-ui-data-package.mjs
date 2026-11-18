@@ -1159,7 +1159,17 @@ const MEASURED_SECTION_PACKS = [
   }
 ];
 
-const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
+const buildSectionLapPacks = ({ raceDebriefPackPairs, canonicalDataset }) => {
+  /* The race's official distance: the winner's laps in the canonical
+     classification. A pack's totalLaps is the race's laps, as a heartbeat's
+     is; bryceLapsCovered is the last lap of his own section data (short of
+     the distance when he was lapped or out early; Indianapolis 2026 Race 1
+     ran 29 laps and he finished on 28). */
+  const raceLapsBySession = new Map();
+  for (const result of canonicalDataset.results ?? []) {
+    const laps = numberOrNull(result.lapsCompleted);
+    if (numberOrNull(result.finishPosition) === 1 && laps !== null && laps > 0) raceLapsBySession.set(result.sessionId, laps);
+  }
   const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
   fs.mkdirSync(outputDir, { recursive: true });
   const observationRows = readCsv(sources.raceSectionLapObservations);
@@ -1242,16 +1252,18 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
     /* Field distribution + derived remainder for this race. */
     const distribution = fieldDistribution[sessionId] ?? null;
     const fieldSecondsFor = (family) => distribution?.sections?.[family]?.fieldCarMedians ?? null;
-    const totalLaps = Math.max(0, ...rows.map((row) => numberOrNull(row.lapNumber) ?? 0));
+    const bryceLapsCovered = Math.max(0, ...rows.map((row) => numberOrNull(row.lapNumber) ?? 0));
+    const totalLaps = Math.max(bryceLapsCovered, raceLapsBySession.get(sessionId) ?? 0);
     /* One row per other car (sorted by its anonymous car index), one cell per
-       lap (index lap - 1): that car's clean green-flag time in the section, or
-       null. Cars with no clean time in the section are left out. */
+       lap (index lap - 1) through his own last lap, so every comparison stays
+       over the laps he ran: that car's clean green-flag time in the section,
+       or null. Cars with no clean time in the section are left out. */
     const otherCarLapsFor = (family) => {
       const byCar = otherCarLapsBySession.get(sessionId)?.get(family);
       if (!byCar || byCar.size === 0) return null;
       return [...byCar.keys()]
         .sort()
-        .map((carRef) => Array.from({ length: totalLaps }, (_, index) => byCar.get(carRef).get(index + 1) ?? null));
+        .map((carRef) => Array.from({ length: bryceLapsCovered }, (_, index) => byCar.get(carRef).get(index + 1) ?? null));
     };
     const measuredSections = [...byFamily.entries()].map(([sectionName, laps]) => {
       const fieldSeconds = fieldSecondsFor(sectionName);
@@ -1301,6 +1313,7 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
       venueName,
       trackType: first.trackType,
       totalLaps,
+      bryceLapsCovered,
       tupleOrder: SECTION_LAP_TUPLE_ORDER,
       sections: [...measuredSections, ...derivedSections],
       derivedCoverage: distribution?.derivedCoverage ?? null,
@@ -3540,7 +3553,7 @@ const buildPackage = () => {
     canonicalDataset,
     canonicalSha256: summarizeArtifact(sources.canonicalDataset).sha256
   });
-  const sectionLapRefs = buildSectionLapPacks({ raceDebriefPackPairs });
+  const sectionLapRefs = buildSectionLapPacks({ raceDebriefPackPairs, canonicalDataset });
   const passMarkRefs = buildPassMarkRefs({ raceDebriefPackPairs });
   const seasonIndex = buildSeasonIndex({ raceDebriefPackPairs, resultsBySession, progressionRows: championshipRows });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
