@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-18T04:33:51.449Z",
+  "generatedAt": "2026-11-18T05:08:04.843Z",
   "sourceHash": "79d1a3b5f19910a55afa1ccee7df1ec81cb8884957241eea463499eefcb4289a",
   "asOfDate": "2026-09-19",
   "baselineCommit": "8ec5bd1",
@@ -18241,9 +18241,9 @@
         "id": "imsa-daytona-stint-class-context",
         "type": "imsa_daytona_stint",
         "path": "analysis/imsa-daytona-stint-class-pace/output/context-packs/imsa-daytona-stint-class-context.json",
-        "bytes": 24058,
-        "modifiedAt": "2026-11-18T04:22:37.617Z",
-        "sha256": "596d9c59b415eab0f5816513fc9348138e37964f2ef0baf38026035cdb278a49"
+        "bytes": 27999,
+        "modifiedAt": "2026-11-18T05:07:43.668Z",
+        "sha256": "48997b5b937aacf6bff0feb115cd170e77bd142032c71d0253083106d7556d11"
       },
       "careerPriorMatrixPath": "analysis/predictive-race-intelligence/output/career_prior_matrix.csv",
       "seriesSummary": [
