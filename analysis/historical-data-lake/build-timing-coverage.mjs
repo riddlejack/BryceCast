@@ -413,7 +413,7 @@ async function timing71Source(replayId, {segmentMode = 'bryce_roster_segment'} =
       sourceSessionId: replayId,
       replayId,
       sourceTier: 'timing71_normalized',
-      sourceLabel: 'Timing71 normalized replay of live timing',
+      sourceLabel: 'Timing71 normalised replay of live timing',
       clockBasis: 'utc_archive_timestamp',
       observationBasis: 'observed_source_frame',
       interpolated: false,
@@ -425,7 +425,7 @@ async function timing71Source(replayId, {segmentMode = 'bryce_roster_segment'} =
   const segment = quality.analysis?.content?.bryceSegment ?? {};
   const descriptor = {
     tier: 'timing71_normalized',
-    label: 'Timing71 normalized replay of live timing',
+    label: 'Timing71 normalised replay of live timing',
     replayId,
     sourceSessionId: quality.sessionId,
     sourceSegment: segmentMode,

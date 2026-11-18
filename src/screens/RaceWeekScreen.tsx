@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { isKnownVenue, venueShort as siteVenueShort } from '../app/venueNames';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
@@ -45,16 +46,9 @@ type Row = Record<string, unknown>;
  *  street venues whose official names carry a mid-string sponsor or descriptor
  *  (so shortVenue's trailing-suffix trim can't reach it) are named here the way
  *  the race archive reads them. */
-const venueShortNames: Record<string, string> = {
-  'World Wide Technology Raceway': 'WWTR',
-  'The Milwaukee Mile': 'Milwaukee',
-  'Iowa Speedway': 'Iowa',
-  'Nashville Superspeedway': 'Nashville',
-  'Indianapolis Motor Speedway Road Course': 'Indy Road Course',
-  'WeatherTech Raceway Laguna Seca': 'Laguna Seca'
-};
+const venueShortNames: Record<string, string> = {};
 
-const venueShort = (trackName: string): string => venueShortNames[trackName] ?? shortVenue(trackName);
+const venueShort = (trackName: string): string => (isKnownVenue(trackName) ? siteVenueShort(trackName) : venueShortNames[trackName] ?? shortVenue(trackName));
 
 /** One race's row label: the two-digit season tick + its short venue name. Shared
  *  by the chart's rendered label and the gutter-width measurement so they can
@@ -1440,8 +1434,8 @@ const VenueDossierModule = ({
       <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         ▲▽ compare each year against the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
         Air, humidity, wind and sky are the Open-Meteo reanalysis for the race hour at the track, modelled, not the
-        series’ own weather. Whether the track was wet is on each race’s page, from the series report or a nearby
-        station where there is one.
+        series’ own weather. Whether the track was wet is on each race’s page: from the series report, else a nearby
+        station, else the same reanalysis, and the page says which.
       </p>
     </Card>
   );

@@ -25,30 +25,10 @@
  * lookup in the package, so every row can be checked in one pass. */
 
 import { uiDataPackage } from '../data/uiDataPackage';
+import { isKnownVenue, venueName } from '../app/venueNames';
 
-/** Long venue names cut to the name people use. Everything else stays as the source spells it. */
-const shortPlaces: Record<string, string> = {
-  'mid ohio sports car course': 'Mid-Ohio',
-  'mid-ohio sports car course': 'Mid-Ohio',
-  'watkins glen international': 'Watkins Glen',
-  'michelin raceway road atlanta': 'Road Atlanta',
-  'euromarque motorsport park': 'Euromarque',
-  'highlands motorsport park': 'Highlands',
-  'castle combe circuit': 'Castle Combe',
-  'cadwell park circuit': 'Cadwell Park',
-  'brands hatch circuit': 'Brands Hatch',
-  'silverstone circuit': 'Silverstone',
-  'snetterton circuit': 'Snetterton',
-  'lucas oil indianapolis raceway park': 'Indianapolis Raceway Park',
-  /* The sources spell it without the tilde; the town is Portimão. */
-  portimao: 'Portimão',
-  'autodromo internacional do algarve': 'Portimão',
-  /* GB3 2022's sheets say "Spa", 2021's and Euroformula's "Spa-Francorchamps"; the chapters say Spa. */
-  'spa-francorchamps': 'Spa',
-  'circuit de spa-francorchamps': 'Spa'
-};
-
-const shortPlace = (name: string): string => shortPlaces[name.trim().toLowerCase()] ?? name.trim();
+/** A venue's one name, from the site's venue table (app/venueNames). */
+const shortPlace = (name: string): string => venueName(name);
 
 export interface RaceNameInput {
   eventName: string;
@@ -134,6 +114,8 @@ const eventOf = (eventName: string, trackName: string): { event: string; named: 
       .replace(/^(the|brscc)\s+/i, '')
       .replace(/\s+for FF1600$/i, '')
       .trim();
+    /* An event named by its venue ("World Wide Technology Raceway", "Milwaukee Mile") says the venue's one name. */
+    if (isKnownVenue(event)) event = venueName(event);
   }
   if (!event) event = shortPlace(trackName);
   return { event, named: namedRace ? Number(namedRace[2]) : null, round };

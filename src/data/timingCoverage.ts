@@ -67,6 +67,23 @@ export interface RaceTimingCoverage {
   qualifying: TimingCoverageSession | null;
 }
 
+/** The site says its own source names (British spelling). The producer
+ *  (build-timing-coverage.mjs) now writes the same words; a ledger built before that
+ *  change still carries "normalized", so the name is set here by tier. */
+const SITE_LABELS: Record<string, string> = {
+  timing71_normalized: 'Timing71 normalised replay of live timing'
+};
+const withSiteLabel = (source: TimingSourceCoverage | null | undefined) =>
+  source && SITE_LABELS[source.tier] ? { ...source, label: SITE_LABELS[source.tier] } : source;
+const withSiteLabels = (ledger: TimingCoverageLedger): TimingCoverageLedger => ({
+  ...ledger,
+  sessions: ledger.sessions.map((session) => ({
+    ...session,
+    primarySource: withSiteLabel(session.primarySource) ?? session.primarySource,
+    sources: session.sources?.map((source) => withSiteLabel(source)!)
+  }))
+});
+
 let ledgerPromise: Promise<TimingCoverageLedger | null> | null = null;
 
 /** The ledger is intentionally loaded on demand, not bundled into any screen
@@ -81,7 +98,7 @@ const loadTimingCoverageLedger = (): Promise<TimingCoverageLedger | null> => {
     ledgerPromise = fetch(ledgerUrl)
       .then((response) => response.json())
       .then((ledger: TimingCoverageLedger) =>
-        ledger?.schemaVersion === 1 && Array.isArray(ledger.sessions) ? ledger : null
+        ledger?.schemaVersion === 1 && Array.isArray(ledger.sessions) ? withSiteLabels(ledger) : null
       )
       .catch(() => null);
   }

@@ -1,4 +1,5 @@
 import { formatDate } from '../../app/format';
+import { isKnownVenue, venueShort } from '../../app/venueNames';
 import { beatLine, placeLine } from '../../app/raceFacts';
 import { displayRaceLabelText } from '../../data/debriefArchive';
 import type { UiSeasonIndexRow } from '../../data/uiDataPackage';
@@ -43,35 +44,17 @@ export interface SeasonMark {
 
 /* ---------- venue names short enough to sit under a weekend ---------- */
 
+/* Meetings named for their event; every venue's short form comes from app/venueNames. */
 const SHORT: Record<string, string> = {
-  'homestead-miami speedway': 'Homestead',
-  'circuit of the americas': 'COTA',
-  'virginia international raceway': 'VIR',
-  'pittsburgh international race complex': 'Pittsburgh',
-  'new jersey motorsports park': 'NJMP',
   'formula ford festival': 'FF Festival',
   'walter hayes trophy': 'Walter Hayes',
   'silverstone international': 'Silverstone',
   'champion of brands': 'Brands Hatch',
-  'champion of cadwell': 'Cadwell Park',
-  'spa-francorchamps': 'Spa',
-  portimao: 'Portimão',
-  'autodromo internacional do algarve': 'Portimão',
-  'streets of st. petersburg': 'St. Pete',
-  'barber motorsports park': 'Barber',
-  'indianapolis motor speedway road course': 'Indy GP',
-  'detroit downtown street circuit': 'Detroit',
-  'weathertech raceway laguna seca': 'Laguna Seca',
-  'mid-ohio sports car course': 'Mid-Ohio',
-  'iowa speedway': 'Iowa',
-  'world wide technology raceway': 'Gateway',
-  'portland international raceway': 'Portland',
-  'the milwaukee mile': 'Milwaukee',
-  'nashville superspeedway': 'Nashville',
-  'grand prix of arlington street circuit': 'Arlington'
+  'champion of cadwell': 'Cadwell Park'
 };
 
 export const venueShortOf = (name: string): string => {
+  if (isKnownVenue(name)) return venueShort(name);
   const key = name.trim().toLowerCase();
   if (SHORT[key]) return SHORT[key];
   return name
