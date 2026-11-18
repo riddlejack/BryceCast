@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode, type RefObject } from 'react';
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode, type RefObject } from 'react';
 import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion } from '../../app/charts';
 import { TAP_CARD, TapAction, useTapPreview, useTouchPlacement, type TapPreview } from '../../app/tapPreview';
 import { useRouter } from '../../app/router';
@@ -41,8 +41,8 @@ export const PHONE_ROWS = 12;
  * strokes, every edge at least a pixel wide at the sizes the charts use:
  *
  *   ?rvtyre (default)  a race slick: black rubber, a gold (Bryce) or silver
- *                      (the rival) wheel, a hub, and one short white sidewall
- *                      mark that shows the roll. Proxy review 3 (Nov 18): at
+ *                      (the rival) wheel, a hub, and two short white sidewall
+ *                      marks, top and bottom, that show the roll. Proxy review 3 (Nov 18): at
  *                      actual size (about 16 px) the five spokes read as
  *                      stars; the slick reads as a tyre and nothing else.
  *   ?rvtyre=spoked     the same with five straight spokes (round 3's first
@@ -93,7 +93,13 @@ export const TyreDefs = ({ prefix }: { prefix: string }) => {
                   <line key={angle} x1={0} y1={-2.2} x2={0} y2={-5.6} stroke={FACE} strokeOpacity={side === 'b' ? 0.55 : 0.5} strokeWidth={1.25} strokeLinecap="round" transform={`rotate(${angle})`} />
                 ))
               : null}
-            {style === 'slick' && !small ? <path d="M -3.2 -8.3 A 8.3 8.3 0 0 1 3.2 -8.3" fill="none" stroke="#ffffff" strokeOpacity={0.55} strokeWidth={1.3} strokeLinecap="round" /> : null}
+            {style === 'slick' && !small ? (
+              <>
+                {/* two sidewall marks, as a race slick's lettering sits top and bottom: at 1x they keep it from reading as a donut */}
+                <path d="M -3.6 -7.4 A 8.15 8.15 0 0 1 3.6 -7.4" fill="none" stroke="#ffffff" strokeOpacity={0.62} strokeWidth={1.6} strokeLinecap="round" />
+                <path d="M 3.6 7.4 A 8.15 8.15 0 0 1 -3.6 7.4" fill="none" stroke="#ffffff" strokeOpacity={0.62} strokeWidth={1.6} strokeLinecap="round" />
+              </>
+            ) : null}
             <circle r={small ? 1.9 : 1.8} fill={FACE} />
           </>
         );
@@ -239,17 +245,57 @@ export const RivalCard = ({ focus, width, tap, coarse }: { focus: Focus; width: 
     );
   }
   const cardW = hasRace ? STILL_W + 2 : 250;
-  const cardH = hasRace ? 250 : 96;
-  const below = focus.y - focus.r - 12 < cardH;
   const left = Math.min(Math.max(focus.x, cardW / 2 + 2), Math.max(width - cardW / 2 - 2, cardW / 2 + 2));
   return (
+    <MouseCard focus={focus} left={left} cardW={cardW} contentKey={`${focusKey(focus)}|${pictureState}`} cardRef={ref}>
+      {still}
+      <CardBody focus={focus} action={hasRace ? <span className="rvc__action">Click to open the race</span> : null} />
+    </MouseCard>
+  );
+};
+
+/** The mouse card, above its tyre unless the screen has no room there (proxy
+ *  review 4: flipping by the tyre's place on the board let the card hang
+ *  below the screen when the board's top rows sat low in the window). It is
+ *  measured, then placed against the screen: above if it fits above the tyre,
+ *  else below if it fits there, else on the side with more room. */
+const MouseCard = ({
+  focus,
+  left,
+  cardW,
+  contentKey,
+  cardRef,
+  children
+}: {
+  focus: Focus;
+  left: number;
+  cardW: number;
+  contentKey: string;
+  cardRef: RefObject<HTMLDivElement | null>;
+  children: ReactNode;
+}) => {
+  const [below, setBelow] = useState(false);
+  useLayoutEffect(() => {
+    const card = cardRef.current;
+    const parent = card?.offsetParent;
+    if (!card || !(parent instanceof HTMLElement)) return;
+    const originY = parent.getBoundingClientRect().top + parent.clientTop;
+    const h = card.offsetHeight;
+    const gap = 10;
+    const margin = 8;
+    const roomAbove = originY + focus.y - focus.r - gap - margin;
+    const roomBelow = window.innerHeight - (originY + focus.y + focus.r + gap) - margin;
+    const next = roomAbove >= h ? false : roomBelow >= h ? true : roomBelow > roomAbove;
+    setBelow((was) => (was === next ? was : next));
+  }, [cardRef, focus.y, focus.r, contentKey]);
+  return (
     <div
+      ref={cardRef}
       className={`rvc${below ? ' rvc--below' : ''}`}
       style={{ left, top: below ? focus.y + focus.r + 10 : focus.y - focus.r - 10, width: cardW }}
       aria-hidden
     >
-      {still}
-      <CardBody focus={focus} action={hasRace ? <span className="rvc__action">Click to open the race</span> : null} />
+      {children}
     </div>
   );
 };
