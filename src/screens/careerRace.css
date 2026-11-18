@@ -149,3 +149,47 @@
   .crs--row .crs-words > :not(.crs-facts) { grid-column: 1; }
   .crs--row .crs-facts { grid-column: 2; grid-row: 1 / span 3; align-self: end; margin: 0; padding: 0; border: 0; }
 }
+
+/* ---------- career round 2 (Nov 17): the track in 3D ---------- */
+
+/* The interactive model, full width under the race, where the venue has one. */
+.crs-model {
+  padding-top: clamp(22px, 2.2vw, 34px);
+  border-top: 1px solid var(--grey-hair);
+  min-width: 0;
+}
+.crs .crs-model__title {
+  margin: 0 0 14px;
+  font-size: clamp(18px, 1.4vw, 22px);
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+.crs-model .track3d__stage { max-height: min(72vh, 780px); }
+
+/* A race with no classified finish: the words, then the track beside them. */
+.crs--unclassified .dd__num { letter-spacing: 0.01em; }
+@media (min-width: 900px) {
+  .crs-stage--unclassified { grid-template-columns: minmax(280px, 1fr) minmax(0, 1.5fr); column-gap: clamp(28px, 3vw, 64px); align-items: start; }
+  .crs-stage--unclassified .crs-track { margin: 0; }
+}
+
+/* The weekend's races, on a page with no result of its own. */
+.crs-weekend { margin: 0; min-width: 0; }
+.crs-weekend__list { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--grey-hair); }
+.crs-weekend__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 16px;
+  align-items: center;
+  gap: 14px;
+  min-height: 48px;
+  border-bottom: 1px solid var(--grey-hair);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 16px;
+}
+a.crs-weekend__row:hover .crs-weekend__title { text-decoration: underline; text-underline-offset: 3px; }
+.crs-weekend__row--here { color: var(--ink); font-weight: 620; }
+.crs-weekend__result { font-variant-numeric: tabular-nums; color: var(--ink-secondary); }
+.crs-weekend__row--here .crs-weekend__result { color: var(--ink); }
+.crs-weekend__result--none { letter-spacing: 0.02em; }
+.crs-weekend__row svg { color: var(--ink-muted); }
