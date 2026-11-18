@@ -10,6 +10,7 @@ import { switchValue } from '../../review/switches';
 import { chapterTint, raceHref, useCareerRows, type CareerRow } from '../careerExplorer';
 import { DeepDive } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
+import { deepRaceTitle } from './raceTitle';
 import { ExplorerDeepDiveOld } from './explorerOld';
 import './explorer.css';
 
@@ -289,7 +290,8 @@ const Swarm = ({
     const point = layout.pos.get(best.id)!;
     const row = byId.get(best.id)!;
     setHovered(best.id);
-    setTip({ x: point.x, y: point.y - layout.r - 2, over: point.y - layout.r - 4, under: point.y + layout.r + 4, ...raceTipOf(row) });
+    const words = raceTipOf(row);
+    setTip({ x: point.x, y: point.y - layout.r - 2, over: point.y - layout.r - 4, under: point.y + layout.r + 4, ...words, title: deepRaceTitle(row.sessionId, words.title) });
     return best.id;
   };
 

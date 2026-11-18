@@ -9,6 +9,7 @@ import { SourcePill } from '../../app/components';
 import { uiDataPackage } from '../../data/uiDataPackage';
 import { DeepDive, DeepTip } from './frame';
 import { raceTipOf, venuesOf } from './raceTip';
+import { deepRaceTitle } from './raceTitle';
 import './rainRows.css';
 
 /* ============================================================================
@@ -349,7 +350,8 @@ export const RainRows = ({ variant }: { variant: Variant }) => {
           ]
             .filter(Boolean)
             .join(' · ') || null
-      })
+      }),
+      title: deepRaceTitle(row.sessionId, raceTipOf(row).title)
     };
   };
 
