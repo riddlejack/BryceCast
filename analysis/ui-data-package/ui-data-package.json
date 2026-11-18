@@ -1,6 +1,6 @@
 {
   "schemaVersion": "brycecast.uiDataPackage.v1",
-  "generatedAt": "2026-11-18T01:50:49.085Z",
+  "generatedAt": "2026-11-18T02:55:15.004Z",
   "sourceHash": "b2b086cd97391645a464fa6f4d9387f8a354749c53fd4b80b0681bb0b66030d5",
   "asOfDate": "2026-09-19",
   "baselineCommit": "9659310",
@@ -190,8 +190,8 @@
     "careerLifeStatsSummary": {
       "path": "analysis/career-life-stats/output/summary.json",
       "bytes": 22709,
-      "modifiedAt": "2026-11-17T22:24:25.805Z",
-      "sha256": "6b25b41fa2cf93fd637b738ca43fe6a131e9f61e8f299d84628caa8d26a39ab8"
+      "modifiedAt": "2026-11-18T02:54:08.763Z",
+      "sha256": "677df69ddef3137ac88a7d85680465bf9d8a3a3d22e3c8ead3a44c28c940c069"
     },
     "careerLifeStatsResearch": {
       "path": "analysis/career-life-stats/RESEARCH.md",
@@ -255,9 +255,9 @@
     },
     "careerLifeStatsFigures": {
       "path": "analysis/career-life-stats/output/career_figures.json",
-      "bytes": 143603,
-      "modifiedAt": "2026-11-17T22:24:25.680Z",
-      "sha256": "1a0f6307b69820c2fe087ea199a3148fcf855809963ea4e2c8adb1875516db65"
+      "bytes": 200524,
+      "modifiedAt": "2026-11-18T02:54:08.763Z",
+      "sha256": "42bf24af15d38201888f2c6404fabc2f49a976e42cd9421e26392c58bc0427a8"
     },
     "careerLifeStatsDriverVariants": {
       "path": "analysis/career-life-stats/data/driver_record_variants.csv",
@@ -555,15 +555,15 @@
     },
     "uiDataPackageBuilderScript": {
       "path": "scripts/build-ui-data-package.mjs",
-      "bytes": 199675,
-      "modifiedAt": "2026-11-18T01:48:57.870Z",
-      "sha256": "a754566b64ab4b53d84caa4e1d7897451eafcf9f3907cdf98eb18432276ad3c5"
+      "bytes": 205405,
+      "modifiedAt": "2026-11-18T02:54:34.388Z",
+      "sha256": "aa8cd2cf5541506798b09f044cbc4b4ce22a7b592ee12e57173f4b66ca57fae0"
     },
     "uiDataPackageValidatorScript": {
       "path": "scripts/validate-ui-data-package.mjs",
-      "bytes": 102141,
-      "modifiedAt": "2026-11-17T22:23:19.064Z",
-      "sha256": "89a98ce6d321bfc62ae2fe286ff06e10bb4d1b0c53ad34c131f1eeba870becb5"
+      "bytes": 102912,
+      "modifiedAt": "2026-11-18T02:54:08.767Z",
+      "sha256": "f9bb44b3a116718be36a955ffacb0f739c990c363ec8e3daeb51a9b8b9a405e8"
     },
     "indyNxtCalendar": {
       "path": "public/data/indy-nxt-calendar.json",
@@ -19011,6 +19011,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19032,6 +19033,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19053,6 +19055,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19074,6 +19077,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19095,6 +19099,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19116,6 +19121,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19137,6 +19143,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19158,6 +19165,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19179,6 +19187,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19200,6 +19209,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19221,6 +19231,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19242,6 +19253,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19263,6 +19275,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19284,6 +19297,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19305,6 +19319,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19326,6 +19341,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19347,6 +19363,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19368,6 +19385,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2019-10-26",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19389,6 +19407,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "damp",
           "weatherConfidence": "official"
         },
@@ -19410,6 +19429,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19431,6 +19451,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19452,6 +19473,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19473,6 +19495,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19494,6 +19517,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19515,6 +19539,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-30",
+          "fieldSize": 14,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19536,6 +19561,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-12",
+          "fieldSize": 26,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19557,6 +19583,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-12",
+          "fieldSize": 25,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19578,6 +19605,7 @@
           "trackName": "Cadwell Park Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-22",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19599,6 +19627,7 @@
           "trackName": "Cadwell Park Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-22",
+          "fieldSize": 13,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19620,6 +19649,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-24",
+          "fieldSize": 30,
           "wetDry": "drying",
           "weatherConfidence": "official"
         },
@@ -19641,6 +19671,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-24",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19662,6 +19693,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-26",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19683,6 +19715,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-26",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19704,6 +19737,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-09-26",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -19725,6 +19759,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2020-07-18",
+          "fieldSize": 34,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19746,6 +19781,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2020-07-18",
+          "fieldSize": 34,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19767,6 +19803,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-10",
+          "fieldSize": 29,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19788,6 +19825,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-10",
+          "fieldSize": 29,
           "wetDry": "drying",
           "weatherConfidence": "official"
         },
@@ -19809,6 +19847,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-31",
+          "fieldSize": 26,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -19830,6 +19869,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2020-10-31",
+          "fieldSize": 35,
           "wetDry": "damp",
           "weatherConfidence": "official"
         },
@@ -19851,6 +19891,7 @@
           "trackName": "Euromarque Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-09",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19872,6 +19913,7 @@
           "trackName": "Euromarque Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-09",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19893,6 +19935,7 @@
           "trackName": "Euromarque Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-09",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19914,6 +19957,7 @@
           "trackName": "Highlands Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-16",
+          "fieldSize": 17,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19935,6 +19979,7 @@
           "trackName": "Highlands Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-16",
+          "fieldSize": 17,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19956,6 +20001,7 @@
           "trackName": "Highlands Motorsport Park",
           "trackType": "road",
           "eventStartDate": "2024-02-16",
+          "fieldSize": 17,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19977,6 +20023,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-04-18",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -19998,6 +20045,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-04-18",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20019,6 +20067,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-04-18",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20040,6 +20089,7 @@
           "trackName": "Watkins Glen International",
           "trackType": "road",
           "eventStartDate": "2019-05-10",
+          "fieldSize": 12,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20061,6 +20111,7 @@
           "trackName": "Watkins Glen International",
           "trackType": "road",
           "eventStartDate": "2019-05-10",
+          "fieldSize": 12,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20082,6 +20133,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20103,6 +20155,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20124,6 +20177,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20145,6 +20199,7 @@
           "trackName": "Virginia International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-07-26",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20166,6 +20221,7 @@
           "trackName": "Virginia International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-07-26",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20187,6 +20243,7 @@
           "trackName": "Virginia International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-07-26",
+          "fieldSize": 16,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20208,6 +20265,7 @@
           "trackName": "Pittsburgh International Race Complex",
           "trackType": "road",
           "eventStartDate": "2019-08-02",
+          "fieldSize": 13,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20229,6 +20287,7 @@
           "trackName": "Pittsburgh International Race Complex",
           "trackType": "road",
           "eventStartDate": "2019-08-02",
+          "fieldSize": 13,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20250,6 +20309,7 @@
           "trackName": "Pittsburgh International Race Complex",
           "trackType": "road",
           "eventStartDate": "2019-08-02",
+          "fieldSize": 13,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20271,6 +20331,7 @@
           "trackName": "Summit Point Motorsports Park Main Circuit",
           "trackType": "road",
           "eventStartDate": "2019-08-23",
+          "fieldSize": 11,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20292,6 +20353,7 @@
           "trackName": "Summit Point Motorsports Park Main Circuit",
           "trackType": "road",
           "eventStartDate": "2019-08-23",
+          "fieldSize": 11,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20313,6 +20375,7 @@
           "trackName": "Summit Point Motorsports Park Main Circuit",
           "trackType": "road",
           "eventStartDate": "2019-08-23",
+          "fieldSize": 11,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20334,6 +20397,7 @@
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
           "trackType": "road",
           "eventStartDate": "2019-09-13",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20355,6 +20419,7 @@
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
           "trackType": "road",
           "eventStartDate": "2019-09-13",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20376,6 +20441,7 @@
           "trackName": "New Jersey Motorsports Park Thunderbolt Raceway",
           "trackType": "road",
           "eventStartDate": "2019-09-13",
+          "fieldSize": 15,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20397,6 +20463,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2021-05-22",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20418,6 +20485,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2021-05-22",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20439,6 +20507,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2021-05-22",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20460,6 +20529,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-06-26",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20481,6 +20551,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-06-26",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20502,6 +20573,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-07-10",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20523,6 +20595,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-07-10",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20544,6 +20617,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-07-10",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20565,6 +20639,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2021-07-24",
+          "fieldSize": 16,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -20586,6 +20661,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2021-07-24",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20607,6 +20683,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2021-07-24",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20628,6 +20705,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-07",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20649,6 +20727,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-07",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20670,6 +20749,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-07",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20691,6 +20771,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-14",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20712,6 +20793,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-14",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20733,6 +20815,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2021-08-14",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20754,6 +20837,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2021-09-11",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20775,6 +20859,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2021-09-11",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20796,6 +20881,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2021-09-11",
+          "fieldSize": 17,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -20817,6 +20903,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-10-16",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20838,6 +20925,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-10-16",
+          "fieldSize": 21,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -20859,6 +20947,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2021-10-16",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -20880,6 +20969,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-05-07",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20901,6 +20991,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-05-07",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20922,6 +21013,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-05-07",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20943,6 +21035,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-05-28",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20964,6 +21057,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-05-28",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -20985,6 +21079,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2022-06-25",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21006,6 +21101,7 @@
           "trackName": "Snetterton Circuit",
           "trackType": "road",
           "eventStartDate": "2022-06-25",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21027,6 +21123,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-07-30",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21048,6 +21145,7 @@
           "trackName": "Silverstone Circuit",
           "trackType": "road",
           "eventStartDate": "2022-07-30",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21069,6 +21167,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2022-09-10",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21090,6 +21189,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2022-09-10",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21111,6 +21211,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2022-09-10",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21132,6 +21233,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-10-15",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21153,6 +21255,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-10-15",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21174,6 +21277,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-10-15",
+          "fieldSize": 20,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21195,6 +21299,7 @@
           "trackName": "Donington Park",
           "trackType": "road",
           "eventStartDate": "2022-05-28",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21216,6 +21321,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2022-07-23",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21237,6 +21343,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2022-07-23",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21258,6 +21365,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2022-07-23",
+          "fieldSize": 22,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21279,6 +21387,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2022-04-15",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21300,6 +21409,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2022-04-15",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21321,6 +21431,7 @@
           "trackName": "Oulton Park",
           "trackType": "road",
           "eventStartDate": "2022-04-15",
+          "fieldSize": 21,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -21342,6 +21453,7 @@
           "trackName": "Daytona International Speedway",
           "trackType": "road",
           "eventStartDate": "2025-01-25",
+          "fieldSize": 61,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -21363,6 +21475,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2024-04-26",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21384,6 +21497,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2024-05-10",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21405,6 +21519,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2024-06-07",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21426,6 +21541,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2024-06-21",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21447,6 +21563,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2024-07-05",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21468,6 +21585,7 @@
           "trackName": "Iowa Speedway",
           "trackType": "oval",
           "eventStartDate": "2024-07-12",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21489,6 +21607,7 @@
           "trackName": "World Wide Technology Raceway",
           "trackType": "oval",
           "eventStartDate": "2024-08-16",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21510,6 +21629,7 @@
           "trackName": "Portland International Raceway",
           "trackType": "road",
           "eventStartDate": "2024-08-23",
+          "fieldSize": 17,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21531,6 +21651,7 @@
           "trackName": "The Milwaukee Mile",
           "trackType": "oval",
           "eventStartDate": "2024-08-30",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21552,6 +21673,7 @@
           "trackName": "Nashville Superspeedway",
           "trackType": "oval",
           "eventStartDate": "2024-09-14",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21573,6 +21695,7 @@
           "trackName": "Streets of St. Petersburg",
           "trackType": "street",
           "eventStartDate": "2024-03-08",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21594,6 +21717,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2024-05-10",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21615,6 +21739,7 @@
           "trackName": "Detroit Downtown Street Circuit",
           "trackType": "street",
           "eventStartDate": "2024-05-31",
+          "fieldSize": 21,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -21636,6 +21761,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2024-06-22",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21657,6 +21783,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2025-07-25",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21678,6 +21805,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2025-05-09",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21699,6 +21827,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2025-05-09",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21720,6 +21849,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2025-05-02",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21741,6 +21871,7 @@
           "trackName": "Streets of St. Petersburg",
           "trackType": "street",
           "eventStartDate": "2025-02-28",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21762,6 +21893,7 @@
           "trackName": "Nashville Superspeedway",
           "trackType": "oval",
           "eventStartDate": "2025-08-30",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21783,6 +21915,7 @@
           "trackName": "The Milwaukee Mile",
           "trackType": "oval",
           "eventStartDate": "2025-08-23",
+          "fieldSize": 18,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21804,6 +21937,7 @@
           "trackName": "Portland International Raceway",
           "trackType": "road",
           "eventStartDate": "2025-08-08",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21825,6 +21959,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2025-07-26",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21846,6 +21981,7 @@
           "trackName": "Iowa Speedway",
           "trackType": "oval",
           "eventStartDate": "2025-07-11",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21867,6 +22003,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2025-07-04",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21888,6 +22025,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2025-06-20",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21909,6 +22047,7 @@
           "trackName": "World Wide Technology Raceway",
           "trackType": "oval",
           "eventStartDate": "2025-06-14",
+          "fieldSize": 19,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21930,6 +22069,7 @@
           "trackName": "Detroit Downtown Street Circuit",
           "trackType": "street",
           "eventStartDate": "2025-05-30",
+          "fieldSize": 20,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21951,6 +22091,7 @@
           "trackName": "Detroit Downtown Street Circuit",
           "trackType": "street",
           "eventStartDate": "2026-05-29",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21972,6 +22113,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2026-03-27",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -21993,6 +22135,7 @@
           "trackName": "Streets of St. Petersburg",
           "trackType": "street",
           "eventStartDate": "2026-02-27",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22014,6 +22157,7 @@
           "trackName": "Barber Motorsports Park",
           "trackType": "road",
           "eventStartDate": "2026-03-28",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22035,6 +22179,7 @@
           "trackName": "Grand Prix of Arlington Street Circuit",
           "trackType": "street",
           "eventStartDate": "2026-03-13",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22056,6 +22201,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2026-06-20",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22077,6 +22223,7 @@
           "trackName": "Nashville Superspeedway",
           "trackType": "oval",
           "eventStartDate": "2026-07-18",
+          "fieldSize": 23,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22098,6 +22245,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2026-05-08",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -22119,6 +22267,7 @@
           "trackName": "The Milwaukee Mile",
           "trackType": "oval",
           "eventStartDate": "2026-08-29",
+          "fieldSize": 23,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22140,6 +22289,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2026-09-05",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22161,6 +22311,7 @@
           "trackName": "WeatherTech Raceway Laguna Seca",
           "trackType": "road",
           "eventStartDate": "2026-09-04",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22182,6 +22333,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2026-07-04",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -22203,6 +22355,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2026-07-03",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22224,6 +22377,7 @@
           "trackName": "Road America",
           "trackType": "road",
           "eventStartDate": "2026-06-19",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22245,6 +22399,7 @@
           "trackName": "World Wide Technology Raceway",
           "trackType": "oval",
           "eventStartDate": "2026-06-06",
+          "fieldSize": 24,
           "wetDry": "wet",
           "weatherConfidence": "modeled_medium"
         },
@@ -22266,6 +22421,7 @@
           "trackName": "Portland International Raceway",
           "trackType": "road",
           "eventStartDate": "2026-08-07",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22287,6 +22443,7 @@
           "trackName": "Indianapolis Motor Speedway Road Course",
           "trackType": "road",
           "eventStartDate": "2026-05-08",
+          "fieldSize": 24,
           "wetDry": "dry",
           "weatherConfidence": "modeled_medium"
         },
@@ -22308,6 +22465,7 @@
           "trackName": "Mid-Ohio Sports Car Course",
           "trackType": "road",
           "eventStartDate": "2019-06-28",
+          "fieldSize": 28,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22329,6 +22487,7 @@
           "trackName": "Circuit of the Americas",
           "trackType": "road",
           "eventStartDate": "2019-02-08",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22350,6 +22509,7 @@
           "trackName": "Circuit of the Americas",
           "trackType": "road",
           "eventStartDate": "2019-02-08",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22371,6 +22531,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-03-15",
+          "fieldSize": 32,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22392,6 +22553,7 @@
           "trackName": "Michelin Raceway Road Atlanta",
           "trackType": "road",
           "eventStartDate": "2019-03-15",
+          "fieldSize": 32,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22413,6 +22575,7 @@
           "trackName": "Sebring International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-01-11",
+          "fieldSize": 26,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22434,6 +22597,7 @@
           "trackName": "Sebring International Raceway",
           "trackType": "road",
           "eventStartDate": "2019-01-11",
+          "fieldSize": 26,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22455,6 +22619,7 @@
           "trackName": "Lucas Oil Indianapolis Raceway Park",
           "trackType": "oval",
           "eventStartDate": "2024-05-23",
+          "fieldSize": 18,
           "wetDry": null,
           "weatherConfidence": null
         }
@@ -22478,6 +22643,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22499,6 +22665,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22520,6 +22687,7 @@
           "trackName": "Autodromo Internacional do Algarve",
           "trackType": "road",
           "eventStartDate": "2023-04-29",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22541,6 +22709,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22562,6 +22731,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22583,6 +22753,7 @@
           "trackName": "Circuit de Spa-Francorchamps",
           "trackType": "road",
           "eventStartDate": "2023-05-27",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22604,6 +22775,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 10,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22625,6 +22797,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22646,6 +22819,7 @@
           "trackName": "Hungaroring",
           "trackType": "road",
           "eventStartDate": "2023-06-17",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22667,6 +22841,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22688,6 +22863,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22709,6 +22885,7 @@
           "trackName": "Circuit Paul Ricard",
           "trackType": "road",
           "eventStartDate": "2023-07-22",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22730,6 +22907,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22751,6 +22929,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22772,6 +22951,7 @@
           "trackName": "Red Bull Ring",
           "trackType": "road",
           "eventStartDate": "2023-09-09",
+          "fieldSize": 9,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22793,6 +22973,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22814,6 +22995,7 @@
           "trackName": "Autodromo Nazionale Monza",
           "trackType": "road",
           "eventStartDate": "2023-09-23",
+          "fieldSize": 7,
           "wetDry": null,
           "weatherConfidence": null
         },
@@ -22835,6 +23017,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2019-10-26",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22856,6 +23039,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "damp",
           "weatherConfidence": "official"
         },
@@ -22877,6 +23061,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-07-04",
+          "fieldSize": 23,
           "wetDry": "wet",
           "weatherConfidence": "official"
         },
@@ -22898,6 +23083,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22919,6 +23105,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-01",
+          "fieldSize": 21,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22940,6 +23127,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 22,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22961,6 +23149,7 @@
           "trackName": "Castle Combe Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-31",
+          "fieldSize": 16,
           "wetDry": "dry",
           "weatherConfidence": "official"
         },
@@ -22982,6 +23171,7 @@
           "trackName": "Brands Hatch Circuit",
           "trackType": "road",
           "eventStartDate": "2020-08-30",
+          "fieldSize": 14,
           "wetDry": "dry",
           "weatherConfidence": "official"
         }
@@ -22998,7 +23188,12 @@
           "trackId": "track_watkins_glen_international",
           "trackName": "Watkins Glen International",
           "country": "United States",
-          "status": "dns"
+          "status": "dns",
+          "raceNumber": 3,
+          "startPosition": null,
+          "fieldSize": 12,
+          "lapsCompleted": 0,
+          "trackType": "road"
         },
         {
           "sessionId": "session_formula_ford_2019_festival_race_13_semi_final_1_sponsored_by_avon_tyres",
@@ -23011,7 +23206,12 @@
           "trackId": "track_brands_hatch_indy",
           "trackName": "Brands Hatch Circuit",
           "country": "United Kingdom",
-          "status": "dnf"
+          "status": "dnf",
+          "raceNumber": 13,
+          "startPosition": 19,
+          "fieldSize": 30,
+          "lapsCompleted": 8,
+          "trackType": "road"
         },
         {
           "sessionId": "session_formula_ford_2020_champion_brands_203851_race_16",
@@ -23024,7 +23224,12 @@
           "trackId": "track_brands_hatch_indy",
           "trackName": "Brands Hatch Circuit",
           "country": "United Kingdom",
-          "status": "dnf"
+          "status": "dnf",
+          "raceNumber": 16,
+          "startPosition": 2,
+          "fieldSize": 20,
+          "lapsCompleted": 3,
+          "trackType": "road"
         },
         {
           "sessionId": "session_formula_ford_2020_champion_brands_203851_race_20",
@@ -23037,7 +23242,12 @@
           "trackId": "track_brands_hatch_indy",
           "trackName": "Brands Hatch Circuit",
           "country": "United Kingdom",
-          "status": "dnf"
+          "status": "dnf",
+          "raceNumber": 20,
+          "startPosition": 20,
+          "fieldSize": 19,
+          "lapsCompleted": 0,
+          "trackType": "road"
         },
         {
           "sessionId": "session_gb3_2021_212505_race_3_result",
@@ -23050,7 +23260,12 @@
           "trackId": "track_silverstone_gp",
           "trackName": "Silverstone Circuit",
           "country": "United Kingdom",
-          "status": "dsq"
+          "status": "dsq",
+          "raceNumber": 3,
+          "startPosition": 5,
+          "fieldSize": 16,
+          "lapsCompleted": null,
+          "trackType": "road"
         },
         {
           "sessionId": "session_gb3_2022_1305",
@@ -23063,7 +23278,12 @@
           "trackId": "track_snetterton_300",
           "trackName": "Snetterton Circuit",
           "country": "United Kingdom",
-          "status": "dsq"
+          "status": "dsq",
+          "raceNumber": 12,
+          "startPosition": null,
+          "fieldSize": 22,
+          "lapsCompleted": 0,
+          "trackType": "road"
         },
         {
           "sessionId": "session_gb3_2022_1376",
@@ -23076,7 +23296,12 @@
           "trackId": "track_silverstone_gp",
           "trackName": "Silverstone Circuit",
           "country": "United Kingdom",
-          "status": "dnf"
+          "status": "dnf",
+          "raceNumber": 17,
+          "startPosition": null,
+          "fieldSize": 23,
+          "lapsCompleted": 7,
+          "trackType": "road"
         },
         {
           "sessionId": "session_euroformula_2023_06-monza-race-2",
@@ -23089,7 +23314,12 @@
           "trackId": "track_autodromo_nazionale_monza",
           "trackName": "Autodromo Nazionale Monza",
           "country": "Italy",
-          "status": "dnf"
+          "status": "dnf",
+          "raceNumber": 2,
+          "startPosition": 7,
+          "fieldSize": 7,
+          "lapsCompleted": 9,
+          "trackType": "road"
         }
       ],
       "moments": [
@@ -48230,6 +48460,4384 @@
             }
           ],
           "totalMiles": 63216.2
+        },
+        "otherDrivers": {
+          "columns": [
+            "name",
+            "seriesIndex",
+            "year",
+            "racesTogether",
+            "flag"
+          ],
+          "how": "One row per other driver record on the results of his races: name, the series of the first race they shared (single-seaters first, in the order he met them; then the drivers met only at Daytona), its year, the races they shared, and a flag for a garbled entry ('artifact') or a likely second spelling of one person ('variant').",
+          "rows": [
+            [
+              "Alex Trubey",
+              0,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Ayrton Ori",
+              0,
+              2019,
+              17,
+              ""
+            ],
+            [
+              "Bob Perona",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Burton August",
+              0,
+              2019,
+              5,
+              "variant"
+            ],
+            [
+              "Charles Foster",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Chris Smith",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Christian Lall Dass",
+              0,
+              2019,
+              11,
+              ""
+            ],
+            [
+              "Dan Grace",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "David Livingston",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Dom Seddio",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Donnie Isley",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Gord Ross",
+              0,
+              2019,
+              5,
+              ""
+            ],
+            [
+              "Harry Schneider",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Hartley MacDonald",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Jack Walbran",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Joe Colasacco",
+              0,
+              2019,
+              7,
+              ""
+            ],
+            [
+              "John LaRue",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "John Schimenti",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Jonathan Lee",
+              0,
+              2019,
+              5,
+              ""
+            ],
+            [
+              "Laura Hayes",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Mikhail Goikhberg",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Russell Fredericks",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Russell Strate Jr.",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Stevan Davis",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Zachary Vanier",
+              0,
+              2019,
+              5,
+              ""
+            ],
+            [
+              "Chris Jennerjahn",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Don Napier",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "F Russell Strate Jr",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Hunter Phelps-Barron",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "James Weida",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Jay Messenger",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "John W. Walbran",
+              0,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Mike Landon",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Misha Goikhberg",
+              0,
+              2019,
+              9,
+              ""
+            ],
+            [
+              "Peter Gonzalez",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Randall Smart",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Randy Acock",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Robert Perona",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Robert Wright",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Stephen Rainey",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "William Dwight Calkins",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Bob Reid",
+              0,
+              2019,
+              23,
+              ""
+            ],
+            [
+              "Burton Kyle August",
+              0,
+              2019,
+              20,
+              "variant"
+            ],
+            [
+              "Charlie Rogers",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Craig Laprade",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "David H. Livingston, Jr.",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Derek Ketchie",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Donald Baggett",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Eric McRee",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Gregory Bruns",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "H Cory McLeod",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Jeff DeLong",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Kevin Brumbaugh",
+              0,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Mark Carberry",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Mitchell Ferguson",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Patrick McRee",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Simon Sikes",
+              0,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Stuart Delaney",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Tim Voth",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Tyler O'Connor",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Wiley Clinton McMahan",
+              0,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Charles Anti",
+              1,
+              2019,
+              18,
+              ""
+            ],
+            [
+              "Cliff Johnson",
+              1,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Dave Petzko",
+              1,
+              2019,
+              18,
+              ""
+            ],
+            [
+              "Jonathan Kotyk",
+              1,
+              2019,
+              21,
+              ""
+            ],
+            [
+              "Josh Green",
+              1,
+              2019,
+              21,
+              ""
+            ],
+            [
+              "Matt Gidman",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Mike Scanlan",
+              1,
+              2019,
+              21,
+              ""
+            ],
+            [
+              "Ryan Bjerke",
+              1,
+              2019,
+              9,
+              ""
+            ],
+            [
+              "Scott Rubenzer",
+              1,
+              2019,
+              18,
+              ""
+            ],
+            [
+              "Tim Dunn",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Dexter Czuba",
+              1,
+              2019,
+              12,
+              ""
+            ],
+            [
+              "Alex Scaler",
+              1,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Christopher Horan",
+              1,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Christopher Kierce",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Sam Lockwood",
+              1,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Tom Schwietz",
+              1,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Zachary Rivard",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Angela Slocum",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Brandon Lavender",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Charles Smith",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Chip Van Slyke",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Chuck Van Nostrand",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Dan Pyanowski",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Dave Harmison",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Derek Holmes",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Douglas Fisher",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Graham Earley",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Greg Peluso",
+              2,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Joe Marcinski",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Mark Davis",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Mark Walthew",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Michael Rand",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Michaeol Neylon",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Phil Kingham",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Ray Rivard",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Robert Dietz",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Sam Eyer",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Steve Brooks",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Steve Roux",
+              2,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Thomas Venturino",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Wayne Nicolette",
+              2,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "William Velkoff",
+              2,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "John RobinsonII",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Keith Grant",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Rick Payne",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Rob Albani",
+              1,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Jackson Lee",
+              1,
+              2019,
+              7,
+              ""
+            ],
+            [
+              "Charles Finelli",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Steve Oseth",
+              1,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Alan Davidson",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Andrew Blair",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Andrew Pryke",
+              3,
+              2019,
+              5,
+              ""
+            ],
+            [
+              "Callum Crawley",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Colm Blackburn",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Dan Rene Larsen",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Henry Campbell",
+              3,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Ivor McCULLOUGH",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "James Hadfield",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Joey Foster",
+              3,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Jonathan Browne",
+              3,
+              2019,
+              40,
+              ""
+            ],
+            [
+              "Jonathan Woolridge",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Jordan Dempsey",
+              3,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Kenneth Cowie",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Kevan Mclurg",
+              3,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Logan Hannah",
+              3,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Matthew Cowley",
+              3,
+              2019,
+              11,
+              ""
+            ],
+            [
+              "Max Marzorati",
+              3,
+              2019,
+              13,
+              ""
+            ],
+            [
+              "Michael Eastwell",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Michael Macpherson",
+              3,
+              2019,
+              6,
+              ""
+            ],
+            [
+              "Morgan Quinn",
+              3,
+              2019,
+              15,
+              ""
+            ],
+            [
+              "Oliver White",
+              3,
+              2019,
+              7,
+              ""
+            ],
+            [
+              "Peter Daly",
+              3,
+              2019,
+              9,
+              ""
+            ],
+            [
+              "Ross Martin",
+              3,
+              2019,
+              14,
+              ""
+            ],
+            [
+              "Ryan Campbell",
+              3,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Simon Hadfield",
+              3,
+              2019,
+              2,
+              ""
+            ],
+            [
+              "Stephen Mawhinney",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Stuart Kestenbaum",
+              3,
+              2019,
+              3,
+              ""
+            ],
+            [
+              "Tom McARTHUR",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Adam Fathers",
+              3,
+              2019,
+              7,
+              ""
+            ],
+            [
+              "David McCULLOUGH",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Jack Kemp",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Jamie Sharp",
+              3,
+              2019,
+              13,
+              ""
+            ],
+            [
+              "Jason Down",
+              3,
+              2019,
+              5,
+              ""
+            ],
+            [
+              "Mark Armstrong",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Peter Dempsey",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Peter Hardman",
+              3,
+              2019,
+              1,
+              ""
+            ],
+            [
+              "Rick Morris",
+              3,
+              2019,
+              4,
+              ""
+            ],
+            [
+              "Rory Smith",
+              3,
+              2019,
+              12,
+              ""
+            ],
+            [
+              "Bob Hawkins",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Bob Higgins",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Chris Acton",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Chris Warden",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "David Vivian",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Felix Fisher",
+              3,
+              2020,
+              7,
+              ""
+            ],
+            [
+              "Grant Palmer",
+              3,
+              2020,
+              20,
+              ""
+            ],
+            [
+              "James Colborn",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "James Rose",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "James Tucker",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Kieran Attwood",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Lloyd Hopes",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Luke Cooper",
+              3,
+              2020,
+              15,
+              ""
+            ],
+            [
+              "Mark De Rozarieux",
+              3,
+              2020,
+              7,
+              ""
+            ],
+            [
+              "Matthew Hallam",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Michael Phillips",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Nathan Ward",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Paul Barnes",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Paul Morcom",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Richard Higgins",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Steve Bracegirdle",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Tom Hawkins",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Adrian Campfield",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Alexander Walker",
+              3,
+              2020,
+              2,
+              "variant"
+            ],
+            [
+              "Andrew Thomas",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Chris Middlehurst",
+              3,
+              2020,
+              7,
+              ""
+            ],
+            [
+              "Colin Lawson",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Daniel MacKINTOSH",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "David Mcarthur",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Jack Wolfenden",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Jason Cheetham",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Jonathan Barnes",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Milan De Laet",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Neil Maclennan",
+              3,
+              2020,
+              11,
+              ""
+            ],
+            [
+              "Neil Mcarthur",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Neil Patten",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Neil Plimmer",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Nigel Dolan",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Phil Nelson",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Reece Lycett",
+              3,
+              2020,
+              9,
+              ""
+            ],
+            [
+              "Samuel Harrison",
+              3,
+              2020,
+              9,
+              ""
+            ],
+            [
+              "Seamus Wild",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Simon Fraser",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Thomas Ward",
+              3,
+              2020,
+              10,
+              ""
+            ],
+            [
+              "Trevor Morgan",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Alan Slater",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Alex Walker",
+              3,
+              2020,
+              7,
+              "variant"
+            ],
+            [
+              "Hayden Hardyman",
+              3,
+              2020,
+              6,
+              ""
+            ],
+            [
+              "Shaun Macklin",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Christopher Stones",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Craig Currie",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "George Ditchfield",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Graham Terry",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Graham Woodin",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Jordan Gronkowski",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Matthew Wrigley",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Mike Gardner",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Nick Barnes",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Nigel Lingwood",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Nigel Thompson",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Scott Guthrie",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Tom Brown",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Chris Hodgen",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Innes Hickman",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "John Whitbourn",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Josh Smith",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Mataeo Pearce",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Matt Hayes",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Simon Pruce",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Terry Durdin",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Robert Hall",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Chris Perkins",
+              3,
+              2020,
+              1,
+              "variant"
+            ],
+            [
+              "Christopher Sharples",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Don Boyack",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "John Svensson",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Max Esterson",
+              3,
+              2020,
+              29,
+              "variant"
+            ],
+            [
+              "Pascal Monbaron",
+              3,
+              2020,
+              7,
+              ""
+            ],
+            [
+              "Richard Mendoza",
+              3,
+              2020,
+              4,
+              ""
+            ],
+            [
+              "Steve Mansell",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Stuart Gough",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Ian Jeary",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Philip Hart",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Alexander (Henry) Walker",
+              3,
+              2020,
+              3,
+              "variant"
+            ],
+            [
+              "Maxwell Esterson",
+              3,
+              2020,
+              5,
+              "variant"
+            ],
+            [
+              "Paul Tucker",
+              3,
+              2020,
+              5,
+              ""
+            ],
+            [
+              "Cameron Jackson",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "George Mcdonald",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Horatio Fitz-Simon",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Lorna Vickers",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "1",
+              3,
+              2020,
+              1,
+              "artifact"
+            ],
+            [
+              "Joe Walton",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Joseph Pomfret",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Leanne Mcshane",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Matthew Hayes",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Megan Gilkes",
+              3,
+              2020,
+              3,
+              ""
+            ],
+            [
+              "Steve Barlow",
+              3,
+              2020,
+              1,
+              "variant"
+            ],
+            [
+              "Thomas Mcarthur",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Goffredo Pirro",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Benn Tilley",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Callum Grant",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Christopher Perkins",
+              3,
+              2020,
+              1,
+              "variant"
+            ],
+            [
+              "Dan Fox",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Daniel O'Beirne",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Ian Campbell",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Joe Porter",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Josh Fisher",
+              3,
+              2020,
+              2,
+              ""
+            ],
+            [
+              "Neil Fowler",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Scott Rawlinson",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Stephen Barlow",
+              3,
+              2020,
+              1,
+              "variant"
+            ],
+            [
+              "Will Everington",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Ben Mitchell",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Jaap Blijleven",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Michael Moyers",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Miles Griffiths",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Roger Orgee",
+              3,
+              2020,
+              1,
+              ""
+            ],
+            [
+              "Alex Connor",
+              4,
+              2021,
+              33,
+              ""
+            ],
+            [
+              "Alex Fores",
+              4,
+              2021,
+              6,
+              ""
+            ],
+            [
+              "Ayrton Simmons",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Bart Horsten",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Christian Mansell",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Dexter Patterson",
+              4,
+              2021,
+              8,
+              ""
+            ],
+            [
+              "Frederick Lubin",
+              4,
+              2021,
+              18,
+              ""
+            ],
+            [
+              "Javier Sagrera",
+              4,
+              2021,
+              48,
+              ""
+            ],
+            [
+              "Jose Garfias",
+              4,
+              2021,
+              15,
+              ""
+            ],
+            [
+              "Mikkel Grundtvig",
+              4,
+              2021,
+              48,
+              ""
+            ],
+            [
+              "Oliver Bearman",
+              4,
+              2021,
+              9,
+              ""
+            ],
+            [
+              "Reece Ushijima",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Reema Juffali",
+              4,
+              2021,
+              21,
+              ""
+            ],
+            [
+              "Robero Faria",
+              4,
+              2021,
+              3,
+              "variant"
+            ],
+            [
+              "Sebastian Alvarez",
+              4,
+              2021,
+              25,
+              ""
+            ],
+            [
+              "Tom Lebbon",
+              4,
+              2021,
+              48,
+              ""
+            ],
+            [
+              "Zak O'Sullivan",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Roberto Faria",
+              4,
+              2021,
+              45,
+              "variant"
+            ],
+            [
+              "Roman Bilinski",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Hunter Yeany",
+              4,
+              2021,
+              3,
+              ""
+            ],
+            [
+              "Branden Oxley",
+              4,
+              2021,
+              33,
+              ""
+            ],
+            [
+              "Tommy Smith",
+              4,
+              2021,
+              23,
+              ""
+            ],
+            [
+              "Luke Browning",
+              4,
+              2021,
+              27,
+              ""
+            ],
+            [
+              "Eduardo Coseteng Jr",
+              4,
+              2021,
+              3,
+              ""
+            ],
+            [
+              "Flynn Jackes",
+              4,
+              2021,
+              3,
+              ""
+            ],
+            [
+              "James Hedley",
+              4,
+              2021,
+              24,
+              ""
+            ],
+            [
+              "Callum Voisin",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "Cian Shields",
+              4,
+              2022,
+              42,
+              ""
+            ],
+            [
+              "David Morales",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "Joel Granfors",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "John Bennett",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "Lucas Staico",
+              4,
+              2022,
+              18,
+              ""
+            ],
+            [
+              "Matthew Rees",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "McKenzy Cresswell",
+              4,
+              2022,
+              23,
+              ""
+            ],
+            [
+              "Nick Gilkes",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "Tbc Tbc",
+              4,
+              2022,
+              24,
+              ""
+            ],
+            [
+              "Zak Taylor Fortec (Old)",
+              4,
+              2022,
+              18,
+              ""
+            ],
+            [
+              "Nico Christodoulou",
+              4,
+              2022,
+              18,
+              ""
+            ],
+            [
+              "Zak Taylor",
+              4,
+              2022,
+              6,
+              ""
+            ],
+            [
+              "Ayato Iwasaki",
+              4,
+              2022,
+              3,
+              ""
+            ],
+            [
+              "Enzo Trulli",
+              5,
+              2023,
+              3,
+              ""
+            ],
+            [
+              "Francesco Simonazzi",
+              5,
+              2023,
+              18,
+              ""
+            ],
+            [
+              "Jakob Bergmeister",
+              5,
+              2023,
+              15,
+              ""
+            ],
+            [
+              "Juju Noda",
+              5,
+              2023,
+              12,
+              ""
+            ],
+            [
+              "Noel Leon",
+              5,
+              2023,
+              18,
+              ""
+            ],
+            [
+              "Paolo Brajnik",
+              5,
+              2023,
+              9,
+              ""
+            ],
+            [
+              "Tim Tramnitz",
+              5,
+              2023,
+              3,
+              ""
+            ],
+            [
+              "Vladimir Netusil",
+              5,
+              2023,
+              12,
+              ""
+            ],
+            [
+              "Gerrard Xie",
+              5,
+              2023,
+              9,
+              ""
+            ],
+            [
+              "Josh Mason",
+              5,
+              2023,
+              8,
+              ""
+            ],
+            [
+              "Benjamin Berta",
+              5,
+              2023,
+              3,
+              ""
+            ],
+            [
+              "Attila Pénzes",
+              5,
+              2023,
+              3,
+              ""
+            ],
+            [
+              "Charlie Wurz",
+              5,
+              2023,
+              6,
+              ""
+            ],
+            [
+              "Joshua Dufek",
+              5,
+              2023,
+              6,
+              ""
+            ],
+            [
+              "Levente Révész",
+              5,
+              2023,
+              3,
+              ""
+            ],
+            [
+              "Alex Crosbie",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Jacob Abel",
+              6,
+              2024,
+              24,
+              ""
+            ],
+            [
+              "Jake Bonilla",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Jett Bowling",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Kaden Probst",
+              6,
+              2024,
+              2,
+              ""
+            ],
+            [
+              "Kaleb Ngatoa",
+              6,
+              2024,
+              3,
+              ""
+            ],
+            [
+              "Landan Matriano Lim",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Liam Sceats",
+              6,
+              2024,
+              15,
+              ""
+            ],
+            [
+              "Lucas Fecury",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Michael Shin",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Patrick Woods Toth",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Titus Sherlock",
+              6,
+              2024,
+              6,
+              ""
+            ],
+            [
+              "Sebastian Manson",
+              6,
+              2024,
+              5,
+              ""
+            ],
+            [
+              "Callum Hedge",
+              6,
+              2024,
+              31,
+              ""
+            ],
+            [
+              "Elliott Cleary",
+              6,
+              2024,
+              3,
+              ""
+            ],
+            [
+              "Ryder Quinn",
+              6,
+              2024,
+              3,
+              ""
+            ],
+            [
+              "Caio Collet",
+              7,
+              2024,
+              28,
+              ""
+            ],
+            [
+              "Christian Bogle",
+              7,
+              2024,
+              14,
+              ""
+            ],
+            [
+              "Jack William Miller",
+              7,
+              2024,
+              28,
+              ""
+            ],
+            [
+              "James Roe",
+              7,
+              2024,
+              46,
+              ""
+            ],
+            [
+              "Jamie Chadwick",
+              7,
+              2024,
+              14,
+              ""
+            ],
+            [
+              "Josh Pierson",
+              7,
+              2024,
+              45,
+              ""
+            ],
+            [
+              "Lindsay Brewer",
+              7,
+              2024,
+              8,
+              ""
+            ],
+            [
+              "Louis Foster",
+              7,
+              2024,
+              14,
+              ""
+            ],
+            [
+              "Michael d'Orlando",
+              7,
+              2024,
+              10,
+              ""
+            ],
+            [
+              "Myles Rowe",
+              7,
+              2024,
+              45,
+              ""
+            ],
+            [
+              "Niels Koolen",
+              7,
+              2024,
+              40,
+              ""
+            ],
+            [
+              "Nolan Allaer",
+              7,
+              2024,
+              28,
+              ""
+            ],
+            [
+              "Nolan Siegel",
+              7,
+              2024,
+              5,
+              ""
+            ],
+            [
+              "Reece Gold",
+              7,
+              2024,
+              13,
+              ""
+            ],
+            [
+              "Salvador de Alba",
+              7,
+              2024,
+              42,
+              ""
+            ],
+            [
+              "Yuven Sundaramoorthy",
+              7,
+              2024,
+              15,
+              ""
+            ],
+            [
+              "Jordan Missig",
+              7,
+              2024,
+              32,
+              ""
+            ],
+            [
+              "Braden Eves",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Christian Brooks",
+              8,
+              2024,
+              9,
+              ""
+            ],
+            [
+              "Danny Dyszelski",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Ethan Ho",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Francesco Pizzi",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Frankie Mossman",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Jace Denmark",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Jorge Garciarce",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Lochie Hughes",
+              8,
+              2024,
+              32,
+              ""
+            ],
+            [
+              "Mac Clark",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Nicholas Monteiro",
+              8,
+              2024,
+              19,
+              ""
+            ],
+            [
+              "Nicolas Baptiste",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Nikita Johnson",
+              8,
+              2024,
+              21,
+              ""
+            ],
+            [
+              "Ricardo Escotto",
+              8,
+              2024,
+              25,
+              ""
+            ],
+            [
+              "Tyke Durst",
+              8,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Kiko Porto",
+              7,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Jagger Jones",
+              7,
+              2024,
+              1,
+              ""
+            ],
+            [
+              "Taylor Ferns",
+              7,
+              2024,
+              4,
+              ""
+            ],
+            [
+              "Dennis Hauger",
+              7,
+              2025,
+              14,
+              ""
+            ],
+            [
+              "Hailie Deegan",
+              7,
+              2025,
+              14,
+              ""
+            ],
+            [
+              "Seb Murray",
+              7,
+              2025,
+              30,
+              ""
+            ],
+            [
+              "Sophia Floersch",
+              7,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Evagoras Papasavvas",
+              7,
+              2025,
+              5,
+              ""
+            ],
+            [
+              "Max Taylor",
+              7,
+              2025,
+              23,
+              ""
+            ],
+            [
+              "Jm Correa",
+              7,
+              2025,
+              26,
+              ""
+            ],
+            [
+              "Davey Hamilton Jr.",
+              7,
+              2025,
+              4,
+              ""
+            ],
+            [
+              "Alessandro de Tullio",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Alexander Koreiba",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Carson Etter",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Colin Kaminsky",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Enzo Fittipaldi",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Jack Beeton",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Matteo Nannini",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Max Garcia",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Nicolas Stati",
+              7,
+              2026,
+              16,
+              ""
+            ],
+            [
+              "Tymek Kucharczyk",
+              7,
+              2026,
+              17,
+              ""
+            ],
+            [
+              "Bart Harrison",
+              7,
+              2026,
+              3,
+              ""
+            ],
+            [
+              "Aaron Telitz",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Adam Adelson",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Albert Costa",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alec Udell",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alessandro Pier Guidi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alessio Picariello",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alessio Rovera",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alex Palou",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alex Riberas",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Alexander Sims",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Andrea Caldarelli",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Andy Lally",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Anthony Bartone",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Anthony McIntosh",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Antonio Felix da Costa",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Antonio Fuoco",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Antonio Garcia",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Arthur Leclerc",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Augusto Farfus",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Austin Cindric",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ayhancan Guven",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ben Barnicoat",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ben Hanley",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ben Keating",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Benjamin Pedersen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Bijoy Garg",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Brendan Iribe",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Brendon Hartley",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Callum Ilott",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Casper Stevenson",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Cedric Sbirrazzuoli",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Charles Milesi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Charles Scardina",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Charlie Eastwood",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Chris Cumming",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Christian Rasmussen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Christopher Mies",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Claudio Schiavoni",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Colin Braun",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Colton Herta",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Connor De Phillippi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Connor Zilisch",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Conrad Laursen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Custodio Toledo",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Dan Harper",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Dan Knox",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Dane Cameron",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Daniel Goldburg",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Daniel Juncadella",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Daniel Morad",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Daniel Serra",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Daniil Kvyat",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Danny Formal",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "David Fumanelli",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "David Heinemeier Hansson",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Davide Rigon",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Dennis Olsen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Dries Vanthoor",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Dylan Murry",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Earl Bamber",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Eddie Cheever",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Edoardo Mortara",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Elliott Skeer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Eric Filgueiras",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Fabian Schiller",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Felipe Drugovich",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Felipe Fraga",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Felipe Massa",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Felipe Nasr",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Felix Rosenqvist",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Filipe Albuquerque",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Franck Perera",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Frankie Montecalvo",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Frederic Vervisch",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Frederik Schandorff",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Frederik Vesti",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Gar Robinson",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Garnet Patterson",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "George Kurtz",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Giacomo Altoè",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Gianmaria Bruni",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Graham Doyle",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Harry Tincknell",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Hunter McElrea",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Indy Dontje",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jack Aitken",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jack Hawksworth",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jake Walker",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "James Allen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "James Calado",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "James Hinchcliffe",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jens Klingmann",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jesse Krohn",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Job Van Uitert",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Joey Hand",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "John Farano",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "John Potter",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jon Field",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jonny Edgar",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jordan Pepper",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jordan Taylor",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Josh Burdon",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Jules Gounon",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Julien Andlauer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kaku Ohta",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kamui Kobayashi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Karen Gaillard",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kei Cozzolino",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kelvin van der Linde",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kenny Habul",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kenton Koch",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kevin Estre",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kevin Magnussen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Klaus Bachler",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kyle Kirkwood",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Kyle Marcelli",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Lars Kern",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Laurens Vanthoor",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Laurin Heinrich",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Lilou Wadoux Ducellier",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Lorenzo Patrese",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Louis Deletraz",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Luca Stolz",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Lucas Auer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Luis Perez Companc",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Madison Snow",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Malthe Jakobsen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Manny Franco",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Marco Mapelli",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Marco Sorensen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Marco Wittmann",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mario Farnbacher",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Maro Engel",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Marvin Kirchhöfer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mathias Beche",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mathieu Jaminet",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Matt Campbell",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Matteo Cressoni",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Matthew Bell",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Matthieu Vaxiviere",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mattia Drudi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Max Hesse",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Maxime Martin",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Maxime Robin",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Maximilian Goetz",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Michelle Gatting",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Miguel Molina",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mikael Grenier",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mike Rockenfeller",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mike Skeen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mikkel Jensen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Mirko Bortolotti",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Neel Jani",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Neil Verhagen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nick Boulle",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nick Tandy",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nick Yelloly",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nicki Thiim",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nicklas Nielsen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nicky Catsburg",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nico Pino",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nico Varrone",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Nicola Lacorte",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Oliver Jarvis",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ollie Millroy",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Onofrio Triarsi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Orey Fidani",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Parker Kligerman",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Parker Thompson",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Pascal Wehrlein",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Patrick Gallagher",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Paul Di Resta",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Paul-Loup Chatin",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Philip Ellis",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Philipp Eng",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Pietro Fittipaldi",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Pipo Derani",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Pj Hyett",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Raffaele Marciello",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Rahel Frey",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ralf Aron",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Rasmus Lindh",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Rene Rast",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Renger van der Zande",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Riccardo Agostini",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Richard Lietz",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ricky Taylor",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Robby Foley",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Roberto Lacorte",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Robin Frijns",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Rodrigo Sales",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Romain Grosjean",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Roman De Angelis",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Rory van der Steur",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ross Gunn",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Russell Ward",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Ryan Dalziel",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Salih Yoluc",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Sarah Bovy",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Scott Andrews",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Scott Dixon",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Scott McLaughlin",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Sebastian Priaulx",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Sebastien Bourdais",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Seth Lucas",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Shane van Gisbergen",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Sheena Monk",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Sheldon van der Linde",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Simon Mann",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Spencer Pumpelly",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Stevan McAleer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Steven Thomas",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tati Calderon",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Thomas Neubauer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Thomas Preining",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tijmen van der Helm",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Till Bechtolsheimer",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tobi Lutke",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Toby Sowery",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tom Blomqvist",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tom Dillmann",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tom Gamble",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tom Sargent",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tommy Milner",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Townsend Bell",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Trent Hindman",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Tristan Vautier",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Valentin Hasse-Clot",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Will Stevens",
+              9,
+              2025,
+              1,
+              ""
+            ],
+            [
+              "Zacharie Robichon",
+              9,
+              2025,
+              1,
+              ""
+            ]
+          ],
+          "series": [
+            "series_scca_super_tour",
+            "series_frp_f1600",
+            "series_rcffs",
+            "series_formula_ford",
+            "series_gb3",
+            "series_euroformula_open",
+            "series_froc",
+            "series_indy_nxt",
+            "series_usf_pro_2000",
+            "series_imsa_weathertech"
+          ],
+          "singleSeaterCount": 389
+        },
+        "timeBreakdown": {
+          "how": "The parts behind 'Racing' and 'In every official session'. Official race times are counted; races with no official time and the other sessions are his laps times his best lap, so each is a floor.",
+          "otherSessions": {
+            "count": 185,
+            "display": "63 h 20 min+",
+            "hours": 63.34
+          },
+          "raceCount": 173,
+          "racesWithoutLaps": 4,
+          "timedRaces": {
+            "count": 139,
+            "display": "65 h 3 min",
+            "hours": 65.05
+          },
+          "untimedRaces": {
+            "count": 30,
+            "display": "13 h 21 min+",
+            "hours": 13.36
+          }
         },
         "caveats": [
           "Every canonical Bryce race row counts. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.",
