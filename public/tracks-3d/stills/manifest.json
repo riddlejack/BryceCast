@@ -7854,6 +7854,78 @@
      "track_virginia_international_raceway"
     ],
     "call": "Full course, 17 turns (5.263 km): F1600 Championship Series, July 2019. Last full repave and widening was 2014, before (research notes table). OSM's main line (5268 m), not the 'Madison Avenue' and north-course links beside it."
+   },
+   "red-bull-ring-gp": {
+    "camera": {
+     "azim": 335,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -34.65261926869189,
+      -16.601280396664027,
+      -18.263820431447403
+     ],
+     "D": 2155.2116105865102,
+     "elev": 40,
+     "azim": 335
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.9872873438959717,
+    "layout": "Grand Prix",
+    "trackIds": [
+     "track_red_bull_ring"
+    ],
+    "call": "Grand Prix circuit (4.318 km): Euroformula Open, September 2023. 2024 gravel strips at T9-T10 and moved white lines; centreline unchanged (research notes table). OSM loop without the 'Moto GP chicane' and 'MotoGP Long Lap Penalty' ways (motorcycle-only); 'Boxenstraße' drawn as the pit."
+   },
+   "pittsburgh-full": {
+    "camera": {
+     "azim": 285,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      26.163631277565905,
+      -43.65124765749184,
+      20.445869827493503
+     ],
+     "D": 2192.6017567689382,
+     "elev": 40,
+     "azim": 285
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 1.62418159400247,
+    "layout": "Full Course",
+    "trackIds": [
+     "track_pittsburgh_international_race_complex"
+    ],
+    "call": "Full course, North and South tracks combined, 19 turns, 2.8 mi (4.506 km): F1600 Championship Series, August 2019. The 2017 repave's chicane before T16 predates his race. The venue closed on 9 November 2025 and was sold; OSM still carried the circuit when read on 17 November 2026 (research notes table). OSM's one loop measures 4386 m, 2.7% under the published length."
+   },
+   "highlands-full": {
+    "camera": {
+     "azim": 280,
+     "elev": 40,
+     "fill": 0.9
+    },
+    "pose": {
+     "target": [
+      -42.595136689109,
+      -27.21627790891508,
+      2.4948534307309465
+     ],
+     "D": 1507.1079253161133,
+     "elev": 40,
+     "azim": 280
+    },
+    "hiddenSamples": 0,
+    "naturalAspect": 2.0038916178011976,
+    "layout": "Full Circuit",
+    "trackIds": [
+     "track_highlands_motorsport_park"
+    ],
+    "call": "Full circuit, 22 turns, 4.1 km, clockwise: Castrol Toyota FR Oceania, February 2024 (research notes item 3; the career data's 4.0 km is kept on the site). OSM's main line with the bridge crossover (4146 m, +1.1%), not its short cut-throughs; the crossover is drawn flat, both roads at ground level."
    }
   },
   "generated": "2026-11-17",

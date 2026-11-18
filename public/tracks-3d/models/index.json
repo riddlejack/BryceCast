@@ -402,6 +402,45 @@
    },
    "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
    "career": true
+  },
+  "red-bull-ring-gp": {
+   "file": "/tracks-3d/models/red-bull-ring-gp.json",
+   "kind": "venue",
+   "bytes": 221789,
+   "gzipBytes": 79091,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/red-bull-ring-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "pittsburgh-full": {
+   "file": "/tracks-3d/models/pittsburgh-full.json",
+   "kind": "venue",
+   "bytes": 212608,
+   "gzipBytes": 73563,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/pittsburgh-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "highlands-full": {
+   "file": "/tracks-3d/models/highlands-full.json",
+   "kind": "venue",
+   "bytes": 131732,
+   "gzipBytes": 42679,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/highlands-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from LINZ (CC BY 4.0), SRTM and others. ESA WorldCover 2021 (CC BY 4.0).",
+   "career": true
   }
  },
  "generated": "2026-11-18",
