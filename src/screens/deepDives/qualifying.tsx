@@ -9,6 +9,8 @@ import { uiDataPackage } from '../../data/uiDataPackage';
 import { switchValue } from '../../review/switches';
 import { QualiConversion, Segmented, chapterTint, raceHref, seriesShort, useCareerRows } from '../careerExplorer';
 import { DeepDive, DeepTip } from './frame';
+import { placeLine } from '../../app/raceFacts';
+import { raceFieldOf, raceTitleOf } from '../raceCardFacts';
 import './qualifying.css';
 
 /* ============================================================
@@ -143,8 +145,8 @@ const tipOf = (race: QualiRace): Omit<VenueTip, 'x' | 'y'> => {
     venue: { sessionId: race.sessionId, trackName: race.trackName },
     meta: `${seriesShort(race.seriesName)} · ${race.seasonYear}`,
     tint: chapterTint(race.seriesName),
-    title: race.label,
-    detail: `qualified P${race.grid}${race.gridField ? ` of ${race.gridField}` : ''} · finished P${race.finish}`,
+    title: raceTitleOf(race.sessionId, race.label),
+    detail: `qualified ${placeLine(race.grid, race.gridField) ?? `P${race.grid}`} · finished ${placeLine(race.finish, raceFieldOf(race.sessionId)) ?? `P${race.finish}`}`,
     note: delta > 0 ? `made up ${placesWord(delta)}` : delta < 0 ? `gave back ${placesWord(-delta)}` : 'held his slot',
     action: 'open the race'
   };

@@ -3,7 +3,8 @@ import { chartFont, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReduce
 import { VenueTipCard, type VenueTip } from '../../app/venueCard';
 import { useVenuePreload, type VenueRef } from '../../app/venuePeek';
 import { venueOfWeek } from '../venueOfDates';
-import { careerRecord, eventPlace, monthYear, racesBySeries, seriesInfo } from './career';
+import { meetingNameOf } from '../raceCardFacts';
+import { careerRecord, monthYear, racesBySeries, seriesInfo } from './career';
 import './raceStrip.css';
 
 /* About's opening picture: every race of the record as one short stroke on a
@@ -93,16 +94,19 @@ export const RaceStrip = () => {
   if (hover !== null && marks[hover]) {
     const mark = marks[hover];
     const total = mark.races.reduce((sum, race) => sum + race.raceCount, 0);
-    const places = [...new Set(mark.races.map((race) => eventPlace(race.eventName)))].join(' and ');
+    const places = [...new Set(mark.races.map((race) => meetingNameOf(race.eventName)))].join(' and ');
     const series = [...new Set(mark.races.map((race) => seriesInfo(race.seriesId).short))].join(' and ');
+    const tint = mark.races.length ? seriesInfo(mark.races[0].seriesId).tint : null;
     const finishes = mark.races.map((race) => race.bestFinish).filter((value): value is number => value !== null);
     const best = finishes.length ? Math.min(...finishes) : null;
     tip = {
       x: mark.x,
       y: base - total * step - 6,
       venue: venueOfWeek(mark.monday),
-      title: `${places}, ${monthYear(mark.monday)}`,
-      detail: `${series} · ${total} ${total === 1 ? 'race' : 'races'}${best !== null ? `, best P${best}` : ''}`
+      meta: `${series} · ${monthYear(mark.monday)}`,
+      tint,
+      title: places,
+      detail: `${total} ${total === 1 ? 'race' : 'races'}${best !== null ? ` · best P${best}` : ''}`
     };
   }
 
