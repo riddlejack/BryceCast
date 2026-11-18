@@ -174,7 +174,7 @@ export const EuroformulaSignature = () => {
             venues={() => stops.flatMap((stop) => stop.rows.slice(0, 1).map((row) => ({ sessionId: row.sessionId, trackName: stop.track })))}
             foot={
               <>
-                The rounds in order, each with his three results. <PointerWord mouse="Hover" touch="Tap" /> a round for its track.
+                The rounds in order, each with his results. <PointerWord mouse="Hover" touch="Tap" /> a round for its track.
               </>
             }
           >

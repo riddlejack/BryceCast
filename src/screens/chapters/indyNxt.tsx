@@ -73,26 +73,34 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
                         {season.year}
                       </text>
                       <line x1={left} x2={width - right} y1={cy} y2={cy} className="chs-hair" strokeOpacity={0.14} />
+                      {/* The season's middle race: a tick across the row, behind the dots, so it reads above and below the
+                       * middle race's own dot (each dot sits on a paper disc). */}
+                      <line x1={x(season.median)} x2={x(season.median)} y1={cy - rowH / 2 + 3} y2={cy + rowH / 2 - 3} stroke="var(--ink)" strokeOpacity={0.75} strokeWidth={2} strokeLinecap="round" pointerEvents="none" />
                       {swarm(season.rows).map(({ row, cx, dy, hit }, k) => {
                         const hot = card.hot === row.sessionId;
                         const running = row.status === 'running';
                         const y = cy + dy;
                         return (
                           <g key={row.sessionId}>
-                            <circle
-                              cx={cx}
-                              cy={y}
-                              r={hot ? r + 1.4 : r}
-                              fill={running ? tint : 'var(--surface-0)'}
-                              fillOpacity={running ? (hot ? 1 : 0.6) : 1}
-                              stroke={running ? 'none' : tint}
-                              strokeWidth={1.2}
+                            <g
+                              pointerEvents="none"
                               style={{
                                 opacity: settled ? 1 : 0,
                                 transform: settled ? 'none' : `translate(${x(season.median) - cx}px, ${-dy}px)`,
                                 transition: `opacity 200ms ease ${reduced ? 0 : s * 200}ms, transform 700ms ${EASE} ${reduced ? 0 : s * 200 + k * 12}ms`
                               }}
-                            />
+                            >
+                              <circle cx={cx} cy={y} r={(hot ? r + 1.4 : r) + 1.4} fill="var(--surface-0)" />
+                              <circle
+                                cx={cx}
+                                cy={y}
+                                r={hot ? r + 1.4 : r}
+                                fill={running ? tint : 'var(--surface-0)'}
+                                fillOpacity={running ? (hot ? 1 : 0.6) : 1}
+                                stroke={running ? 'none' : tint}
+                                strokeWidth={1.2}
+                              />
+                            </g>
                             <circle
                               cx={cx}
                               cy={y}
@@ -105,7 +113,6 @@ export const IndyNxtSignature = ({ narrative, extra }: { narrative: string; extr
                           </g>
                         );
                       })}
-                      <rect x={x(season.median) - 1.5} y={cy - 9} width={3} height={18} rx={1.5} fill="var(--ink)" pointerEvents="none" />
                     </g>
                   );
                 })}

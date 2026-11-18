@@ -190,18 +190,56 @@ export const Gb3Signature = () => {
                         P{venue.bestB.finish}
                         {venue.bestB.finish === 1 && !phone ? <tspan className="chs-note" dx={6}>first GB3 win</tspan> : null}
                       </text>
-                      <rect
-                        x={0}
-                        y={Math.min(ya, yb) - 8}
-                        width={chartW}
-                        height={Math.abs(yb - ya) + 16}
-                        fill="transparent"
-                        style={{ cursor: 'pointer' }}
-                        {...card.bind(venue.track, () => tipFor(venue, Math.min(ya, yb)), openOf(venue.bestB.finish <= venue.bestA.finish ? venue.bestB : venue.bestA))}
-                      />
                     </g>
                   );
                 })}
+                {/* Hit areas, each circuit its own: lines underneath, then dots and labels on top, so a crossing never steals
+                 * a dot or a label. Two circuits on one dot (a tie) split it, each taking the half towards its label. */}
+                {(() => {
+                  const bindOf = (venue: (typeof venues)[number]) => {
+                    const ya = y(venue.bestA.finish);
+                    const yb = y(venue.bestB.finish);
+                    return card.bind(venue.track, () => tipFor(venue, Math.min(ya, yb)), openOf(venue.bestB.finish <= venue.bestA.finish ? venue.bestB : venue.bestA));
+                  };
+                  const dotBands = (side: 'a' | 'b') => {
+                    const at = (venue: (typeof venues)[number]) => y(side === 'a' ? venue.bestA.finish : venue.bestB.finish);
+                    const labelAt = side === 'a' ? leftYs : rightYs;
+                    return venues.map((venue, i) => {
+                      const tied = venues.map((other, j) => ({ j, y: at(other), label: labelAt[j] })).filter((other) => other.y === at(venue)).sort((p, q) => p.label - q.label);
+                      const k = tied.findIndex((other) => other.j === i);
+                      const span = 18;
+                      return { i, y0: at(venue) - span / 2 + (span / tied.length) * k, h: span / tied.length };
+                    });
+                  };
+                  const left = dotBands('a');
+                  const right = dotBands('b');
+                  return (
+                    <g>
+                      {venues.map((venue) => (
+                        <line
+                          key={`l${venue.track}`}
+                          x1={x1}
+                          y1={y(venue.bestA.finish)}
+                          x2={x2}
+                          y2={y(venue.bestB.finish)}
+                          stroke="transparent"
+                          strokeWidth={phone ? 12 : 10}
+                          style={{ cursor: 'pointer' }}
+                          data-circuit={venue.track}
+                          {...bindOf(venue)}
+                        />
+                      ))}
+                      {venues.map((venue, i) => (
+                        <g key={`h${venue.track}`} data-circuit={venue.track} style={{ cursor: 'pointer' }} {...bindOf(venue)}>
+                          <rect x={0} y={leftYs[i] - 8.5} width={x1 - 10} height={17} fill="transparent" />
+                          <rect x={x1 - 9} y={left[i].y0} width={18} height={left[i].h} fill="transparent" />
+                          <rect x={x2 - 9} y={right[i].y0} width={18} height={right[i].h} fill="transparent" />
+                          <rect x={x2 + 10} y={rightYs[i] - 8.5} width={chartW - x2 - 10} height={17} fill="transparent" />
+                        </g>
+                      ))}
+                    </g>
+                  );
+                })()}
               </svg>
             ) : null}
           </Signature>

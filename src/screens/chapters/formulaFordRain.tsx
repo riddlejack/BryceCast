@@ -273,21 +273,22 @@ export const FormulaFordRain = () => {
               <svg width={width} height={height} role="img" aria-label={`Formula Ford: ${marks.length} races, the rain in each as the series reported it, his finish under it`}>
                 {(() => {
                   /* Meeting names over their first column; one that would run into the last drops to a lower line,
-                   * one that would run off the right edge ends at it. */
+                   * one that would run off the right edge ends a margin short of it. */
                   const ends = [-Infinity, -Infinity];
+                  const edge = width - 14;
                   return groups.map((group) => {
                     const label = meetingLabel(group);
                     const first = placed.find((p) => p.mark === group.marks[0]);
                     if (!label || !first) return null;
-                    const textW = label.length * 6.6;
-                    const fits = first.groupStart + textW <= width;
-                    const x0 = fits ? first.groupStart : width - textW;
+                    const textW = label.length * 7;
+                    const fits = first.groupStart + textW <= edge;
+                    const x0 = fits ? first.groupStart : edge - textW;
                     const line = x0 > ends[0] + 8 ? 0 : 1;
                     ends[line] = x0 + textW;
                     const ty = top - 10 - (1 - line) * 16;
                     return (
                       <g key={`m${first.mark.sessionId}`}>
-                        <text x={fits ? first.groupStart : width} y={ty} textAnchor={fits ? 'start' : 'end'} className="chs-axis">
+                        <text x={fits ? first.groupStart : edge} y={ty} textAnchor={fits ? 'start' : 'end'} className="chs-axis">
                           {label}
                         </text>
                         <line x1={first.groupStart} x2={first.groupStart} y1={ty + 4} y2={top} className="chs-hair" />
