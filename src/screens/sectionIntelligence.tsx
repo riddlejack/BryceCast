@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
+import { TrackModelSlot } from '../three/TrackModelSlot';
+import type { TrackModelSection } from '../three/TrackModel3D';
 import { Card, SourcePill } from '../app/components';
-import { inkGoldDiverging, useCoarsePointer } from '../app/charts';
+import { chartFont, inkGoldDiverging, useCoarsePointer, useMeasuredWidth } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
+import { TrackStill } from '../app/trackStill';
 import type { TrackOutline } from '../assets/tracks';
 import {
   hasDerivedRemainder,
@@ -13,13 +17,16 @@ import {
 } from '../assets/tracks/sections';
 import {
   MIN_CLEAN_LAPS,
+  MIN_FIELD_CARS,
   anchorsForPack,
+  fieldReferenceFor,
   cleanSectionLapsOf,
   lapContextOf,
   lapScopesForObservedLaps,
   lapScopesForPack,
   resolveHeatSections,
   sectionObservationsFromLaps,
+  type FieldBasis,
   type ResolvedHeatSection,
   type SectionScope,
   type SectionStat,
@@ -57,59 +64,1123 @@ const HeatKey = () => {
   const stops = [0, 0.2, 0.4, 0.5, 0.6, 0.8, 1];
   return (
     <div className="row" style={{ gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-      <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>Tougher</span>
+      <span style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>Tougher</span>
       <span style={{ display: 'flex', borderRadius: 3, overflow: 'hidden' }}>
         {stops.map((stop) => (
           <span key={stop} style={{ width: 20, height: 8, background: inkGoldDiverging(stop) }} />
         ))}
       </span>
-      <span style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>Stronger</span>
-      <span style={{ fontSize: 11.5, color: 'var(--ink-secondary)' }}>
+      <span style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>Stronger</span>
+      <span style={{ fontSize: 12.5, color: 'var(--ink-secondary)' }}>
         deeper gold = stronger stretch, deeper ink = tougher
       </span>
     </div>
   );
 };
 
-/** Single-lap drawer row: a one-dot strip would imply a distribution that
- *  isn't there (director ruling), so one lap gets its plain value instead. */
+/* ---------- the Tracks page's lap reading: lap order, the lap budget, the grid ---------- */
+
+const parseOutlinePoints = (d: string): Array<{ x: number; y: number }> => {
+  const nums = d.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+  const points: Array<{ x: number; y: number }> = [];
+  for (let i = 0; i + 1 < nums.length; i += 2) points.push({ x: nums[i], y: nums[i + 1] });
+  return points;
+};
+
+/** Where the start/finish line sits on the outline's [0,1] arc parameter (the
+ *  same parameterisation the anchors' startT/endT use). 0 when the outline
+ *  carries no S/F datum. */
+const startFinishTOf = (outline: TrackOutline): number => {
+  if (!outline.startFinish) return 0;
+  const points = parseOutlinePoints(outline.mainPath);
+  if (points.length < 2) return 0;
+  const cum = [0];
+  for (let i = 0; i < points.length; i += 1) {
+    const a = points[i];
+    const b = points[(i + 1) % points.length];
+    cum.push(cum[i] + Math.hypot(b.x - a.x, b.y - a.y));
+  }
+  const total = cum[points.length] || 1;
+  const sf = outline.startFinish;
+  let best = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < points.length; i += 1) {
+    const a = points[i];
+    const b = points[(i + 1) % points.length];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const segment = dx * dx + dy * dy || 1;
+    const u = Math.max(0, Math.min(1, ((sf.x - a.x) * dx + (sf.y - a.y) * dy) / segment));
+    const dist = Math.hypot(a.x + dx * u - sf.x, a.y + dy * u - sf.y);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = (cum[i] + Math.sqrt(segment) * u) / total;
+    }
+  }
+  return best;
+};
+
+/** A venue's anchored sections in the order he drives them, starting at the
+ *  start/finish line (the official reports do not always list them that way:
+ *  Portland's 2026 report opens with FS-PO and ends with Turn 3). */
+export const sectionsInLapOrder = (anchors: TrackSectionAnchorSet, outline: TrackOutline) => {
+  const sf = startFinishTOf(outline);
+  /* A section that starts on the line can read a hair before it after
+   * rounding; the small lead keeps it first rather than last. */
+  const key = (startT: number) => (((startT - sf + 0.004) % 1) + 1) % 1;
+  return [...anchors.sections].sort((left, right) => key(left.startT) - key(right.startT));
+};
+
+const medianOf = (values: number[]): number | null => {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+};
+
+export interface LapBudgetRow {
+  sectionName: string;
+  label: string;
+  kind: 'measured' | 'derived_remainder';
+  /** compared: a bar. too_few: under MIN_CLEAN_LAPS clean laps of his here in
+   *  this scope. no_field: the other cars can't be read here over this scope
+   *  (under MIN_FIELD_CARS of them, or a pack that holds the field for the
+   *  whole race only). no_timing: no time of his here (no timing row this
+   *  race, or no clean time on this one lap). */
+  state: 'compared' | 'too_few' | 'no_field' | 'no_timing';
+  bryceSeconds: number | null;
+  fieldMedianSeconds: number | null;
+  /** His time minus the field's, seconds. Negative = quicker. */
+  delta: number | null;
+  cleanLaps: number;
+  fieldCars: number;
+  /** One lap only, whatever the flag: his place in this section on that lap
+   *  from the official order, as the share of the other cars he was ahead of
+   *  and as P of N, and his time there (clean or not). Null over a range of
+   *  laps, or with no timing row. */
+  lapShare?: number | null;
+  lapRank?: number | null;
+  lapRankOf?: number | null;
+  lapSeconds?: number | null;
+}
+
+export interface LapBudget {
+  /** The laps the bars read: the same scope the map shows. */
+  scope: SectionScope;
+  /** How his laps (and each other car's) are summarised; one lap is one lap. */
+  stat: SectionStat;
+  rows: LapBudgetRow[];
+  /** Sum of the compared rows' deltas: his lap against the field, built
+   *  section by section. */
+  total: number;
+  compared: number;
+  /** His clean green-flag laps inside the scope (0 or 1 for one lap). */
+  cleanLaps: number;
+  totalLaps: number;
+  fieldCarsMin: number;
+  fieldCarsMax: number;
+  /** How the field was built for this scope (null when no row has a field). */
+  fieldBasis: FieldBasis | null;
+  /** His median (or average) clean green-flag lap over the scope, from the
+   *  official lap rows; for one lap, his official time on that lap. */
+  bryceLap: number | null;
+  /** Sum of his section times (all sections compared only). */
+  bryceSectionSum: number | null;
+  /** The field's section times added up (all sections compared only). */
+  fieldSectionSum: number | null;
+  /** One lap only: the lap, his whole-lap rank on it (official order, any
+   *  flag) and the share of the other cars he was ahead of. */
+  lap: { lap: number; rank: number | null; rankOf: number | null; share: number | null } | null;
+  /** One lap only: why the bars can't read it (a caution or restart lap, or a
+   *  lap that is not clean), or null when they can. */
+  unreadable: 'caution' | 'restart' | 'unknown' | 'not_clean' | null;
+}
+
+/** "Where his lap goes", for any scope the card offers (Jack's review of Nov
+ *  15: the bars follow every filter, the thirds as well as one lap). In lap
+ *  order, his time in each section over the scope against the field's over
+ *  the SAME laps, the field being the other cars and never him: the whole
+ *  race and each third compare his median (or average) clean-lap time with
+ *  the middle of the other cars' own medians (or averages) over those laps;
+ *  one lap compares his time on it with the other cars' median on it. The
+ *  sections tile the lap, so the compared rows add up to his lap against the
+ *  field. The numbers come from sectionObservationsFromLaps, the same set the
+ *  map draws, so the bars and the map always read the same laps. */
+export const lapBudgetOf = (
+  pack: SectionLapsPack,
+  anchors: TrackSectionAnchorSet,
+  outline: TrackOutline,
+  scope: SectionScope = { kind: 'full_race' },
+  stat: SectionStat = 'median'
+): LapBudget => {
+  const single = scope.kind === 'single_lap' ? scope.lap : null;
+  const effectiveStat: SectionStat = single !== null ? 'median' : stat;
+  const set = sectionObservationsFromLaps(pack, scope, effectiveStat);
+  const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
+  const ordered = sectionsInLapOrder(anchors, outline);
+  const anchoredNames = new Set(ordered.map((anchor) => anchor.sectionName));
+  const rowFor = (sectionName: string, label: string, kind: 'measured' | 'derived_remainder'): LapBudgetRow => {
+    const observation = byName.get(sectionName);
+    const fieldCars = observation?.fieldSeconds?.length ?? 0;
+    const field = observation?.fieldMedianSeconds ?? null;
+    if (!observation) {
+      return { sectionName, label, kind, cleanLaps: 0, fieldCars, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: null, delta: null };
+    }
+    if (single !== null) {
+      const bryce = observation.clean ? observation.bryceSummarySeconds ?? null : null;
+      const base = {
+        sectionName,
+        label,
+        kind,
+        cleanLaps: bryce !== null ? 1 : 0,
+        fieldCars,
+        lapShare: observation.percentile,
+        lapRank: observation.fieldRank ?? null,
+        lapRankOf: observation.fieldComparisonCount ?? null,
+        lapSeconds: observation.bryceSummarySeconds ?? null
+      };
+      if (bryce === null) return { ...base, state: 'no_timing', bryceSeconds: null, fieldMedianSeconds: field, delta: null };
+      if (field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: null, delta: null };
+      return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
+    }
+    const bryce = observation.bryceSummarySeconds ?? null;
+    const base = { sectionName, label, kind, cleanLaps: observation.observationCount ?? 0, fieldCars };
+    if (observation.percentile === null || bryce === null) {
+      return { ...base, state: 'too_few', bryceSeconds: bryce, fieldMedianSeconds: field, delta: null };
+    }
+    if (field === null) return { ...base, state: 'no_field', bryceSeconds: bryce, fieldMedianSeconds: null, delta: null };
+    return { ...base, state: 'compared', bryceSeconds: bryce, fieldMedianSeconds: field, delta: bryce - field };
+  };
+  const rows = [
+    ...ordered.map((anchor) => rowFor(anchor.sectionName, anchor.label, anchor.kind ?? 'measured')),
+    /* A timed section no anchor names (none in the shipped packs) still belongs
+     * in the sum; it goes last, under its official name. */
+    ...pack.sections
+      .filter((section) => !anchoredNames.has(section.sectionName))
+      .map((section) => rowFor(section.sectionName, section.sectionName, section.kind ?? 'measured'))
+  ];
+  const compared = rows.filter((row) => row.state === 'compared');
+  const all = compared.length === rows.length;
+  const cars = compared.map((row) => row.fieldCars);
+  const [fromLap, toLap] =
+    scope.kind === 'full_race' ? [1, pack.totalLaps] : scope.kind === 'lap_window' ? [scope.fromLap, scope.toLap] : [scope.lap, scope.lap];
+  const lapRow = single !== null ? pack.lapTotals.find((tuple) => tuple[0] === single) ?? null : null;
+  const cleanLapTimes = pack.lapTotals
+    .filter((tuple) => tuple[0] !== null && tuple[0] >= fromLap && tuple[0] <= toLap && tuple[4] === 1 && tuple[6] !== null)
+    .map((tuple) => tuple[6] as number);
+  const unreadable: LapBudget['unreadable'] =
+    single === null
+      ? null
+      : !lapRow || lapRow[4] !== 1
+        ? lapRow?.[5] === 'c'
+          ? 'caution'
+          : lapRow?.[5] === 'r'
+            ? 'restart'
+            : lapRow?.[5] === 'u'
+              ? 'unknown'
+              : 'not_clean'
+        : null;
+  const basisOf = set.sections.find((observation) => observation.fieldBasis)?.fieldBasis ?? null;
+  return {
+    scope,
+    stat: effectiveStat,
+    rows,
+    total: compared.reduce((sum, row) => sum + (row.delta ?? 0), 0),
+    compared: compared.length,
+    cleanLaps: single !== null ? (unreadable ? 0 : 1) : cleanSectionLapsOf(pack).filter((lap) => lap >= fromLap && lap <= toLap).length,
+    totalLaps: pack.totalLaps,
+    fieldCarsMin: cars.length > 0 ? Math.min(...cars) : 0,
+    fieldCarsMax: cars.length > 0 ? Math.max(...cars) : 0,
+    fieldBasis: basisOf,
+    bryceLap: single !== null ? lapRow?.[6] ?? null : cleanLapTimes.length > 0 ? (effectiveStat === 'mean' ? cleanLapTimes.reduce((a, b) => a + b, 0) / cleanLapTimes.length : medianOf(cleanLapTimes)) : null,
+    bryceSectionSum: all && compared.length > 0 ? compared.reduce((sum, row) => sum + (row.bryceSeconds ?? 0), 0) : null,
+    fieldSectionSum: all && compared.length > 0 ? compared.reduce((sum, row) => sum + (row.fieldMedianSeconds ?? 0), 0) : null,
+    lap: single !== null ? { lap: single, rank: lapRow?.[2] ?? null, rankOf: lapRow?.[3] ?? null, share: lapRow?.[1] ?? null } : null,
+    unreadable
+  };
+};
+
+/** Signed seconds for the dense chart (the bars' value column), with the
+ *  legend beside it saying what minus means: minus is quicker than the field. */
+const signedSeconds = (value: number): string => {
+  const rounded = Math.round(value * 1000) / 1000;
+  if (rounded === 0) return '0.000';
+  return `${rounded < 0 ? '−' : '+'}${Math.abs(rounded).toFixed(3)}`;
+};
+
+/** The same difference in words, for sentences (his ruling of Nov 15):
+ *  "0.034 s quicker than the field". `delta` is his time minus the field's. */
+export const againstFieldWords = (delta: number): string => {
+  const rounded = Math.round(delta * 1000) / 1000;
+  if (rounded === 0) return 'level with the field, to the thousandth';
+  return `${Math.abs(rounded).toFixed(3)} s ${rounded < 0 ? 'quicker' : 'slower'} than the field`;
+};
+
+const GAIN_COLOUR = inkGoldDiverging(0.92);
+const LOSS_COLOUR = inkGoldDiverging(0.16);
+
+export const budgetMissingCopy = (row: LapBudgetRow, budget: LapBudget): string => {
+  const scope = budget.scope;
+  if (row.state === 'too_few') {
+    const where = scope.kind === 'lap_window' ? ` in the ${scope.label.toLowerCase()}` : '';
+    return `not compared: ${row.cleanLaps} clean ${row.cleanLaps === 1 ? 'lap' : 'laps'}${where}`;
+  }
+  if (row.state === 'no_field') {
+    return budget.fieldBasis === null && scope.kind !== 'full_race'
+      ? 'not compared: field held for the whole race only'
+      : `not compared: under ${MIN_FIELD_CARS} other cars timed`;
+  }
+  return scope.kind === 'single_lap' ? 'no clean time this lap' : 'no timing row this race';
+};
+
+const scopeLine = (budget: LapBudget): string => {
+  const { scope } = budget;
+  const laps = `${budget.cleanLaps} clean green-flag ${budget.cleanLaps === 1 ? 'lap' : 'laps'}`;
+  if (scope.kind === 'single_lap') return `Lap ${scope.lap} of ${budget.totalLaps}`;
+  if (scope.kind === 'lap_window') return `${scope.label} · laps ${scope.fromLap}–${scope.toLap} · ${laps}`;
+  return `Whole race · ${laps} of ${budget.totalLaps}`;
+};
+
+const UNREADABLE_COPY: Record<NonNullable<LapBudget['unreadable']>, string> = {
+  caution: 'ran under caution',
+  restart: 'was a restart lap',
+  unknown: 'has no flag report',
+  not_clean: 'is not a clean green-flag lap (a pit stop, an off or a slow lap)'
+};
+
+/** Why one lap's bars show his place rather than seconds, and how the bars
+ *  are marked. 'order' is a green, clean lap whose race holds the other cars'
+ *  times for the whole race only, so the place is a racing comparison. */
+type PlaceReason = NonNullable<LapBudget['unreadable']> | 'order';
+const PLACE_TAG: Record<PlaceReason, string | null> = {
+  caution: 'Run under caution: not a racing comparison',
+  restart: 'Restart lap: part of it ran behind the pace car',
+  unknown: 'No flag report for this lap',
+  not_clean: 'Not a clean lap of his',
+  order: null
+};
+const PLACE_WHY: Record<PlaceReason, string> = {
+  caution:
+    'The whole field ran behind the pace car, so this is not a racing comparison. The timing keeps the other cars’ times on green-flag laps only, so these bars show his place in each section on this lap, from the official order, not seconds.',
+  restart:
+    'Part of the lap ran behind the pace car, so it is not a like-for-like comparison. The timing keeps the other cars’ times on green-flag laps only, so these bars show his place in each section on this lap, from the official order, not seconds.',
+  unknown:
+    'The flag on this lap is not on file, so the other cars’ times on it are not used. These bars show his place in each section on this lap, from the official order, not seconds.',
+  not_clean:
+    'His lap had a pit stop, an off or a slow stretch in it, so his seconds are not set against the field. These bars show his place in each section on this lap, from the official order.',
+  order:
+    'This race holds the other cars’ times for the whole race only, so one lap cannot be read in seconds. These bars show his place in each section on this lap, from the official order.'
+};
+export const placeReasonOf = (budget: LapBudget): PlaceReason | null =>
+  budget.lap && (budget.unreadable || budget.compared === 0) && budget.rows.some((row) => typeof row.lapShare === 'number')
+    ? budget.unreadable ?? 'order'
+    : null;
+
+/** One lap the seconds cannot compare (a caution or restart lap, a lap of his
+ *  that is not clean, or a race that holds the field for the whole race only):
+ *  his place in each section on that lap from the official order, drawn from
+ *  the middle of the field (ahead of more than half the other cars reads to
+ *  the right, in gold), and marked when it is not a racing comparison. The
+ *  bars never go empty for a lap that has timing rows (Jack's review of Nov 16). */
+const LapPlaceBars = ({
+  budget,
+  reason,
+  hovered,
+  setHovered
+}: {
+  budget: LapBudget;
+  reason: PlaceReason;
+  hovered: number | null;
+  setHovered: (index: number | null) => void;
+}) => {
+  const coarse = useCoarsePointer();
+  const oneLap = budget.lap!;
+  const marked = reason !== 'order';
+  const x = (share: number) => `${Math.max(0, Math.min(100, share * 100))}%`;
+  const bar = (share: number) => {
+    const left = Math.min(0.5, share);
+    const colour = share >= 0.5 ? GAIN_COLOUR : LOSS_COLOUR;
+    return {
+      left: x(left),
+      width: `${Math.abs(share - 0.5) * 100}%`,
+      background: marked ? `repeating-linear-gradient(135deg, ${colour} 0 3px, transparent 3px 5px)` : colour,
+      boxShadow: marked ? `inset 0 0 0 1px ${colour}` : undefined
+    };
+  };
+  const place = (rank: number | null | undefined, of: number | null | undefined) =>
+    typeof rank === 'number' && typeof of === 'number' ? `P${rank}/${of}` : '—';
+  const readout = (row: LapBudgetRow): string => {
+    if (typeof row.lapShare !== 'number') return `${row.label}: no timing row for lap ${oneLap.lap}`;
+    const ahead =
+      typeof row.lapRank === 'number' && typeof row.lapRankOf === 'number'
+        ? `P${row.lapRank} of ${row.lapRankOf} on lap ${oneLap.lap}, ahead of ${row.lapRankOf - row.lapRank} of the other ${row.lapRankOf - 1} cars`
+        : `ahead of ${Math.round(row.lapShare * 100)}% of the other cars on lap ${oneLap.lap}`;
+    return `${row.label}: ${ahead}${typeof row.lapSeconds === 'number' ? `, in ${row.lapSeconds.toFixed(3)} s` : ''}${marked ? `. ${PLACE_TAG[reason]}.` : '.'}`;
+  };
+  const lapShare =
+    oneLap.share ?? (oneLap.rank !== null && oneLap.rankOf !== null && oneLap.rankOf > 1 ? (oneLap.rankOf - oneLap.rank) / (oneLap.rankOf - 1) : null);
+  return (
+    <div className={`tracks-budget${marked ? ' tracks-budget--marked' : ''}`} onMouseLeave={() => setHovered(null)}>
+      <h3 className="tracks-subhead">Where his lap goes</h3>
+      <p className="tracks-budget__scope">
+        {`Lap ${oneLap.lap} of ${budget.totalLaps}`}
+        {marked ? <span className="tracks-budget__flag">{PLACE_TAG[reason]}</span> : null}
+      </p>
+      <p className="tracks-note">
+        {PLACE_WHY[reason]} Each bar runs from the middle of the field: to the right, he was ahead of more than half of
+        the other cars in that section.
+      </p>
+      <div className="tracks-budget__axis" aria-hidden>
+        <span>&larr; nearer the back</span>
+        <span>nearer the front &rarr;</span>
+      </div>
+      <ol className="tracks-budget__rows">
+        {budget.rows.map((row, index) => (
+          <li
+            key={row.sectionName}
+            className={`tracks-budget__row${typeof row.lapShare === 'number' ? '' : ' tracks-budget__row--missing'}${hovered === index ? ' tracks-budget__row--on' : ''}`}
+            onMouseEnter={() => setHovered(index)}
+          >
+            <span className="tracks-budget__label">{row.label}</span>
+            <span className="tracks-budget__track">
+              <span className="tracks-budget__zero" style={{ left: '50%' }} />
+              {typeof row.lapShare === 'number' ? (
+                <span className="tracks-budget__bar" style={bar(row.lapShare)} />
+              ) : (
+                <span className="tracks-budget__gap">no timing row this lap</span>
+              )}
+            </span>
+            <span className="tracks-budget__value tnum">{place(row.lapRank, row.lapRankOf)}</span>
+          </li>
+        ))}
+      </ol>
+      <div className="tracks-budget__row tracks-budget__row--total">
+        <span className="tracks-budget__label">{`Lap ${oneLap.lap}, the whole lap`}</span>
+        <span className="tracks-budget__track">
+          <span className="tracks-budget__zero" style={{ left: '50%' }} />
+          {lapShare !== null ? <span className="tracks-budget__bar" style={bar(lapShare)} /> : null}
+        </span>
+        <span className="tracks-budget__value tnum">{place(oneLap.rank, oneLap.rankOf)}</span>
+      </div>
+      {hovered !== null && budget.rows[hovered] ? (
+        <p className="tracks-budget__readout tnum" aria-hidden>
+          {readout(budget.rows[hovered])}
+        </p>
+      ) : (
+        <p className="tracks-budget__readout tracks-budget__legend">
+          His place in each section&rsquo;s times on this lap: P1 was the quickest there. {coarse ? 'Tap' : 'Point at'} a
+          section to read it in words.
+        </p>
+      )}
+      <p className="tracks-note">
+        {oneLap.rank !== null && oneLap.rankOf !== null
+          ? `On the whole lap he was P${oneLap.rank} of ${oneLap.rankOf}${budget.bryceLap !== null ? `, in ${budget.bryceLap.toFixed(3)} s` : ''}. `
+          : ''}
+        {reason === 'order' ? 'Places do not add up the way seconds do, so the whole lap is its own row.' : 'Pick a green-flag lap, or a third of the race, to see the seconds against the field.'}
+      </p>
+    </div>
+  );
+};
+
+/** The lap budget drawn as one bar per section, quicker to the right in gold,
+ *  slower to the left in ink, with the total underneath on the same scale.
+ *  It reads whatever scope the map shows: the whole race, a third, or one
+ *  lap. A scope it cannot compare says so in words and draws no number. */
+export const LapBudgetBars = ({
+  budget,
+  active,
+  onActiveChange
+}: {
+  budget: LapBudget;
+  /** The section pointed at elsewhere (the Tracks page's 3D model), by name:
+   *  its row lights and reads out here too. */
+  active?: string | null;
+  onActiveChange?: (sectionName: string | null) => void;
+}) => {
+  /* Pointing at a row reads it out under the total (no stock browser box). */
+  const [ownHovered, setOwnHovered] = useState<number | null>(null);
+  const activeIndex = active ? budget.rows.findIndex((row) => row.sectionName === active) : -1;
+  const hovered = ownHovered ?? (activeIndex >= 0 ? activeIndex : null);
+  const setHovered = (index: number | null) => {
+    setOwnHovered(index);
+    onActiveChange?.(index === null ? null : budget.rows[index]?.sectionName ?? null);
+  };
+  const coarse = useCoarsePointer();
+  const oneLap = budget.lap;
+  const statWord = budget.stat === 'mean' ? 'average' : 'median';
+  const placeReason = placeReasonOf(budget);
+  if (placeReason) return <LapPlaceBars budget={budget} reason={placeReason} hovered={hovered} setHovered={setHovered} />;
+  if (budget.unreadable || budget.compared === 0) {
+    const scope = budget.scope;
+    const why = budget.unreadable && oneLap
+      ? `Lap ${oneLap.lap} ${UNREADABLE_COPY[budget.unreadable]}, so there is nothing to set against the field. Pick a green-flag lap, or a third of the race.`
+      : budget.fieldBasis === null && scope.kind !== 'full_race' && budget.rows.some((row) => row.state === 'no_field')
+        ? `This race's field times are held for the whole race only, so the other cars can't be read over ${scope.kind === 'lap_window' ? `the ${scope.label.toLowerCase()}` : 'one lap'}. The whole race compares.`
+        : budget.fieldBasis === null && budget.stat === 'mean' && budget.rows.some((row) => row.state === 'no_field')
+          ? "This race's field times are held as medians only, so the comparison reads medians. Pick Median."
+          : `No section ${scope.kind === 'lap_window' ? `in the ${scope.label.toLowerCase()} ` : ''}has the ${MIN_CLEAN_LAPS} clean laps of his and ${MIN_FIELD_CARS} other cars a comparison needs.`;
+    return (
+      <div className="tracks-budget">
+        <h3 className="tracks-subhead">Where his lap goes</h3>
+        <p className="tracks-budget__scope">{scopeLine(budget)}</p>
+        <p className="tracks-note">{why}</p>
+      </div>
+    );
+  }
+  /* A running sum, drawn as a waterfall: each section's bar starts where the
+   * lap so far had got to, so the last bar ends on the total and the chart
+   * adds itself up. Quicker reads to the right (minus seconds), slower to the
+   * left. */
+  const running: Array<{ from: number; to: number }> = [];
+  let sofar = 0;
+  for (const row of budget.rows) {
+    const from = sofar;
+    if (row.state === 'compared') sofar += row.delta ?? 0;
+    running.push({ from, to: sofar });
+  }
+  const extents = [0, ...running.flatMap((step) => [-step.from, -step.to])];
+  const span = Math.max(0.001, Math.max(...extents) - Math.min(...extents));
+  const lo = Math.min(...extents) - span * 0.04;
+  const hi = Math.max(...extents) + span * 0.04;
+  const xOf = (seconds: number) => ((-seconds - lo) / (hi - lo)) * 100;
+  const bar = (from: number, to: number) => {
+    const left = Math.min(xOf(from), xOf(to));
+    return {
+      left: `${left}%`,
+      width: `${Math.abs(xOf(to) - xOf(from))}%`,
+      background: to < from ? GAIN_COLOUR : LOSS_COLOUR
+    };
+  };
+  const zero = { left: `${xOf(0)}%` };
+  const cars =
+    budget.fieldCarsMin === budget.fieldCarsMax
+      ? `${budget.fieldCarsMax} other cars`
+      : `${budget.fieldCarsMin} to ${budget.fieldCarsMax} other cars`;
+  const missing = budget.rows.length - budget.compared;
+  const readout = (row: LapBudgetRow): string =>
+    row.state === 'compared'
+      ? oneLap
+        ? `${row.label}: his ${row.bryceSeconds!.toFixed(3)} s on lap ${oneLap.lap}, the field's median ${row.fieldMedianSeconds!.toFixed(3)} s (${row.fieldCars} other cars): ${againstFieldWords(row.delta!)}`
+        : `${row.label}: his ${statWord} ${row.bryceSeconds!.toFixed(3)} s, the field's ${row.fieldMedianSeconds!.toFixed(3)} s (${row.cleanLaps} clean laps, ${row.fieldCars} other cars): ${againstFieldWords(row.delta!)}`
+      : `${row.label}: ${budgetMissingCopy(row, budget)}`;
+  /* The "how", said once: what each bar compares, and that the field is the
+   * other cars over the same laps, never him. */
+  const how = oneLap ? (
+    <>
+      One bar per section, in the order he drives them: his time there on lap {oneLap.lap} against the field&rsquo;s
+      median on the same lap. The field is the other cars, not him ({cars} with a clean lap {oneLap.lap}). Each bar
+      starts where the lap so far had got to, so the last one ends on the total.
+    </>
+  ) : budget.fieldBasis === 'whole_race_medians' ? (
+    <>
+      One bar per section, in the order he drives them: his median time there against the field&rsquo;s. The field is
+      the other cars, not him: the middle of {cars}&rsquo; own medians over the race. Each bar starts where the lap so
+      far had got to, so the last one ends on the total.
+    </>
+  ) : (
+    <>
+      One bar per section, in the order he drives them: his {statWord} time there against the field&rsquo;s, over the
+      same laps. The field is the other cars, not him: each car&rsquo;s own {statWord} over those laps, then the{' '}
+      {budget.stat === 'mean' ? 'average' : 'middle'} of the {cars}. Each bar starts where the lap so far had got to,
+      so the last one ends on the total.
+    </>
+  );
+  const totalSentence = oneLap
+    ? missing === 0 && budget.fieldSectionSum !== null && budget.bryceSectionSum !== null
+      ? `His lap ${oneLap.lap} was ${(budget.bryceLap ?? budget.bryceSectionSum).toFixed(3)} s${
+          budget.bryceLap !== null && Math.abs(budget.bryceLap - budget.bryceSectionSum) >= 0.0015
+            ? ` (his sections add up to ${budget.bryceSectionSum.toFixed(3)} s)`
+            : ''
+        }; the field's section medians on that lap add up to ${budget.fieldSectionSum.toFixed(3)} s. The ${budget.compared} bars come to ${againstFieldWords(budget.total)}.${
+          oneLap.rank !== null && oneLap.rankOf !== null ? ` On the whole lap he was P${oneLap.rank} of ${oneLap.rankOf}.` : ''
+        }`
+      : `${budget.compared} of ${budget.rows.length} sections compared on lap ${oneLap.lap}; together ${againstFieldWords(budget.total)}. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`
+    : `${
+        missing === 0
+          ? `The ${budget.compared} sections cover the whole lap and add up to ${againstFieldWords(budget.total)}.`
+          : `${budget.compared} of ${budget.rows.length} sections compared; together ${againstFieldWords(budget.total)}. The ${missing === 1 ? 'missing one stays' : `${missing} missing stay`} out of the total.`
+      }${budget.bryceLap !== null ? ` His ${statWord} clean lap ${budget.scope.kind === 'lap_window' ? 'in these laps ' : ''}was ${budget.bryceLap.toFixed(3)} s.` : ''}`;
+  return (
+    <div className="tracks-budget" onMouseLeave={() => setHovered(null)}>
+      <h3 className="tracks-subhead">Where his lap goes</h3>
+      <p className="tracks-budget__scope">{scopeLine(budget)}</p>
+      <p className="tracks-note">{how}</p>
+      <div className="tracks-budget__axis" aria-hidden>
+        <span>&larr; slower</span>
+        <span>quicker &rarr;</span>
+      </div>
+      <ol className="tracks-budget__rows">
+        {budget.rows.map((row, index) => (
+          <li
+            key={row.sectionName}
+            className={`tracks-budget__row${row.state === 'compared' ? '' : ' tracks-budget__row--missing'}${hovered === index ? ' tracks-budget__row--on' : ''}`}
+            onMouseEnter={() => setHovered(index)}
+          >
+            <span className="tracks-budget__label">{row.label}</span>
+            <span className="tracks-budget__track">
+              <span className="tracks-budget__zero" style={zero} />
+              {row.state === 'compared' ? <span className="tracks-budget__bar" style={bar(running[index].from, running[index].to)} /> : null}
+              {row.state !== 'compared' ? <span className="tracks-budget__gap">{budgetMissingCopy(row, budget)}</span> : null}
+            </span>
+            <span className="tracks-budget__value tnum">{row.state === 'compared' ? signedSeconds(row.delta!) : '—'}</span>
+          </li>
+        ))}
+      </ol>
+      <div className="tracks-budget__row tracks-budget__row--total">
+        <span className="tracks-budget__label">{oneLap ? `Lap ${oneLap.lap} against the field` : 'His lap against the field'}</span>
+        <span className="tracks-budget__track">
+          <span className="tracks-budget__zero" style={zero} />
+          <span className="tracks-budget__bar" style={bar(0, budget.total)} />
+        </span>
+        <span className="tracks-budget__value tnum">{signedSeconds(budget.total)}</span>
+      </div>
+      {/* One line under the bars: at rest the legend for the signed seconds
+          (what minus means); pointing at a section reads that one out in
+          words in its place, so the line never sits empty. */}
+      {hovered !== null && budget.rows[hovered] ? (
+        <p className="tracks-budget__readout tnum" aria-hidden>
+          {readout(budget.rows[hovered])}
+        </p>
+      ) : (
+        <p className="tracks-budget__readout tracks-budget__legend">
+          Seconds against the field: − quicker, + slower. {coarse ? 'Tap' : 'Point at'} a section to read it in words.
+        </p>
+      )}
+      <p className="tracks-note">{totalSentence}</p>
+    </div>
+  );
+};
+
+const GRID_CAUTION_COPY: Record<string, string> = { c: 'caution', r: 'restart', u: 'no flag report', g: 'not compared' };
+
+/** Laps down, sections across (in lap order), each cell his rank in that
+ *  section on that lap, on the map's ink-to-gold scale. Caution and restart
+ *  laps stay blank and say so; a clean lap with no timing row is an outlined
+ *  empty cell. The last column is his whole lap's rank. */
+export const LapSectionGrid = ({
+  pack,
+  ordered,
+  highlightLap,
+  onLapSelect,
+  fill = false
+}: {
+  pack: SectionLapsPack;
+  ordered: Array<{ sectionName: string; label: string }>;
+  highlightLap?: number | null;
+  onLapSelect?: (lap: number) => void;
+  /** Tracks page: the rows grow to fill the height their column is given (the
+   *  row it shares with "Where his lap goes"), so the two end on one line. */
+  fill?: boolean;
+}) => {
+  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [fillH, setFillH] = useState(0);
+  useEffect(() => {
+    const node = ref.current;
+    if (!fill || !node) return;
+    const observer = new ResizeObserver((entries) => {
+      const next = Math.round(entries[0]?.contentRect.height ?? 0);
+      setFillH((previous) => (Math.abs(previous - next) > 1 ? next : previous));
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fill, ref]);
+  /* Phone: the grid starts folded to one strip of whole-lap ranks; opening it
+   * draws every section at compact row heights. */
+  const [open, setOpen] = useState(false);
+  /* The square under the pointer (or the lap with keyboard focus). It reads
+   * out in the line under the grid and gets an ink outline: the grid's own
+   * readout, in place of the browser's grey <title> box (review, Nov 14).
+   * col: a section index, -1 the whole-lap column, null the lap as a row. */
+  const [pointed, setPointed] = useState<{ lap: number; col: number | null } | null>(null);
+  const coarse = useCoarsePointer();
+  const laps = useMemo(() => {
+    const byLap = new Map<number, SectionLapsPack['lapTotals'][number]>();
+    for (const tuple of pack.lapTotals) if (tuple[0] !== null && !byLap.has(tuple[0])) byLap.set(tuple[0], tuple);
+    return [...byLap.entries()].sort((left, right) => left[0] - right[0]);
+  }, [pack]);
+  const cells = useMemo(
+    () =>
+      ordered.map((section) => {
+        const source = pack.sections.find((entry) => entry.sectionName === section.sectionName);
+        const byLap = new Map<number, SectionLapsPack['sections'][number]['laps'][number]>();
+        for (const tuple of source?.laps ?? []) if (tuple[0] !== null) byLap.set(tuple[0], tuple);
+        return { ...section, byLap, present: Boolean(source), source: source ?? null };
+      }),
+    [pack, ordered]
+  );
+  if (laps.length === 0) return null;
+  const totalOf = (lap: number) => laps.find(([candidate]) => candidate === lap)?.[1] ?? null;
+  /** One plain line per square: the lap, the section, his rank there and his
+   *  time, with the field's whole-race median for the section beside it. */
+  const readoutFor = (lap: number, col: number | null): string => {
+    const total = totalOf(lap);
+    if (!total) return '';
+    if (total[4] !== 1) {
+      /* Round 6: the bars and the map still read such a lap, by his place
+       * on it, so the line says what kind of reading it is. */
+      const word = total[5] === 'g' ? 'not a clean lap of his' : total[5] === 'c' ? 'under caution' : total[5] === 'r' ? 'a restart lap' : 'no flag report';
+      const place = total[2] !== null && total[3] !== null ? `, P${total[2]} of ${total[3]} on the whole lap` : '';
+      return `Lap ${lap}: ${word}${place}; ${total[5] === 'c' || total[5] === 'r' ? 'not a racing comparison' : 'not set against the field'}`;
+    }
+    if (col === null || col < 0 || !cells[col]) {
+      return total[2] !== null
+        ? `Lap ${lap}, whole lap: P${total[2]} of ${total[3] ?? '?'}${total[6] !== null ? ` · ${total[6].toFixed(3)} s` : ''}`
+        : `Lap ${lap}, whole lap: no rank`;
+    }
+    const cell = cells[col];
+    const tuple = cell.byLap.get(lap);
+    if (!tuple || tuple[1] === null || tuple[4] !== 1) return `Lap ${lap}, ${cell.label}: no timing row`;
+    const time = tuple[6] !== null ? ` · ${tuple[6].toFixed(3)} s` : '';
+    /* The field on the same lap: the other cars' median there, never him. A
+     * pack that holds the field for the whole race only says nothing here
+     * rather than set one lap against a race-long figure. */
+    const reference = cell.source ? fieldReferenceFor(cell.source, { kind: 'single_lap', lap }, 'median', pack.totalLaps) : null;
+    const field =
+      reference?.seconds != null && tuple[6] !== null
+        ? ` · ${againstFieldWords(tuple[6] - reference.seconds)} (the other cars' median ${reference.seconds.toFixed(3)} s)`
+        : '';
+    return `Lap ${lap}, ${cell.label}: P${tuple[2] ?? '?'} of ${tuple[3] ?? '?'}${time}${field}`;
+  };
+  const readoutText = pointed
+    ? readoutFor(pointed.lap, pointed.col)
+    : highlightLap !== null && highlightLap !== undefined && totalOf(highlightLap)
+      ? `On the map: ${readoutFor(highlightLap, null)}`
+      : `${coarse ? 'Tap' : 'Hover'} a square to read it${onLapSelect ? `; ${coarse ? 'tap' : 'click'} a lap to see it on the track` : ''}.`;
+  const readout = <p className="tracks-grid__readout tnum">{readoutText}</p>;
+  /* Keyboard and screen readers: each lap row is a button named by its readout. */
+  const lapButtonProps = (lap: number) =>
+    onLapSelect
+      ? {
+          role: 'button',
+          tabIndex: 0,
+          'aria-label': `${readoutFor(lap, null)}. Show this lap on the track.`,
+          onKeyDown: (event: React.KeyboardEvent) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onLapSelect(lap);
+            }
+          },
+          onFocus: () => setPointed({ lap, col: null }),
+          onBlur: () => setPointed(null)
+        }
+      : { 'aria-hidden': true };
+  const narrow = width > 0 && width < 520;
+  /* Folding is for phones only: a narrow grid column on a wide desktop (the
+   * three-across layout) stays open at full row heights. */
+  const phone = narrow && typeof window !== 'undefined' && window.matchMedia('(max-width: 700px)').matches;
+  const labelW = narrow ? 30 : 40;
+  const lapColW = narrow ? 38 : 48;
+  const gapW = narrow ? 6 : 10;
+  const n = Math.max(1, cells.length);
+  const cellW = width > 0 ? Math.max(9, Math.min(60, (width - labelW - gapW - lapColW) / n)) : 0;
+  const baseRowH = phone
+    ? laps.length > 60 ? 6 : laps.length > 40 ? 8 : laps.length > 20 ? 10 : 14
+    : laps.length > 60 ? 9 : laps.length > 40 ? 12 : laps.length > 20 ? 16 : 22;
+  const fontPx = 12;
+  const longest = Math.max(...cells.map((cell) => cell.label.length), 7);
+  const headerH = Math.ceil(longest * fontPx * 0.56) + 12;
+  /* Fill: never shorter than the usual rows, never taller than 40 px a lap. The
+   * readout line under the grid keeps its 30 px. */
+  const filling = fill && !phone;
+  const fillMinH = headerH + laps.length * baseRowH + 2 + 30;
+  const rowH = filling && fillH > fillMinH
+    ? Math.min(40, Math.max(baseRowH, Math.floor((fillH - headerH - 2 - 30) / laps.length)))
+    : baseRowH;
+  const gridW = labelW + cellW * n + gapW + lapColW;
+  const height = headerH + laps.length * rowH + 2;
+  const lapX = labelW + cellW * n + gapW;
+  const everyLabel = rowH >= 14;
+  const foldToggle = phone ? (
+    <button
+      type="button"
+      className="tracks-grid__toggle"
+      aria-expanded={open}
+      onClick={() => setOpen((value) => !value)}
+    >
+      {open ? 'Fold the grid' : `Open every section, lap by lap (${cells.length} × ${laps.length})`}
+    </button>
+  ) : null;
+  if (phone && !open) {
+    /* One square per lap, his whole-lap rank, same scale as the grid. */
+    const stripW = Math.min(width, laps.length * 24);
+    const stepW = stripW / laps.length;
+    const stripH = 24;
+    return (
+      <div ref={ref} className="tracks-grid__frame tracks-grid__frame--folded">
+        <svg
+          width={stripW}
+          height={stripH + 20}
+          viewBox={`0 0 ${stripW} ${stripH + 20}`}
+          role={onLapSelect ? 'group' : 'img'}
+          aria-label={`His whole-lap rank on each of ${laps.length} laps`}
+          style={{ display: 'block', overflow: 'visible' }}
+          onMouseLeave={() => setPointed(null)}
+        >
+          {laps.map(([lap, total], index) => {
+            const x = stepW * index;
+            const clean = total[4] === 1 && total[1] !== null;
+            const isPointed = pointed?.lap === lap;
+            return (
+              <g
+                key={`s-${lap}`}
+                className={onLapSelect ? 'tracks-grid__lap' : undefined}
+                onClick={onLapSelect ? () => onLapSelect(lap) : undefined}
+                onMouseEnter={() => setPointed({ lap, col: -1 })}
+                {...lapButtonProps(lap)}
+              >
+                <rect x={x} y={0} width={stepW} height={stripH} fill="transparent" />
+                {clean ? (
+                  <rect x={x + 0.5} y={0.5} width={Math.max(0, stepW - 1)} height={stripH - 1} fill={inkGoldDiverging(total[1] as number)} />
+                ) : (
+                  <line x1={x} x2={x + stepW} y1={stripH / 2} y2={stripH / 2} stroke="var(--grey-hair)" strokeWidth={1} />
+                )}
+                {highlightLap === lap || isPointed ? (
+                  <rect
+                    x={x + 0.5}
+                    y={0.5}
+                    width={Math.max(0, stepW - 1)}
+                    height={stripH - 1}
+                    fill="none"
+                    stroke={highlightLap === lap ? 'var(--amber)' : 'var(--ink-primary)'}
+                    strokeWidth={1.5}
+                  />
+                ) : null}
+              </g>
+            );
+          })}
+          <text x={0} y={stripH + 15} fontSize={fontPx} fill="var(--ink-muted)" fontFamily={chartFont} className="tnum">
+            Lap {laps[0][0]}
+          </text>
+          <text x={stripW} y={stripH + 15} textAnchor="end" fontSize={fontPx} fill="var(--ink-muted)" fontFamily={chartFont} className="tnum">
+            Lap {laps[laps.length - 1][0]}
+          </text>
+        </svg>
+        {readout}
+        <p className="tracks-grid__strip-note">His rank in the field on each whole lap, quickest in gold. Blank laps were not clean green-flag laps.</p>
+        {foldToggle}
+      </div>
+    );
+  }
+  /* Pointer position to a square: rows by lap, columns by section, the last
+   * column the whole lap. The svg is drawn 1:1 with its viewBox. */
+  const onGridMove = (event: React.MouseEvent<SVGSVGElement>) => {
+    const box = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - box.left;
+    const y = event.clientY - box.top;
+    const row = Math.floor((y - headerH) / rowH);
+    if (y < headerH || row < 0 || row >= laps.length) {
+      setPointed(null);
+      return;
+    }
+    const lap = laps[row][0];
+    const col =
+      x >= labelW && x < labelW + cellW * n
+        ? Math.min(n - 1, Math.floor((x - labelW) / cellW))
+        : x >= lapX && x <= lapX + lapColW
+          ? -1
+          : null;
+    if (pointed?.lap !== lap || pointed?.col !== col) setPointed({ lap, col });
+  };
+  return (
+    <div
+      ref={ref}
+      className={`tracks-grid__frame${filling ? ' tracks-grid__frame--fill' : ''}`}
+      style={filling ? { minHeight: fillMinH } : undefined}
+    >
+      <div className={filling ? 'tracks-grid__fill' : undefined}>
+      {foldToggle}
+      {width > 0 ? (
+        <svg
+          width={gridW}
+          height={height}
+          viewBox={`0 0 ${gridW} ${height}`}
+          role={onLapSelect ? 'group' : 'img'}
+          aria-label={`His rank in each of ${cells.length} sections on each of ${laps.length} laps`}
+          style={{ display: 'block', overflow: 'visible' }}
+          onMouseMove={onGridMove}
+          onMouseLeave={() => setPointed(null)}
+        >
+          {cells.map((cell, index) => (
+            <text
+              key={`h-${cell.sectionName}`}
+              transform={`translate(${labelW + cellW * (index + 0.5) + fontPx * 0.35} ${headerH - 6}) rotate(-90)`}
+              fontSize={fontPx}
+              fill={pointed?.col === index ? 'var(--ink-primary)' : cell.present ? 'var(--ink-secondary)' : 'var(--ink-muted)'}
+              fontFamily={chartFont}
+              aria-hidden
+            >
+              {cell.label}
+            </text>
+          ))}
+          <text
+            transform={`translate(${lapX + lapColW / 2 + fontPx * 0.35} ${headerH - 6}) rotate(-90)`}
+            fontSize={fontPx}
+            fill="var(--ink-primary)"
+            fontFamily={chartFont}
+            aria-hidden
+          >
+            Whole lap
+          </text>
+          {laps.map(([lap, total], rowIndex) => {
+            const y = headerH + rowIndex * rowH;
+            const clean = total[4] === 1;
+            /* One label per run of laps that are not compared ("caution, laps
+             * 26 to 28"), on the run's first row, rather than a word per row. */
+            const previousClean = rowIndex > 0 ? laps[rowIndex - 1][1][4] === 1 : true;
+            let runEnd = rowIndex;
+            while (!clean && runEnd + 1 < laps.length && laps[runEnd + 1][1][4] !== 1) runEnd += 1;
+            const runFlags = new Set(laps.slice(rowIndex, runEnd + 1).map(([, tuple]) => tuple[5]));
+            const runWord =
+              runFlags.size === 1
+                ? GRID_CAUTION_COPY[[...runFlags][0]] ?? 'not clean'
+                : runFlags.has('c') && runFlags.has('r') && runFlags.size === 2
+                  ? 'caution and restart'
+                  : 'not compared';
+            const runLabel =
+              !clean && previousClean && (runEnd - rowIndex + 1) * rowH >= 12
+                ? runEnd > rowIndex
+                  ? `${runWord}, laps ${lap} to ${laps[runEnd][0]}`
+                  : `${runWord}, lap ${lap}`
+                : null;
+            const showLabel = everyLabel || lap === 1 || lap % 5 === 0;
+            const highlighted = highlightLap === lap;
+            const rowPointed = pointed?.lap === lap;
+            return (
+              <g
+                key={`lap-${lap}`}
+                className={onLapSelect ? 'tracks-grid__lap' : undefined}
+                onClick={onLapSelect ? () => onLapSelect(lap) : undefined}
+                {...lapButtonProps(lap)}
+              >
+                <rect x={0} y={y} width={gridW} height={rowH} fill="transparent" />
+                {showLabel || rowPointed ? (
+                  <text
+                    x={labelW - 8}
+                    y={y + rowH / 2}
+                    textAnchor="end"
+                    dominantBaseline="central"
+                    fontSize={fontPx}
+                    fill={highlighted || rowPointed ? 'var(--ink-primary)' : 'var(--ink-muted)'}
+                    fontFamily={chartFont}
+                    className="tnum"
+                  >
+                    {lap}
+                  </text>
+                ) : null}
+                {clean ? (
+                  cells.map((cell, index) => {
+                    const tuple = cell.byLap.get(lap);
+                    const x = labelW + cellW * index;
+                    if (!tuple || tuple[1] === null || tuple[4] !== 1) {
+                      return (
+                        <rect
+                          key={cell.sectionName}
+                          x={x + 1.5}
+                          y={y + 1.5}
+                          width={Math.max(0, cellW - 3)}
+                          height={Math.max(0, rowH - 3)}
+                          fill="none"
+                          stroke="var(--grey-line)"
+                          strokeWidth={1}
+                        />
+                      );
+                    }
+                    return (
+                      <rect
+                        key={cell.sectionName}
+                        x={x + 0.5}
+                        y={y + 0.5}
+                        width={Math.max(0, cellW - 1)}
+                        height={Math.max(0, rowH - 1)}
+                        fill={inkGoldDiverging(tuple[1])}
+                      />
+                    );
+                  })
+                ) : (
+                  <>
+                    <line
+                      x1={labelW}
+                      x2={labelW + cellW * n}
+                      y1={y + rowH / 2}
+                      y2={y + rowH / 2}
+                      stroke="var(--grey-hair)"
+                      strokeWidth={1}
+                    />
+                    {runLabel && cellW * n > 120 ? (
+                      <text
+                        x={labelW + 6}
+                        y={y + ((runEnd - rowIndex + 1) * rowH) / 2}
+                        dominantBaseline="central"
+                        fontSize={fontPx}
+                        fill="var(--ink-muted)"
+                        fontFamily={chartFont}
+                        style={{ paintOrder: 'stroke', stroke: 'var(--paper)', strokeWidth: 4 }}
+                      >
+                        {runLabel}
+                      </text>
+                    ) : null}
+                  </>
+                )}
+                {clean && total[1] !== null ? (
+                  <>
+                    <rect x={lapX + 0.5} y={y + 0.5} width={lapColW - 1} height={rowH - 1} fill={inkGoldDiverging(total[1])} />
+                    {rowH >= 14 && total[2] !== null ? (
+                      <text
+                        x={lapX + lapColW / 2}
+                        y={y + rowH / 2}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                        fontSize={fontPx}
+                        fill={total[1] < 0.3 ? 'var(--paper)' : 'var(--ink-primary)'}
+                        fontFamily={chartFont}
+                        className="tnum"
+                      >
+                        P{total[2]}
+                      </text>
+                    ) : null}
+                  </>
+                ) : null}
+                {highlighted ? (
+                  <rect
+                    x={0.5}
+                    y={y + 0.5}
+                    width={gridW - 1}
+                    height={rowH - 1}
+                    fill="none"
+                    stroke="var(--amber)"
+                    strokeWidth={1}
+                  />
+                ) : null}
+              </g>
+            );
+          })}
+          {/* The pointed square, outlined in ink above everything else. */}
+          {pointed && pointed.col !== null && totalOf(pointed.lap)?.[4] === 1 ? (
+            <rect
+              x={(pointed.col < 0 ? lapX : labelW + cellW * pointed.col) + 0.75}
+              y={headerH + laps.findIndex(([lap]) => lap === pointed.lap) * rowH + 0.75}
+              width={(pointed.col < 0 ? lapColW : cellW) - 1.5}
+              height={rowH - 1.5}
+              fill="none"
+              stroke="var(--ink-primary)"
+              strokeWidth={1.5}
+              pointerEvents="none"
+            />
+          ) : null}
+        </svg>
+      ) : null}
+      {width > 0 ? readout : null}
+      </div>
+    </div>
+  );
+};
+
+/** Single-lap drawer row, drawn as lines like the other scopes (Jack's review
+ *  of Nov 16: one lap read as rows of text). Top rule: his place in this
+ *  section on that lap, the share of the other cars he was ahead of in the
+ *  official order, his gold tick (no dots: one lap has no spread of laps).
+ *  Lower rule, green-flag laps only: the other cars' times there on that lap,
+ *  each a faint mark, his the gold tick, faster to the right. On a caution or
+ *  restart lap the timing keeps no other cars' times, so only the top rule is
+ *  drawn, and its tick is hollow: not a racing comparison. */
 const SectionSingleLapRow = ({
   label,
-  observation
+  observation,
+  qualifying = false
 }: {
   label: string;
+  /** Qualifying: the field figure is each driver's best section (a fixed
+   *  benchmark, not times on this lap), so no lower rule is drawn. */
+  qualifying?: boolean;
   observation: {
     percentile: number | null;
     cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
+    clean?: boolean;
     bryceSummarySeconds?: number | null;
+    fieldSeconds?: number[] | null;
     fieldRank?: number | null;
     fieldComparisonCount?: number | null;
   };
-}) => (
-  <div className="row row--between" style={{ gap: 12 }}>
-    <span
-      title={label}
-      style={{ fontSize: 12.5, color: 'var(--ink-secondary)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-    >
-      {label}
-    </span>
-    <span className="tnum" style={{ fontSize: 12, color: observation.percentile === null ? 'var(--ink-muted)' : 'var(--ink-primary)', textAlign: 'right' }}>
-      {observation.percentile === null
-        ? 'no timing row for this lap'
-        : `this lap: ${ordinal(Math.round(observation.percentile * 100))} percentile${
-            typeof observation.bryceSummarySeconds === 'number'
-              ? ` · ${observation.bryceSummarySeconds.toFixed(3)}s`
-              : ''
-          }${
-            typeof observation.fieldRank === 'number' && typeof observation.fieldComparisonCount === 'number'
-              ? ` · P${observation.fieldRank} of ${observation.fieldComparisonCount}`
-              : ''
-          }${
-            observation.cautionState && observation.cautionState !== 'green' ? ` · ${cautionCopy[observation.cautionState]}` : ''
-          }`}
-    </span>
-  </div>
-);
+}) => {
+  const share = observation.percentile;
+  const his = typeof observation.bryceSummarySeconds === 'number' ? observation.bryceSummarySeconds : null;
+  const field = observation.fieldSeconds ?? null;
+  const racing = qualifying || (observation.cautionState === 'green' && observation.clean !== false);
+  const showPace = !qualifying && racing && his !== null && field !== null && field.length > 0;
+  const paceValues = showPace ? [...field!, his!] : [];
+  const lo = paceValues.length > 0 ? Math.min(...paceValues) : 0;
+  const hi = paceValues.length > 0 ? Math.max(...paceValues) : 1;
+  const xOf = (seconds: number) => (hi > lo ? ((hi - seconds) / (hi - lo)) * 100 : 50);
+  const place =
+    typeof observation.fieldRank === 'number' && typeof observation.fieldComparisonCount === 'number'
+      ? `P${observation.fieldRank} of ${observation.fieldComparisonCount}`
+      : null;
+  return (
+    <div className="row" style={{ gap: 12, alignItems: 'center' }}>
+      <span
+        title={label}
+        style={{ fontSize: 12.5, color: 'var(--ink-secondary)', flex: '0 0 32%', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+      >
+        {label}
+      </span>
+      <span className="stack" style={{ flex: 1, gap: 3 }}>
+        <span style={{ position: 'relative', display: 'block', height: 22 }}>
+          <span style={{ position: 'absolute', left: 0, right: 0, top: 10, height: 2, borderRadius: 1, background: 'var(--surface-2)' }} />
+          <span style={{ position: 'absolute', left: '50%', top: 6, width: 1, height: 10, background: 'var(--grid-hairline)' }} aria-hidden />
+          {share !== null ? (
+            <span
+              style={{
+                position: 'absolute',
+                top: 3,
+                left: `calc(${share * 100}% - ${racing ? 1.5 : 3.5}px)`,
+                width: racing ? 3 : 7,
+                height: 16,
+                borderRadius: racing ? 1.5 : 2,
+                background: racing ? 'var(--bryce)' : 'var(--paper)',
+                boxShadow: racing ? undefined : 'inset 0 0 0 2px var(--bryce)'
+              }}
+            />
+          ) : null}
+        </span>
+        {showPace ? (
+          <span style={{ position: 'relative', display: 'block', height: 10 }} aria-hidden>
+            <span style={{ position: 'absolute', left: 0, right: 0, top: 5, height: 1, background: 'var(--grid-hairline)' }} />
+            {field!.map((seconds, index) => (
+              <span
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: 1,
+                  left: `calc(${xOf(seconds)}% - 0.5px)`,
+                  width: 1,
+                  height: 8,
+                  background: 'var(--ink-muted)',
+                  opacity: 0.35
+                }}
+              />
+            ))}
+            <span
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: `calc(${xOf(his!)}% - 1px)`,
+                width: 2,
+                height: 10,
+                borderRadius: 1,
+                background: 'var(--bryce)'
+              }}
+            />
+          </span>
+        ) : null}
+      </span>
+      <span className="tnum" style={{ fontSize: 12, color: share === null ? 'var(--ink-muted)' : 'var(--ink-primary)', width: 150, textAlign: 'right' }}>
+        {share === null
+          ? 'no timing row this lap'
+          : `${ordinal(Math.round(share * 100))}${place ? ` · ${place}` : ''}${his !== null ? ` · ${his.toFixed(3)}s` : ''}`}
+      </span>
+    </div>
+  );
+};
 
 /** One drawer row: official label, summary ordinal, clean-lap count, and two
  *  quiet strips — the top one every clean lap as a dot on the 0–100 field-beaten
@@ -228,11 +1299,95 @@ const SectionDistributionRow = ({
         {suppressed
           ? `${observation.observationCount ?? 0} ${qualifying ? 'valid ' : 'clean '}${observation.observationCount === 1 ? 'lap' : 'laps'}`
           : `${ordinal(Math.round(observation.percentile! * 100))} · ${
-              showPace ? `vs ${field!.length} cars · ` : ''
+              showPace ? `vs ${field!.length} others · ` : ''
             }${bryceMed !== null ? `${bryceMed.toFixed(3)}s ${stat === 'mean' ? 'avg' : 'med'} · ` : ''}${observation.observationCount ?? 0} ${observation.observationCount === 1 ? 'lap' : 'laps'}`}
       </span>
     </div>
   );
+};
+
+/** The sections as the Tracks page's 3D model reads them, and the 3D stills'
+ *  overlay with it: every anchor in lap order, coloured from the heat
+ *  (inkGoldDiverging, pale where this scope has no comparison), with the words
+ *  a hover reads, the same words the bars use (lap budget). One lap the
+ *  seconds cannot compare reads his place on it, marked as such. */
+export const modelSectionsOf = ({
+  ordered,
+  heatSections,
+  budget,
+  scope,
+  qualifyingMode = false
+}: {
+  ordered: TrackSectionAnchorSet['sections'];
+  heatSections: ResolvedHeatSection[];
+  budget: LapBudget | null;
+  scope: SectionScope;
+  qualifyingMode?: boolean;
+}): TrackModelSection[] => {
+  const heatByName = new Map(heatSections.map((section) => [section.sectionName, section]));
+  const rowByName = new Map((budget?.rows ?? []).map((row) => [row.sectionName, row]));
+  const where = scope.kind === 'single_lap' ? `on lap ${scope.lap}` : scope.kind === 'lap_window' ? `in the ${scope.label.toLowerCase()}` : qualifyingMode ? 'in qualifying' : 'this race';
+  const placeReason = budget && !qualifyingMode ? placeReasonOf(budget) : null;
+  return ordered.map((anchor) => {
+    const heat = heatByName.get(anchor.sectionName) ?? null;
+    const row = rowByName.get(anchor.sectionName) ?? null;
+    const derived = (anchor.kind ?? 'measured') === 'derived_remainder';
+    const label = derived ? 'The rest of the lap, together' : anchor.label;
+    const spans: Array<[number, number]> = [[anchor.startT, anchor.endT], ...(anchor.additionalSpans ?? []).map((span) => [span.startT, span.endT] as [number, number])];
+    const color = heat ? inkGoldDiverging(heat.percentile) : null;
+    if (placeReason && scope.kind === 'single_lap' && row && typeof row.lapRank === 'number' && typeof row.lapRankOf === 'number') {
+      return {
+        key: anchor.sectionName,
+        label,
+        spans,
+        color,
+        dashed: derived,
+        words: `P${row.lapRank} of ${row.lapRankOf} in this section on lap ${scope.lap}`,
+        detail: PLACE_TAG[placeReason] ?? `ahead of ${row.lapRankOf - row.lapRank} of the other ${row.lapRankOf - 1} cars`
+      };
+    }
+    const share = heat
+      ? heat.fieldBeaten !== null && heat.fieldCars !== null
+        ? `quicker than ${heat.fieldBeaten} of the ${heat.fieldCars} other cars ${where}`
+        : `beat ${Math.round(heat.percentile * 100)}% of the field ${where}`
+      : null;
+    const seconds = row && budget ? (row.state === 'compared' ? againstFieldWords(row.delta!) : budgetMissingCopy(row, budget)) : null;
+    const fewLaps = !heat && !qualifyingMode ? `not compared, fewer than ${MIN_CLEAN_LAPS} clean laps ${where}` : null;
+    const words = heat ? (row?.state === 'compared' ? seconds! : share!) : seconds && row?.state !== 'too_few' ? seconds : fewLaps ?? 'not compared';
+    const detail = heat
+      ? row?.state === 'compared'
+        ? share
+        : seconds
+          ? `seconds ${seconds}`
+          : null
+      : derived
+        ? 'derived from lap time minus the timed sections'
+        : null;
+    return {
+      key: anchor.sectionName,
+      label,
+      spans,
+      color,
+      dashed: derived,
+      words,
+      detail: heat && derived ? `${detail ?? ''}${detail ? '; ' : ''}derived from lap time` : detail
+    };
+  });
+};
+
+/** A race's sections as its 3D still shows them: the whole race, medians,
+ *  shaded by the share of the other cars his time beat over the same laps
+ *  (basis 'field_times', as the Tracks page's model and the stills tools'
+ *  site-pace.ts), with the Tracks page's words. */
+export const raceStillSectionsFor = (pack: SectionLapsPack, anchors: TrackSectionAnchorSet, outline: TrackOutline) => {
+  const scope: SectionScope = { kind: 'full_race' };
+  const set = sectionObservationsFromLaps(pack, scope, 'median');
+  const heat = resolveHeatSections(anchors, set, { basis: 'field_times' });
+  const sections =
+    heat.length > 0
+      ? modelSectionsOf({ ordered: sectionsInLapOrder(anchors, outline), heatSections: heat, budget: lapBudgetOf(pack, anchors, outline, scope, 'median'), scope })
+      : [];
+  return { set, heat, sections };
 };
 
 /** The venue heat card: the track shape as the interface, with lap scopes, the
@@ -263,7 +1418,8 @@ export const SectionHeatCard = ({
   visitControl,
   visitLapsCompleted,
   priorComparison,
-  qualifying
+  qualifying,
+  layout = 'card'
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -288,6 +1444,10 @@ export const SectionHeatCard = ({
   /** Race-detail only: a second sourced substrate rendered through this same
    * map, controls, key, drawer, and section-selection engine. */
   qualifying?: QualifyingHeatMode | null;
+  /** 'tracks' (the Tracks page): the map drawn large with a thick line and
+   *  labels outside it, "where his lap goes" beside it, the lap-by-section grid,
+   *  and the percentile lines under a toggle. Every other caller keeps 'card'. */
+  layout?: 'card' | 'tracks';
 }) => {
   const [mode, setMode] = useState<'race' | 'qualifying'>('race');
   const [raceScopeKey, setRaceScopeKey] = useState('full');
@@ -297,10 +1457,14 @@ export const SectionHeatCard = ({
   const [raceStat, setRaceStat] = useState<SectionStat>('median');
   const [qualifyingStat, setQualifyingStat] = useState<SectionStat>('mean');
   const [numbersOpen, setNumbersOpen] = useState(false);
+  /* Tracks page: the section pointed at on the 3D model or in the bars, by
+   * name, so each lights the other. */
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   /* Touch screens can't hover: swap the interaction verb so the caption asks
    * for a gesture the device can actually make (a tap opens the same tooltip). */
   const coarse = useCoarsePointer();
   const readVerb = coarse ? 'tap' : 'hover';
+  const readVerbCap = coarse ? 'Tap' : 'Hover';
 
   const qualifyingMode = mode === 'qualifying';
   const activeLaps = qualifyingMode ? qualifying?.laps ?? null : laps;
@@ -378,7 +1542,15 @@ export const SectionHeatCard = ({
     if (activeLaps) return sectionObservationsFromLaps(activeLaps, scope, stat, aggregationOptions);
     return activeFallbackSet;
   }, [activeLaps, scope, stat, aggregationOptions, activeFallbackSet]);
-  const heatSections = useMemo(() => (set ? resolveHeatSections(activeAnchors, set) : []), [activeAnchors, set]);
+  /* The seconds sit beside the shade (the bars, the model's hover), so the
+   * shade reads the same comparison: his time against the other cars' times
+   * over the same laps. Round 6: the card layout (Race Week in season) is the
+   * 3D model too, so it reads the same basis. Qualifying keeps its lap rank. */
+  const heatBasis = !qualifyingMode ? 'field_times' : 'lap_rank';
+  const heatSections = useMemo(
+    () => (set ? resolveHeatSections(activeAnchors, set, { basis: heatBasis }) : []),
+    [activeAnchors, set, heatBasis]
+  );
   const hasHeat = heatSections.length > 0;
   /* Does this race have ANY valid comparison scope? Resolve the full-race default
    * independently of the selected scope — the full race carries the most clean
@@ -462,7 +1634,7 @@ export const SectionHeatCard = ({
         {
           label: 'RaceTools race-weekend capture · timing-loop crossings',
           path: intervalPath ?? 'analysis/semantic-layer/output/nashville/',
-          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings — ${measuredSectionCount(activeAnchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
+          note: `Bryce's per-lap section times and full-field percentiles, differenced from the RaceTools race-weekend capture's timing-loop crossings: ${measuredSectionCount(activeAnchors)} sub-sections tiling the whole lap. A third-party capture; not official timing.`
         }
       ]
     : [
@@ -486,8 +1658,8 @@ export const SectionHeatCard = ({
         ? "Each lap's section is compared with every driver's best comparable section in Bryce's actual qualifying group; those benchmark sections need not come from one lap."
         : 'Qualifying section ranks and denominators follow the official report scope.'
       : measured
-      ? 'Section times are the RaceTools race-weekend capture — timing-loop crossings, time-based, not GPS or car position; not official timing.'
-      : 'Section times come from official timing loops — they are time-based, not GPS or car position.',
+      ? 'Section times come from the RaceTools race-weekend capture: timing-loop crossings, time-based, not GPS or car position, and not official timing.'
+      : 'Section times come from official timing loops. They are time-based, not GPS or car position.',
     ...(set ? [set.caveat] : []),
     ...(measured ? ['Sanity-checked: the three published corner sections agree with these measured spans within ~0.10s per lap.'] : []),
     ...(qualifyingMode && activeLaps
@@ -535,13 +1707,13 @@ export const SectionHeatCard = ({
       qualifyingMode
         ? qualifying?.note ?? 'No official qualifying section times are on file for this session.'
         : visitLapsCompleted === 0
-        ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
+        ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap, so there are no clean laps to compare.`.replace(/\s{2,}/g, ' ')
         : !set
           ? 'No official section times are on file for this race yet.'
           : cleanLapTotal === 0
             ? 'This race ran no clean green-flag laps, so there is no section comparison to draw.'
             : cleanLapTotal !== null && cleanLapTotal < MIN_CLEAN_LAPS
-              ? `This race ran ${cleanLapTotal} clean green-flag lap${cleanLapTotal === 1 ? '' : 's'} — a section comparison needs ${MIN_CLEAN_LAPS}.`
+              ? `This race ran ${cleanLapTotal} clean green-flag lap${cleanLapTotal === 1 ? '' : 's'}. A section comparison needs ${MIN_CLEAN_LAPS}.`
               : 'The section report for this race does not line up with this track’s timing sections.';
     return (
       <Card
@@ -552,6 +1724,11 @@ export const SectionHeatCard = ({
           {sessionControl}
           {visitControl}
         </div>
+        {layout === 'tracks' ? (
+          <div style={{ marginBottom: 16 }}>
+            <TrackModelSlot slug={outline.slug} name={outline.name} sections={[]} fallback={null} caption="The track, not shaded: no section comparison for this race." />
+          </div>
+        ) : null}
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>{dignified}</p>
         {qualifyingMode && qualifying?.sourceUrl ? (
           <p style={{ margin: '10px 0 0', fontSize: 13 }}>
@@ -569,36 +1746,26 @@ export const SectionHeatCard = ({
     );
   }
 
-  return (
-    <Card
-      title={title}
-      action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
-    >
-      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-        {hasHeat
-          ? orientationClause
-            ? `${orientationClause} Gold shows where he was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
-            : qualifyingMode
-              ? `Gold shows the stronger qualifying stretches — ${readVerb} the shape to read the selected session summary stretch by stretch.`
-              : `Gold shows where Bryce was strongest — ${readVerb} the shape to read his pace stretch by stretch.`
-          : set
+  const emptyLead =
+    set
             ? visitLapsCompleted === 0
-              ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap — no clean laps to compare.`.replace(/\s{2,}/g, ' ')
+              ? `His ${laps?.seasonYear ?? ''} visit ended on the opening lap, so there are no clean laps to compare.`.replace(/\s{2,}/g, ' ')
               : !qualifyingMode &&
                   scope.kind === 'lap_window' &&
                   scopeCleanLapCount !== null &&
                   scopeCleanLapCount < minimumObservations
-                ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()} — cautions covered the rest. Try Full race.`
+                ? `Only ${scopeCleanLapCount} clean green-flag lap${scopeCleanLapCount === 1 ? '' : 's'} in the ${scope.label.toLowerCase()}. Cautions covered the rest. Try Full race.`
                 : 'Too few clean laps in this scope to compare sections.'
-            : 'The venue shape, with the start/finish line marked.'}
-      </p>
-      {sessionControl || visitControl ? (
-        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
-          {sessionControl}
-          {visitControl}
-        </div>
-      ) : null}
-      {activeLaps ? (
+            : 'The venue shape, with the start/finish line marked.';
+  const drawerLabel =
+    layout === 'tracks'
+      ? numbersOpen
+        ? 'Hide the percentile lines'
+        : 'Show the percentile lines'
+      : numbersOpen
+        ? 'Hide the numbers'
+        : 'The numbers behind the shades';
+  const scopeControls = activeLaps ? (
         <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
           {qualifyingContext ? (
             <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-secondary)' }}>{qualifyingContext}</p>
@@ -684,49 +1851,47 @@ export const SectionHeatCard = ({
             </ControlRow>
           ) : null}
         </div>
-      ) : null}
-      {hasHeat ? (
+      ) : null;
+  const keyRow = hasHeat ? (
         <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
           <HeatKey />
           {scopeSummary ? (
-            <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+            <span className="tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
               {scopeSummary}
             </span>
           ) : null}
         </div>
-      ) : null}
-      <TrackArt
-        outline={outline}
-        showCornerLabels={false}
-        maxHeight={300}
-        sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
-        passMarks={showMarks ? resolvedMarks : null}
-      />
+      ) : null;
+  const mapNotes = (
+    <>
       {showMarks ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
           <span aria-hidden style={{ marginRight: 6 }}>○</span>
-          a pass involving Bryce — placed between timing loops · derived from the RaceTools race-weekend capture,{' '}
+          a pass involving Bryce, placed between timing loops · derived from the RaceTools race-weekend capture,{' '}
           {resolvedMarks.length} this race. {coarse ? 'Tap' : 'Hover'} for the lap and the car.
         </p>
       ) : null}
       {thirdsWithheld && hasHeat && !singleLap ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          This race carries {cleanLapTotal} clean green-flag lap{cleanLapTotal === 1 ? '' : 's'} — the map reads them
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+          This race carries {cleanLapTotal} clean green-flag lap{cleanLapTotal === 1 ? '' : 's'}, so the map reads them
           together rather than splitting them into thirds.
         </p>
       ) : null}
       {suppressedCount > 0 && !singleLap && hasHeat ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`} — under{' '}
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+          {suppressedCount === 1 ? 'One stretch stays uncoloured' : `${suppressedCount} stretches stay uncoloured`}: under{' '}
           {minimumObservations} {qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in this scope.
         </p>
       ) : null}
       {singleLap && scrubContext && scrubContext.caution !== 'green' ? (
-        <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-          Lap {scrubLap} ran {cautionCopy[scrubContext.caution]} — one lap is a snapshot, not a trend.
+        <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+          Lap {scrubLap} ran {cautionCopy[scrubContext.caution]}. One lap is a snapshot, not a trend.
         </p>
       ) : null}
-      {activeLaps && set ? (
+
+    </>
+  );
+  const numbersDrawer = activeLaps && set ? (
         <div style={{ marginTop: 14, borderTop: '1px solid var(--divider)', paddingTop: 12 }}>
           <button
             type="button"
@@ -742,45 +1907,51 @@ export const SectionHeatCard = ({
               cursor: 'pointer'
             }}
           >
-            {numbersOpen ? 'Hide the numbers' : 'The numbers behind the shades'}
+            {drawerLabel}
           </button>
           {numbersOpen ? (
             <div className="stack" style={{ gap: 12, marginTop: 12 }}>
               {!singleLap ? (
-                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                   {qualifyingMode
                     ? `Each dot is one valid observed qualifying lap and its share of the group benchmark beaten in that section. The gold tick is Bryce’s ${stat === 'median' ? 'median' : 'average'} lap-level share. Each driver’s best comparable section remains the fixed benchmark; it is not drawn as a field average.`
-                    : `Top rule: each dot is one clean lap — its share of the field beaten in that section, the gold tick his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the field this section — each faint mark a car, the gold tick Bryce, faster to the right.`}
+                    : `Top rule: each dot is one clean lap and its share of the field beaten in that section; the gold tick is his ${stat === 'median' ? 'median' : 'average'} lap and the number the map carries. Lower rule: where his pace sits among the other cars in this section, over the same laps. Each faint mark is another car, the gold tick is Bryce, and faster is to the right.`}
                 </p>
               ) : (
-                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                  One lap's field share per section, exactly as timed — {scrubContext ? cautionCopy[scrubContext.caution] : 'no flag report'}.
+                <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
+                  {qualifyingMode
+                    ? `Qualifying lap ${scrubLap}. The rule is his share of the group benchmark beaten in each section on that lap; the gold tick is him, and further right is stronger.`
+                    : scrubContext && scrubContext.caution === 'green' && scrubContext.clean
+                    ? `Lap ${scrubLap}, green flag. Top rule: his place in each section on that lap, as the share of the other cars he was ahead of; the gold tick is him. Lower rule: the other cars' times there on that lap, each a faint mark, his the gold tick. Faster is to the right on both.`
+                    : `Lap ${scrubLap}, ${scrubContext ? (scrubContext.caution === 'green' ? 'not a clean lap of his' : cautionCopy[scrubContext.caution]) : 'no flag report'}. The rule is his place in each section on that lap, as the share of the other cars he was ahead of, from the official order; the hollow tick marks it as not a racing comparison. ${scrubContext && scrubContext.caution !== 'green' ? 'The timing keeps the other cars’ times on green-flag laps only, so there is no lower rule of times.' : 'His time on this lap is not set against the field’s.'}`}
                 </p>
               )}
               <div className="stack" style={{ gap: 10 }}>
                 {drawerRows.map(({ observation, label }) =>
                   singleLap ? (
-                    <SectionSingleLapRow key={observation.sectionName} label={label} observation={observation} />
+                    <SectionSingleLapRow key={observation.sectionName} label={label} observation={observation} qualifying={qualifyingMode} />
                   ) : (
                     <SectionDistributionRow key={observation.sectionName} label={label} observation={observation} stat={stat} qualifying={qualifyingMode} />
                   )
                 )}
               </div>
-              <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+              <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                 {coverage}.{' '}
                 {measured
-                  ? `${measuredSectionCount(activeAnchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap — time-based, not GPS, and not official timing.`
+                  ? `${measuredSectionCount(activeAnchors)} timing-loop sub-sections from the RaceTools race-weekend capture, tiling the whole lap. Time-based, not GPS, and not official timing.`
                   : hasDerivedRemainder(activeAnchors)
-                    ? 'Solid spans are official timing loops — time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
-                    : 'Section times from official timing loops — time-based, not GPS. Stretches without timing loops stay the plain line.'}
+                    ? 'Solid spans are official timing loops, time-based, not GPS. The dotted stretch is derived: lap time minus the timed sections, ranked against the field the same way.'
+                    : 'Section times from official timing loops, time-based, not GPS. Stretches without timing loops stay the plain line.'}
               </p>
-              <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+              <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                 {qualifyingMode
                   ? 'Qualifying summaries use valid observed laps from the official section report. Loop timing measures time, not GPS or car position.'
-                  : 'Clean green-flag laps only — caution and restart laps are excluded from the shades. Loop timing measures time, not car position.'}
+                  : singleLap
+                    ? 'One lap reads as timed, whatever the flag; only a clean green-flag lap is set against the other cars’ times. Loop timing measures time, not car position.'
+                    : 'Clean green-flag laps only. Caution and restart laps are excluded from the shades. Loop timing measures time, not car position.'}
               </p>
               {activePassMarks ? (
-                <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                <p style={{ margin: 0, fontSize: 12.5, color: 'var(--ink-muted)' }}>
                   The open circles are green, on-track passes involving Bryce. Pass placement validated{' '}
                   {activePassMarks.pairwiseConcordancePct}% against the official lap chart.
                   {activePassMarks.reshuffleCounts.pit_cycle + activePassMarks.reshuffleCounts.caution > 0
@@ -791,16 +1962,180 @@ export const SectionHeatCard = ({
             </div>
           ) : null}
         </div>
-      ) : null}
-      {!hasHeat ? (
+      ) : null;
+  const emptyFooter = !hasHeat ? (
         /* Method copy (coverage, derivation, GPS caveats) now lives behind "The
          * numbers behind the shades"; the face only carries the empty state. */
-        <p style={{ margin: 0, paddingTop: 14, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        <p style={{ margin: 0, paddingTop: 14, fontSize: 12.5, color: 'var(--ink-muted)' }}>
           {set
             ? `Sections need ${minimumObservations} ${qualifyingMode ? 'valid observed qualifying laps' : 'clean laps'} in a scope to compare honestly.`
             : `No official section times are on file for this ${qualifyingMode ? 'qualifying session' : 'race'} yet.`}
         </p>
+      ) : null;
+
+  if (layout === 'tracks') {
+    /* The bars read exactly the scope the map shows: the whole race, a third,
+     * or one lap, with the metric picked above (Jack's review of Nov 15). A
+     * plain computation, not a hook: this branch sits after the empty-state
+     * return above, and it is a few hundred tuples. */
+    const budget = !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline, scope, stat) : null;
+    const ordered = sectionsInLapOrder(activeAnchors, outline);
+    const showGrid = !qualifyingMode && activeLaps !== null;
+    /* The 3D model carries the same shading as the 2D map (heatSections,
+     * inkGoldDiverging) for the same scope, and in its hover the words the
+     * bars use. A section this scope cannot compare stays pale and says why. */
+    const modelSections = modelSectionsOf({ ordered, heatSections, budget, scope, qualifyingMode });
+    const trackArt = (
+      <TrackArt
+        outline={outline}
+        showCornerLabels={false}
+        maxHeight={560}
+        strokeScale={2.3}
+        labelPlacement="outside"
+        labelRoom={64}
+        sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
+        passMarks={showMarks ? resolvedMarks : null}
+      />
+    );
+    const anyPale = modelSections.some((section) => section.color === null);
+    const modelKey = hasHeat && (anyPale || hasDerivedRemainder(activeAnchors)) ? (
+      <div className="track3d-key">
+        {anyPale ? <span className="track3d-key__item"><span className="track3d-key__pale" aria-hidden /> pale: not compared in this scope</span> : null}
+        {hasDerivedRemainder(activeAnchors) ? (
+          <span className="track3d-key__item"><span className="track3d-key__dash" aria-hidden /> dashed: derived from lap time</span>
+        ) : null}
+      </div>
+    ) : null;
+    const selectLap = (lap: number) => {
+      setScopeKey('lap');
+      setScrubLap(lap);
+    };
+    return (
+      <Card
+        title={title}
+        className={`tracks-story${showGrid ? '' : ' tracks-story--no-grid'}`}
+        action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
+      >
+        <p className="tracks-lead">
+          {hasHeat
+            ? qualifyingMode
+              ? `Gold marks his stronger qualifying stretches, grey the tougher ones. ${coarse ? 'Tap' : 'Hover'} the track to read each one.`
+              : `Gold marks where he was strongest against the field, grey where it was tougher. ${coarse ? 'Tap' : 'Hover'} the track to read each stretch.`
+            : emptyLead}
+        </p>
+        {sessionControl || visitControl ? (
+          <div className="stack tracks-story__session">
+            {sessionControl}
+            {visitControl}
+          </div>
+        ) : null}
+        <div className="tracks-story__layout">
+          <div className="tracks-story__map">
+            {scopeControls}
+            <TrackModelSlot
+              slug={outline.slug}
+              name={outline.name}
+              sections={hasHeat ? modelSections : []}
+              active={activeSection}
+              onActiveChange={setActiveSection}
+              legend={keyRow || modelKey ? <>{keyRow}{modelKey}</> : null}
+              fallback={<>{keyRow}{trackArt}</>}
+            />
+            {mapNotes}
+            {emptyFooter}
+          </div>
+          <div className="tracks-story__budget">
+            {budget ? (
+              <LapBudgetBars key={`${budget.scope.kind}-${scopeKey}`} budget={budget} active={activeSection} onActiveChange={setActiveSection} />
+            ) : (
+              <div className="tracks-budget">
+                <h3 className="tracks-subhead">Where his lap goes</h3>
+                <p className="tracks-note">
+                  Drawn for races only. In qualifying the benchmark is each driver&rsquo;s best section, which need not come
+                  from one lap, so the sections would not add up to a lap.
+                </p>
+              </div>
+            )}
+          </div>
+          {showGrid && activeLaps ? (
+            <div className="tracks-story__laps">
+              <div className="tracks-laps">
+              <h3 className="tracks-subhead">Every lap, every section</h3>
+              <p className="tracks-note">
+                Each square is one section on one lap, shaded by where he ranked in the field on that lap. Laps run down,
+                sections across in the order he drives them; the last column is the whole lap. Caution and restart laps stay
+                blank. {coarse ? 'Tap' : 'Click'} a lap to see it on the track.
+              </p>
+              <LapSectionGrid
+                pack={activeLaps}
+                ordered={ordered}
+                highlightLap={singleLap ? scrubLap : null}
+                onLapSelect={selectLap}
+                fill
+              />
+              </div>
+            </div>
+          ) : null}
+        </div>
+        <div className="tracks-story__drawer">{numbersDrawer}</div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card
+      title={title}
+      action={<SourcePill title={`${qualifyingMode ? 'Qualifying' : 'Race'} section signal`} entries={allEntries} caveats={sourceCaveats} />}
+    >
+      <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
+        {hasHeat
+          ? orientationClause
+            ? `${orientationClause} Gold shows where he was strongest. ${readVerbCap} the shape to read his pace stretch by stretch.`
+            : qualifyingMode
+              ? `Gold shows the stronger qualifying stretches. ${readVerbCap} the shape to read the selected session summary stretch by stretch.`
+              : `Gold shows where Bryce was strongest. ${readVerbCap} the shape to read his pace stretch by stretch.`
+          : emptyLead}
+      </p>
+      {sessionControl || visitControl ? (
+        <div className="stack" style={{ gap: 10, marginBottom: 12 }}>
+          {sessionControl}
+          {visitControl}
+        </div>
       ) : null}
+      {scopeControls}
+      {/* Round 6: the 3D model, as on Tracks (the 2D map where the venue has
+          no model or no WebGL). */}
+      <TrackModelSlot
+        slug={outline.slug}
+        name={outline.name}
+        sections={
+          hasHeat
+            ? modelSectionsOf({
+                ordered: sectionsInLapOrder(activeAnchors, outline),
+                heatSections,
+                budget: !qualifyingMode && activeLaps ? lapBudgetOf(activeLaps, activeAnchors, outline, scope, stat) : null,
+                scope,
+                qualifyingMode
+              })
+            : []
+        }
+        legend={keyRow}
+        fallback={
+          <>
+            {keyRow}
+            <TrackArt
+              outline={outline}
+              showCornerLabels={false}
+              maxHeight={300}
+              sections={hasHeat ? { resolved: heatSections, showLabels: true, contextLabel: qualifyingMode ? 'in qualifying' : 'this race' } : null}
+              passMarks={showMarks ? resolvedMarks : null}
+            />
+          </>
+        }
+      />
+      {mapNotes}
+      {numbersDrawer}
+      {emptyFooter}
     </Card>
   );
 };
@@ -846,7 +2181,8 @@ const VisitShape = ({
   pack,
   lapsCompleted,
   label,
-  grainNote
+  grainNote,
+  shapeMaxHeight
 }: {
   outline: TrackOutline;
   /** Pre-resolved to THIS visit's own grain by the parent. */
@@ -860,9 +2196,15 @@ const VisitShape = ({
   /** When the venue's visits carry mixed grains, each shape states its own section
    *  count so no reader assumes one scale across all the years. */
   grainNote?: string | null;
+  /** Drawn height of the shape; given, the 420 px width cap is dropped too. */
+  shapeMaxHeight?: number;
 }) => {
-  const set = useMemo(() => sectionObservationsFromLaps(pack, { kind: 'full_race' }, 'median'), [pack]);
-  const resolved = useMemo(() => resolveHeatSections(anchors, set), [anchors, set]);
+  /* Round 6 (Jack's review of Nov 16): each visit is a still of the 3D model,
+   * shaded for that race as the Tracks page's model shades it (whole race,
+   * medians, the share of the other cars his time beat), and pointing at a
+   * section reads it in the same words. A venue with no model keeps the 2D
+   * shape, shaded the same way. */
+  const { set, heat: resolved, sections } = useMemo(() => raceStillSectionsFor(pack, anchors, outline), [pack, anchors, outline]);
   /* Orientation, not a second question (director ruling): each year carries its
    * official result as quiet label text from the synchronous season index. */
   const indexRow = uiDataPackage.screens.raceDebrief.seasonIndex.find((row) => row.sessionId === pack.sessionId) ?? null;
@@ -873,14 +2215,31 @@ const VisitShape = ({
         : `P${indexRow.finishPosition}`
       : null;
   return (
-    <div className="stack" style={{ gap: 6, flex: '1 1 240px', minWidth: 220, maxWidth: 420 }}>
-      <TrackArt outline={outline} showCornerLabels={false} maxHeight={170} sections={resolved.length > 0 ? { resolved } : null} />
-      <div className="row row--between" style={{ alignItems: 'baseline' }}>
-        <span style={{ fontSize: 13 }}>
+    <div
+      className="stack"
+      style={{ gap: 6, flex: '1 1 240px', minWidth: 220, maxWidth: shapeMaxHeight === undefined ? 420 : Math.round((shapeMaxHeight * 1200) / 676) }}
+    >
+      <TrackStill
+        slug={outline.slug}
+        sessionId={pack.sessionId}
+        sections={sections}
+        alt={`${venueName(outline.name)}, ${label ?? pack.seasonYear ?? ''}: the 3D track${resolved.length > 0 ? ', shaded section by section for this race' : ''}.`}
+        sizes={shapeMaxHeight === undefined ? '(max-width: 760px) 100vw, 420px' : '(max-width: 760px) 100vw, 540px'}
+        fallback={
+          <TrackArt
+            outline={outline}
+            showCornerLabels={false}
+            maxHeight={shapeMaxHeight ?? 170}
+            sections={resolved.length > 0 ? { resolved } : null}
+          />
+        }
+      />
+      <div className="yoy-caption">
+        <span className="yoy-caption__title">
           <strong style={{ fontWeight: 600 }}>{label ?? (pack.seasonYear !== null ? String(pack.seasonYear) : '—')}</strong>
-          {resultLabel ? <span className="tnum" style={{ color: 'var(--ink-secondary)' }}> · {resultLabel}</span> : null}
+          {resultLabel ? <span className="tnum yoy-caption__result"> · {resultLabel}</span> : null}
         </span>
-        <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+        <span className="tnum yoy-caption__meta">
           {lapsCompleted === 0
             ? 'ended on the opening lap'
             : resolved.length === 0
@@ -888,7 +2247,7 @@ const VisitShape = ({
               : `${set.comparisonRows ?? 0} clean-lap comparisons`}
         </span>
       </div>
-      {grainNote ? <span className="caption caption--secondary" style={{ fontSize: 11 }}>{grainNote}</span> : null}
+      {grainNote ? <span className="caption caption--secondary">{grainNote}</span> : null}
     </div>
   );
 };
@@ -901,7 +2260,9 @@ export const VenueYearsCard = ({
   anchors,
   visits,
   title = 'This place, other years',
-  lapsCompletedBySession
+  lapsCompletedBySession,
+  className,
+  shapeMaxHeight
 }: {
   outline: TrackOutline;
   anchors: TrackSectionAnchorSet;
@@ -911,13 +2272,20 @@ export const VenueYearsCard = ({
    *  "ended on the opening lap" instead of "0 clean-lap comparisons". Absent on
    *  race pages (each shape then keeps the bare comparison count). */
   lapsCompletedBySession?: Map<string, number | null>;
+  /** Optional class on the card (the Tracks page lays the shapes on a grid). */
+  className?: string;
+  /** Drawn height of each year's shape (default 170). Given, each shape also
+   *  drops its 420 px width cap so a larger shape can use its column. */
+  shapeMaxHeight?: number;
 }) => {
+  const coarse = useCoarsePointer();
   if (visits.length < 2) return null;
   const measured = visits.every((visit) => visit.sourceTier === 'lake_loop_crossings');
 
   /* Per-visit labels: a double-header year ("2026 · Race 1" / "2026 · Race 2")
-   * never renders two bare "2026" shapes (finding #18). Prefer the official race
-   * number from the label; fall back to chronological order (visits oldest-first). */
+   * never renders two bare "2026" shapes (finding #18). The official race number
+   * from the label wins wherever it gives one; a year of two unnumbered visits
+   * falls back to chronological order (visits oldest-first). */
   const visitLabels = (() => {
     const yearCounts = new Map<number, number>();
     for (const visit of visits) {
@@ -931,13 +2299,15 @@ export const VenueYearsCard = ({
         out.set(visit.sessionId, '—');
         continue;
       }
-      if ((yearCounts.get(year) ?? 0) <= 1) {
-        out.set(visit.sessionId, String(year));
-        continue;
-      }
-      const raceMatch = /race\s*(\d+)/i.exec(visit.raceLabel ?? '');
+      /* A race its label numbers keeps the number even when its doubleheader partner has no
+       * section data (Indianapolis 2024: Race 1 alone would read a bare "2024"). */
+      const raceMatch = /\brace\s*(\d+)/i.exec(visit.raceLabel ?? '');
       if (raceMatch) {
         out.set(visit.sessionId, `${year} · Race ${raceMatch[1]}`);
+        continue;
+      }
+      if ((yearCounts.get(year) ?? 0) <= 1) {
+        out.set(visit.sessionId, String(year));
         continue;
       }
       const next = (seen.get(year) ?? 0) + 1;
@@ -956,6 +2326,7 @@ export const VenueYearsCard = ({
   return (
     <Card
       title={title}
+      className={className}
       action={
         <SourcePill
           title="Same venue, every visit"
@@ -964,14 +2335,14 @@ export const VenueYearsCard = ({
               ? {
                   label: 'RaceTools race-weekend capture · timing-loop crossings',
                   path: 'analysis/semantic-layer/output/nashville/',
-                  note: `Each year aggregates its own race on the same ${measuredSectionCount(anchors)}-section scale: median clean-lap percentile per timing-loop sub-section. A third-party capture; not official timing.`
+                  note: `Each year aggregates its own race on the same ${measuredSectionCount(anchors)}-section scale: his median clean-lap time in each timing-loop sub-section against the other cars’, shaded by the share of them he beat. A third-party capture; not official timing.`
                 }
               : {
                   label: 'Official Section Results, lap by lap',
                   path: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
                   note: mixedGrain
-                    ? 'Each year aggregates its own race: median clean-lap percentile per section, drawn at the finest grain that year’s timing carried.'
-                    : 'Each year aggregates its own race on the same scale: median clean-lap percentile per section.'
+                    ? 'Each year aggregates its own race: his median clean-lap time in each section against the other cars’ over the same laps, shaded by the share of them he beat, drawn at the finest grain that year’s timing carried.'
+                    : 'Each year aggregates its own race on the same scale: his median clean-lap time in each section against the other cars’ over the same laps, shaded by the share of them he beat.'
                 }
           ]}
           caveats={[
@@ -984,13 +2355,13 @@ export const VenueYearsCard = ({
     >
       <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)' }}>
         {mixedGrain
-          ? 'The same shape, one per visit — same key as above; each drawn at the finest grain its own timing carried.'
-          : 'The same shape, one per visit — same scale, same key as above.'}
+          ? `The track once for each visit, with the same key as above. Each is shaded at the finest grain its own timing carried. ${coarse ? 'Tap' : 'Point at'} a section to read it.`
+          : `The track once for each visit, shaded the same way as above. ${coarse ? 'Tap' : 'Point at'} a section to read it.`}
       </p>
       <div className="row row--between" style={{ gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
         <HeatKey />
         {mixedGrain ? null : (
-          <span className="tnum" style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+          <span className="tnum" style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
             {measuredSectionCount(anchors)} timed sections ·{' '}
             {hasDerivedRemainder(anchors)
               ? `${Math.round(timedShareOf(anchors) * 100)}% measured · rest derived`
@@ -998,7 +2369,8 @@ export const VenueYearsCard = ({
           </span>
         )}
       </div>
-      <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      {/* --yoy-n: how many visits, so the Tracks page can give each its share of the full width (tracks.css). */}
+      <div className="row" style={{ gap: 22, flexWrap: 'wrap', alignItems: 'flex-start', ['--yoy-n' as string]: visits.length }}>
         {visits.map((pack) => {
           const packAnchors = visitAnchors.get(pack.sessionId) ?? anchors;
           return (
@@ -1010,6 +2382,7 @@ export const VenueYearsCard = ({
               lapsCompleted={lapsCompletedBySession?.get(pack.sessionId) ?? null}
               label={visitLabels.get(pack.sessionId)}
               grainNote={mixedGrain ? `${measuredSectionCount(packAnchors)} timed sections` : null}
+              shapeMaxHeight={shapeMaxHeight}
             />
           );
         })}
@@ -1154,11 +2527,14 @@ export const useVenueSectionData = (
      * with an empty shape (Jack's review, 2026-07-21). */
     const newestWithData = [...visits].reverse().find(packHasCleanComparisons) ?? null;
     const mostRecent = newestWithData ?? (visits.length > 0 ? visits[visits.length - 1] : null);
+    /* Shaded as the Tracks page's model and the 3D stills shade it (round 6):
+     * the share of the other cars his time beat over the same laps. */
     const heroHeat =
       anchors && mostRecent
         ? resolveHeatSections(
             anchorsBySession.get(mostRecent.sessionId) ?? anchors,
-            sectionObservationsFromLaps(mostRecent)
+            sectionObservationsFromLaps(mostRecent),
+            { basis: 'field_times' }
           )
         : [];
     return { loading, anchors, anchorsBySession, visits, passMarksBySession, lapsCompletedBySession, mostRecent, heroHeat };
@@ -1175,7 +2551,9 @@ export const VenueSectionSuite = ({
   selectedVisitId,
   onSelectedVisitChange,
   showVisitControl = true,
-  qualifying
+  qualifying,
+  layout = 'card',
+  heatTitle
 }: {
   outline: TrackOutline;
   data: VenueSectionData;
@@ -1185,6 +2563,10 @@ export const VenueSectionSuite = ({
   onSelectedVisitChange?: (sessionId: string) => void;
   showVisitControl?: boolean;
   qualifying?: QualifyingHeatMode | null;
+  /** Passed to the heat card ('tracks' on the Tracks page). */
+  layout?: 'card' | 'tracks';
+  /** Overrides the heat card's title (the Tracks page names the visit). */
+  heatTitle?: string;
 }) => {
   const { anchors, anchorsBySession, visits, passMarksBySession, lapsCompletedBySession, mostRecent } = data;
   const [localSelectedId, setLocalSelectedId] = useState<string | null>(null);
@@ -1202,7 +2584,8 @@ export const VenueSectionSuite = ({
       <>
         <SectionHeatCard
           key={selectedVisitId ?? 'missing-race-pack'}
-          title="Race and qualifying, section by section — his record here"
+          title={heatTitle ?? 'Race and qualifying here, section by section'}
+          layout={layout}
           outline={outline}
           anchors={anchors}
           laps={null}
@@ -1217,6 +2600,7 @@ export const VenueSectionSuite = ({
           anchors={anchors}
           visits={visits}
           lapsCompletedBySession={lapsCompletedBySession}
+          className={layout === 'tracks' ? 'tracks-years' : undefined}
         />
       </>
     );
@@ -1258,7 +2642,7 @@ export const VenueSectionSuite = ({
     .filter((year) => year !== selected.seasonYear)
     .sort((left, right) => left - right);
   const orientationClause = `His ${selectedLabel} race here, section by section${
-    multi && showVisitControl && otherYears.length > 0 ? ` — toggle for ${otherYears.join(' · ')}` : ''
+    multi && showVisitControl && otherYears.length > 0 ? `. Toggle for ${otherYears.join(' · ')}` : ''
   }.`;
   /* Single-visit venues hide the toggle entirely (director spec): one year, no
    * control, no "toggle for" clause. */
@@ -1276,7 +2660,8 @@ export const VenueSectionSuite = ({
     <>
       <SectionHeatCard
         key={selected.sessionId}
-        title={qualifying ? 'Race and qualifying, section by section — his record here' : 'The track, section by section — his record here'}
+        title={heatTitle ?? (qualifying ? 'Race and qualifying here, section by section' : 'His record here, section by section')}
+        layout={layout}
         orientationClause={orientationClause}
         visitControl={visitControl}
         outline={outline}
@@ -1295,6 +2680,7 @@ export const VenueSectionSuite = ({
         anchors={anchors}
         visits={visits}
         lapsCompletedBySession={lapsCompletedBySession}
+        className={layout === 'tracks' ? 'tracks-years' : undefined}
       />
     </>
   );

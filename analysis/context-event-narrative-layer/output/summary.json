@@ -15,20 +15,20 @@
   "claimStrength": "source_bounded_context_narrative_not_telemetry",
   "contextTypeCounts": {
     "incident": 166,
-    "media": 1098,
+    "media": 1130,
     "penalty": 94,
     "racecraft": 44,
-    "weather": 221
+    "weather": 252
   },
   "counts": {
     "derivedMetricRows": 453,
-    "gapRows": 10,
-    "mediaRows": 1098,
-    "seriesCoverageRows": 8,
-    "sessionRollupRows": 439,
-    "sourceEvidenceRows": 1356,
-    "timelineRows": 1623,
-    "weatherRows": 221
+    "gapRows": 11,
+    "mediaRows": 1130,
+    "seriesCoverageRows": 11,
+    "sessionRollupRows": 481,
+    "sourceEvidenceRows": 1468,
+    "timelineRows": 1686,
+    "weatherRows": 252
   },
   "derivedMetricTypeCounts": {
     "career_award": 1,
@@ -42,23 +42,26 @@
     "season_context_milestone": 1
   },
   "gapStatusCounts": {
-    "open": 7,
+    "open": 8,
     "partial": 2,
     "source_broken_preserved": 1
   },
-  "generatedAt": "2026-09-20T00:00:20Z",
+  "generatedAt": "2026-11-18T09:48:03Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceEvidenceTypeCounts": {
     "archived_official_page": 2,
+    "curated_identity_table": 1,
     "official_api": 304,
     "official_article": 4,
-    "official_html": 16,
+    "official_html": 17,
     "official_image": 5,
     "official_json": 2,
-    "official_page": 117,
-    "official_pdf": 812,
+    "official_page": 132,
+    "official_pdf": 904,
+    "press_article": 1,
+    "press_results": 2,
     "weather_api": 94
   },
-  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc"
 }

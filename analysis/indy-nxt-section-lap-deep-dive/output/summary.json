@@ -34,11 +34,11 @@
     "topSectionRows": 3357,
     "upcomingVenuePrepRows": 0
   },
-  "generatedAt": "2026-09-20T00:00:50Z",
+  "generatedAt": "2026-11-18T09:47:59Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd",
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
   "upcomingVenue": {
     "artifactSlug": null,
     "asOfDate": "2026-09-19",

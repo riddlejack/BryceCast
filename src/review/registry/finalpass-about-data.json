@@ -1,0 +1,45 @@
+{
+  "lane": "final-pass",
+  "entries": [
+    {
+      "id": "fp-about-opener",
+      "page": "/about",
+      "title": "About opens on the career: 173 races, every one drawn",
+      "switch": "ddabout",
+      "values": [
+        {
+          "value": null,
+          "label": "every race on one line, January 2019 to September 2026, one stroke each in its series colour, stacked by weekend; point at or tap a weekend to read it (new, default)"
+        },
+        {
+          "value": "bar",
+          "label": "the same 173 races as one bar, series by series, with the same key"
+        }
+      ],
+      "look": "About, top: the 173 figure and its sentence, then the picture under it. The hard parts below now each have a drawing; How it works is a diagram.",
+      "anchor": ".about-record",
+      "added": "2026-11-17T20:00",
+      "reviewed": false
+    },
+    {
+      "id": "fp-data-families",
+      "page": "/data",
+      "title": "Data & sources: the INDY NXT sources grouped, in plain words",
+      "switch": "dddata",
+      "values": [
+        {
+          "value": null,
+          "label": "four groups (Results, Timing, In the race, Around it), each source a count and one plain line (new, default)"
+        },
+        {
+          "value": "list",
+          "label": "the same sources as one two-column list"
+        }
+      ],
+      "look": "Data & sources → INDY NXT, 2024 to 2026, in full depth. Above it, the career record with what each series kept.",
+      "anchor": "#data-nxt",
+      "added": "2026-11-17T20:00",
+      "reviewed": false
+    }
+  ]
+}

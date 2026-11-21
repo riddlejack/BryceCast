@@ -20,14 +20,14 @@ This repository contains the complete system: the collectors, a content-addresse
 - **Race replay.** All 45 INDY NXT races from 2024 through 2026 can be replayed from archived timing through the same data contract the live views use.
 - **Section pace maps.** Race and qualifying pace for each timing section, ranked against the full field and filterable by race phase, single lap, and average or median.
 - **Pass placement.** Each change in running order is bracketed between two named timing loops instead of being reported only as a lap-chart delta.
-- **Career archive.** Every session of Bryce's career since 2019 across seven series, with teammate, rival, and full-field context for each result.
+- **Career archive.** Every session of Bryce's career since 2019 across ten series, with teammate, rival, and full-field context for each result.
 
 ## Scale
 
 | | |
 | --- | --- |
-| **8 seasons, 7 series** | F1600, Formula Ford, GB3, Euroformula Open, Formula Regional Oceania, IMSA, and INDY NXT, 2019–2026: 87 events, 493 sessions, 42 tracks |
-| **75,589 laps** | Lap-level records, plus 8,943 session results covering 556 drivers, so each result is stored with the field around it |
+| **8 seasons, 10 series** | SCCA Super Tour, F1600, Right Coast Formula F, Formula Ford, GB3, Euroformula Open, Formula Regional Oceania, USF Pro 2000, IMSA, and INDY NXT, 2019–2026: 99 events, 533 sessions, 46 tracks |
+| **75,740 laps** | Lap-level records, plus 9,826 session results covering 683 drivers, so each result is stored with the field around it |
 | **About 690,000 timing-loop passages** | Every car over every timing loop in 143 INDY NXT sessions, decoded from raw timing captures at 0.0001-second resolution, with the feed's repeated records removed and each pass counted once |
 | **45 of 45 races** | Complete timing and replay coverage of INDY NXT races, 2024–2026 |
 | **1 Hz capture** | One Race Control sample per second while cars are on track; the production archive holds roughly 6 GB of snapshots |

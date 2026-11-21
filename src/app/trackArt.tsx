@@ -1,8 +1,11 @@
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { venueName } from './venueNames';
 import type { TrackOutline } from '../assets/tracks';
 import type { ResolvedHeatSection } from '../data/sectionObservations';
 import { ChartTipCard, chartFont, inkGoldDiverging, useMeasuredWidth, type ChartTip } from './charts';
 import { ordinal } from './format';
+import { switchValue } from '../review/switches';
+import { useTapPreview } from './tapPreview';
 
 /** The heat-map / section-intelligence layer (Brief H). `resolved` carries the
  *  curated section spans already joined to Bryce's percentile for the scope;
@@ -55,9 +58,25 @@ export const TrackArt = ({
   progress,
   sections = null,
   passMarks = null,
-  wind
+  wind,
+  strokeScale = 1,
+  labelPlacement = 'beside',
+  labelRoom = 0,
+  labelSize
 }: {
   outline: TrackOutline;
+  /** Multiplies the heat-map stroke, dots and start/finish tick (the Tracks
+   *  page draws a thick line; every other caller keeps 1). */
+  strokeScale?: number;
+  /** 'beside' (default) pushes each section label away from the shape's
+   *  centre. 'outside' searches along the track's normal for a spot that clears
+   *  the line itself and every other label, with a hairline leader when the
+   *  label had to move further out. */
+  labelPlacement?: 'beside' | 'outside';
+  /** Pixels of room kept around the drawing for 'outside' labels. */
+  labelRoom?: number;
+  /** Section label size in screen pixels (default 10.5; 'outside' uses 12.5). */
+  labelSize?: number;
   annotation?: { corner: string; note: string } | null;
   showCornerLabels?: boolean;
   /** Cap the rendered height so differently-shaped circuits occupy one
@@ -99,11 +118,31 @@ export const TrackArt = ({
   /* A pass mark owns the tip while hovered, so the section nearest-point hover
    * doesn't fight it (same pattern as the lap chart's inflection dots). */
   const markTipActive = useRef(false);
+  /* Round 9: on a phone a tap reads the section (or pass mark) under it, as
+   * hover does; a tap off the track, or anywhere else, lets go. */
+  const tap = useTapPreview();
   const [, , viewWidth, viewHeight] = outline.viewBox.split(' ').map(Number);
   const aspect = viewHeight / viewWidth;
-  const width = maxHeight !== undefined ? Math.min(measuredWidth, maxHeight / aspect) : measuredWidth;
+  const outside = labelPlacement === 'outside';
+  /* Room around the art for outside labels (0 for every other caller, which
+   * keeps their geometry exactly as before). */
+  const room = outside ? Math.max(0, Math.min(labelRoom, measuredWidth * 0.1)) : 0;
+  const artAvailable = Math.max(0, measuredWidth - room * 2);
+  const width =
+    maxHeight !== undefined ? Math.max(0, Math.min(artAvailable, (maxHeight - room * 2) / aspect)) : artAvailable;
   const scale = width > 0 ? width / viewWidth : 1;
   const px = (visual: number) => visual / scale;
+  /* Margin in viewBox units, and the svg's own box in screen pixels. */
+  const margin = room / scale;
+  const svgWidth = width + room * 2;
+  const svgInset = Math.max(0, (measuredWidth - svgWidth) / 2);
+  /** Screen position (container pixels) of a viewBox point. */
+  const toScreen = (point: { x: number; y: number }) => ({
+    x: (point.x + margin) * scale + svgInset,
+    y: (point.y + margin) * scale
+  });
+  const weight = (visual: number) => px(visual * strokeScale);
+  const labelPx = labelSize ?? (outside ? 12.5 : 12);
   const center = { x: viewWidth / 2, y: viewHeight / 2 };
   const heatSections = sections?.resolved ?? [];
   const hasHeat = heatSections.length > 0;
@@ -168,13 +207,12 @@ export const TrackArt = ({
     hoveredFamily ?? (selectedIndex !== null ? heatSections[selectedIndex]?.familyId ?? null : null);
 
   const showTipFor = (section: ResolvedHeatSection, at?: { x: number; y: number }) => {
-    const anchorPt = at ?? geometry.pointAtT(spanMid(section.startT, section.endT));
-    const offset = Math.max(0, (measuredWidth - width) / 2);
+    const anchorPt = toScreen(at ?? geometry.pointAtT(spanMid(section.startT, section.endT)));
     const pct = Math.round(section.percentile * 100);
     if (section.kind === 'derived_remainder') {
       setTip({
-        x: anchorPt.x * scale + offset,
-        y: anchorPt.y * scale,
+        x: anchorPt.x,
+        y: anchorPt.y,
         title: 'The rest of the lap, together',
         detail: `${ordinal(pct)} percentile ${sections?.contextLabel ?? 'this race'}`,
         action: section.combined
@@ -184,8 +222,8 @@ export const TrackArt = ({
       return;
     }
     setTip({
-      x: anchorPt.x * scale + offset,
-      y: anchorPt.y * scale,
+      x: anchorPt.x,
+      y: anchorPt.y,
       title: section.label,
       detail: `beat ${pct}% of the field ${sections?.contextLabel ?? 'this race'}`
     });
@@ -197,8 +235,8 @@ export const TrackArt = ({
     const svg = svgRef.current;
     if (!svg) return null;
     const rect = svg.getBoundingClientRect();
-    const vx = ((clientX - rect.left) / rect.width) * viewWidth;
-    const vy = ((clientY - rect.top) / rect.height) * viewHeight;
+    const vx = ((clientX - rect.left) / rect.width) * (viewWidth + margin * 2) - margin;
+    const vy = ((clientY - rect.top) / rect.height) * (viewHeight + margin * 2) - margin;
     let best = geometry.samples[0];
     let bestDist = Infinity;
     for (const sample of geometry.samples) {
@@ -214,10 +252,10 @@ export const TrackArt = ({
   /** The honest-explanation tip for stretches without timing loops (Jack's
    *  review: the gaps must explain themselves, not just the caption). */
   const showUntimedTip = (sample: { x: number; y: number }) => {
-    const offset = Math.max(0, (measuredWidth - width) / 2);
+    const at = toScreen(sample);
     setTip({
-      x: sample.x * scale + offset,
-      y: sample.y * scale,
+      x: at.x,
+      y: at.y,
       title: 'No timing loops on this stretch',
       detail: 'officially untimed'
     });
@@ -259,15 +297,33 @@ export const TrackArt = ({
   const sectionLabels = useMemo(() => {
     if (!hasHeat || !sections?.showLabels || width === 0) return [];
     const pxOf = (visual: number) => visual / (width / viewWidth);
-    const candidates = heatSections
-      .filter((section) => section.kind !== 'derived_remainder')
-      .map((section) => {
-        const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
+    type PlacedLabel = {
+      familyId: string;
+      /** Every section this label names (two for a merged "Turn 1"). */
+      familyIds: string[];
+      label: string;
+      lx: number;
+      ly: number;
+      rank: number;
+      percentile: number;
+      halfW: number;
+      halfH: number;
+      t: number;
+      leader?: { x1: number; y1: number; x2: number; y2: number } | null;
+    };
+    const candidateFor = (
+      familyIds: string[],
+      label: string,
+      t: number,
+      isTopSection: boolean,
+      percentile: number
+    ): PlacedLabel => {
+        const mid = geometry.pointAtT(t);
         const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
-        const hasWord = /[a-z]{3,}/.test(section.label); // a named feature, e.g. "Back straight"
-        const isStartFinish = /S\/F/.test(section.label);
-        const halfW = pxOf(section.label.length * 3 + 4);
-        const halfH = pxOf(6.5);
+        const hasWord = /[a-z]{3,}/.test(label); // a named feature, e.g. "Back straight"
+        const isStartFinish = /S\/F/.test(label);
+        const halfW = outside ? pxOf(label.length * labelPx * 0.28 + 3) : pxOf(label.length * labelPx * 0.29 + 4);
+        const halfH = outside ? pxOf(labelPx * 0.62) : pxOf(labelPx * 0.62);
         /* The SVG paints with overflow visible. Vertically that's fine — the
          * card has room above and below — but the card is width-tight, so an
          * outward-pushed label near the outline's left/right edge spills past
@@ -277,17 +333,71 @@ export const TrackArt = ({
         const rawX = mid.x + ((mid.x - center.x) / away) * pxOf(16);
         const rawY = mid.y + ((mid.y - center.y) / away) * pxOf(16);
         return {
-          familyId: section.familyId,
-          label: section.label,
+          familyId: familyIds[0],
+          familyIds,
+          label,
           lx: Math.min(Math.max(rawX, halfW + pxOf(2)), viewWidth - halfW - pxOf(2)),
           ly: rawY,
-          rank: section.isTopSection ? 0 : hasWord ? 1 : isStartFinish ? 2 : 3,
-          percentile: section.percentile,
+          rank: isTopSection ? 0 : hasWord ? 1 : isStartFinish ? 2 : 3,
+          percentile,
           halfW,
-          halfH
+          halfH,
+          t
         };
-      })
-      .sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
+    };
+    const timed = heatSections.filter((section) => section.kind !== 'derived_remainder');
+    /* A corner timed in two short pieces ("Turn 1 entry", "Turn 1 exit") gets
+     * ONE label, "Turn 1", at the middle of the pair. Two labels for a few
+     * hundred feet of track crowded the start/finish line at Laguna Seca (the
+     * three-label cluster in the Nov 14 review). Each piece still reads out on
+     * hover under its own name, and the bars and the grid keep both. */
+    const pieceSuffix = /\s+(entry|exit)$/i;
+    const pieces = new Map<string, ResolvedHeatSection[]>();
+    for (const section of timed) {
+      if (!pieceSuffix.test(section.label)) continue;
+      const base = section.label.replace(pieceSuffix, '');
+      pieces.set(base, [...(pieces.get(base) ?? []), section]);
+    }
+    const merged: PlacedLabel[] = [];
+    const absorbed = new Set<string>();
+    for (const [base, members] of pieces) {
+      if (members.length < 2) continue;
+      const chain = [...members].sort((left, right) => left.startT - right.startT);
+      const joined = chain.every((section, index) => index === 0 || Math.abs(section.startT - chain[index - 1].endT) < 0.003);
+      if (!joined) continue;
+      for (const section of chain) absorbed.add(section.familyId);
+      merged.push(
+        candidateFor(
+          chain.map((section) => section.familyId),
+          base,
+          spanMid(chain[0].startT, chain[chain.length - 1].endT),
+          chain.some((section) => section.isTopSection),
+          Math.max(...chain.map((section) => section.percentile))
+        )
+      );
+    }
+    const candidates: PlacedLabel[] = [
+      ...timed
+        .filter((section) => !absorbed.has(section.familyId))
+        .map((section) =>
+          candidateFor([section.familyId], section.label, spanMid(section.startT, section.endT), Boolean(section.isTopSection), section.percentile)
+        ),
+      ...merged
+    ].sort((left, right) => left.rank - right.rank || right.percentile - left.percentile);
+    /* The gold start/finish tick crosses the line well past the stroke, so a
+     * label that only clears the line can still sit on the tick. Its points
+     * join the obstacles both placements test against. */
+    const startFinishPoints = outline.startFinish
+      ? (() => {
+          const sf = outline.startFinish;
+          const angle = ((sf.angleDeg + 90) * Math.PI) / 180;
+          const half = pxOf(8 * strokeScale) + pxOf(2);
+          return Array.from({ length: 11 }, (_, k) => {
+            const u = -half + (2 * half * k) / 10;
+            return { x: sf.x + Math.cos(angle) * u, y: sf.y + Math.sin(angle) * u };
+          });
+        })()
+      : [];
 
     /* Phones show only labels a family member can read cold: gold anchors,
      * named features, S/F. Plain station-code spans (rank 3) never fill in —
@@ -295,25 +405,125 @@ export const TrackArt = ({
     const eligible = compactLabels ? candidates.filter((candidate) => candidate.rank < 3) : candidates;
     const cap = compactLabels ? 5 : eligible.length;
     const gap = pxOf(3);
-    const kept: typeof candidates = [];
-    for (const candidate of eligible) {
-      if (kept.length >= cap) break;
-      const collides = kept.some(
+    const kept: PlacedLabel[] = [];
+    const clashes = (candidate: { lx: number; ly: number; halfW: number; halfH: number }) =>
+      kept.some(
         (other) =>
           Math.abs(other.lx - candidate.lx) < other.halfW + candidate.halfW + gap &&
           Math.abs(other.ly - candidate.ly) < other.halfH + candidate.halfH + gap
       );
-      if (!collides) kept.push(candidate);
+    if (!outside) {
+      /* Inside placement: push each label out from the shape's centre by its
+       * own half-size along that direction, so a 12 px label clears the line
+       * instead of straddling it; one further step if the first spot still
+       * touches the line, and otherwise the label stays in the tap tip. */
+      const line = [...Array.from({ length: 480 }, (_, k) => geometry.pointAtT(k / 480)), ...startFinishPoints];
+      const half = pxOf(3 * strokeScale);
+      const touchesLine = (box: { lx: number; ly: number; halfW: number; halfH: number }) =>
+        line.some((point) => {
+          const dx = Math.max(Math.abs(point.x - box.lx) - box.halfW, 0);
+          const dy = Math.max(Math.abs(point.y - box.ly) - box.halfH, 0);
+          return Math.hypot(dx, dy) < half + pxOf(1.5);
+        });
+      for (const candidate of eligible) {
+        if (kept.length >= cap) break;
+        const mid = geometry.pointAtT(candidate.t);
+        const away = Math.hypot(mid.x - center.x, mid.y - center.y) || 1;
+        const ux = (mid.x - center.x) / away;
+        const uy = (mid.y - center.y) / away;
+        const extent = Math.abs(ux) * candidate.halfW + Math.abs(uy) * candidate.halfH;
+        let placed: PlacedLabel | null = null;
+        for (const step of [6, 14]) {
+          const reach = half + pxOf(step) + extent;
+          const box = {
+            ...candidate,
+            lx: Math.min(Math.max(mid.x + ux * reach, candidate.halfW + pxOf(2)), viewWidth - candidate.halfW - pxOf(2)),
+            ly: mid.y + uy * reach
+          };
+          if (!touchesLine(box) && !clashes(box)) {
+            placed = box;
+            break;
+          }
+        }
+        if (placed) kept.push(placed);
+      }
+      return kept;
+    }
+
+    /* Outside placement (the Tracks page, F5): a label never sits on the line
+     * or on a section dot. For each label, step outward along the track's
+     * normal at its span midpoint — the side away from the shape's centre
+     * first — and keep the first spot whose box clears every point of the
+     * line by the stroke's half-width plus a margin, clears every label
+     * already placed, and stays inside the drawing's room. */
+    const dense = [...Array.from({ length: 720 }, (_, k) => geometry.pointAtT(k / 720)), ...startFinishPoints];
+    const strokeHalf = pxOf(3 * strokeScale);
+    const clearance = strokeHalf + pxOf(4);
+    const steps = [6, 16, 30, 48, 72].map((step) => strokeHalf + pxOf(step));
+    const minX = -margin;
+    const maxX = viewWidth + margin;
+    const minY = -margin;
+    const maxY = viewHeight + margin;
+    for (const candidate of eligible) {
+      if (kept.length >= cap) break;
+      const mid = geometry.pointAtT(candidate.t);
+      const ahead = geometry.pointAtT(candidate.t + 0.004);
+      const behind = geometry.pointAtT(candidate.t - 0.004);
+      const tx = ahead.x - behind.x;
+      const ty = ahead.y - behind.y;
+      const len = Math.hypot(tx, ty) || 1;
+      let nx = -ty / len;
+      let ny = tx / len;
+      if (nx * (mid.x - center.x) + ny * (mid.y - center.y) < 0) {
+        nx = -nx;
+        ny = -ny;
+      }
+      const sides = [
+        { x: nx, y: ny },
+        { x: -nx, y: -ny }
+      ];
+      let placed: PlacedLabel | null = null;
+      for (let stepIndex = 0; stepIndex < steps.length && !placed; stepIndex += 1) {
+        for (const side of sides) {
+          const extent = Math.abs(side.x) * candidate.halfW + Math.abs(side.y) * candidate.halfH;
+          const lx = mid.x + side.x * (steps[stepIndex] + extent);
+          const ly = mid.y + side.y * (steps[stepIndex] + extent);
+          const box = { lx, ly, halfW: candidate.halfW, halfH: candidate.halfH };
+          if (lx - box.halfW < minX || lx + box.halfW > maxX || ly - box.halfH < minY || ly + box.halfH > maxY) continue;
+          const onLine = dense.some((point) => {
+            const dx = Math.max(Math.abs(point.x - lx) - box.halfW, 0);
+            const dy = Math.max(Math.abs(point.y - ly) - box.halfH, 0);
+            return Math.hypot(dx, dy) < clearance;
+          });
+          if (onLine || clashes(box)) continue;
+          placed = {
+            ...candidate,
+            lx,
+            ly,
+            leader:
+              stepIndex > 0
+                ? {
+                    x1: mid.x + side.x * (strokeHalf + pxOf(2)),
+                    y1: mid.y + side.y * (strokeHalf + pxOf(2)),
+                    x2: lx - side.x * (extent + pxOf(2)),
+                    y2: ly - side.y * (extent + pxOf(2))
+                  }
+                : null
+          };
+          break;
+        }
+      }
+      if (placed) kept.push(placed);
     }
     return kept;
-  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels]);
+  }, [hasHeat, sections?.showLabels, heatSections, geometry, center.x, center.y, width, viewWidth, viewHeight, compactLabels, outside, labelPx, strokeScale, margin, outline.startFinish]);
 
   const showPassTip = (mark: { x: number; y: number; lap: number; direction: 'gain' | 'loss'; otherName: string }) => {
     markTipActive.current = true;
     setHoveredFamily(null);
     setTip({
-      x: mark.x * scale + Math.max(0, (measuredWidth - width) / 2),
-      y: mark.y * scale,
+      x: toScreen(mark).x,
+      y: toScreen(mark).y,
       title: `Lap ${mark.lap}`,
       /* Spatial words, Bryce-first, no signed numbers. */
       detail: mark.direction === 'gain' ? `past ${mark.otherName}` : `${mark.otherName} by him`,
@@ -341,10 +551,40 @@ export const TrackArt = ({
     showTipFor(found, hit.sample);
   };
 
-  const handleLeave = () => {
+  const handleLeave = (event: React.PointerEvent<HTMLDivElement>) => {
+    /* A finger leaves as it lifts: what it tapped stays read. */
+    if (event.pointerType === 'touch') return;
     setHoveredFamily(null);
     if (selectedIndex === null) setTip(null);
   };
+
+  /* A finger's tap: the section (or untimed stretch) under it, read exactly as
+   * hover reads it; off the track, nothing. Returns what it read. */
+  const readAt = (clientX: number, clientY: number): string | null => {
+    setSelectedIndex(null);
+    const hit = hasHeat ? nearestSample(clientX, clientY) : null;
+    if (!hit || hit.dist > px(18)) {
+      setHoveredFamily(null);
+      setTip(null);
+      return null;
+    }
+    const found = heatSections.find((section) => sectionContainsT(section, hit.sample.t));
+    if (!found) {
+      setHoveredFamily(null);
+      showUntimedTip(hit.sample);
+      return `untimed-${Math.round(hit.sample.t * 200)}`;
+    }
+    setHoveredFamily(found.familyId);
+    showTipFor(found, hit.sample);
+    return `section-${heatSections.indexOf(found)}`;
+  };
+  const letGoOfTap = () => {
+    markTipActive.current = false;
+    setHoveredFamily(null);
+    setSelectedIndex(null);
+    setTip(null);
+  };
+  const tapSurface = tap.surface({ find: (event) => readAt(event.clientX, event.clientY), clear: letGoOfTap });
 
   /* Touch / click: a tap ON an untimed stretch explains it; anywhere else
    * cycles through the timed sections (Brief E). */
@@ -381,19 +621,21 @@ export const TrackArt = ({
       }}
       onPointerMove={hasHeat ? handleMove : undefined}
       onPointerLeave={hasHeat ? handleLeave : undefined}
-      onClick={hasHeat ? handleActivate : undefined}
+      onPointerDown={hasHeat ? tapSurface.onPointerDown : undefined}
+      onPointerUp={hasHeat ? tapSurface.onPointerUp : undefined}
+      onClick={hasHeat ? (event) => tap.click(event, () => handleActivate(event)) : undefined}
     >
       {width > 0 ? (
         <svg
           ref={svgRef}
-          viewBox={outline.viewBox}
-          width={width}
-          height={width * (viewHeight / viewWidth)}
+          viewBox={margin > 0 ? `${-margin} ${-margin} ${viewWidth + margin * 2} ${viewHeight + margin * 2}` : outline.viewBox}
+          width={svgWidth}
+          height={width * (viewHeight / viewWidth) + room * 2}
           role="img"
           aria-label={
             hasHeat
-              ? `${outline.name} track outline, sections shaded by Bryce's pace ${sections?.contextLabel ?? 'this race'}`
-              : `${outline.name} track outline`
+              ? `${venueName(outline.name)} track outline, sections shaded by Bryce's pace ${sections?.contextLabel ?? 'this race'}`
+              : `${venueName(outline.name)} track outline`
           }
           style={{ overflow: 'visible', display: 'block' }}
         >
@@ -406,7 +648,7 @@ export const TrackArt = ({
                 d={outline.mainPath}
                 fill="none"
                 stroke="var(--grid-hairline)"
-                strokeWidth={px(2)}
+                strokeWidth={weight(2)}
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
@@ -423,9 +665,9 @@ export const TrackArt = ({
                       d={spanPolyline(span.startT, span.endT)}
                       fill="none"
                       stroke={color}
-                      strokeWidth={px(activeFamily === section.familyId ? 4 : 3)}
+                      strokeWidth={weight(activeFamily === section.familyId ? 4 : 3)}
                       strokeLinecap="round"
-                      strokeDasharray={`${px(0.1)} ${px(5)}`}
+                      strokeDasharray={`${px(0.1)} ${weight(5)}`}
                       style={{ opacity: focused ? 0.9 : 0.3, transition: 'opacity 150ms ease-out, stroke-width 150ms ease-out' }}
                     />
                   ));
@@ -437,8 +679,10 @@ export const TrackArt = ({
                     fill="none"
                     pathLength={1}
                     stroke={color}
-                    strokeWidth={px(activeFamily === section.familyId ? 7.5 : 6)}
-                    strokeLinecap="round"
+                    strokeWidth={weight(activeFamily === section.familyId ? 7.5 : 6)}
+                    /* Thick lines (strokeScale > 1) meet their neighbours
+                     * flush; round caps would bleed one colour into the next. */
+                    strokeLinecap={strokeScale > 1 ? 'butt' : 'round'}
                     strokeDasharray={dash.dasharray}
                     strokeDashoffset={dash.dashoffset}
                     style={{ opacity: focused ? 1 : 0.35, transition: 'opacity 150ms ease-out, stroke-width 150ms ease-out' }}
@@ -483,7 +727,7 @@ export const TrackArt = ({
             <g
               transform={`translate(${outline.startFinish.x} ${outline.startFinish.y}) rotate(${outline.startFinish.angleDeg + 90})`}
             >
-              <line x1={-px(8)} x2={px(8)} stroke="var(--bryce)" strokeWidth={px(3.5)} strokeLinecap="round" />
+              <line x1={-weight(8)} x2={weight(8)} stroke="var(--bryce)" strokeWidth={weight(3.5)} strokeLinecap="round" />
             </g>
           ) : null}
           {/* Section anchors: gold dots on the top-2 stretches, quiet ink ticks
@@ -493,29 +737,39 @@ export const TrackArt = ({
                 if (section.kind === 'derived_remainder') return null; // no loop dot on a derived stretch
                 const mid = geometry.pointAtT(spanMid(section.startT, section.endT));
                 return section.isTopSection ? (
-                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={px(4)} fill="var(--bryce)" />
+                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={weight(strokeScale > 1 ? 2.6 : 4)} fill={strokeScale > 1 ? 'var(--ink-primary)' : 'var(--bryce)'} stroke={strokeScale > 1 ? 'var(--bryce)' : undefined} strokeWidth={strokeScale > 1 ? px(2) : undefined} />
                 ) : (
-                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={px(2.5)} fill="var(--ink-primary)" />
+                  <circle key={`dot-${section.familyId}`} cx={mid.x} cy={mid.y} r={strokeScale > 1 ? px(2.6) : px(2.5)} fill="var(--ink-primary)" />
                 );
               })
             : null}
           {/* Direct section labels (Brief H #1): priority-ranked, collision-
               detected, phone-capped. Suppressed codes stay one tap away. */}
           {sectionLabels.map((entry) => (
-            <text
-              key={`label-${entry.familyId}`}
-              x={entry.lx}
-              y={entry.ly}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill="var(--ink-secondary)"
-              fontFamily={chartFont}
-              fontSize={px(10.5)}
-              fontWeight={500}
-              style={{ pointerEvents: 'none' }}
-            >
-              {entry.label}
-            </text>
+            <g key={`label-${entry.familyId}`} style={{ pointerEvents: 'none' }}>
+              {entry.leader ? (
+                <line
+                  x1={entry.leader.x1}
+                  y1={entry.leader.y1}
+                  x2={entry.leader.x2}
+                  y2={entry.leader.y2}
+                  stroke="var(--ink-faint)"
+                  strokeWidth={px(1)}
+                />
+              ) : null}
+              <text
+                x={entry.lx}
+                y={entry.ly}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill={outside && activeFamily !== null && entry.familyIds.includes(activeFamily) ? 'var(--ink-primary)' : 'var(--ink-secondary)'}
+                fontFamily={chartFont}
+                fontSize={px(labelPx)}
+                fontWeight={500}
+              >
+                {entry.label}
+              </text>
+            </g>
           ))}
           {/* Pass marks (heat-map v2): quiet open circles on the spans where a
               green Bryce pass happened; hover reads lap · direction · other car. */}
@@ -538,11 +792,13 @@ export const TrackArt = ({
                 data-pass-mark={mark.id}
                 aria-label={`Lap ${mark.lap}: a pass involving Bryce, ${mark.direction === 'gain' ? `past ${mark.otherName}` : `${mark.otherName} by him`}`}
                 style={{ cursor: 'pointer' }}
-                onMouseEnter={() => showPassTip(mark)}
-                onMouseLeave={() => {
-                  markTipActive.current = false;
-                  setTip(null);
-                }}
+                {...tap.target(`pass-${mark.id}`, {
+                  show: () => showPassTip(mark),
+                  hide: () => {
+                    markTipActive.current = false;
+                    setTip(null);
+                  }
+                })}
               />
             </g>
           ))}
@@ -564,15 +820,16 @@ export const TrackArt = ({
                         r={px(13)}
                         fill="transparent"
                         style={{ cursor: 'default' }}
-                        onMouseEnter={() =>
-                          setTip({
-                            x: arc.apex.x * scale + Math.max(0, (measuredWidth - width) / 2),
-                            y: arc.apex.y * scale,
-                            title: `Turn ${annotation.corner}`,
-                            detail: annotation.note
-                          })
-                        }
-                        onMouseLeave={() => setTip(null)}
+                        {...tap.target(`turn-${annotation.corner}`, {
+                          show: () =>
+                            setTip({
+                              x: toScreen(arc.apex).x,
+                              y: toScreen(arc.apex).y,
+                              title: `Turn ${annotation.corner}`,
+                              detail: annotation.note
+                            }),
+                          hide: () => setTip(null)
+                        })}
                       />
                     </>
                   ) : null}
@@ -584,7 +841,7 @@ export const TrackArt = ({
                       dominantBaseline="middle"
                       fill="var(--ink-muted)"
                       fontFamily={chartFont}
-                      fontSize={px(11.5)}
+                      fontSize={px(12)}
                       fontWeight={500}
                       style={{ pointerEvents: 'none' }}
                     >
@@ -601,7 +858,7 @@ export const TrackArt = ({
           <div
             className="track-wind"
             style={{ left: artInset }}
-            title={`Near-track wind${wind.frame ? ` (${wind.frame})` : ''} ${wind.label} (modeled, not official)`}
+            title={`Near-track wind${wind.frame ? ` (${wind.frame})` : ''} ${wind.label} (modelled, not official)`}
             aria-label={`Near-track wind${wind.frame ? ` ${wind.frame}` : ''} ${wind.label}`}
           >
             {wind.frame ? <span className="track-wind__frame">{wind.frame}</span> : null}
@@ -647,7 +904,7 @@ export const TrackArt = ({
                 dominantBaseline="central"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={8}
+                fontSize={12}
                 fontWeight={500}
               >
                 N
@@ -657,7 +914,96 @@ export const TrackArt = ({
           ) : null}
         </>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={measuredWidth} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={measuredWidth} tap={tap} /> : null}
     </div>
+  );
+};
+
+/* ---------- the small track icon: the 3D model from above ----------
+ * Round 7 (Jack's review of Nov 16): the small line drawings on /races and on
+ * the Race Week board become "a bird's eye view of the 3D tracks", with the
+ * outline "as visible as it is right now". Each icon is the venue's own 3D
+ * model (public/tracks-3d/models, drawn by src/three/trackScene.js) from
+ * straight above, turned to sit the way the line drawing does, the land paled
+ * toward the paper and the track drawn as a bold ink ribbon on the model's own
+ * centreline. Made by Portfolio/builds/project-brycecast/site-refresh/
+ * stills-tools (run.sh icons: icon-stills.mjs, icon-page.js, finish_icons.py)
+ * into public/tracks-3d/icons/<slug>-<box>(@2x).webp, one per box:
+ *   row    76 x 42 CSS px (the Races list)
+ *   board  132 x 84 CSS px (the Race Week board)
+ * A venue with no model keeps its line drawing (`fallback`), and ?icons=line
+ * shows the line drawings everywhere, for comparison.
+ * Two looks (round 7): A, straight above, the land paled and feathered
+ * (<slug>-<box>.webp); B, the whole plate tilted 14 degrees in the stills' own
+ * colours with its real edge (<slug>-<box>-b.webp, icon-stills.mjs --plate,
+ * ICON_VARIANT=b finish_icons.py). DEFAULT_ICON_LOOK picks one; ?icons=a and
+ * ?icons=b show either. */
+
+/** Venues with a bird's-eye icon (public/tracks-3d/icons/index.json lists the same). */
+export const TRACK_ICON_SLUGS: ReadonlySet<string> = new Set([
+  'barber-motorsports-park',
+  'indianapolis-motor-speedway-road-course',
+  'iowa-speedway',
+  'mid-ohio-sports-car-course',
+  'nashville-superspeedway',
+  'portland-international-raceway',
+  'road-america',
+  'streets-of-arlington',
+  'streets-of-detroit',
+  'streets-of-st-petersburg',
+  'the-milwaukee-mile',
+  'weathertech-raceway-laguna-seca',
+  'world-wide-technology-raceway',
+  // modelled for the icons only (not on the Tracks page): the oval from the IMS road course's OSM data; Phoenix
+  // and Long Beach from OSM (round 7)
+  'indianapolis-motor-speedway',
+  'phoenix-raceway',
+  'streets-of-long-beach'
+]);
+
+const DEFAULT_ICON_LOOK: 'a' | 'b' = 'a';   // B shrinks the ovals at 76 px (the plate is wider than the track)
+const ICON_LOOK: 'line' | 'a' | 'b' = (() => {
+  try {
+    const q = switchValue('icons');
+    return q === 'line' || q === 'a' || q === 'b' ? q : DEFAULT_ICON_LOOK;
+  } catch {
+    return DEFAULT_ICON_LOOK;
+  }
+})();
+
+export type TrackIconBox = 'row' | 'board';
+
+export const TrackIcon = ({
+  slug,
+  box,
+  fallback = null,
+  muted = false,
+  alt = ''
+}: {
+  slug: string | null | undefined;
+  box: TrackIconBox;
+  /** Drawn where the venue has no icon (the line drawing). */
+  fallback?: ReactNode;
+  /** A venue he has no race at: the icon steps back, as the muted line did. */
+  muted?: boolean;
+  alt?: string;
+}) => {
+  const [failed, setFailed] = useState(false);
+  if (!slug || ICON_LOOK === 'line' || failed || !TRACK_ICON_SLUGS.has(slug)) return <>{fallback}</>;
+  const [w, h] = box === 'row' ? [76, 42] : [132, 84];
+  const base = `/tracks-3d/icons/${slug}-${box}${ICON_LOOK === 'b' ? '-b' : ''}`;
+  return (
+    <img
+      className={`track-icon track-icon--${box}${muted ? ' track-icon--muted' : ''}`}
+      src={`${base}.webp`}
+      srcSet={`${base}.webp 1x, ${base}@2x.webp 2x`}
+      width={w}
+      height={h}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+      onError={() => setFailed(true)}
+    />
   );
 };

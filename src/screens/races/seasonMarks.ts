@@ -1,0 +1,249 @@
+import { formatDate } from '../../app/format';
+import { isKnownVenue, venueName, venueShort } from '../../app/venueNames';
+import { beatLine, placeLine } from '../../app/raceFacts';
+import { displayRaceLabelText } from '../../data/debriefArchive';
+import type { UiSeasonIndexRow } from '../../data/uiDataPackage';
+import type { VenueRef } from '../../app/venuePeek';
+import { chapterTint } from '../careerExplorer';
+import { fieldSizeFor, statusWords, type ArchiveRace } from '../careerRaceList';
+import { labelledRaceTitle } from '../careerRaceNames';
+import { wetFor } from '../raceWet';
+import { switchValue } from '../../review/switches';
+import { wetPhraseFor } from '../../app/wetDry';
+
+/* ============================================================================
+ * The Races page's season charts, as one kind of mark (career round 3,
+ * Nov 18 2026). Jack: the season graphs "look like boring basic Excel graphs".
+ * Every season, INDY NXT or before, now draws the same picture
+ * (races/fieldSeason.tsx): each race its field as a thin line, front at the
+ * top, his dot where he finished in it, races grouped by the weekend with the
+ * venue named under them. This file turns both sources into that mark.
+ * ==========================================================================*/
+
+export interface SeasonMark {
+  id: string;
+  href: string;
+  /** The venue's short name, under the weekend's races. */
+  venueShort: string;
+  /** The place, short and undated ("Brands Hatch"): the chart dates every
+   *  weekend at a place it visits more than once (fieldSeason, axisNames). */
+  place: string;
+  /** The series: a weekend, and the line through its averages, never crosses one. */
+  series: string;
+  /** The race day (YYYY-MM-DD), for grouping a weekend's races. */
+  day: string;
+  finish: number | null;
+  /** Cars classified, where the source gives it. */
+  field: number | null;
+  /** Ran to the flag. False: the day ended early (contact, a mechanical). */
+  clean: boolean;
+  tint: string;
+  /** Ringed: a win (earlier seasons) or a top 5 (INDY NXT). */
+  ring: boolean;
+  /** Championship standing after the round (INDY NXT only). */
+  standing: number | null;
+  /** A named moment, labelled over the dot on a wide screen. */
+  moment: string | null;
+  card: { venue: VenueRef; meta: string; title: string; nums: string | null; note: string | null; action?: string };
+}
+
+/* ---------- venue names short enough to sit under a weekend ---------- */
+
+/* Meetings named for their event; every venue's short form comes from app/venueNames. */
+const SHORT: Record<string, string> = {
+  'formula ford festival': 'FF Festival',
+  'walter hayes trophy': 'Walter Hayes',
+  'silverstone international': 'Silverstone',
+  'champion of brands': 'Brands Hatch',
+  'champion of cadwell': 'Cadwell Park'
+};
+
+/* A venue visited twice in a season carries its month in the race name
+ * (careerRaceNames): "Donington Park, October", "Champion of Brands, 12
+ * September". The place is shortened on its own, then the month put back. */
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const WHEN = new RegExp(`^(.*?),\\s*((?:\\d{1,2}\\s+)?(?:${MONTHS.join('|')}))$`, 'i');
+const splitWhen = (meeting: string): { place: string; when: string | null } => {
+  const match = meeting.trim().match(WHEN);
+  return match ? { place: match[1], when: match[2] } : { place: meeting, when: null };
+};
+/** "12 September" → "12 Sep", "October" → "Oct". */
+const whenShort = (when: string): string => when.replace(/([A-Za-z]{3})[A-Za-z]*$/, '$1');
+
+const shortPlace = (name: string): string => {
+  if (isKnownVenue(name)) return venueShort(name);
+  const key = name.trim().toLowerCase();
+  if (SHORT[key]) return SHORT[key];
+  return name
+    .replace(/\b(International|Motorsports?|Race Complex|Raceway|Speedway|Circuit|Park)\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim() || name;
+};
+
+export const venueShortOf = (name: string): string => {
+  const { place, when } = splitWhen(name);
+  const short = shortPlace(place);
+  return when ? `${short}, ${when}` : short;
+};
+
+/* The axis's short form of a place, for a chart with no room for full names:
+ * the word racing people use for it. Every place of a chart takes its short
+ * form together, so one axis never mixes "Brands" with "Oulton Park". */
+const TINY: Record<string, string> = {
+  'Brands Hatch': 'Brands',
+  'Castle Combe': 'Combe',
+  'Cadwell Park': 'Cadwell',
+  'Oulton Park': 'Oulton',
+  'Donington Park': 'Donington',
+  'Laguna Seca': 'Laguna',
+  'Watkins Glen': 'Watkins',
+  'Summit Point': 'Summit',
+  'FF Festival': 'Festival',
+  'Walter Hayes': 'Hayes',
+  'Paul Ricard': 'Ricard',
+  'Red Bull Ring': 'Red Bull'
+};
+
+/** A weekend's two axis names, given its place and, where the chart visits
+ *  the place more than once, its date ("12 September" or "October"):
+ *  "Brands Hatch, 12 September" / "Brands 12 Sep"; "Oulton Park" / "Oulton". */
+export const axisNames = (place: string, when: string | null): { long: string; short: string } => {
+  const tiny = TINY[place] ?? place;
+  return { long: when ? `${place}, ${when}` : place, short: when ? `${tiny} ${whenShort(when)}` : tiny };
+};
+
+/** The place a meeting or track name is at, short and without its month. */
+export const placeOf = (name: string): string => shortPlace(splitWhen(name).place);
+
+/* ---------- INDY NXT rounds ---------- */
+
+/** Archive labels drop the series prefix (everything here is INDY NXT) and
+ *  write a doubleheader the way the rest of the site does: "Grand Prix of
+ *  Monterey, Race 2". */
+export const archiveLabel = (raceLabel: string): string =>
+  displayRaceLabelText(raceLabel)
+    .replace(/^INDY NXT by Firestone at (the )?/i, '')
+    .replace(/[,\s]+(Race\s+\d+)$/i, ', $1');
+
+/** An INDY NXT race's name in the site's one race-name grammar (careerRaceNames,
+ *  proxy review 2): "Grand Prix of Monterey · Race 2", a single-race weekend
+ *  plain "Iowa Speedway". The meeting and the race of a doubleheader are read
+ *  from the source label, then named by raceName like every other race. */
+export const indyTitle = ({ raceLabel, sessionId, trackName }: { raceLabel: string; sessionId: string; trackName: string | null }): string =>
+  labelledRaceTitle({ raceLabel, sessionId, trackName });
+
+export const indyMarks = (rows: UiSeasonIndexRow[]): SeasonMark[] => {
+  const tint = chapterTint('INDY NXT');
+  return rows.map((row) => {
+    const clean = row.officialStatus === 'running';
+    const day = row.raceDate ?? row.eventStartDate ?? '';
+    const field = fieldSizeFor(row.sessionId);
+    return {
+      id: row.sessionId,
+      href: `/races/${encodeURIComponent(row.sessionId)}`,
+      venueShort: venueShortOf(row.trackName ?? ''),
+      place: placeOf(row.trackName ?? ''),
+      series: 'INDY NXT',
+      day,
+      finish: row.finishPosition,
+      field,
+      clean,
+      tint,
+      ring: clean && row.finishPosition !== null && row.finishPosition <= 5,
+      standing: row.standingRank,
+      moment: null,
+      card: {
+        venue: { sessionId: row.sessionId, trackName: row.trackName },
+        meta: [`INDY NXT · Round ${row.roundIndex ?? '—'}`, day ? formatDate(day, { month: 'short', day: 'numeric' }) : null].filter(Boolean).join(' · '),
+        title: indyTitle(row),
+        nums: [placeLine(row.finishPosition, field), beatLine(row.finishPosition, field)].filter(Boolean).join(' · ') || null,
+        note:
+          [
+            row.startPosition !== null && row.finishPosition !== null && row.startPosition !== row.finishPosition ? `started P${row.startPosition}` : null,
+            row.points !== null ? `${row.points} pts` : null,
+            row.standingRank !== null ? `P${row.standingRank} in points` : null,
+            !clean && row.officialStatus && row.officialStatus !== 'unknown' ? `ended early: ${row.officialStatus}` : null,
+            wetFor(row.sessionId)?.words ?? null
+          ]
+            .filter(Boolean)
+            .join(' · ') || null,
+        action: 'open the race page'
+      }
+    };
+  });
+};
+
+/* ---------- the seasons before INDY NXT ---------- */
+
+/** The meeting's name, the race title before its " · Race N". */
+const meetingOf = (race: ArchiveRace): string => race.title.split(' · ')[0] || race.trackName;
+
+/** "Feb 9", or "Weekend of Feb 8" where only the meeting's first day is known. */
+export const dayWords = (race: ArchiveRace, year = false): string => {
+  const date = formatDate(race.day, year ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
+  return race.dayIsMeeting ? `Weekend of ${date}` : date;
+};
+
+/* One finish grammar site-wide (raceFacts): "P8 of 23 · ahead of 15 of the
+ * other 22", the place alone where the field isn't known. */
+export const archiveNums = (race: ArchiveRace): string => {
+  if (race.finish === null) return statusWords(race.status) || 'No classified finish';
+  return [placeLine(race.finish, race.field), beatLine(race.finish, race.field)].filter(Boolean).join(' · ');
+};
+
+export const archiveNote = (race: ArchiveRace): string | null => {
+  const ended = race.finish !== null && race.status !== 'running' ? statusWords(race.status) : '';
+  return (
+    [
+      race.start !== null && race.finish !== null && race.start !== race.finish ? `started P${race.start}` : null,
+      ended ? `ended early: ${ended.toLowerCase()}` : null,
+      switchValue('rainmarks') === 'off' ? wetPhraseFor(race.sessionId, race.wetDry) : (wetFor(race.sessionId)?.words ?? null)
+    ]
+      .filter(Boolean)
+      .join(' · ') || null
+  );
+};
+
+/** The first win in each series across the whole archive: "First GB3 win". */
+export const firstWinsOf = (archive: ArchiveRace[]): Map<string, string> => {
+  const seen = new Set<string>();
+  const out = new Map<string, string>();
+  for (const race of archive) {
+    if (race.finish !== 1 || seen.has(race.seriesName)) continue;
+    seen.add(race.seriesName);
+    out.set(race.sessionId, `First ${race.seriesShort} win`);
+  }
+  return out;
+};
+
+export const archiveMarks = (races: ArchiveRace[], firstWins: Map<string, string>): SeasonMark[] => {
+  /* A year with no win names its best finish once, at its first time. */
+  const finishes = races.map((race) => race.finish).filter((value): value is number => value !== null);
+  const best = finishes.length ? Math.min(...finishes) : null;
+  const bestAt = best !== null && best > 1 ? races.find((race) => race.finish === best)?.sessionId ?? null : null;
+  return races.map((race) => {
+    const short = venueShortOf(meetingOf(race));
+    return {
+      id: race.sessionId,
+      href: race.href,
+      venueShort: short,
+      place: placeOf(meetingOf(race)),
+      series: race.seriesId,
+      day: race.day,
+      finish: race.finish,
+      field: race.field,
+      clean: race.finish !== null && race.status === 'running',
+      tint: chapterTint(race.seriesName),
+      ring: race.finish === 1,
+      standing: null,
+      moment: firstWins.get(race.sessionId) ?? (race.sessionId === bestAt ? `Best of the year · P${best} at ${short}` : null),
+      card: {
+        venue: { sessionId: race.sessionId, trackName: race.trackName, trackId: race.trackId },
+        meta: `${race.seriesShort} · ${dayWords(race, true)}`,
+        title: race.title,
+        nums: archiveNums(race),
+        note: archiveNote(race) ?? venueName(race.trackName)
+      }
+    };
+  });
+};

@@ -15,37 +15,39 @@
   "causalAttribution": false,
   "claimStrength": "source_bounded_dimension_context_not_rating_or_forecast",
   "conversionSourceStateCounts": {
-    "same_event_driver_race_result_one_to_one": 1455,
-    "same_event_multi_race_result_ambiguous": 307
+    "missing_qualifying_position": 2,
+    "no_same_event_race_result": 2,
+    "same_event_driver_race_result_one_to_one": 1622,
+    "same_event_multi_race_result_ambiguous": 341
   },
   "counts": {
-    "carRows": 472,
-    "driverRows": 555,
-    "qualifyingRows": 1762,
-    "qualifyingSessionRows": 121,
-    "resultRows": 8563,
-    "teamEraRows": 90,
-    "teamRows": 75,
-    "trackAnalogRows": 210,
-    "trackRows": 42
+    "carRows": 706,
+    "driverRows": 669,
+    "qualifyingRows": 1967,
+    "qualifyingSessionRows": 133,
+    "resultRows": 9866,
+    "teamEraRows": 99,
+    "teamRows": 84,
+    "trackAnalogRows": 235,
+    "trackRows": 47
   },
   "driverCohortCounts": {
     "bryce": 1,
-    "observed_competitor_or_codriver": 56,
-    "shared_race_field": 475,
-    "teammate_overlap": 23
+    "observed_competitor_or_codriver": 58,
+    "shared_race_field": 586,
+    "teammate_overlap": 24
   },
-  "generatedAt": "2026-07-20T11:41:32Z",
+  "generatedAt": "2026-11-18T09:47:12Z",
   "ok": true,
   "publicPointPrediction": false,
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978",
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc",
   "trackArchetypeCounts": {
-    "oval_short_low_corner_count": 4,
-    "road_long_high_corner_count": 7,
+    "oval_short_low_corner_count": 5,
+    "road_long_high_corner_count": 9,
     "road_long_medium_corner_count": 6,
     "road_medium_high_corner_count": 4,
     "road_medium_low_corner_count": 3,
-    "road_medium_medium_corner_count": 14,
+    "road_medium_medium_corner_count": 16,
     "road_short_low_corner_count": 1,
     "temporary_street_medium_medium_corner_count": 3
   }

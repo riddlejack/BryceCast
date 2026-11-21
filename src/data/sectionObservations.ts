@@ -59,12 +59,32 @@ export interface SectionObservation {
   /** Legacy alias retained for aggregate race-story consumers. New per-lap
    * consumers should read `bryceSummarySeconds`. */
   bryceMedianSeconds?: number | null;
-  /** Field-median section time, seconds, from the field distribution below. */
+  /** The field's section time for the scope, seconds: the middle of
+   *  `fieldSeconds` (the average of them when the set's stat is 'mean'). The
+   *  field is the OTHER cars, never Bryce (Jack's ruling of Nov 15: him
+   *  against the others). Null under MIN_FIELD_CARS cars, or when the source
+   *  cannot give the other cars over this scope (see fieldReferenceFor). */
   fieldMedianSeconds?: number | null;
-  /** Each field car's median clean-lap section time (seconds) across the race —
-   *  the quiet field distribution the drawer draws behind Bryce's marker.
-   *  Null when the source carries only Bryce's own times. */
+  /** Each other car's section time over the same laps as the scope, summarised
+   *  the way his are (each car's own median or average of its clean laps
+   *  there; its time on that lap for one lap). The quiet field distribution
+   *  the drawer draws behind Bryce's marker. Qualifying packs pass their
+   *  benchmark through unchanged. Null when the source cannot give it. */
   fieldSeconds?: number[] | null;
+  /** How the field above was built: 'same_laps' from the other cars lap by
+   *  lap; 'whole_race_medians' from a pack that holds only each car's
+   *  whole-race median (his taken out); 'qualifying_benchmark' passed through. */
+  fieldBasis?: FieldBasis | null;
+  /** The share of the other cars in `fieldSeconds` whose time his own time
+   *  beats (a tie counts half), [0,1]: the same comparison as his seconds
+   *  against `fieldMedianSeconds`, read as a rank. Under the median it sits
+   *  above 0.5 exactly when he is quicker than the field figure, so a shade
+   *  drawn from it and the seconds beside it cannot point opposite ways.
+   *  Null where the seconds comparison is withheld (too few clean laps, too
+   *  few other cars, no field over these laps). */
+  fieldShare?: number | null;
+  /** How many of those other cars he was strictly quicker than, for words. */
+  fieldBeaten?: number | null;
   /** single_lap scope only: that lap's race-control context. */
   cautionState?: 'green' | 'caution' | 'restart' | 'unknown';
   clean?: boolean;
@@ -151,6 +171,37 @@ export interface SectionAggregationOptions {
   /** Source-appropriate denominator language carried into the source drawer. */
   observationLabel?: string;
 }
+
+export type FieldBasis = 'same_laps' | 'whole_race_medians' | 'qualifying_benchmark';
+
+/** A field reference needs at least this many other cars: the same "three is
+ *  the smallest sample a median can honestly summarise" floor as his laps. */
+export const MIN_FIELD_CARS = 3;
+
+/** His time against the other cars' times: how many he beat and the share
+ *  (ties count half). Null under MIN_FIELD_CARS cars. */
+export const fieldShareOf = (
+  his: number | null | undefined,
+  carSeconds: number[] | null | undefined
+): { share: number; beaten: number; cars: number } | null => {
+  if (his === null || his === undefined || !carSeconds || carSeconds.length < MIN_FIELD_CARS) return null;
+  let beaten = 0;
+  let ties = 0;
+  for (const value of carSeconds) {
+    if (value > his) beaten += 1;
+    else if (value === his) ties += 1;
+  }
+  return { share: (beaten + ties / 2) / carSeconds.length, beaten, cars: carSeconds.length };
+};
+
+/** The field he is compared with, in one section over one scope. */
+export interface FieldReference {
+  carSeconds: number[];
+  seconds: number | null;
+  basis: FieldBasis;
+}
+
+const round4 = (value: number): number => Math.round(value * 10000) / 10000;
 
 const median = (values: number[]): number => {
   const sorted = [...values].sort((a, b) => a - b);
@@ -299,6 +350,68 @@ export const selectableSectionLap = (
   return laps[0] ?? null;
 };
 
+/** The other cars in one section over a scope, "him against the others".
+ *
+ *  With `otherCarLaps` (every race pack built from the official field table):
+ *  each other car's clean green-flag times over the scope's laps, summarised
+ *  with the set's stat when it has MIN_CLEAN_LAPS of them (rounded to the
+ *  source's 4 dp, as the source's own per-car medians are), then the middle
+ *  (or average) of those cars. One lap: each other car's clean time on that
+ *  lap, and their median. Over the whole race this reproduces the source's
+ *  per-car medians with his own left out.
+ *
+ *  Without it (the measured Nashville packs hold each car's whole-race median
+ *  only): the whole race, median only, from those medians with his own taken
+ *  out (it is exactly his clean-lap median at 4 dp); any narrower scope, or
+ *  averages, return null, because the other cars cannot be read over the same
+ *  laps. Qualifying packs never reach this (see sectionObservationsFromLaps). */
+export const fieldReferenceFor = (
+  section: SectionLapsPack['sections'][number],
+  scope: SectionScope,
+  stat: SectionStat,
+  totalLaps: number
+): FieldReference | null => {
+  const [fromLap, toLap] = lapWindowOf(scope, totalLaps);
+  if (section.otherCarLaps && section.otherCarLaps.length > 0) {
+    const single = scope.kind === 'single_lap';
+    const carSeconds: number[] = [];
+    for (const row of section.otherCarLaps) {
+      const times: number[] = [];
+      for (let lap = fromLap; lap <= toLap; lap += 1) {
+        const value = row[lap - 1];
+        if (typeof value === 'number') times.push(value);
+      }
+      if (single ? times.length === 1 : times.length >= MIN_CLEAN_LAPS) {
+        carSeconds.push(single ? times[0] : round4(summarize(times, stat)));
+      }
+    }
+    carSeconds.sort((left, right) => left - right);
+    return {
+      carSeconds,
+      // The field is the middle car (Nov 16): each car summarised by the chosen
+      // statistic, then the median across cars, so under Average too the shade
+      // (his share of the other cars beaten) and the seconds cannot disagree.
+      seconds: carSeconds.length >= MIN_FIELD_CARS ? median(carSeconds) : null,
+      basis: 'same_laps'
+    };
+  }
+  const distribution = section.fieldSeconds ?? [];
+  if (scope.kind !== 'full_race' || stat !== 'median' || distribution.length === 0) return null;
+  const his = section.laps
+    .filter((tuple) => tuple[0] !== null && tuple[4] === 1 && tuple[6] !== null)
+    .map((tuple) => tuple[6] as number);
+  const carSeconds = [...distribution].sort((left, right) => left - right);
+  if (his.length > 0) {
+    const own = carSeconds.findIndex((value) => Math.abs(value - round4(median(his))) < 5e-5);
+    if (own >= 0) carSeconds.splice(own, 1);
+  }
+  return {
+    carSeconds,
+    seconds: carSeconds.length >= MIN_FIELD_CARS ? median(carSeconds) : null,
+    basis: 'whole_race_medians'
+  };
+};
+
 /** Per-lap race-control context for the scrubber (caution ticks, clean flags),
  *  from the pack's lap-total rows. */
 export const lapContextOf = (
@@ -325,13 +438,23 @@ export const sectionObservationsFromLaps = (
   const observationLabel = options.observationLabel ?? 'clean green-flag laps';
   const [fromLap, toLap] = lapWindowOf(scope, pack.totalLaps);
   const single = scope.kind === 'single_lap';
-  const sections: SectionObservation[] = pack.sections.map(({ sectionName, laps, kind, fieldSeconds }) => {
-    /* Field distribution is a whole-race per-car spread; it stays constant as
-     * Bryce's scope tick moves across it. Absent for sources without it. */
-    const fieldDistribution = fieldSeconds && fieldSeconds.length > 0 ? fieldSeconds : null;
-    const fieldMedianSeconds = fieldDistribution ? median(fieldDistribution) : null;
+  const qualifyingBenchmark = pack.comparisonScope === 'qualifying_group_best_sections';
+  const sections: SectionObservation[] = pack.sections.map((section) => {
+    const { sectionName, laps, kind, fieldSeconds } = section;
+    /* The field follows the scope: the other cars over the same laps (or on
+     * the same lap), never him. Qualifying keeps its fixed group benchmark
+     * (each driver's best comparable section), passed through as before. */
+    const reference: FieldReference | null = qualifyingBenchmark
+      ? fieldSeconds && fieldSeconds.length > 0
+        ? { carSeconds: fieldSeconds, seconds: median(fieldSeconds), basis: 'qualifying_benchmark' }
+        : null
+      : fieldReferenceFor(section, scope, stat, pack.totalLaps);
+    const fieldDistribution = reference && reference.carSeconds.length > 0 ? reference.carSeconds : null;
+    const fieldMedianSeconds = reference?.seconds ?? null;
+    const fieldBasis = reference?.basis ?? null;
     if (single) {
       const row = laps.find((tuple) => tuple[0] === fromLap) ?? null;
+      const versus = row && row[4] === 1 && fieldMedianSeconds !== null ? fieldShareOf(row[6], fieldDistribution) : null;
       return {
         sectionName,
         kind: kind ?? 'measured',
@@ -341,6 +464,9 @@ export const sectionObservationsFromLaps = (
         bryceMedianSeconds: row ? row[6] : null,
         fieldMedianSeconds,
         fieldSeconds: fieldDistribution,
+        fieldBasis,
+        fieldShare: versus?.share ?? null,
+        fieldBeaten: versus?.beaten ?? null,
         cautionState: row ? CAUTION_LABEL[row[5]] ?? 'unknown' : undefined,
         clean: row ? row[4] === 1 : undefined,
         fieldRank: row ? row[2] : null,
@@ -352,16 +478,22 @@ export const sectionObservationsFromLaps = (
     );
     const pcts = inWindow.map((tuple) => tuple[1] as number);
     const times = inWindow.map((tuple) => tuple[6]).filter((value): value is number => value !== null);
+    const summary = times.length > 0 ? summarize(times, stat) : null;
+    const versus =
+      pcts.length >= minimumObservations && fieldMedianSeconds !== null ? fieldShareOf(summary, fieldDistribution) : null;
     return {
       sectionName,
       kind: kind ?? 'measured',
       percentile: pcts.length >= minimumObservations ? summarize(pcts, stat) : null,
       observationCount: pcts.length,
       lapPercentiles: inWindow.map((tuple) => ({ lap: tuple[0] as number, percentile: tuple[1] as number })),
-      bryceSummarySeconds: times.length > 0 ? summarize(times, stat) : null,
+      bryceSummarySeconds: summary,
       bryceMedianSeconds: times.length > 0 ? median(times) : null,
       fieldMedianSeconds,
-      fieldSeconds: fieldDistribution
+      fieldSeconds: fieldDistribution,
+      fieldBasis,
+      fieldShare: versus?.share ?? null,
+      fieldBeaten: versus?.beaten ?? null
     };
   });
   const allPcts = sections.flatMap((section) => (section.lapPercentiles ?? []).map((point) => point.percentile));
@@ -385,7 +517,7 @@ export const sectionObservationsFromLaps = (
     sourceState: measured ? 'racetools_capture_loop_crossings_per_lap' : 'official_section_results_per_lap',
     sourceTier: tier,
     caveat: single
-      ? 'one lap is one lap — a snapshot, not a trend; caution laps are labeled'
+      ? 'one lap is one lap — a snapshot, not a trend; caution laps are labelled'
       : `${observationLabel} only; sections under ${minimumObservations} observations in this scope are not compared`
   };
 };
@@ -420,6 +552,10 @@ export interface ResolvedHeatSection {
    *  or more for a derived remainder that spans disjoint untimed stretches. */
   renderSpans: Array<{ startT: number; endT: number }>;
   percentile: number;
+  /** basis 'field_times' only: how many of how many other cars his time beat
+   *  (null where the shade fell back to the lap-rank percentile). */
+  fieldBeaten: number | null;
+  fieldCars: number | null;
   /** 'measured' draws a solid coloured span; 'derived_remainder' draws a
    *  visually distinct dotted span and reads as derived in the tooltip. */
   kind: 'measured' | 'derived_remainder';
@@ -436,13 +572,21 @@ export interface ResolvedHeatSection {
  *  shows the honest base line there rather than a fabricated colour. */
 export const resolveHeatSections = (
   anchors: TrackSectionAnchorSet,
-  set: SectionObservationSet
+  set: SectionObservationSet,
+  /** What the shade reads. 'lap_rank' (the default, every surface until now):
+   *  the summary of his per-lap field percentiles. 'field_times' (the Tracks
+   *  page, where the seconds sit beside the shade): his time against the other
+   *  cars' times over the same laps (`fieldShare`), so shade and seconds agree
+   *  by construction; a section with no field figure keeps its lap rank. */
+  options: { basis?: 'lap_rank' | 'field_times' } = {}
 ): ResolvedHeatSection[] => {
+  const byTimes = options.basis === 'field_times';
   const byName = new Map(set.sections.map((observation) => [observation.sectionName, observation]));
   const joined = anchors.sections
     .map((anchor) => {
       const observation = byName.get(anchor.sectionName);
       if (!observation || observation.percentile === null) return null;
+      const share = byTimes && observation.fieldShare !== null && observation.fieldShare !== undefined ? observation.fieldShare : null;
       const kind: 'measured' | 'derived_remainder' = anchor.kind ?? 'measured';
       const additional = anchor.additionalSpans ?? [];
       return {
@@ -452,7 +596,9 @@ export const resolveHeatSections = (
         startT: anchor.startT,
         endT: anchor.endT,
         renderSpans: [{ startT: anchor.startT, endT: anchor.endT }, ...additional],
-        percentile: observation.percentile,
+        percentile: share ?? observation.percentile,
+        fieldBeaten: share !== null ? observation.fieldBeaten ?? null : null,
+        fieldCars: share !== null ? observation.fieldSeconds?.length ?? null : null,
         kind,
         combined: kind === 'derived_remainder' && additional.length > 0
       };

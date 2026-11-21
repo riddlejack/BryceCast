@@ -1,23 +1,23 @@
 {
-  "checkedAt": "2026-06-16T18:12:18.025Z",
+  "checkedAt": "2026-11-18T07:35:36.625Z",
   "year": 2020,
   "refresh": false,
   "fetched": 0,
-  "cached": 11,
+  "cached": 23,
   "pdfsConverted": 0,
-  "textCached": 8,
-  "classificationSessionsDiscovered": 46,
-  "gridPagesDiscovered": 32,
-  "lapAnalysisPagesDiscovered": 24,
-  "sessionsImported": 46,
-  "resultRowsImported": 1094,
-  "gridRowsImported": 755,
-  "lapSamplesImported": 282,
-  "bryceResultRowsImported": 24,
-  "bryceLapSamplesImported": 282,
-  "weatherObservationsImported": 46,
+  "textCached": 14,
+  "classificationSessionsDiscovered": 72,
+  "gridPagesDiscovered": 50,
+  "lapAnalysisPagesDiscovered": 39,
+  "sessionsImported": 72,
+  "resultRowsImported": 1666,
+  "gridRowsImported": 1148,
+  "lapSamplesImported": 433,
+  "bryceResultRowsImported": 42,
+  "bryceLapSamplesImported": 433,
+  "weatherObservationsImported": 72,
   "penaltiesImported": 4,
-  "mediaAssetsImported": 11,
+  "mediaAssetsImported": 23,
   "rawArtifacts": [
     "data/career/raw/formula-ford-2020/walter-hayes-trophy-event.html",
     "data/career/raw/formula-ford-2020/pdf/walter-hayes-trophy-grand-final.pdf",
@@ -38,6 +38,24 @@
     "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-event.html",
     "data/career/raw/formula-ford-2020/pdf/champion-of-brands-book.pdf",
     "data/career/raw/formula-ford-2020/text/champion-of-brands-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/castle-combe-202768-event.html",
+    "data/career/raw/formula-ford-2020/pdf/castle-combe-202768-book.pdf",
+    "data/career/raw/formula-ford-2020/text/castle-combe-202768-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/castle-combe-203168-event.html",
+    "data/career/raw/formula-ford-2020/pdf/castle-combe-203168-book.pdf",
+    "data/career/raw/formula-ford-2020/text/castle-combe-203168-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/castle-combe-203668-event.html",
+    "data/career/raw/formula-ford-2020/pdf/castle-combe-203668-book.pdf",
+    "data/career/raw/formula-ford-2020/text/castle-combe-203668-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-203505-event.html",
+    "data/career/raw/formula-ford-2020/pdf/champion-of-brands-203505-book.pdf",
+    "data/career/raw/formula-ford-2020/text/champion-of-brands-203505-book.txt",
+    "data/career/raw/formula-ford-2020/event-pages/champion-of-brands-203851-event.html",
+    "data/career/raw/formula-ford-2020/pdf/champion-of-brands-203851-book.pdf",
+    "data/career/raw/formula-ford-2020/text/champion-of-brands-203851-book.txt",
+    "data/career/raw/formula-ford-2019/event-pages/formula-ford-festival-2019-event.html",
+    "data/career/raw/formula-ford-2019/pdf/formula-ford-festival-2019-book.pdf",
+    "data/career/raw/formula-ford-2019/text/formula-ford-festival-2019-book.txt",
     "data/career/raw/formula-ford-2020/extracted-classifications.json"
   ],
   "crossChecks": [
@@ -726,16 +744,6 @@
       "reason": "official_grid_row_has_no_imported_classification_result_row"
     },
     {
-      "sourceId": "national_silverstone",
-      "sessionSlug": "race_3",
-      "sessionName": "RACE 3",
-      "pageNumber": 13,
-      "position": 17,
-      "carNumber": "156",
-      "driverName": "Horatio FITZ-SIMON",
-      "reason": "official_grid_row_has_no_imported_classification_result_row"
-    },
-    {
       "sourceId": "champion_brands",
       "sessionSlug": "race_5",
       "sessionName": "RACE 5",
@@ -754,7 +762,1567 @@
       "carNumber": "18",
       "driverName": "Chris PERKINS",
       "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203168",
+      "sessionSlug": "race_4",
+      "sessionName": "Race 4",
+      "pageNumber": 12,
+      "position": 18,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203168",
+      "sessionSlug": "race_8",
+      "sessionName": "Race 8",
+      "pageNumber": 13,
+      "position": 9,
+      "carNumber": "28",
+      "driverName": "Tom HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203168",
+      "sessionSlug": "race_8",
+      "sessionName": "Race 8",
+      "pageNumber": 13,
+      "position": 17,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_3",
+      "sessionName": "RACE 3",
+      "pageNumber": 12,
+      "position": 21,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 2,
+      "carNumber": "26",
+      "driverName": "Felix FISHER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 3,
+      "carNumber": "122",
+      "driverName": "Jonathan BROWNE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 5,
+      "carNumber": "44",
+      "driverName": "David VIVIAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 15,
+      "carNumber": "77",
+      "driverName": "Chris HODGEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 18,
+      "carNumber": "69",
+      "driverName": "Alan SLATER",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 19,
+      "carNumber": "91",
+      "driverName": "Bob HAWKINS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 22,
+      "carNumber": "33",
+      "driverName": "Chris WARDEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "castle_combe_203668",
+      "sessionSlug": "race_8",
+      "sessionName": "RACE 8",
+      "pageNumber": 13,
+      "position": 24,
+      "carNumber": "84",
+      "driverName": "Steve BRACEGIRDLE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands_203505",
+      "sessionSlug": "race_10",
+      "sessionName": "RACE 10",
+      "pageNumber": 12,
+      "position": 8,
+      "carNumber": "87",
+      "driverName": "Ian JEARY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands_203505",
+      "sessionSlug": "race_10",
+      "sessionName": "RACE 10",
+      "pageNumber": 12,
+      "position": 15,
+      "carNumber": "77",
+      "driverName": "Phil ATTWOOD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "champion_brands_203851",
+      "sessionSlug": "race_20",
+      "sessionName": "RACE 20",
+      "pageNumber": 23,
+      "position": 18,
+      "carNumber": "79",
+      "driverName": "Andrew PRYKE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_8_heats_last_chance_sponsored_by_cam_tech",
+      "sessionName": "RACE 8 - HEATS LAST CHANCE Sponsored by Cam-Tech",
+      "pageNumber": 74,
+      "position": 9,
+      "carNumber": "73",
+      "driverName": "Simon PRUCE",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_8_heats_last_chance_sponsored_by_cam_tech",
+      "sessionName": "RACE 8 - HEATS LAST CHANCE Sponsored by Cam-Tech",
+      "pageNumber": 74,
+      "position": 21,
+      "carNumber": "49",
+      "driverName": "Jordan HARRISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 15,
+      "carNumber": "128",
+      "driverName": "David McCULLOUGH",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 21,
+      "carNumber": "7",
+      "driverName": "Peter LUCAS",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 23,
+      "carNumber": "30",
+      "driverName": "Steve BARLOW",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "pageNumber": 102,
+      "position": 28,
+      "carNumber": "35",
+      "driverName": "Tom CLOET",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "pageNumber": 117,
+      "position": 16,
+      "carNumber": "124",
+      "driverName": "Oliver CHAPMAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "pageNumber": 117,
+      "position": 17,
+      "carNumber": "40",
+      "driverName": "Dan Rene LARSEN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 8,
+      "carNumber": "33",
+      "driverName": "Richard DAVISON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 15,
+      "carNumber": "69",
+      "driverName": "Peter DALY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 16,
+      "carNumber": "78",
+      "driverName": "Joe WALTON",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 18,
+      "carNumber": "888",
+      "driverName": "Chris STUART",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 20,
+      "carNumber": "140",
+      "driverName": "Laurie HUGHES",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 21,
+      "carNumber": "90",
+      "driverName": "Henry CAMPBELL",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 22,
+      "carNumber": "124",
+      "driverName": "Oliver CHAPMAN",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 23,
+      "carNumber": "13",
+      "driverName": "Stuart KESTENBAUM",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 24,
+      "carNumber": "177",
+      "driverName": "Philip ATTWOOD",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
+    },
+    {
+      "sourceId": "festival",
+      "sessionSlug": "race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "pageNumber": 130,
+      "position": 27,
+      "carNumber": "91",
+      "driverName": "Stephen MAWHINNEY",
+      "reason": "official_grid_row_has_no_imported_classification_result_row"
     }
+  ],
+  "startPositionsRankedAmongStarters": [
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_78_driver_joe_walton",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_79_driver_leanne_mcshane",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_5_driver_lorna_vickers",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_51_driver_adam_fathers",
+      "gridPosition": 21,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_60_driver_matthew_hayes",
+      "gridPosition": 22,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_87_driver_ian_jeary",
+      "gridPosition": 23,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_27_driver_hayden_hardyman",
+      "gridPosition": 24,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_semi_final_1_race_13_36_driver_don_boyack",
+      "gridPosition": 25,
+      "startPosition": 24
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_27_driver_hayden_hardyman",
+      "gridPosition": 13,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_43_driver_simon_pruce",
+      "gridPosition": 14,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_40_driver_laurie_hughes",
+      "gridPosition": 16,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_87_driver_ian_jeary",
+      "gridPosition": 17,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_177_driver_philip_attwood",
+      "gridPosition": 18,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_5_driver_lorna_vickers",
+      "gridPosition": 19,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_36_driver_don_boyack",
+      "gridPosition": 20,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_historic_final_race_17_55_driver_stephen_mawhinney",
+      "gridPosition": 21,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_90_driver_henry_campbell",
+      "gridPosition": 3,
+      "startPosition": 2
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_317_driver_thomas_mcarthur",
+      "gridPosition": 4,
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_17_driver_joseph_pomfret",
+      "gridPosition": 5,
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_13_driver_stuart_kestenbaum",
+      "gridPosition": 6,
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_30_driver_steve_barlow",
+      "gridPosition": 7,
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_19_driver_james_hagan",
+      "gridPosition": 8,
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_79_driver_leanne_mcshane",
+      "gridPosition": 9,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_72_driver_marc_sawer",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_11_driver_rick_morris",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_43_driver_simon_pruce",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_27_driver_hayden_hardyman",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_64_driver_john_whitbourn",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_60_driver_matthew_hayes",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_91_driver_bob_hawkins",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_51_driver_adam_fathers",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_40_driver_laurie_hughes",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_87_driver_ian_jeary",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_177_driver_philip_attwood",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_36_driver_don_boyack",
+      "gridPosition": 22,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_156_driver_horatio_fitz_simon",
+      "gridPosition": 23,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_28_driver_tom_hawkins",
+      "gridPosition": 24,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_4_driver_goffredo_pirro",
+      "gridPosition": 25,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_festival_last_chance_race_race_19_55_driver_stephen_mawhinney",
+      "gridPosition": 26,
+      "startPosition": 24
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_48_driver_benn_tilley",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_73_driver_edward_thurston",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_44_driver_kieran_attwood",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_149_driver_jordan_harrison",
+      "gridPosition": 21,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_24_driver_mark_de_rozarieux",
+      "gridPosition": 22,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_91_driver_bob_hawkins",
+      "gridPosition": 23,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_32_driver_david_billington",
+      "gridPosition": 25,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_2_84_driver_stephen_bracegirdle",
+      "gridPosition": 26,
+      "startPosition": 24
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_188_driver_morgan_quinn",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_115_driver_matthew_wrigley",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_12_driver_sean_byrne",
+      "gridPosition": 14,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_30_driver_stephen_barlow",
+      "gridPosition": 15,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_5_driver_paul_barnes",
+      "gridPosition": 16,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_13_driver_dean_forward",
+      "gridPosition": 17,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_17_driver_joseph_pomfret",
+      "gridPosition": 18,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_20_driver_george_ditchfield",
+      "gridPosition": 19,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_155_driver_kenneth_finneran",
+      "gridPosition": 20,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_50_driver_david_porter",
+      "gridPosition": 21,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_127_driver_colin_turner",
+      "gridPosition": 23,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_11_driver_graham_woodin",
+      "gridPosition": 24,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_71_driver_phil_hart",
+      "gridPosition": 25,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_3_99_driver_john_evans",
+      "gridPosition": 26,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_3_driver_roger_orgee",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_2_driver_rick_morris",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_7_driver_chris_hodgen",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_98_driver_ryan_campbell",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_124_driver_tom_ward",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_36_driver_daniel_obeirne",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_121_driver_gaius_ghinn",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_28_driver_tom_hawkins",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_76_driver_james_colborn",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_10_driver_will_everington",
+      "gridPosition": 21,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_18_driver_christopher_perkins",
+      "gridPosition": 23,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_heat_4_130_driver_david_squire",
+      "gridPosition": 25,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_progression_race_277_driver_joey_foster",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_progression_race_33_driver_neil_broome",
+      "gridPosition": 22,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_progression_race_6_driver_peter_daly",
+      "gridPosition": 24,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_progression_race_41_driver_chris_porritt",
+      "gridPosition": 26,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_progression_race_157_driver_jeremy_caine",
+      "gridPosition": 28,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_49_driver_megan_gilkes",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_63_driver_tom_brown",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_59_driver_josh_smith",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_89_driver_neil_fowler",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_188_driver_morgan_quinn",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_96_driver_dan_fox",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_43_driver_callum_grant",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_62_driver_richard_higgins",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_115_driver_matthew_wrigley",
+      "gridPosition": 21,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_8_driver_nigel_dolan",
+      "gridPosition": 22,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_30_driver_stephen_barlow",
+      "gridPosition": 23,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_90_driver_henry_campbell",
+      "gridPosition": 24,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_16_driver_neil_mcarthur",
+      "gridPosition": 26,
+      "startPosition": 24
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_55_driver_joe_porter",
+      "gridPosition": 27,
+      "startPosition": 25
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_2_driver_rick_morris",
+      "gridPosition": 28,
+      "startPosition": 26
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_48_driver_benn_tilley",
+      "gridPosition": 29,
+      "startPosition": 27
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_36_driver_daniel_obeirne",
+      "gridPosition": 30,
+      "startPosition": 28
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_10_driver_will_everington",
+      "gridPosition": 31,
+      "startPosition": 29
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_79_driver_leanne_mcshane",
+      "gridPosition": 32,
+      "startPosition": 30
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_134_driver_scott_rawlinson",
+      "gridPosition": 33,
+      "startPosition": 31
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_27_driver_hayden_hardyman",
+      "gridPosition": 34,
+      "startPosition": 32
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_24_driver_mark_de_rozarieux",
+      "gridPosition": 35,
+      "startPosition": 33
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_semi_final_2_18_driver_christopher_perkins",
+      "gridPosition": 36,
+      "startPosition": 34
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_143_driver_jaap_blijleven",
+      "gridPosition": 4,
+      "startPosition": 3
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_67_driver_george_mcdonald",
+      "gridPosition": 5,
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_56_driver_alex_ames",
+      "gridPosition": 6,
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_98_driver_ryan_campbell",
+      "gridPosition": 7,
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_121_driver_gaius_ghinn",
+      "gridPosition": 8,
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_169_driver_joe_watts",
+      "gridPosition": 9,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_73_driver_edward_thurston",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_90_driver_henry_campbell",
+      "gridPosition": 12,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_76_driver_james_colborn",
+      "gridPosition": 13,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_134_driver_scott_rawlinson",
+      "gridPosition": 14,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_11_driver_graham_woodin",
+      "gridPosition": 15,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_18_driver_christopher_perkins",
+      "gridPosition": 17,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_194_driver_mark_bates",
+      "gridPosition": 18,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_5_driver_paul_barnes",
+      "gridPosition": 19,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_27_driver_hayden_hardyman",
+      "gridPosition": 20,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_84_driver_stephen_bracegirdle",
+      "gridPosition": 22,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_79_driver_leanne_mcshane",
+      "gridPosition": 24,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_62_driver_richard_higgins",
+      "gridPosition": 26,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_17_driver_joseph_pomfret",
+      "gridPosition": 27,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_15_55_driver_joe_porter",
+      "gridPosition": 28,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_16_71_driver_phil_hart",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_16_130_driver_david_squire",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_16_93_driver_rudolf_ernst",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_16_64_driver_mark_carter",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_16_2_driver_rick_morris",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_wht_race_16_41_driver_chris_porritt",
+      "gridPosition": 20,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_national_oulton_park_race_1_93_driver_seamus_wild",
+      "gridPosition": 30,
+      "startPosition": 29
+    },
+    {
+      "resultId": "result_formula_ford_2020_national_oulton_park_race_1_52_driver_trevor_morgan",
+      "gridPosition": 31,
+      "startPosition": 30
+    },
+    {
+      "resultId": "result_formula_ford_2020_national_oulton_park_race_1_60_driver_simon_fraser",
+      "gridPosition": 32,
+      "startPosition": 31
+    },
+    {
+      "resultId": "result_formula_ford_2020_national_oulton_park_race_1_4_driver_jonathan_barnes",
+      "gridPosition": 33,
+      "startPosition": 32
+    },
+    {
+      "resultId": "result_formula_ford_2020_national_oulton_park_race_1_14_driver_phil_nelson",
+      "gridPosition": 34,
+      "startPosition": 33
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_15_driver_matthew_wrigley",
+      "gridPosition": 9,
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_3_driver_tom_brown",
+      "gridPosition": 10,
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_2_driver_mike_gardner",
+      "gridPosition": 11,
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_105_driver_nick_barnes",
+      "gridPosition": 12,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_142_driver_craig_currie",
+      "gridPosition": 13,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_1_driver_scott_guthrie",
+      "gridPosition": 14,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_56_driver_nigel_lingwood",
+      "gridPosition": 15,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_188_driver_nigel_thompson",
+      "gridPosition": 16,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_16_driver_graham_terry",
+      "gridPosition": 17,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_42_driver_christopher_stones",
+      "gridPosition": 18,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_22_driver_george_ditchfield",
+      "gridPosition": 19,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_2_11_driver_graham_woodin",
+      "gridPosition": 20,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_15_driver_matthew_wrigley",
+      "gridPosition": 13,
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_3_driver_tom_brown",
+      "gridPosition": 14,
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_105_driver_nick_barnes",
+      "gridPosition": 15,
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_56_driver_nigel_lingwood",
+      "gridPosition": 16,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_188_driver_nigel_thompson",
+      "gridPosition": 17,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_11_driver_graham_woodin",
+      "gridPosition": 18,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_16_driver_graham_terry",
+      "gridPosition": 19,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_22_driver_george_ditchfield",
+      "gridPosition": 20,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_cadwell_race_5_42_driver_christopher_stones",
+      "gridPosition": 21,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_123_driver_bryce_aron",
+      "gridPosition": 5,
+      "startPosition": 4
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_30_driver_grant_palmer",
+      "gridPosition": 6,
+      "startPosition": 5
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_29_driver_stuart_gough",
+      "gridPosition": 7,
+      "startPosition": 6
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_42_driver_max_esterson",
+      "gridPosition": 8,
+      "startPosition": 7
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_96_driver_pascal_monbaron",
+      "gridPosition": 9,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_24_driver_thomas_ward",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_5_driver_adam_fathers",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_35_driver_john_svensson",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_88_driver_jason_down",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_14_driver_richard_mendoza",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_74_driver_mataeo_pearce",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_11_driver_steve_mansell",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_17_driver_hayden_hardyman",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_79_driver_andrew_pryke",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_98_driver_terry_durdin",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_64_driver_john_whitbourn",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_27_driver_shaun_macklin",
+      "gridPosition": 21,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_13_driver_simon_pruce",
+      "gridPosition": 22,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_18_driver_chris_perkins",
+      "gridPosition": 23,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_77_driver_christopher_sharples",
+      "gridPosition": 24,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_36_driver_don_boyack",
+      "gridPosition": 25,
+      "startPosition": 24
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_5_19_driver_innes_hickman",
+      "gridPosition": 26,
+      "startPosition": 25
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_race_11_41_driver_alex_walker",
+      "gridPosition": 26,
+      "startPosition": 25
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_4_69_driver_alan_slater",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_4_960_driver_bob_higgins",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_4_7_driver_michael_phillips",
+      "gridPosition": 21,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_4_60_driver_paul_morcom",
+      "gridPosition": 22,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_4_33_driver_chris_warden",
+      "gridPosition": 23,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_40_driver_matthew_hallam",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_5_driver_paul_barnes",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_84_driver_steve_bracegirdle",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_25_driver_mark_de_rozarieux",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_78_driver_james_rose",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_17_driver_hayden_hardyman",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_83_driver_james_colborn",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_27_driver_shaun_macklin",
+      "gridPosition": 18,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_69_driver_alan_slater",
+      "gridPosition": 19,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_960_driver_bob_higgins",
+      "gridPosition": 20,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_7_driver_michael_phillips",
+      "gridPosition": 21,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_60_driver_paul_morcom",
+      "gridPosition": 22,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203168_race_8_33_driver_chris_warden",
+      "gridPosition": 23,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203668_race_3_33_driver_chris_warden",
+      "gridPosition": 22,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2020_castle_combe_203668_race_3_78_driver_james_rose",
+      "gridPosition": 23,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_27_driver_shaun_macklin",
+      "gridPosition": 9,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_64_driver_john_whitbourn",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_60_driver_matt_hayes",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_79_driver_andrew_pryke",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_19_driver_innes_hickman",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_13_driver_simon_pruce",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203505_race_10_98_driver_terry_durdin",
+      "gridPosition": 16,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203851_race_20_88_driver_jason_down",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2020_champion_brands_203851_race_20_123_driver_bryce_aron",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_90_driver_henry_campbell",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_87_driver_ian_jeary",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_78_driver_joe_walton",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_177_driver_philip_attwood",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_140_driver_laurie_hughes",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_9_driver_terry_walkingshaw",
+      "gridPosition": 15,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_888_driver_chris_stuart",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_64_driver_john_whitbourn",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_35_driver_tom_cloet",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_23_driver_jonathan_woolridge",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech_70_driver_andrew_pryke",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_34_driver_jack_kemp",
+      "gridPosition": 16,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_96_driver_pascal_monbaron",
+      "gridPosition": 17,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_28_driver_tom_hawkins",
+      "gridPosition": 18,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_31_driver_rick_morris",
+      "gridPosition": 19,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_6_driver_peter_hardman",
+      "gridPosition": 20,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_33_driver_richard_davison",
+      "gridPosition": 22,
+      "startPosition": 20
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_5_driver_adam_fathers",
+      "gridPosition": 24,
+      "startPosition": 21
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_8_driver_mark_armstrong",
+      "gridPosition": 25,
+      "startPosition": 22
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_88_driver_jason_down",
+      "gridPosition": 26,
+      "startPosition": 23
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_124_driver_oliver_chapman",
+      "gridPosition": 27,
+      "startPosition": 24
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_140_driver_laurie_hughes",
+      "gridPosition": 29,
+      "startPosition": 25
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_78_driver_joe_walton",
+      "gridPosition": 30,
+      "startPosition": 26
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_177_driver_philip_attwood",
+      "gridPosition": 18,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_25_driver_matthew_skelton",
+      "gridPosition": 19,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_173_driver_jordan_harrison",
+      "gridPosition": 20,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_12_driver_colm_blackburn",
+      "gridPosition": 9,
+      "startPosition": 8
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_5_driver_adam_fathers",
+      "gridPosition": 10,
+      "startPosition": 9
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_36_driver_logan_hannah",
+      "gridPosition": 11,
+      "startPosition": 10
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_6_driver_peter_hardman",
+      "gridPosition": 12,
+      "startPosition": 11
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_42_driver_simon_hadfield",
+      "gridPosition": 13,
+      "startPosition": 12
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_8_driver_mark_armstrong",
+      "gridPosition": 14,
+      "startPosition": 13
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_101_driver_andrew_blair",
+      "gridPosition": 17,
+      "startPosition": 14
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_71_driver_kevan_mclurg",
+      "gridPosition": 19,
+      "startPosition": 15
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_18_driver_bryce_aron",
+      "gridPosition": 25,
+      "startPosition": 16
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_45_driver_rory_smith",
+      "gridPosition": 26,
+      "startPosition": 17
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_88_driver_jason_down",
+      "gridPosition": 28,
+      "startPosition": 18
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_40_driver_dan_rene_larsen",
+      "gridPosition": 29,
+      "startPosition": 19
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_3_driver_peter_dempsey",
+      "gridPosition": 30,
+      "startPosition": 20
+    }
+  ],
+  "restartedSessionsKeptGridSlot": [
+    "session_formula_ford_2020_wht_heat_1",
+    "session_formula_ford_2020_wht_race_7",
+    "session_formula_ford_2020_wht_race_8",
+    "session_formula_ford_2020_wht_last_chance_race",
+    "session_formula_ford_2020_wht_grand_final",
+    "session_formula_ford_2020_castle_combe_203668_race_8"
   ],
   "gridRowsMatchedByDriverName": [
     {
@@ -770,6 +2338,51 @@
     }
   ],
   "gridStartHoldouts": [
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_177_driver_philip_attwood",
+      "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "carNumber": "177",
+      "driverId": "driver_philip_attwood",
+      "finishPosition": null,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_888_driver_chris_stuart",
+      "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "carNumber": "888",
+      "driverId": "driver_chris_stuart",
+      "finishPosition": 22,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_73_driver_simon_pruce",
+      "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "carNumber": "73",
+      "driverId": "driver_simon_pruce",
+      "finishPosition": 17,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_87_driver_ian_jeary",
+      "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "carNumber": "87",
+      "driverId": "driver_ian_jeary",
+      "finishPosition": 13,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
+    {
+      "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_128_driver_david_mccullough",
+      "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "carNumber": "128",
+      "driverId": "driver_david_mccullough",
+      "finishPosition": 12,
+      "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+    },
     {
       "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
       "sessionId": "session_formula_ford_2020_champion_brands_race_11",
@@ -839,7 +2452,7 @@
       "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
       "scope": "series_formula_ford:2020:grid_start_positions",
       "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
+      "description": "Formula Ford 2020 official grid/start import is complete for 1148 race/heat rows. The remaining 12 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically.",
       "provenanceRefs": [
         "source_formula_ford_2020_festival_book_pdf",
         "source_formula_ford_2020_wht_book_pdf",
@@ -847,10 +2460,21 @@
         "source_formula_ford_2020_national_brands_hatch_book_pdf",
         "source_formula_ford_2020_national_silverstone_book_pdf",
         "source_formula_ford_2020_champion_cadwell_book_pdf",
-        "source_formula_ford_2020_champion_brands_book_pdf"
+        "source_formula_ford_2020_champion_brands_book_pdf",
+        "source_formula_ford_2020_castle_combe_202768_book_pdf",
+        "source_formula_ford_2020_castle_combe_203168_book_pdf",
+        "source_formula_ford_2020_castle_combe_203668_book_pdf",
+        "source_formula_ford_2020_champion_brands_203505_book_pdf",
+        "source_formula_ford_2020_champion_brands_203851_book_pdf",
+        "source_formula_ford_2019_festival_book_pdf"
       ],
       "raw": {
         "resultIds": [
+          "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_177_driver_philip_attwood",
+          "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_888_driver_chris_stuart",
+          "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_73_driver_simon_pruce",
+          "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_87_driver_ian_jeary",
+          "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_128_driver_david_mccullough",
           "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
           "result_formula_ford_2020_national_oulton_park_race_1_16_driver_neil_mcarthur",
           "result_formula_ford_2020_wht_grand_final_3_driver_roger_orgee",
@@ -860,6 +2484,51 @@
           "result_formula_ford_2020_wht_semi_final_2_91_driver_bob_hawkins"
         ],
         "holdouts": [
+          {
+            "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_177_driver_philip_attwood",
+            "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+            "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+            "carNumber": "177",
+            "driverId": "driver_philip_attwood",
+            "finishPosition": null,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech_888_driver_chris_stuart",
+            "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+            "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+            "carNumber": "888",
+            "driverId": "driver_chris_stuart",
+            "finishPosition": 22,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_73_driver_simon_pruce",
+            "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+            "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+            "carNumber": "73",
+            "driverId": "driver_simon_pruce",
+            "finishPosition": 17,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy_87_driver_ian_jeary",
+            "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+            "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+            "carNumber": "87",
+            "driverId": "driver_ian_jeary",
+            "finishPosition": 13,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
+          {
+            "resultId": "result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_128_driver_david_mccullough",
+            "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
+            "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+            "carNumber": "128",
+            "driverId": "driver_david_mccullough",
+            "finishPosition": 12,
+            "reason": "official_classification_row_has_no_safe_original_grid_start_match"
+          },
           {
             "resultId": "result_formula_ford_2020_champion_brands_race_11_87_driver_ian_jeary",
             "sessionId": "session_formula_ford_2020_champion_brands_race_11",

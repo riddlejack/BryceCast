@@ -162,6 +162,19 @@ def build_indexes(data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def field_beaten_share(row: dict[str, Any]) -> float | None:
+    """Share of the OTHER cars he finished ahead of: (field - place) / (field - 1).
+
+    The stored finishPercentile, (field - place + 1) / field, counts Bryce himself,
+    so it overstates the share of the field he beat. Reader-facing "field beaten"
+    figures use this one."""
+    finish = clean_num(row.get("finishPosition"))
+    field = clean_num(row.get("fieldSize"))
+    if finish is None or not field or field <= 1 or finish < 1 or finish > field:
+        return None
+    return round((field - finish) / (field - 1), 4)
+
+
 def series_session_ids(data: dict[str, Any], idx: dict[str, Any], series_id: str) -> set[str]:
     event_ids = {e["id"] for e in data["events"] if e.get("seriesId") == series_id}
     return {s["id"] for s in data["sessions"] if s.get("eventId") in event_ids}
@@ -364,6 +377,7 @@ def event_summary_rows(race_rows: list[dict[str, Any]], q_rows: list[dict[str, A
             "avgFinish": avg(finishes),
             "bestFinish": min([f for f in finishes if f is not None], default=None),
             "avgFinishPercentile": avg(pct),
+            "avgFieldBeatenShare": avg([field_beaten_share(r) for r in rows]),
             "avgPositionGainWhenStartKnown": avg(gains),
             "top5Count": sum(1 for f in finishes if f is not None and f <= 5),
             "top10Count": sum(1 for f in finishes if f is not None and f <= 10),
@@ -444,6 +458,7 @@ def track_profile_rows(data: dict[str, Any], idx: dict[str, Any], race_rows: lis
             "avgFinish": avg(finishes),
             "bestFinish": min([f for f in finishes if f is not None], default=None),
             "avgFinishPercentile": avg(pct),
+            "avgFieldBeatenShare": avg([field_beaten_share(r) for r in rows]),
             "avgPositionGainWhenStartKnown": avg(gains),
             "startKnownRows": sum(1 for r in rows if r.get("startPosition") is not None),
             "sourceState": "official_results_plus_track_metadata",

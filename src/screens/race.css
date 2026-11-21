@@ -1,0 +1,368 @@
+/* Race pages (site refresh, round 2): /races/:id, /races and /career/race/:id.
+ * Everything here is scoped under a race class so nothing leaks into the
+ * shared theme. Paper ground, 1 px rules, no grey boxes. */
+
+/* ---------- /races/:id ---------- */
+
+/* Restarts and the team, side by side under the lap chart on a wide screen. */
+.race-page .race-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--section-gap) var(--card-gap);
+  align-items: start;
+}
+@media (min-width: 1100px) {
+  .race-page .race-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .race-page .race-pair:has(> :only-child) { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* "This place, other years": the year shapes on an even grid, three across on
+ * a desktop, so a sixth visit never sits alone on a second row and each shape
+ * gets the full column the component lets it fill. The shapes row is the
+ * card's last child (sectionIntelligence.tsx renders it; we only lay it out). */
+.race-page .race-years > .card > .row:last-child {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 36px 40px !important;
+}
+.race-page .race-years > .card > .row:last-child > * {
+  max-width: none !important;
+  min-width: 0 !important;
+}
+@media (min-width: 640px) {
+  .race-page .race-years > .card > .row:last-child { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .race-page .race-years > .card > .row:last-child { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Four visits read as one row of four rather than three and an orphan. */
+  .race-page .race-years > .card > .row:last-child:has(> :nth-child(4):last-child) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* The day: the year-over-year line under the tiles, split by a rule. */
+.race-page .race-day__yoy {
+  border-top: 1px solid var(--grid-hairline);
+  margin-top: 18px;
+  padding-top: 14px;
+}
+
+/* ---------- the header: one block, one left edge (round 6) ----------
+ * Jack, Nov 16 (screenshot 5): "a lot of weird lines, there's too much text,
+ * the spacing isn't right, the padding isn't right, the white space is really
+ * off." The back link, the race line and the title sit tight as one head; under
+ * it one block: the result, the points, one line of context and the replays on
+ * the left, the track as the interactive 3D model on the right. Space separates
+ * the parts; the only rules on it are the model's own. */
+
+.race-page .race-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: clamp(4px, 1vw, 16px);
+}
+.race-page .race-head__back { padding: 4px 0; margin-bottom: clamp(16px, 1.6vw, 28px); font-size: 14px; }
+.race-page .race-head .screen-head__title { margin-top: 8px; max-width: none; }
+/* The stack's section gap is for sections; the result belongs to the title. */
+.page.stack.race-page > .race-head + .race-hero { margin-top: calc(var(--section-gap) * -1 + clamp(28px, 2.6vw, 48px)); }
+
+.race-page .race-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'facts' 'model' 'watch';
+  gap: 32px;
+  align-items: start;
+}
+.race-page .race-hero__facts { grid-area: facts; min-width: 0; }
+.race-page .race-hero__model { grid-area: model; min-width: 0; }
+.race-page .race-hero__watch { grid-area: watch; min-width: 0; }
+.race-page .race-hero__watch:empty { display: none; }
+
+@media (min-width: 1000px) {
+  .race-page .race-hero {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+    grid-template-areas: 'facts model' 'watch model';
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(40px, 4.4vw, 88px);
+    row-gap: 40px;
+  }
+  /* The replays follow the facts directly (Nov 16: no dead band between them). */
+  .race-page .race-hero__watch { align-self: start; }
+  .race-page .race-hero--no-track {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'facts' 'watch';
+    grid-template-rows: auto;
+  }
+}
+
+/* The result: the place, then how he got there. */
+.race-page .race-hero__result { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.race-page .race-hero__pos {
+  font-size: clamp(72px, 7vw, 128px);
+  font-weight: 640;
+  font-variant-numeric: proportional-nums;
+  letter-spacing: -0.045em;
+  line-height: 0.86;
+  margin-left: -0.04em; /* the P's stem on the left edge, optically */
+}
+.race-page .race-hero__gain { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 16px; }
+.race-page .race-hero__gain .stat__delta { font-size: 16px; }
+.race-page .race-hero__field { color: var(--ink-muted); }
+
+.race-page .race-hero__points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px clamp(28px, 3vw, 52px);
+  margin-top: clamp(28px, 2.6vw, 44px);
+}
+.race-page .race-hero__points .stat__value { font-size: clamp(26px, 2.1vw, 36px); }
+
+.race-page .race-hero__line {
+  margin: clamp(22px, 2vw, 32px) 0 0;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+/* The replays: this race's as the one filled play button, the earlier years
+ * as a quiet row of links, and one line naming the captures. The shared
+ * affordance's own capture labels, sources and earlier-year meta lines give
+ * way to that one line here (on Home they stay). */
+.race-page .race-watch { display: flex; flex-direction: column; gap: 20px; }
+.race-page .race-watch .race-replay__affordance { justify-content: flex-start; }
+.race-page .race-watch .race-replay__cta { flex: 0 1 auto; }
+.race-page .race-watch .race-replay__provenance,
+.race-page .race-watch .race-replay__year-prov,
+.race-page .race-watch__years .race-replay__year-meta { display: none; }
+.race-page .race-watch__years { display: flex; flex-direction: column; gap: 10px; }
+.race-page .race-watch__lead { font-size: 13.5px; color: var(--ink-secondary); }
+.race-page .race-watch__list { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.race-page .race-watch__list .race-replay__year { flex: 0 0 auto; }
+.race-page .race-watch__list .race-replay__year-link { flex: 0 0 auto; grid-template-columns: 28px auto; gap: 9px; }
+.race-page .race-watch__list .race-replay__year-play { width: 28px; height: 28px; }
+.race-page .race-watch__list .race-replay__year-play svg { width: 12px; height: 12px; }
+.race-page .race-watch__list .race-replay__year-title { font-size: 14.5px; font-weight: 520; white-space: nowrap; }
+.race-page .race-watch__prov { margin: 0; max-width: 52ch; font-size: 12.5px; line-height: 1.5; color: var(--ink-muted); }
+
+/* The model's key: the ramp and what a shade means, on one line. */
+.race-page .race-hero__key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 12.5px; color: var(--ink-muted); }
+.race-page .race-hero__ramp { display: inline-flex; align-items: center; gap: 8px; }
+.race-page .race-hero__swatches { display: inline-flex; border-radius: 3px; overflow: hidden; }
+.race-page .race-hero__swatches > span { width: 18px; height: 8px; }
+.race-page .race-hero__key-words { color: var(--ink-secondary); }
+.race-page .race-hero__model .track3d__legend { margin-bottom: 12px; }
+.race-page .race-hero__model .track3d__stage { max-height: min(70vh, 760px); }
+.race-page .race-hero__flat { display: flex; flex-direction: column; gap: 12px; }
+
+/* ---------- /races ---------- */
+
+/* Round 5 (Jack, Nov 16: "a little bit too zoomed in", "not enough white space
+ * on the sides"): the Races page runs a narrower column, nav and footer with it
+ * so the left edge stays one line, and every size from round 4 comes down about
+ * 8%. */
+:root:has(.races-index) { --content-max: 1560px; }
+
+/* Phone: the season title gets its own line; the summary and source sit
+ * under it instead of squeezing "2025 season" onto two lines. */
+@media (max-width: 640px) {
+  .races-index .card__header { flex-wrap: wrap; row-gap: 4px; }
+  .races-index .card__header > .card__title { flex: 1 0 100%; }
+}
+.races-index .tower__name > span:first-child { text-wrap: pretty; }
+.races-index .card__header .caption { white-space: nowrap; }
+
+/* Round 4 (Jack's review, Nov 15): the page "needs to be increased a few
+ * points". Every size here is up two to five points from round 3, the track
+ * outlines in the rows are near twice the size, and the header sits as one
+ * block: the line under the title, the results date tight under it, then the
+ * season. */
+.races-index .screen-head__sub { font-size: clamp(17px, 1.2vw, 21px); max-width: 52ch; }
+/* (!important: DataFreshness sets margin: 0 inline, which is why the stack's
+ * own pull-up under a screen head never reached it.) */
+.page.stack.races-index > .screen-head + [role='status'] { margin-top: calc(var(--section-gap) * -1 + 14px) !important; }
+.races-index > [role='status'] { font-size: 15px; gap: 8px !important; }
+.races-index > [role='status'] svg { width: 15px; height: 15px; }
+.page.stack.races-index > [role='status'] + .card { margin-top: calc(var(--section-gap) * -1 + clamp(40px, 3.4vw, 60px)); }
+
+.races-index .card { padding-top: 24px; }
+.races-index .card__header { margin-bottom: 10px; }
+.races-index .card__title { font-size: clamp(24px, 2vw, 36px); letter-spacing: -0.02em; }
+.races-index .card__header .caption { font-size: 15px; }
+.races-index .races-index__legend { margin: 0 0 12px; font-size: 15px; line-height: 1.5; max-width: none; }
+
+.races-index .tower__row { padding: 12px 0; font-size: 18px; }
+.races-index .tower__row.race-row { grid-template-columns: 58px minmax(0, 1fr) auto auto 20px; column-gap: 14px; }
+.races-index .race-row__pos { gap: 5px; font-size: 20px; color: var(--ink-primary); font-variant-numeric: tabular-nums; }
+.races-index .race-row__top5 { width: 6px; height: 6px; border-radius: 2px; background: var(--bryce); }
+.races-index .race-row__mini { width: 76px; height: 42px; align-items: center; justify-content: center; flex: none; }
+/* Round 7: the bird's-eye 3D mark (TrackIcon), drawn at the box's own size; a
+ * future round's mark steps back as its muted line did. */
+.races-index .race-row__mini .track-icon { display: block; width: 100%; height: 100%; object-fit: contain; }
+.races-index .race-row__mini .track-icon--muted { opacity: 0.55; }
+.races-index .tower__team { font-size: 14px; }
+.races-index .tower__row .stat__delta { font-size: 16px; font-variant-numeric: tabular-nums; }
+.races-index .tower__row .tower__gap { font-size: 16px; }
+.races-index .race-row__date,
+.races-index .race-row__when { min-width: 60px; }
+.races-index .race-upcoming__head .caption { font-size: 15px; }
+.races-index .tower__row.race-row--upcoming { grid-template-columns: 76px minmax(0, 1fr) auto; column-gap: 14px; }
+.races-index .tower__row.race-row--upcoming.race-row--live { grid-template-columns: 76px minmax(0, 1fr) auto 20px; }
+@media (min-width: 640px) {
+  .races-index .tower__row.race-row { grid-template-columns: 58px 76px minmax(0, 1fr) auto auto auto 20px; }
+}
+@media (max-width: 639px) {
+  .races-index .tower__row { font-size: 17px; padding: 12px 0; }
+  .races-index .race-row__pos { font-size: 20px; }
+  .races-index .tower__row.race-row { grid-template-columns: 52px minmax(0, 1fr) auto auto 18px; column-gap: 12px; }
+  .races-index .race-row__mini { width: 64px; height: 36px; }
+  .races-index .tower__row.race-row--upcoming { grid-template-columns: 64px minmax(0, 1fr) auto; }
+  .races-index .tower__row .stat__delta,
+  .races-index .tower__row .tower__gap { font-size: 15px; }
+  .races-index .races-index__legend, .races-index .card__header .caption { font-size: 15px; }
+  /* the freshness line wraps on a phone: drop its dot so no line ends on one */
+  .races-index > [role='status'] > span[aria-hidden] { display: none; }
+  .races-index > [role='status'] { column-gap: 0 !important; }
+  .races-index > [role='status'] > svg { margin-right: 8px; }
+  .races-index > [role='status'] > span:last-child { flex-basis: 100%; }
+}
+
+
+/* ---------- career round 2 (Nov 17): every season, 3D stills ---------- */
+
+/* The years as one line of jump links under the freshness line. */
+.races-index .races-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px clamp(14px, 2vw, 30px);
+  margin-top: calc(var(--section-gap) * -1 + 22px);
+}
+.races-index .races-years__year {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 2px;
+  color: var(--ink-primary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 140ms ease;
+}
+.races-index .races-years__year:hover,
+.races-index .races-years__year:focus-visible { border-bottom-color: var(--ink-primary); }
+.races-index .races-years__label { font-size: clamp(18px, 1.4vw, 23px); font-weight: 620; letter-spacing: -0.015em; font-variant-numeric: tabular-nums; }
+.races-index .races-years__count { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.races-index .races-years__swatches { display: inline-flex; gap: 2px; }
+.races-index .races-years__swatches i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.page.stack.races-index > .races-years + .races-season { margin-top: calc(var(--section-gap) * -1 + clamp(30px, 2.6vw, 48px)); }
+.races-index .races-season { scroll-margin-top: 84px; }
+
+/* The series key: a swatch per series, its name, its count. */
+.races-index .races-key { display: inline-flex; flex-wrap: wrap; gap: 4px 16px; margin-right: 14px; color: var(--ink-secondary); }
+.races-index .races-key__item { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.races-index .races-key__item i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.races-index .races-key__n { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.races-index .races-key__how { white-space: normal; }
+
+/* Show / hide a year's rows. */
+.races-index .races-fold {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0 2px;
+  border: none;
+  background: none;
+  color: var(--link);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+.races-index .races-fold svg { transition: transform 160ms ease; }
+.races-index .races-fold:hover span { text-decoration: underline; text-underline-offset: 3px; }
+
+/* The other series in an INDY NXT year. */
+.races-index .races-also { margin-top: clamp(26px, 2.4vw, 40px); padding-top: clamp(18px, 1.6vw, 26px); border-top: 1px solid var(--grid-hairline); }
+.races-index .races-also__head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-bottom: 8px; font-size: 15px; }
+.races-index .races-also__title { margin: 0; font-size: clamp(18px, 1.3vw, 22px); font-weight: 620; letter-spacing: -0.01em; }
+
+/* Archive rows: the series swatch under the race, a win marked in gold. */
+.races-index .race-row__series { display: inline-flex; align-items: center; gap: 6px; }
+.races-index .race-row__series i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.races-index .race-row__name { white-space: normal; flex-direction: column; align-items: flex-start; gap: 2px; }
+.races-index .race-row__pos--none { color: var(--ink-muted); font-size: 16px; letter-spacing: 0.02em; }
+.races-index .race-row__win { width: 6px; height: 6px; border-radius: 50%; background: var(--bryce); }
+.races-index .race-row__field { color: var(--ink-muted); }
+
+/* The row's track: the 3D still in a 16:9 slot (the stills' own shape). */
+@media (min-width: 640px) {
+  .races-index .tower__row.race-row { grid-template-columns: 58px 104px minmax(0, 1fr) auto auto auto 20px; }
+  .races-index .tower__row.race-row--upcoming { grid-template-columns: 104px minmax(0, 1fr) auto; }
+  .races-index .tower__row.race-row--upcoming.race-row--live { grid-template-columns: 104px minmax(0, 1fr) auto 20px; }
+  .races-index .race-row__mini--still { width: 104px; height: 58px; }
+}
+.races-index .race-row__still {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--grey-fill);
+}
+.races-index .race-row__mini--muted .race-row__still { opacity: 0.55; }
+.races-index .race-row:hover .race-row__still { filter: saturate(1.08) contrast(1.03); }
+
+/* The spine dot's card: the explorer's mouse card (.ddx-card) grammar. */
+.rsc {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: var(--surface-0);
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(30, 28, 26, 0.12);
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.rsc--below { transform: translate(-50%, 0); }
+.rsc__still { display: block; width: 100%; height: auto; background: var(--grey-fill); border-bottom: 1px solid var(--divider); }
+.rsc__body { display: flex; flex-direction: column; gap: 3px; padding: 9px 12px 10px; }
+.rsc__meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.rsc__meta i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.rsc__title { font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+.rsc__nums { color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+.rsc__note { color: var(--ink-muted); }
+.rsc__action { color: var(--link); font-size: 12px; margin-top: 2px; }
+.rsc-tap { width: min(272px, calc(100vw - 16px)); padding-top: 0; overflow: hidden; }
+.rsc-tap__still { width: calc(100% + 24px); margin: 0 -12px 8px; }
+.rsc-tap__body { display: flex; flex-direction: column; gap: 3px; }
+.rsc-tap .rsc__meta { font-size: 12.5px; }
+.races-index .races-nopic .race-row__mini { display: none; }
+@media (min-width: 640px) {
+  .races-index .races-nopic .tower__row.race-row { grid-template-columns: 58px minmax(0, 1fr) auto auto auto 20px; }
+}
+
+/* Proxy review 1 (Nov 17): the row's still with the lap drawn bold; a venue
+ * with no model shows a quiet stand-in, never an empty hole. */
+.races-index svg.race-row__still--bold { overflow: hidden; }
+.races-index .race-row__standin {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: var(--grey-fill);
+  opacity: 0.6;
+}
+@media (min-width: 640px) {
+  .races-index .race-row__date { display: inline-flex; flex-direction: column; align-items: flex-end; line-height: 1.2; }
+}
+.races-index .race-row__weekend { font-size: 12.5px; color: var(--ink-muted); white-space: nowrap; }
+/* A win, and an INDY NXT top 5: a ring, so gold means INDY NXT and nothing else. */
+.races-index .race-row__win,
+.races-index .race-row__top5 { width: 9px; height: 9px; border-radius: 50%; background: none; border: 1.6px solid var(--ink-primary); box-sizing: border-box; }
+.races-index .races-also__series + .races-also__series { margin-top: 14px; }
+.races-index .races-also__sub { display: inline-flex; align-items: center; gap: 7px; margin: 10px 0 0; font-size: 15px; font-weight: 600; color: var(--ink-secondary); }
+.races-index .races-also__sub i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }

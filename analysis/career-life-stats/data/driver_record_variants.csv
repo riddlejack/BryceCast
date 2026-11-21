@@ -1,0 +1,9 @@
+groupId,driverId,displayName,kind,note
+smith,driver_josh_smith,Josh SMITH,possible_variant,"Josh and Joshua Smith: both in Van Diemen JL13s, a common car, in different numbers; the sheets don't tie them. Merged records are in data/career/identity/driver-aliases.json."
+smith,driver_joshua_smith,Joshua SMITH,possible_variant,"Josh and Joshua Smith: both in Van Diemen JL13s, a common car, in different numbers; the sheets don't tie them."
+ward,driver_tom_ward,Tom WARD,possible_variant,"Tom and Thomas Ward: a Medina BH20 in car 24 and a BH21 in car 124; possibly one driver in a new car."
+ward,driver_thomas_ward,Thomas WARD,possible_variant,"Tom and Thomas Ward: a Medina BH20 in car 24 and a BH21 in car 124; possibly one driver in a new car."
+mcarthur,driver_tom_mcarthur,Tom McARTHUR,possible_variant,"Tom and Thomas McArthur: different cars in a family of McArthur drivers."
+mcarthur,driver_thomas_mcarthur,Thomas MCARTHUR,possible_variant,"Tom and Thomas McArthur: different cars in a family of McArthur drivers."
+goikhberg,driver_mikhail_goikhberg,Mikhail Goikhberg,possible_variant,"Mikhail and Misha Goikhberg: both in Mygales in 2019 in different numbers; Misha is a short form of Mikhail."
+goikhberg,driver_misha_goikhberg,Misha Goikhberg,possible_variant,"Mikhail and Misha Goikhberg: both in Mygales in 2019 in different numbers; Misha is a short form of Mikhail."

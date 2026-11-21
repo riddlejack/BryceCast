@@ -1,0 +1,61 @@
+/* Qualifying to the flag (November 17, 2026) */
+
+.ddq-a {
+  display: grid;
+  grid-template-columns: minmax(0, 640px) minmax(280px, 1fr);
+  column-gap: clamp(32px, 4vw, 80px);
+  align-items: center;
+}
+.ddq-a__plot { position: relative; width: 100%; }
+.ddq-a__plot svg { display: block; touch-action: manipulation; }
+
+.ddq-key { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; max-width: 560px; }
+.ddq-key__row {
+  display: grid;
+  grid-template-columns: 136px minmax(0, 1fr);
+  grid-template-areas: 'name strip' 'name count';
+  column-gap: 16px;
+  row-gap: 4px;
+  align-items: center;
+  width: 100%;
+  padding: 10px 10px;
+  border: 0;
+  border-radius: var(--radius-tile);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 160ms ease, background 160ms ease;
+}
+.ddq-key__row:hover, .ddq-key__row--on { background: var(--grey-fill); }
+.ddq-key__row--off { opacity: 0.35; }
+.ddq-key__row:focus-visible { outline: 2px solid var(--amber); outline-offset: 1px; }
+.ddq-key__name { grid-area: name; display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; color: var(--ink); }
+.ddq-key__swatch { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.ddq-key__strip { grid-area: strip; display: flex; flex-wrap: wrap; gap: 3px; }
+.ddq-key__mark { width: 9px; height: 9px; border-radius: 50%; }
+.ddq-key__mark--ahead { background: var(--amber); }
+.ddq-key__mark--held { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.ddq-key__mark--behind { background: var(--grey-line); }
+.ddq-key__count { grid-area: count; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.ddq-key__up { color: var(--link); font-weight: 600; }
+.ddq-key__held { color: var(--ink-secondary); }
+
+.ddq-b svg { display: block; touch-action: manipulation; }
+
+@media (max-width: 900px) {
+  .ddq-a { grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
+  .ddq-key { max-width: none; }
+}
+@media (max-width: 520px) {
+  .ddq-key__row { grid-template-columns: 96px minmax(0, 1fr); column-gap: 10px; padding: 9px 6px; }
+  .ddq-key__name { font-size: 14px; }
+}
+
+/* Round 3 (November 18, 2026): the split and the runs. */
+.ddq-flag { position: relative; width: 100%; }
+.ddq-flag svg { touch-action: manipulation; }
+.ddq-gold {
+  color: var(--ink);
+  background: linear-gradient(transparent 58%, color-mix(in srgb, var(--bryce) 55%, transparent) 58%);
+  padding: 0 1px;
+}

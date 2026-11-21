@@ -18,6 +18,11 @@ export interface ReplaySessionInfo {
   firstCheckedAt: string | null;
   lastCheckedAt: string | null;
   firstGreenAt: string | null;
+  /** Optional, from a server that computes it: the first green flag that held
+   *  (the rule is in src/data/replayStart.ts). When present the client starts
+   *  there without probing; when absent it probes the archive itself. No server
+   *  emits it yet. */
+  firstRaceGreenAt?: string | null;
   durationSeconds: number | null;
   totalLaps: number | null;
   watchable: boolean;
@@ -56,18 +61,21 @@ export const isBryceCastCaptureTier = (tier: ReplaySourceTier): boolean =>
  *  never "official", never confusable with live. */
 export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProvenance => {
   const tier = session?.sourceTier ?? 'brycecast_capture';
+  /* The site says its own tier names (British spelling); a feed's tierLabel is the fallback
+   *  for a tier this file doesn't know. */
   const label =
-    session?.tierLabel ??
-    (tier === 'racetools_capture'
+    tier === 'racetools_capture'
       ? 'RaceTools race-weekend capture'
       : tier === 'timing71_normalized'
-        ? 'third-party normalized (Timing71)'
-        : 'BryceCast Race Control capture');
+        ? 'third-party normalised (Timing71)'
+        : tier === 'brycecast_capture'
+          ? 'BryceCast Race Control capture'
+          : session?.tierLabel ?? 'BryceCast Race Control capture';
   if (tier === 'racetools_capture') {
     return {
       tier,
       label,
-      detail: 'Reconstructed from a RaceTools race-weekend timing capture — a third-party capture of the series timing feed, normalized into a second-by-second replay.',
+      detail: 'Reconstructed from a RaceTools race-weekend timing capture: a third-party capture of the series timing feed, normalised into a second-by-second replay.',
       caveat: session?.asRaced ? 'Shown as-raced; the official result is the reference.' : 'A third-party capture; not official timing, and not our own live capture.'
     };
   }
@@ -75,14 +83,14 @@ export const replayProvenance = (session: ReplaySessionInfo | null): ReplayProve
     return {
       tier,
       label,
-      detail: 'Reconstructed from Timing71 normalized timing states — third-party normalized observations of the 2026 season, replayed second by second.',
-      caveat: session?.asRaced ? 'Shown as-raced; a post-race change means the official result differs.' : 'Third-party normalized data; not official timing, and not our own live capture.'
+      detail: 'Reconstructed from Timing71 normalised timing states: third-party normalised observations of the 2026 season, replayed second by second.',
+      caveat: session?.asRaced ? 'Shown as-raced; a post-race change means the official result differs.' : 'Third-party normalised data; not official timing, and not our own live capture.'
     };
   }
   return {
     tier,
     label,
-    detail: 'BryceCast retained snapshots from INDYCAR Race Control timing during the session. This replays that archive — never live.',
+    detail: 'BryceCast retained snapshots from INDYCAR Race Control timing during the session. This replays that archive. It is never live.',
     caveat: 'Sampling cadence varies; the archive can contain source gaps.'
   };
 };
@@ -98,10 +106,27 @@ export interface ReplayAvailable {
 
 /** Returns null when replay is disabled (production 404) or unreachable — the
  *  callers treat null as "no replay here" and stay silent. */
-export const loadReplayAvailable = async (): Promise<ReplayAvailable | null> => {
-  const payload = await loadApiJson<ReplayAvailable>('/api/replay/available');
-  if (!payload || payload.enabled !== true || !Array.isArray(payload.sessions)) return null;
-  return payload;
+/** One read shared by every caller for a minute (round 7): the race page has
+ *  just read the list when its replay button is pressed, and the replay read it
+ *  again (0.8 s, 56 KB from production), twice in parallel, before the clock
+ *  could start. A failed read is not kept. */
+const AVAILABLE_TTL_MS = 60_000;
+let availableCache: { atMs: number; promise: Promise<ReplayAvailable | null> } | null = null;
+
+export const loadReplayAvailable = (): Promise<ReplayAvailable | null> => {
+  const now = Date.now();
+  if (availableCache && now - availableCache.atMs < AVAILABLE_TTL_MS) return availableCache.promise;
+  const promise = (async () => {
+    const payload = await loadApiJson<ReplayAvailable>('/api/replay/available');
+    if (!payload || payload.enabled !== true || !Array.isArray(payload.sessions)) return null;
+    return payload;
+  })();
+  const entry = { atMs: now, promise };
+  availableCache = entry;
+  void promise.then((value) => {
+    if (value === null && availableCache === entry) availableCache = null;
+  });
+  return promise;
 };
 
 /** Canonical race sessionIds are `session_indy_nxt_<year>_<eventSessionId>`. */

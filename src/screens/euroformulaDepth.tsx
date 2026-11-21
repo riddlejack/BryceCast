@@ -10,14 +10,19 @@
  *
  *  No lap, sector, weather, or team-pace claims: Euro's records hold none. */
 
+import { venueName } from '../app/venueNames';
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord } from '../app/charts';
+import { VenueTipCard, type VenueTip } from '../app/venueCard';
 import { SourcePill } from '../app/components';
 import { asNumber, ordinal } from '../app/format';
 import { useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { Link } from '../app/router';
 import { uiDataPackage } from '../data/uiDataPackage';
-import { chapterTint, raceHref } from './careerExplorer';
+import { chapterTint, raceHref, useCareerRows } from './careerExplorer';
+import { placeLine } from '../app/raceFacts';
+import { raceFieldOf, raceTitleOf } from './raceCardFacts';
 
 const EURO_SERIES = 'Euroformula Open';
 const EURO_TINT = chapterTint(EURO_SERIES);
@@ -51,7 +56,7 @@ const useEuroRaces = (): EuroRace[] =>
         start: asNumber(row.startPosition),
         finish: asNumber(row.finishPosition),
         gain: asNumber(row.positionGain),
-        percentile: asNumber(row.finishPercentile)
+        percentile: asNumber(row.fieldBeatenShare ?? row.finishPercentile)
       }));
   }, []);
 
@@ -61,7 +66,10 @@ const QualiToRace = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
+  const tap = useTapPreview();
+  const careerRows = useCareerRows();
+  const trackOf = useMemo(() => new Map(careerRows.map((row) => [row.sessionId, row.trackName])), [careerRows]);
 
   const layer = uiDataPackage.screens.careerLab.qualifyingLayer;
   const euroSummary = useMemo(() => (layer.bySeries ?? []).find((row) => row.seriesName === EURO_SERIES) ?? null, [layer]);
@@ -131,34 +139,41 @@ const QualiToRace = () => {
                     stroke="transparent"
                     strokeWidth={14}
                     style={{ cursor: 'pointer' }}
-                    onMouseEnter={() => {
-                      setHovered(index);
-                      const outcome = row.conversionOutcome === 'ahead' ? 'gained on his grid' : row.conversionOutcome === 'behind' ? 'lost ground' : 'held station';
-                      setTip({
-                        x: (leftX + rightX) / 2,
-                        y: (y1 + y2) / 2 - 6,
-                        title: `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`,
-                        detail: `qualified P${row.qualiRank} → finished P${row.finish} · ${outcome}`,
-                        action: 'Open the race'
-                      });
-                    }}
-                    onMouseLeave={() => {
-                      setHovered(null);
-                      setTip(null);
-                    }}
-                    onClick={() => navigate(raceHref(row.raceSessionId))}
+                    {...tap.target(row.raceSessionId, {
+                      show: () => {
+                        setHovered(index);
+                        const outcome = row.conversionOutcome === 'ahead' ? 'gained on his grid' : row.conversionOutcome === 'behind' ? 'lost ground' : 'held station';
+                        setTip({
+                          x: (leftX + rightX) / 2,
+                          y: (y1 + y2) / 2 - 6,
+                          over: Math.min(y1, y2) - 6,
+                          under: Math.max(y1, y2) + 6,
+                          venue: { sessionId: row.raceSessionId, trackName: trackOf.get(row.raceSessionId) ?? null },
+                          meta: `Euroformula · ${row.eventName.match(/(?:19|20)\d{2}/)?.[0] ?? ''}`.replace(/ · $/, ''),
+                          tint: chapterTint('Euroformula Open'),
+                          title: raceTitleOf(row.raceSessionId, `${row.eventName.replace('Euroformula Open ', '')} · ${row.raceLabel}`),
+                          detail: `qualified P${row.qualiRank} · finished ${placeLine(row.finish, raceFieldOf(row.raceSessionId)) ?? `P${row.finish}`} · ${outcome}`,
+                          action: 'Open the race'
+                        });
+                      },
+                      hide: () => {
+                        setHovered(null);
+                        setTip(null);
+                      },
+                      open: () => navigate(raceHref(row.raceSessionId))
+                    })}
                   />
                 </g>
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="euro-caption">
         Each line is one race, qualifying slot to flag · a Euro-magenta line marks a race he gained on his grid · P1 at the top.
-        Only the {races.length} of 17 races whose grid a qualifying session set are shown — Euro’s three-race weekends also use
-        reverse and second grids, which aren’t a read on qualifying. Click a line to open the race.
+        Only the {races.length} of 17 races whose grid a qualifying session set are shown. Euro’s three-race weekends also use
+        reverse and second grids, which aren’t a read on qualifying. <PointerOpen start what="a line" then="to open the race" />.
       </p>
     </div>
   );
@@ -218,7 +233,7 @@ const EuroVenues = ({ races }: { races: EuroRace[] }) => {
             <>
               <span className="tower__name" style={{ whiteSpace: 'normal' }}>
                 <span aria-hidden style={{ width: 7, height: 7, borderRadius: '50%', background: EURO_TINT, opacity: 0.6, flex: 'none' }} />
-                {venue.trackName}
+                {venueName(venue.trackName)}
               </span>
               <span className="tower__gap">{venue.races}</span>
               <span className="tower__gap">{venue.bestFinish !== null ? `P${venue.bestFinish}` : '—'}</span>
@@ -239,7 +254,7 @@ const EuroVenues = ({ races }: { races: EuroRace[] }) => {
       </div>
       <p className="euro-caption">
         Field beat = the average share of the grid he finished ahead of, across each venue’s races. Small samples, so read it as
-        texture. Click a venue to open his best race there.
+        texture. <PointerWord mouse="Click" touch="Tap" /> a venue to open his best race there.
       </p>
     </div>
   );
@@ -257,7 +272,7 @@ const EuroSourcePill = ({ conversionRaces }: { conversionRaces: number }) => (
       {
         label: 'Career result conversion',
         path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-        note: 'Official Euroformula Open classifications — 17 classified races, grids, and finishes across six venues (the Barcelona finale ran without him).'
+        note: 'Official Euroformula Open classifications: 17 classified races, grids, and finishes across six venues (the Barcelona finale ran without him).'
       }
     ]}
     caveats={[
@@ -280,13 +295,15 @@ export const EuroformulaDepthLayer = () => {
     <div className="euro-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="euro-copy" style={{ margin: 0, maxWidth: '58ch' }}>
-          A full European campaign in continental single-seaters — front-running results across six circuits. Here is how his
+          A full European campaign in continental single-seaters, with front-running results across six circuits. Here is how his
           weekends converted, and where he was strongest.
         </p>
         <EuroSourcePill conversionRaces={euroSummary?.conversionRaces ?? 7} />
       </div>
-      <QualiToRace />
-      <EuroVenues races={races} />
+      <div className="depth-pair">
+        <QualiToRace />
+        <EuroVenues races={races} />
+      </div>
     </div>
   );
 };

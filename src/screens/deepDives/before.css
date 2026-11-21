@@ -1,0 +1,11 @@
+/* Before the record (November 17, 2026): the run-up to the first race of the record. */
+.before__wrap { position: relative; width: 100%; }
+.before__stage { position: relative; width: 100%; }
+.before__svg { display: block; overflow: visible; }
+.before__figure, .before__num { font-variant-numeric: tabular-nums; }
+.before__fact { cursor: default; }
+.before__hit { cursor: crosshair; }
+@media (hover: none) {
+  .before__fact, .before__hit { cursor: pointer; }
+}
+.before__passive { pointer-events: none; }

@@ -15,6 +15,7 @@
  *  (none of these is the current chapter). Every number is sourced; every fact
  *  carries a source drawer. */
 
+import { venueName } from '../app/venueNames';
 import { Fragment, useMemo } from 'react';
 import { Card, SourcePill, Stat, Unavailable, type SourceEntry } from '../app/components';
 import { ordinal } from '../app/format';
@@ -32,6 +33,7 @@ import type {
   UiSourceRef
 } from '../data/uiDataPackage';
 import { chapterTint, raceHref } from './careerExplorer';
+import { PointerWord } from '../app/charts';
 
 const F1600_TINT = chapterTint('F1600 Championship Series');
 const FROC_TINT = chapterTint('Castrol Toyota Formula Regional Oceania Championship');
@@ -48,8 +50,8 @@ const citedSourceEntry = (source: UiCitedSource): SourceEntry => ({
   label: source.sourceName,
   path: source.sourceUrl ?? undefined,
   note: source.archived
-    ? 'Archived official page — stored as a source URL only.'
-    : 'Direct official page — stored as a source URL only.'
+    ? 'Archived official page, stored as a source URL only.'
+    : 'Direct official page, stored as a source URL only.'
 });
 
 const posLabel = (position: number | null, status: string | null): string => {
@@ -71,7 +73,7 @@ const F1600EventRow = ({ event }: { event: UiF1600Event }) => {
     <div className="ss-event">
       <div className="ss-event__head">
         <span className="ss-event__round">R{event.roundIndex}</span>
-        <span className="ss-event__venue">{event.trackName}</span>
+        <span className="ss-event__venue">{venueName(event.trackName)}</span>
       </div>
       <div className="ss-event__quali">
         {quali && quali.rank !== null ? (
@@ -92,7 +94,7 @@ const F1600EventRow = ({ event }: { event: UiF1600Event }) => {
               <span className={`ss-race__mark${race.isPodium ? ' ss-race__mark--on' : ''}`} aria-hidden style={race.isPodium ? { background: F1600_TINT } : undefined} />
             </>
           );
-          const title = `${event.trackName} · Race ${race.raceNumber} · ${label}`;
+          const title = `${venueName(event.trackName)} · Race ${race.raceNumber} · ${label}`;
           return race.hasRacePage ? (
             <Link key={race.sessionId} to={raceHref(race.sessionId)} className="ss-race ss-race--link">
               {inner}
@@ -123,9 +125,8 @@ export const F1600SeasonStory = () => {
     <div className="ss-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="ss-copy" style={{ margin: 0, maxWidth: '60ch' }}>
-          His first season in cars, in American grassroots open-wheel — seven weekends, {totals.raceCount} races, and a
-          third-place run in the championship built on {totals.podiums} podiums. The Campaigns chart the points; this is the
-          weekend-by-weekend shape underneath.
+          His first full season in cars, in American grassroots open-wheel: seven weekends, {totals.raceCount} races, and a
+          third-place run in the championship built on {totals.podiums} podiums. Here is the season weekend by weekend.
         </p>
         <SourcePill title="The F1600 season, in depth" entries={refEntries(story.sourceRefs)} caveats={story.caveats} />
       </div>
@@ -148,8 +149,8 @@ export const F1600SeasonStory = () => {
           ))}
         </div>
         <p className="ss-caption">
-          Each weekend, left to right: where he qualified, then the round&rsquo;s races. A blue dot marks a podium. F1600 2019
-          carries no sourced grid positions, so there is no grid-to-finish here — qualifying is only where he lined up. Click a
+          Each weekend, left to right: where he qualified, then the round&rsquo;s races. A coloured dot marks a podium. F1600 2019
+          carries no sourced grid positions, so there is no grid-to-finish here; qualifying is only where he lined up. <PointerWord mouse="Click" touch="Tap" /> a
           race to open it.
         </p>
       </div>
@@ -185,7 +186,7 @@ const FrocRoundsRibbon = ({ story }: { story: UiFrocCampaignStory }) => {
         ))}
       </div>
       <p className="ss-caption">
-        The 2024 championship ran five rounds; Bryce joined for the final two — {story.coverage.racesRun} races in all. Green
+        The 2024 championship ran five rounds; Bryce joined for the final two, {story.coverage.racesRun} races in all. Green
         marks the rounds he raced.
       </p>
     </div>
@@ -199,7 +200,7 @@ const FrocEventRow = ({ event }: { event: UiFrocEvent }) => {
     <div className="ss-event">
       <div className="ss-event__head">
         <span className="ss-event__round">R{event.roundIndex}</span>
-        <span className="ss-event__venue">{event.trackName}</span>
+        <span className="ss-event__venue">{venueName(event.trackName)}</span>
       </div>
       <div className="ss-event__quali">
         {bestRank !== null ? (
@@ -223,7 +224,7 @@ const FrocEventRow = ({ event }: { event: UiFrocEvent }) => {
               <span className={`ss-race__mark${race.isPodium ? ' ss-race__mark--on' : ''}`} aria-hidden style={race.isPodium ? { background: FROC_TINT } : undefined} />
             </>
           );
-          const title = `${event.trackName} · Race ${race.raceNumber}${race.startPosition !== null ? ` · P${race.startPosition} → ${finish}` : ` · ${finish}`}${race.isWin ? ' · win' : ''}`;
+          const title = `${venueName(event.trackName)} · Race ${race.raceNumber}${race.startPosition !== null ? ` · P${race.startPosition} → ${finish}` : ` · ${finish}`}${race.isWin ? ' · win' : ''}`;
           return race.hasRacePage ? (
             <Link key={race.sessionId} to={raceHref(race.sessionId)} className="ss-race ss-race--wide ss-race--link">
               {inner}
@@ -250,7 +251,7 @@ export const FrocCampaignStory = () => {
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="ss-copy" style={{ margin: 0, maxWidth: '60ch' }}>
           A southern-hemisphere summer in the Toyota junior series. Bryce joined for the final two rounds of the 2024
-          championship — {story.coverage.racesRun} races across Euromarque and Highlands, with a win at Highlands. Here is the
+          championship: {story.coverage.racesRun} races across Euromarque and Highlands, with a win at Highlands. Here is the
           guest campaign, honest about the rounds he didn&rsquo;t run.
         </p>
         <SourcePill title="The FR Oceania campaign, in depth" entries={refEntries(story.sourceRefs)} caveats={story.caveats} />
@@ -273,7 +274,7 @@ export const FrocCampaignStory = () => {
         </div>
         <p className="ss-caption">
           Each race reads grid to flag; a green dot marks a podium. Position change is the plain difference between start and
-          finish, never a pace claim. Click a race to open it.
+          finish, never a pace claim. <PointerWord mouse="Click" touch="Tap" /> a race to open it.
         </p>
       </div>
     </div>
@@ -323,8 +324,8 @@ export const OriginTimeline = () => {
   return (
     <Card title="Before the record" action={<SourcePill title="Before the record" entries={sourceEntries} caveats={origin.caveats} />}>
       <p className="ss-copy" style={{ maxWidth: '62ch' }}>
-        The measured career starts with F1600 in {origin.recordStartsYear}. What survives from before it — the karting years,
-        2016 through 2018 — is context, not a scoreboard. Every fact here is sourced; none is a race result.
+        The measured career starts with F1600 in {origin.recordStartsYear}. What survives from before it, the karting years
+        from 2016 through 2018, is context, not a scoreboard. Every fact here is sourced; none is a race result.
       </p>
       <div className="ss-timeline">
         {byYear.map((group) => (

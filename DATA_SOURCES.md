@@ -23,8 +23,13 @@ Everything below was collected from pages, files and feeds that each organizatio
 | Formula Regional Oceania (2024) | [Toyota Gazoo Racing New Zealand](https://www.toyota.co.nz/toyota-racing/toyota-gazoo-racing/) | Results pages, grids, timing PDFs, event articles |
 | Euroformula Open (2023) | [GT Sport](https://euroformula.gtsport.es) | Classification PDFs |
 | GB3 (2021–2022) | [GB3](https://www.gb-3.net) / MSVR, timing by TSL Timing | Timing books, grids, classifications, conditions |
-| Formula Ford (2020) | BRSCC, BARC, TSL Timing and individual circuits | Result books, lap charts, classifications |
+| Formula Ford (2019–2020) | BRSCC, BARC, MSVR, Castle Combe Racing Club, TSL Timing and individual circuits | Result books, lap charts, grids, classifications, conditions |
 | F1600 Championship Series (2019) | [Formula Race Promotions](https://www.racefrp.com) | Results and standings PDFs |
+| SCCA U.S. Majors Tour / Hoosier Super Tour (2019) | [SCCA](https://www.scca.com), timing on [growtiming.scca.com](https://growtiming.scca.com) (Orbits) | Race results and grids for Sebring, Circuit of the Americas and Road Atlanta; the Southeast Conference standings report |
+| Right Coast Formula F Series (2019) | Right Coast Formula F Series, at the FRP All Formula Weekend | Mid-Ohio race classification (Orbits) |
+| USF Pro 2000 (2024) | USF Pro Championships, timing by INDYCAR | Freedom 90 classification and qualifying at Lucas Oil Indianapolis Raceway Park |
+| Euroformula Open 2023, Mugello (reported only) | [Speedsport Magazine](https://www.speedsport-magazine.com), [Formula Scout](https://www.formulascout.com) | Press results for two races whose official classification was not found; recorded as gaps, not results |
+| Track lengths and turn counts | Circuit sites (Circuit of the Americas, Castle Combe), official timing sheets, and [Wikipedia](https://en.wikipedia.org) infoboxes (Sebring, Castle Combe turns, Lucas Oil IRP) | Length, turns, direction and coordinates for circuits without an official turn count in the data |
 | Karting and scholarship context | Team USA Scholarship, [Badger Kart Club](https://badgerkartclub.com) | Published results, records and articles |
 
 ## Weather, maps and geography
@@ -35,6 +40,12 @@ Everything below was collected from pages, files and feeds that each organizatio
 | **NOAA / National Weather Service** | U.S. public domain | Near-track observations where available |
 | **[OpenStreetMap](https://www.openstreetmap.org/copyright)** contributors | ODbL | Circuit outlines and track geometry are derived from OSM data. © OpenStreetMap contributors |
 | **[Natural Earth](https://www.naturalearthdata.com)** | Public domain | Land texture for the career map ([source record](analysis/career-atlas/data/SOURCE.md)) |
+
+## Fonts
+
+| Font | License | Use |
+| --- | --- | --- |
+| **[Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk)**, © 2023 The Schibsted-Grotesk Project Authors | [SIL Open Font License 1.1](public/fonts/OFL.txt) | The site's typeface, served from `public/fonts/SchibstedGrotesk-VF-tnum-digits.woff2`: `SchibstedGrotesk-VF.woff2` modified so its tabular-figures feature (`tnum`) changes only the digits 0-9 (OFL 1.1 permits modification; the license declares no Reserved Font Name) |
 
 Photos, logos and series marks that appear in the corpus or on the site belong to their respective owners and are used for identification only. BryceCast is not affiliated with or endorsed by any series, team, broadcaster or data provider.
 

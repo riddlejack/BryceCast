@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { Unavailable } from '../app/components';
+import { useTapPreview, type TapKey } from '../app/tapPreview';
 import {
   CAMERA_WINDOW_SECONDS,
   cameraDomainFor,
@@ -57,6 +58,8 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
   const retainedMembership = useRef(new Set<string>());
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [focusedId, setFocusedId] = useState<string | null>(null);
+  /* Round 9: on a phone the first tap reads a line or a crossing, as hover does; a tap elsewhere lets go. */
+  const tap = useTapPreview();
   const reducedMotion = useReducedMotion();
   const series = useMemo(() => fullFieldCameraSeries(history), [history]);
   const bryceSeries = series.find((entry) => entry.bryce) ?? null;
@@ -173,8 +176,8 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
     return boundaries.filter((_, index) => index % stride === 0 || index === boundaries.length - 1);
   }, [history, latestSample, timeDomain]);
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || !timeDomain || !domain || visibleSeries.length === 0) return;
+  const onMove = (event: React.MouseEvent<Element>): TapKey | null => {
+    if (!svgRef.current || !timeDomain || !domain || visibleSeries.length === 0) return null;
     const bounds = svgRef.current.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
     const cursorY = event.clientY - bounds.top;
@@ -188,7 +191,7 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
     if (!nearest || nearest.distance > 24) {
       setFocusedId(null);
       setTip(null);
-      return;
+      return null;
     }
     const bryce = bryceSeries ? samplePoint(bryceSeries, sample.checkedAt) : null;
     const pointIndex = nearest.entry.points.findIndex((point) => point.checkedAt === sample.checkedAt);
@@ -202,7 +205,10 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
       title: nearest.entry.bryce ? `${nearest.entry.name} · №9` : nearest.entry.name,
       detail: `${toBryce} · +${nearest.point.value!.toFixed(1)}s to leader${trendLabel}`
     });
+    return `${nearest.entry.id}@${sample.checkedAt}`;
   };
+  const clearRead = () => { setTip(null); setFocusedId(null); };
+  const crossingTip = (crossing: (typeof crossings)[number]): ChartTip => ({ x: x(crossing.checkedAtMs), y: y(crossing.value), over: y(crossing.value) - 5, under: y(crossing.value) + 5, title: crossing.direction === 'ahead_of' ? `ahead of ${crossing.rivalName}` : `behind ${crossing.rivalName}`, detail: crossing.lap === null ? 'observed rank crossing' : `lap ${crossing.lap}` });
 
   const nonComparable = currentFrame.filter((entry) => entry.status && (entry.bryce || /pit|retir|lapped|out|stopp/i.test(entry.status)));
   const bryceUnavailable = currentBryce?.value === null || currentBryce?.value === undefined;
@@ -234,8 +240,7 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
             data-bryce-rank={currentBryce?.rank ?? ''}
             data-visible-driver-ids={currentInFrame.map((entry) => entry.id).join(',')}
             data-leader-change-break-count={leaderChangeCount}
-            onMouseMove={onMove}
-            onMouseLeave={() => { setTip(null); setFocusedId(null); }}
+            {...tap.surface({ find: onMove, clear: clearRead })}
           >
             <defs><clipPath id={`battle-camera-${history.sessionKey.replace(/[^a-z0-9]/gi, '-')}`}><rect x={margin.left} y={margin.top} width={plotWidth} height={plotHeight} /></clipPath></defs>
             <g clipPath={`url(#battle-camera-${history.sessionKey.replace(/[^a-z0-9]/gi, '-')})`}>
@@ -259,14 +264,14 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
                 <path key={index} data-camera-series data-driver-id={bryceSeries.id} data-series-role="bryce" d={stepPath(segment, x, y)} fill="none" stroke="var(--bryce)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" strokeOpacity={focusedId && focusedId !== bryceSeries.id ? 0.22 : 1} />
               ))}
               {crossings.filter((crossing) => crossing.checkedAtMs >= timeDomain.startMs && crossing.checkedAtMs <= timeDomain.endMs).map((crossing) => (
-                <circle key={crossing.id} data-bryce-crossing data-rival-id={crossing.rivalId} data-crossing-direction={crossing.direction} data-crossing-lap={crossing.lap ?? ''} cx={x(crossing.checkedAtMs)} cy={y(crossing.value)} r={5} fill="var(--surface-1)" stroke="var(--bryce)" strokeWidth={2} tabIndex={0} aria-label={`${crossing.direction === 'ahead_of' ? 'ahead of' : 'behind'} ${crossing.rivalName}${crossing.lap === null ? '' : `, lap ${crossing.lap}`}`} onMouseMove={(event) => { event.stopPropagation(); setTip({ x: x(crossing.checkedAtMs), y: y(crossing.value), title: crossing.direction === 'ahead_of' ? `ahead of ${crossing.rivalName}` : `behind ${crossing.rivalName}`, detail: crossing.lap === null ? 'observed rank crossing' : `lap ${crossing.lap}` }); }} onMouseLeave={() => setTip(null)} onFocus={() => setTip({ x: x(crossing.checkedAtMs), y: y(crossing.value), title: crossing.direction === 'ahead_of' ? `ahead of ${crossing.rivalName}` : `behind ${crossing.rivalName}`, detail: crossing.lap === null ? 'observed rank crossing' : `lap ${crossing.lap}` })} onBlur={() => setTip(null)} />
+                <circle key={crossing.id} data-bryce-crossing data-rival-id={crossing.rivalId} data-crossing-direction={crossing.direction} data-crossing-lap={crossing.lap ?? ''} cx={x(crossing.checkedAtMs)} cy={y(crossing.value)} r={5} fill="var(--surface-1)" stroke="var(--bryce)" strokeWidth={2} tabIndex={0} aria-label={`${crossing.direction === 'ahead_of' ? 'ahead of' : 'behind'} ${crossing.rivalName}${crossing.lap === null ? '' : `, lap ${crossing.lap}`}`} {...tap.target(`crossing-${crossing.id}`, { show: () => setTip(crossingTip(crossing)), hide: () => setTip(null) })} onMouseMove={(event) => event.stopPropagation()} onFocus={() => setTip(crossingTip(crossing))} onBlur={() => setTip(null)} />
               ))}
               {currentInFrame.map((entry) => <circle key={entry.id} data-ladder-dot data-driver-id={entry.id} cx={plotRight} cy={y(entry.value!)} r={entry.bryce ? 4 : 2.8} fill={entry.bryce ? 'var(--bryce)' : entry.id === nearestAhead?.id ? '#5581c2' : entry.id === nearestBehind?.id ? '#2f9377' : 'var(--ink-primary)'} opacity={entry.bryce ? 1 : 0.82} />)}
             </g>
-            {yTicks.map((tick) => <text key={`label-${tick}`} x={margin.left - 8} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10}>{tick.toFixed(tick < 10 ? 1 : 0)}s</text>)}
-            <text transform={`translate(12 ${margin.top + plotHeight / 2}) rotate(-90)`} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>behind the leader</text>
-            {xTicks.map((offset) => <text key={offset} x={x(timeDomain.endMs + offset)} y={height - 8} textAnchor={offset === -300_000 ? 'start' : offset === 0 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10}>{relativeTimeLabel(offset)}</text>)}
-            {lapBoundaries.map((boundary) => <g key={`${boundary.lap}-${boundary.checkedAtMs}`}><line x1={x(boundary.checkedAtMs)} x2={x(boundary.checkedAtMs)} y1={margin.top} y2={margin.top + 8} stroke="var(--axis-baseline)" /><text x={x(boundary.checkedAtMs)} y={margin.top - 6} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>L{boundary.lap}</text></g>)}
+            {yTicks.map((tick) => <text key={`label-${tick}`} x={margin.left - 8} y={y(tick)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{tick.toFixed(tick < 10 ? 1 : 0)}s</text>)}
+            <text transform={`translate(12 ${margin.top + plotHeight / 2}) rotate(-90)`} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>behind the leader</text>
+            {xTicks.map((offset) => <text key={offset} x={x(timeDomain.endMs + offset)} y={height - 8} textAnchor={offset === -300_000 ? 'start' : offset === 0 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{relativeTimeLabel(offset)}</text>)}
+            {lapBoundaries.map((boundary) => <g key={`${boundary.lap}-${boundary.checkedAtMs}`}><line x1={x(boundary.checkedAtMs)} x2={x(boundary.checkedAtMs)} y1={margin.top} y2={margin.top + 8} stroke="var(--axis-baseline)" /><text x={x(boundary.checkedAtMs)} y={margin.top - 6} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>L{boundary.lap}</text></g>)}
             <line x1={plotRight} x2={plotRight} y1={margin.top} y2={margin.top + plotHeight} stroke="var(--axis-baseline)" strokeDasharray="2 4" />
             {ladderEntries.map((entry) => {
               const labelY = ladderY.get(entry.id) ?? y(entry.value!);
@@ -275,7 +280,7 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
               const roleColor = role === 'ahead' ? '#5581c2' : role === 'behind' ? '#2f9377' : 'var(--ink-secondary)';
               return <g key={entry.id} data-ladder-label data-driver-id={entry.id} data-label-y={labelY.toFixed(2)} data-gap-to-bryce={delta?.toFixed(4) ?? ''}>
                 <path d={`M${plotRight + 3} ${y(entry.value!)}H${plotRight + 8}L${plotRight + 14} ${labelY}`} fill="none" stroke={entry.bryce ? 'var(--bryce)' : roleColor} strokeWidth={1} opacity={0.72} />
-                {entry.bryce ? <g data-ladder-label-content transform={`translate(${plotRight + 16} ${labelY})`}><rect x={0} y={-9} width={28} height={18} rx={4} fill="var(--bryce)" /><text x={14} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={10.5} fontWeight={750}>№9</text></g> : <text data-ladder-label-content x={plotRight + 16} y={labelY} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={width < 520 ? 8.7 : 9.8} fontWeight={role ? 650 : 500}>{entry.name} {delta === null ? '' : signedGap(delta)}{role ? <tspan x={plotRight + 16} dy={10.5} fontSize={8.2}>{role} now</tspan> : null}</text>}
+                {entry.bryce ? <g data-ladder-label-content transform={`translate(${plotRight + 16} ${labelY})`}><rect x={0} y={-9} width={28} height={18} rx={4} fill="var(--bryce)" /><text x={14} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={12} fontWeight={750}>№9</text></g> : <text data-ladder-label-content x={plotRight + 16} y={labelY} dominantBaseline="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12} fontWeight={role ? 650 : 500}>{entry.name} {delta === null ? '' : signedGap(delta)}{role ? <tspan x={plotRight + 16} dy={13} fontSize={12}>{role} now</tspan> : null}</text>}
               </g>;
             })}
           </svg>
@@ -284,7 +289,7 @@ export const LiveBattleCamera = ({ history }: { history: LiveSessionHistory | nu
             {bryceUnavailable ? <strong>Bryce’s timing coordinate is unavailable; camera held at his last valid position.</strong> : null}
             {nonComparable.filter((entry) => !entry.bryce).slice(0, 2).map((entry) => <span key={entry.id}>{entry.name}: {entry.status}</span>)}
           </div>
-          {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+          {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
         </>
       ) : <Unavailable>The camera starts after Race Control publishes two full-field samples with a contiguous numeric interval chain to Bryce.</Unavailable>}
     </div>

@@ -1,0 +1,19 @@
+{
+  "lane": "deep-dives",
+  "entries": [
+    {
+      "id": "dd-explorer",
+      "page": "/career",
+      "title": "The explorer: every race as one dot, regrouped by one control",
+      "switch": "ddexplorer",
+      "values": [
+        { "value": null, "label": "default: opens as one pile of all 165 races that splits into the series rows on a clock" },
+        { "value": "one", "label": "opens on the single pile (All races) and leaves the split to the visitor" }
+      ],
+      "look": "Open More from the archive → The explorer. Watch the pile split into series, then flip Series / Season / Track / Weather and watch the dots travel. Hover a dot (INDY NXT ones carry the 3D still), click a group's name (try INDY NXT, then Track: ovals against road courses), click × to let go. Start → finish is gone: Qualifying to the flag and Biggest climbs carry it.",
+      "anchor": "#archive-explorer",
+      "added": "2026-11-17T18:00",
+      "reviewed": false
+    }
+  ]
+}

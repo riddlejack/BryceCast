@@ -1,0 +1,11 @@
+/* Rain on the race marks (round 2, intersections lane; switch `rainmarks`).
+ * The rain dive's blue, in short slanted streaks over a wet race's dot. */
+.rain-mark line {
+  stroke: var(--seq-550);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  transition: opacity 150ms ease;
+}
+.rain-mark--mixed line { opacity: 0.6; }
+.rain-mark--dim line { opacity: 0.3; }
+.rain-mark--ink line { stroke: var(--ink-secondary); }

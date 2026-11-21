@@ -1,0 +1,584 @@
+/* ============================================================
+   Landing page (round 3 of the site refresh, November 14, 2026).
+   Everything here is scoped under .home. Built to the approved mock-up
+   (site-refresh/mockup/landing.html): paper ground, the 3D still and the
+   data drawn large, 1 px rules, no boxes. Tokens come from theme.css.
+   ============================================================ */
+
+.home {
+  --home-section: clamp(64px, 5vw, 96px);
+  display: flex;
+  flex-direction: column;
+}
+
+.home h2 {
+  margin: var(--home-section) 0 0;
+  font-size: clamp(24px, 1.7vw, 32px);
+  font-weight: 620;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink-primary);
+}
+
+.home .home-sub {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink-secondary);
+}
+
+.home-label {
+  display: block;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+  letter-spacing: 0.01em;
+}
+
+.home-textlink,
+.home .home-note a,
+.home-hero__links a {
+  color: var(--link);
+  font-weight: 560;
+  white-space: nowrap;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+@media (hover: hover) {
+  .home-textlink:hover,
+  .home .home-note a:hover,
+  .home-hero__links a:hover { color: var(--link-active); text-decoration-line: underline; }
+}
+
+/* ---------- hero: words left, the still right ----------
+   Round 4 (Jack's review, Nov 15): one left edge. The headline, the intro,
+   the two links and, under a rule, the readout (the map's legend) stack in
+   the left column and share the page's left edge; the left column sits
+   centred against the still, so nothing leaves an empty block under it. The
+   still's caption hangs directly under the picture, its left edge on the
+   island's (the model starts 5% into the frame). The hero's two columns are
+   the page grid: "Last time out" below lines up on them. */
+
+.home {
+  --home-cols: minmax(340px, 0.82fr) minmax(0, 2fr);
+  --home-colgap: clamp(32px, 2.6vw, 56px);
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: var(--home-cols);
+  column-gap: var(--home-colgap);
+  align-items: center;
+  margin-top: 8px;
+}
+
+.home-hero__text { max-width: 540px; }
+
+.home-hero h1 {
+  margin: 0;
+  font-size: clamp(40px, 3.6vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  font-weight: 640;
+  color: var(--ink-primary);
+  text-wrap: balance;
+}
+
+.home .home-hero__intro {
+  margin: 18px 0 0;
+  max-width: 470px;
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+.home-hero__links {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  font-size: 17px;
+}
+
+/* The still bleeds into the right gutter, as in the mock-up. It answers the
+   hand (homeHeroStill.tsx): the section under the pointer or the tap lights
+   from the matching ID map, drawn into a canvas the exact size of the image,
+   and a paper veil quiets the rest of the picture while the hand is on it. */
+.home-hero__figure { margin: 0; min-width: 0; }
+
+.home-hero__still {
+  position: relative;
+  display: block;
+  margin-right: calc(-1 * var(--gutter));
+  border-radius: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.home-hero__still img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2400 / 1350;
+}
+
+.home-hero__still:focus { outline: none; }
+.home-hero__still:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+
+.home-hero__veil,
+.home-hero__lit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.home-hero__veil { background: var(--paper); opacity: 0; transition: opacity 160ms ease-out; }
+.home-hero__still.is-pointing .home-hero__veil,
+.home-hero__still:focus-visible .home-hero__veil { opacity: 0.45; }
+
+/* The section's name on the picture, above its stretch of track. */
+.home-hero__tag {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 8px));
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--ink-primary);
+  text-shadow: 0 0 2px var(--paper), 0 0 4px var(--paper), 0 0 8px var(--paper);
+}
+.home-hero__tag.is-below { transform: translate(-50%, 8px); }
+.home-hero__tag b { font-weight: 600; }
+.home-hero__tag span { color: var(--ink-secondary); }
+
+/* The readout: the map's legend, under a rule at the foot of the left
+   column. Its height is held (min-height) so a hover that changes the words
+   never moves the headline above it. */
+.home-hero__read {
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.home .home-hero__read p { margin: 0; max-width: 470px; }
+.home .home-hero__read-line {
+  font-size: 19px;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+.home-hero__read-line b { color: var(--ink-primary); font-weight: 600; }
+.home .home-hero__read-how {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.home-hero__hint { white-space: nowrap; }
+.home .home-hero__race { align-self: flex-start; margin-top: 4px; font-size: 15px; }
+
+.home-hero__still.is-still .home-hero__veil { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__veil { transition: none; }
+}
+
+/* The caption, directly under the picture and aligned to the island's left
+   edge (5% of the image, which is the figure plus the gutter it bleeds into). */
+.home-hero__cap {
+  margin: 4px 0 0;
+  padding-left: calc((100% + var(--gutter)) * 0.05);
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.home-hero__cap-line { color: var(--ink-secondary); }
+.home-hero__credit { display: block; font-size: 12px; color: var(--ink-muted); }
+
+/* ---------- one-line results: last time out, and the "now" line ----------
+   Round 4: a block of its own. A rule over it, its heading on its own row,
+   then the big figure in the hero's left column and the facts and the action
+   in the right one, so the facts start where the map does. */
+
+.home-line {
+  margin-top: clamp(56px, 4.4vw, 80px);
+  display: grid;
+  grid-template-columns: var(--home-cols);
+  column-gap: var(--home-colgap);
+  row-gap: 18px;
+  align-items: start;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink-primary);
+}
+
+.page.home > .home-line--now:first-child { margin-top: 16px; }
+
+.home-line__head {
+  grid-column: 1 / -1;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+a.home-line__head { justify-self: start; }
+.home-last__race { color: var(--ink-primary); }
+@media (hover: hover) {
+  a.home-line__head:hover .home-last__race { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+}
+
+.home-line__lead { display: block; min-width: 0; }
+
+.home-line__body {
+  min-width: 0;
+  /* the facts start on the island's left edge, like the caption above */
+  padding-left: calc((100% + var(--gutter)) * 0.05);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px 48px;
+}
+/* The big figure's cap height starts level with the first line of facts. */
+.home-line__lead .home-line__big { margin-top: 0; }
+@media (max-width: 1380px) {
+  .home-line__body { flex-direction: column; }
+}
+
+.home-line__big {
+  display: block;
+  margin-top: 4px;
+  font-size: clamp(84px, 6.4vw, 124px);
+  line-height: 0.85;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  color: var(--ink-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-line__unit {
+  margin-left: 0.18em;
+  font-size: 0.26em;
+  font-weight: 560;
+  letter-spacing: -0.01em;
+  color: var(--ink-secondary);
+}
+
+.home-line__count { margin-top: 10px; }
+
+.home-line__facts {
+  min-width: 0;
+  padding-bottom: 2px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--ink-secondary);
+}
+
+.home .home-line__facts p { margin: 0; max-width: none; text-wrap: pretty; }
+.home-nowrap { white-space: nowrap; }
+.home-line__facts b { color: var(--ink-primary); font-weight: 560; }
+.home-line__facts b.home-gain--up { color: var(--status-good); }
+.home-line__facts b.home-gain--down { color: var(--status-bad); }
+
+@media (hover: hover) {
+  .home-last__result:hover .home-line__big { color: var(--link-active); }
+}
+
+/* The season card share stays, as a quiet text action under the season line. */
+.home-share { margin-top: 6px; }
+.home .home-share .share-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+@media (hover: hover) { .home .home-share .share-button:hover { color: var(--ink-primary); } }
+
+/* The replay: the race pages' own affordance (compact), drawn as the
+   mock-up's ink disc and one bold line, with its source beneath. The slot
+   keeps one size from the first paint: the button shows at once (pending),
+   and the catalog's answer only fills its meta and source lines. */
+.home-last__replay { flex: none; min-width: 300px; }
+.home-last__replay .race-replay__year-meta { min-height: 1.35em; }
+.home-last__replay .race-replay__year-prov { min-height: 24px; }
+.home-last__replay .race-replay__year { flex-direction: column; align-items: flex-start; gap: 8px; }
+.home-last__replay .race-replay__year-link {
+  grid-template-columns: 46px auto;
+  gap: 14px;
+  flex: none;
+}
+.home-last__replay .race-replay__year-play {
+  width: 46px;
+  height: 46px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.home-last__replay .race-replay__year-play svg { width: 18px; height: 18px; fill: currentColor; }
+.home-last__replay .race-replay__year-link:hover .race-replay__year-play { background: var(--link-active); }
+.home-last__replay .race-replay__year-title { font-size: 17px; font-weight: 560; }
+.home-last__replay .race-replay__year-meta { font-size: 13px; }
+.home-last__replay .race-replay__year-prov { padding-left: 60px; }
+
+/* The live line's way in: the same disc, with the live mark in it. */
+.home-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 17px;
+  font-weight: 560;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+.home-disc {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  font-style: normal;
+}
+@media (hover: hover) { .home-action:hover .home-disc { background: var(--link-active); } }
+
+/* ---------- his career so far ---------- */
+
+.home-odo {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-top: 1px solid var(--ink-primary);
+  container-type: inline-size;
+}
+
+.home-odo__cell { display: block; padding: 18px 20px 0 0; min-width: 0; }
+
+.home-odo__cell b {
+  display: block;
+  font-size: clamp(30px, 3.05cqi, 56px);
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink-primary);
+  white-space: nowrap;
+}
+
+.home-odo__unit {
+  font-size: 0.5em;
+  font-weight: 560;
+  letter-spacing: -0.01em;
+  color: var(--ink-secondary);
+  margin-left: 0.1em;
+}
+
+.home-odo__unit + span:not(.home-odo__plus) { margin-left: 0.16em; }
+
+.home-odo__plus { color: var(--amber); font-weight: 560; margin-left: 0.02em; }
+
+.home-odo__label {
+  display: block;
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+
+.home-odo__cell em {
+  display: block;
+  margin-top: 2px;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+}
+
+@media (hover: hover) {
+  .home-odo:hover .home-odo__label { color: var(--ink-primary); }
+}
+
+.home .home-note {
+  margin: 22px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+/* ---------- standout races, drawn large ---------- */
+
+.home-races {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 48px;
+}
+
+.home-race { display: block; min-width: 0; }
+.home-race__link { display: block; }
+
+.home-race__art {
+  position: relative;
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 34px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.home-race__draw { position: relative; width: 100%; }
+
+/* The sweep (homeStandouts.tsx). On the 3D still (round 6) the still's own
+   overlay veils the picture and lights each section in its own colour, ringed
+   in ink. On a venue with no still, the 2D drawing dims and each section
+   lights in its own colour in turn, on the drawing's own geometry; the last
+   one fades as the next lights. */
+.home-race__flat { transition: opacity 200ms ease-out; }
+.home-race__art.is-playing .home-race__flat { opacity: 0.28; }
+.home-race__art--still .track-still {
+  max-width: calc((340px - 34px) * 1200 / 676);
+  margin: 0 auto;
+}
+@media (hover: hover) {
+  /* A pointer that hovers reaches the still (which reads each section);
+     the play target stays for taps and keys. */
+  .home-race__art--still .home-race__hit { pointer-events: none; }
+}
+.home-race__sweep { position: absolute; top: 0; overflow: visible; pointer-events: none; }
+.home-race__sweep path { opacity: 0; transition: opacity 280ms ease-out; }
+.home-race__sweep path.is-lit { opacity: 1; transition: none; }
+.home-race__hit { position: absolute; inset: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.home-race__hit:focus { outline: none; }
+.home-race__hit:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+
+.home-race__sweep-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.home-race__sweep-cap b { font-weight: 560; color: var(--ink-primary); }
+.home-race__sweep-hint--touch { display: none; }
+@media (hover: none) {
+  .home-race__sweep-hint--hover { display: none; }
+  .home-race__sweep-hint--touch { display: inline; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-race__flat,
+  .home-race__sweep path { transition: none; }
+}
+
+.home-race__pos { margin-top: 18px; display: flex; align-items: baseline; gap: 12px; }
+.home-race__pos b {
+  font-size: 56px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink-primary);
+}
+.home-race__pos span { font-size: 15px; color: var(--ink-secondary); }
+.home-race__name { display: block; margin-top: 8px; font-size: 19px; font-weight: 560; color: var(--ink-primary); }
+.home-race__meta { display: block; margin-top: 4px; font-size: 14px; color: var(--ink-muted); }
+
+@media (hover: hover) {
+  .home-race__link:hover .home-race__name { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .home-race__link:hover .home-race__pos b { color: var(--link-active); }
+}
+
+/* ---------- the rest of the site, plain links ---------- */
+
+.home-more {
+  margin-top: var(--home-section);
+  padding-top: 24px;
+  border-top: 1px solid var(--divider);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px 48px;
+}
+
+.home-more__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  text-wrap: pretty;
+}
+
+.home-more__title { font-size: 17px; font-weight: 560; color: var(--link); }
+@media (hover: hover) { .home-more__item:hover .home-more__title { color: var(--link-active); text-decoration: underline; text-underline-offset: 3px; } }
+
+.home-fresh { margin-top: 40px; }
+
+/* ---------- mid widths ---------- */
+
+@media (max-width: 1180px) {
+  .home { --home-cols: minmax(300px, 0.9fr) minmax(0, 1.6fr); }
+  .home-odo { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 26px; }
+  .home-odo__cell b { font-size: clamp(30px, 5.4cqi, 52px); }
+  .home-more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-races { gap: 32px; }
+}
+
+/* ---------- phone ---------- */
+
+@media (max-width: 760px) {
+  /* One column. The text column opens up (display: contents) so the readout
+     can drop under the picture: words, picture, readout, caption. */
+  .home-hero { grid-template-columns: minmax(0, 1fr); }
+  .home-hero__text { display: contents; }
+  .home-hero__text > * { grid-column: 1; }
+  .home-hero__figure { display: contents; }
+  .home-hero__still { order: 1; }
+  .home-hero__read { order: 2; }
+  .home-hero__cap { order: 3; }
+  .home .home-hero__intro { font-size: 17px; }
+  .home-hero__links { gap: 12px 22px; }
+  .home-hero__still { margin: 20px calc(-1 * var(--gutter)) 0; }
+  .home-hero__cap { padding-left: 0; margin-top: 14px; }
+  .home-hero__read { margin-top: 18px; padding-top: 14px; min-height: 168px; }
+  .home .home-hero__read-line { font-size: 17px; }
+  .home-hero__tag { font-size: 13px; }
+
+  .home-line { grid-template-columns: minmax(0, 1fr); row-gap: 12px; margin-top: 48px; }
+  .home-line__big { font-size: 84px; }
+  .home-line__body { flex-direction: column; align-items: flex-start; gap: 18px; padding-left: 0; }
+  .home-line__facts { font-size: 16px; }
+  .home-last__replay { min-width: 0; }
+  .home-last__replay .race-replay__year-prov { padding-left: 0; }
+
+  .home h2 { font-size: 24px; margin-top: 60px; }
+  .home-odo { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
+  .home-odo__cell { padding-right: 12px; }
+  .home-odo__cell b { font-size: clamp(28px, 9cqi, 40px); }
+
+  .home-races { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .home-race__art { height: auto; min-height: 120px; padding-top: 8px; padding-bottom: 34px; }
+
+  .home-more { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+}

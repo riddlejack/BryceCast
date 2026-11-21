@@ -6,10 +6,11 @@
  * separate build-before-publish command. Dry-run validates without running steps.
  */
 
-import { existsSync, mkdirSync, openSync, readSync, closeSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { existsSync, mkdirSync, openSync, readSync, closeSync, readFileSync, realpathSync, statSync, writeFileSync } from 'node:fs';
+import { delimiter, dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { DatabaseSync } from 'node:sqlite';
+import { analyticsPython } from '../run-predictive-race-intelligence.mjs';
 
 /** The pipeline, in execution order. `env` is merged over the inherited env for
  *  that step only — that is how ALLOW_EVENT_ROLL stays scoped to the package. */
@@ -25,6 +26,13 @@ export const PIPELINE_STEPS = [
   { id: 'timing-coverage', npmScript: 'analytics:timing-coverage', label: 'Rebuild observed timing coverage' },
   { id: 'timing-coverage-validate', npmScript: 'analytics:timing-coverage:validate', label: 'Validate timing source coverage' },
   { id: 'ingest-history', npmScript: 'ingest:history', label: 'Refresh official championship standings and career history' },
+  // The odometer, career figures and travel legs, then the globe that reads them.
+  // career-life-stats stops (naming the track) when a race's track has no row in
+  // analysis/career-life-stats/data/venue_facts.csv, so a new venue never drops out silently.
+  { id: 'career-life-stats', npmScript: 'analytics:career-life-stats', label: 'Rebuild career mileage, figures and travel legs', analyticsPython: true },
+  { id: 'career-life-stats-validate', npmScript: 'analytics:career-life-stats:validate', label: 'Validate career mileage, figures and travel legs', analyticsPython: true },
+  { id: 'career-atlas', npmScript: 'analytics:career-atlas', label: 'Rebuild the career globe', analyticsPython: true },
+  { id: 'career-atlas-validate', npmScript: 'analytics:career-atlas:validate', label: 'Validate the career globe', analyticsPython: true },
   {
     id: 'ui-data-package',
     npmScript: 'analytics:ui-data-package:refresh-validate',
@@ -36,6 +44,11 @@ export const PIPELINE_STEPS = [
 /** Manual follow-ups the script deliberately does NOT perform. Surfaced in every
  *  run report so the operator knows what still needs a human. */
 export const MANUAL_FOLLOWUPS = [
+  {
+    id: 'venue-facts',
+    title: 'Add a row for any new track',
+    detail: 'If career-life-stats stopped on a track with no venue_facts row, add that track to analysis/career-life-stats/data/venue_facts.csv (length, coordinates, country, each from a named source) and re-run the roll.'
+  },
   {
     id: 'source-coverage',
     title: 'Review source gaps and newly posted reports',
@@ -49,6 +62,26 @@ export const MANUAL_FOLLOWUPS = [
 ];
 
 const SQLITE_MAGIC = 'SQLite format 3\0';
+
+/** PATH override so a step's `python3` is the interpreter the UI package builder
+ *  uses (BRYCECAST_ANALYTICS_PYTHON, else the project runtime). Only applied when
+ *  that interpreter sits in a directory whose own `python3` it is (a venv bin), so
+ *  prepending the directory cannot pick up a different Python. */
+export const analyticsPythonEnv = (env = process.env) => {
+  const python = analyticsPython();
+  if (!python.includes('/')) return {};
+  const bin = dirname(python);
+  const sibling = join(bin, 'python3');
+  if (!existsSync(sibling)) return {};
+  try {
+    if (realpathSync(sibling) !== realpathSync(python)) return {};
+  } catch {
+    return {};
+  }
+  return { PATH: [bin, env.PATH ?? ''].filter(Boolean).join(delimiter) };
+};
+
+const stepEnv = (step, env) => ({ ...env, ...(step.env ?? {}), ...(step.analyticsPython ? analyticsPythonEnv(env) : {}) });
 
 const readJsonIfExists = (path) => {
   try {
@@ -158,7 +191,22 @@ export const runPreflight = ({ env = process.env, cwd = process.cwd(), now = Dat
   const npmProbe = spawnSync('npm', ['--version'], { encoding: 'utf8', timeout: 20000 });
   add('npm-available', npmProbe.status === 0, npmProbe.status === 0 ? `npm ${String(npmProbe.stdout).trim()}` : 'npm not found on PATH');
 
-  // 6. Roll intent: what the committed package would roll to.
+  // 6. The career globe step needs Pillow in the python3 that npm runs.
+  const pillowProbe = spawnSync('python3', ['-c', 'import PIL; print(PIL.__version__)'], {
+    encoding: 'utf8',
+    timeout: 20000,
+    env: { ...env, ...analyticsPythonEnv(env) }
+  });
+  add(
+    'python-pillow',
+    pillowProbe.status === 0,
+    pillowProbe.status === 0
+      ? `python3 has Pillow ${String(pillowProbe.stdout).trim()} (career-atlas)`
+      : 'python3 cannot import Pillow: the career-atlas step will fail. Run npm run analytics:setup, or set BRYCECAST_ANALYTICS_PYTHON to a venv python with analysis/career-atlas/requirements.txt.',
+    'warn'
+  );
+
+  // 7. Roll intent: what the committed package would roll to.
   const committed = readJsonIfExists(join(cwd, 'analysis/ui-data-package/ui-data-package.json'));
   const committedAsOf = typeof committed?.asOfDate === 'string' ? committed.asOfDate : null;
   const upcoming = (committed?.screens?.upcomingPrep?.events ?? [])
@@ -197,7 +245,7 @@ export const runPreflight = ({ env = process.env, cwd = process.cwd(), now = Dat
 export const defaultRunStep = ({ step, env, cwd }) => {
   const result = spawnSync('npm', ['run', step.npmScript], {
     cwd,
-    env: { ...env, ...(step.env ?? {}) },
+    env: stepEnv(step, env),
     stdio: 'inherit'
   });
   const exitCode = result.status === null ? (result.signal ? 1 : 1) : result.status;
@@ -255,7 +303,7 @@ export const runPostraceRoll = ({
     ok: false,
     exitCode: 1,
     preflight,
-    steps: PIPELINE_STEPS.map((s) => ({ id: s.id, npmScript: s.npmScript, label: s.label, status: 'pending', exitCode: null, startedAt: null, finishedAt: null, durationMs: null, rollScoped: Boolean(s.env) })),
+    steps: PIPELINE_STEPS.map((s) => ({ id: s.id, npmScript: s.npmScript, label: s.label, status: 'pending', exitCode: null, startedAt: null, finishedAt: null, durationMs: null, rollScoped: Boolean(s.env?.BRYCECAST_ALLOW_EVENT_ROLL) })),
     package: { before: null, after: null, diff: null },
     manualFollowups: MANUAL_FOLLOWUPS,
     neverDid: ['deploy', 'LaunchAgent changes', 'iCloud writes', 'live-runner interaction']

@@ -1,7 +1,7 @@
 # Context Event Narrative Layer
 
-Generated: 2026-09-20T00:00:20Z
-Source hash: `d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd`
+Generated: 2026-11-18T09:48:03Z
+Source hash: `e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc`
 
 ## Source Scope
 
@@ -9,9 +9,9 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | collection | rows |
 | --- | --- |
-| media | 1098 |
+| media | 1130 |
 | penalty | 94 |
-| weather | 221 |
+| weather | 252 |
 | incident | 166 |
 | racecraft | 44 |
 
@@ -45,21 +45,24 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 | sourceType | rows |
 | --- | --- |
-| official_pdf | 812 |
+| official_pdf | 904 |
 | official_api | 304 |
-| official_page | 117 |
+| official_page | 132 |
 | weather_api | 94 |
-| official_html | 16 |
+| official_html | 17 |
 | official_image | 5 |
 | official_article | 4 |
 | archived_official_page | 2 |
 | official_json | 2 |
+| press_results | 2 |
+| curated_identity_table | 1 |
+| press_article | 1 |
 
 ## Source Boundary Gaps
 
 | status | rows |
 | --- | --- |
-| open | 7 |
+| open | 8 |
 | partial | 2 |
 | source_broken_preserved | 1 |
 
@@ -79,10 +82,10 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 
 ## Weather And Media
 
-- Weather/condition rows: 221.
-- Media index rows: 1098.
-- Source-evidence rows: 1356.
-- Source-boundary gap rows: 10.
+- Weather/condition rows: 252.
+- Media index rows: 1130.
+- Source-evidence rows: 1468.
+- Source-boundary gap rows: 11.
 - Derived metric rows: 453.
 
 ## Series Coverage
@@ -90,13 +93,15 @@ This lane normalizes canonical non-lap context collections into product-ready ar
 | seriesName | seasonYears | totalContextRows | racecraftCount | penaltyCount | incidentCount | weatherCount | mediaCount |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | INDY NXT | 2024; 2025; 2026 | 1273 | 44 | 88 | 166 | 135 | 840 |
-| GB3 Championship | 2021; 2022 | 180 | 0 | 0 | 0 | 39 | 141 |
-| Formula Ford | 2020 | 61 | 0 | 4 | 0 | 46 | 11 |
+| GB3 Championship | 2021; 2022 | 194 | 0 | 0 | 0 | 44 | 150 |
+| Formula Ford | 2019; 2020 | 99 | 0 | 4 | 0 | 72 | 23 |
 | F1600 Championship Series | 2019 | 39 | 0 | 2 | 0 | 0 | 37 |
 | Castrol Toyota Formula Regional Oceania Championship | 2024 | 32 | 0 | 0 | 0 | 0 | 32 |
 | Euroformula Open | 2023 | 28 | 0 | 0 | 0 | 0 | 28 |
+| SCCA U.S. Majors Tour | 2019 | 8 | 0 | 0 | 0 | 0 | 8 |
 | Global / career context |  | 5 | 0 | 0 | 0 | 0 | 5 |
 | IMSA WeatherTech SportsCar Championship | 2025 | 5 | 0 | 0 | 0 | 1 | 4 |
+| USF Pro 2000 Championship | 2024 | 2 | 0 | 0 | 0 | 0 | 2 |
 
 ## Caveats
 

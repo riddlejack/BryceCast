@@ -1,0 +1,19 @@
+{
+  "lane": "round-9",
+  "entries": [
+    {
+      "id": "tap-to-read",
+      "page": ["/races", "/races/*", "/career", "/race-week"],
+      "title": "On a phone, the first tap on a dot reads it; the second opens it",
+      "switch": "tap",
+      "values": [
+        { "value": null, "label": "the first tap opens the dot's card, with Open the race → in it; a second tap on the dot also opens (new)" },
+        { "value": "plain", "label": "no button: the card says tap again, and a second tap on the dot opens" }
+      ],
+      "look": "On the phone, tap any dot on the season chart: its card opens above it (below it near the top of the screen) and you stay on the page. Tap the card's Open the race →, or the same dot again, to open the race; tap another dot to move the card, anywhere else to close it. The same on every chart that had a hover: Career's climb, chapters, explorer, rivals, restarts, rain days, campaign arcs and globe, a race page's lap chart and team strip, the Race Week charts. On the laptop nothing changes.",
+      "anchor": "svg[aria-label^='Season results']",
+      "added": "2026-11-17T12:30",
+      "reviewed": false
+    }
+  ]
+}

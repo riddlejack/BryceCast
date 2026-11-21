@@ -622,7 +622,15 @@ assert.ok(bridge!.sources.length >= 1 && bridge!.sources.every((source) => !sour
 const lifeStats = careerScreen.lifeStats;
 assert.equal(lifeStats.schemaVersion, 'brycecast.careerLifeStats.v2');
 assert.equal(lifeStats.personalRaceMileage.raceRows, canonicalBryceRaceSessionIds.size, 'life-stats must use all canonical Bryce race rows');
-assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, raceMileageRows.length, 'every canonical Bryce race row has sourced attribution');
+// A race whose official sheet lists no laps (a disqualification) keeps its
+// ledger row as `unknown` with blank laps; every other row is sourced exactly.
+const unlappedRaceRows = raceMileageRows.filter((row) => row.confidenceClass === 'unknown' && row.personalLaps === '' && row.canonicalLaps === '');
+assert.equal(
+  raceMileageRows.filter((row) => row.confidenceClass !== 'observed_exact').length,
+  unlappedRaceRows.length,
+  'only races without laps on the sheet may lack exact attribution'
+);
+assert.equal(lifeStats.personalRaceMileage.coveredRaceRows, raceMileageRows.length - unlappedRaceRows.length, 'every lapped canonical Bryce race row has sourced attribution');
 assert.equal(lifeStats.personalRaceMileage.laps, expectedPersonalRaceLaps, 'personal race laps must reconcile to the driver-race ledger');
 assert.equal(lifeStats.personalRaceMileage.miles, expectedPersonalRaceMiles, 'personal race mileage must reconcile to the driver-race ledger');
 assert.deepEqual(
@@ -866,8 +874,8 @@ assert.ok(
     new Set(['2021 TSL official PDFs', '2022 GB3 official JSON']),
     'GB3 must stay split across its two source families'
   );
-  assert.equal(gb3.raceResults.length, 44, 'GB3 carries all 44 Bryce race rows');
-  assert.equal(gb3.teamContext.length, 44, 'team context spans every GB3 race');
+  assert.equal(gb3.raceResults.length, 48, 'GB3 carries all 48 Bryce race rows');
+  assert.equal(gb3.teamContext.length, 48, 'team context spans every GB3 race');
   assert.equal(gb3.trackProfile.length, 6, 'GB3 profiles six venues');
 
   /* Grid-to-finish is 2021-only: 2021 rows carry a start, 2022 rows never do. */
@@ -885,7 +893,7 @@ assert.ok(
 
   /* Two races have no classified result; they render open, never invented. */
   const unclassified = gb3.raceResults.filter((row) => row.finishPosition === null);
-  assert.equal(unclassified.length, 2, 'GB3 has exactly two unclassified races');
+  assert.equal(unclassified.length, 3, 'GB3 has exactly three unclassified races');
   assert.ok(
     gb3.raceResults
       .filter((row) => row.finishPosition !== null)

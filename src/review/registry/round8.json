@@ -1,0 +1,46 @@
+{
+  "lane": "round-8",
+  "entries": [
+    {
+      "id": "tracks-replay",
+      "page": "/tracks",
+      "title": "Replay a race on the Tracks page",
+      "switch": "trackreplay",
+      "values": [
+        {
+          "value": null,
+          "label": "plays here, on this page's track (new)"
+        },
+        {
+          "value": "link",
+          "label": "a button that goes to the Live page"
+        }
+      ],
+      "look": "Pick Laguna Seca, 2026 · Race 2, then press Replay this race beside the pickers: the race plays on this page's 3D track with his 9, the field, the race bar and his place. Exit replay returns to the heat map; changing the venue or race stops it. A race with no replay says so in one line.",
+      "with": {
+        "venue": "WeatherTech Raceway Laguna Seca",
+        "visit": "session_indy_nxt_2026_6758"
+      },
+      "anchor": ".tracks-head__pickers",
+      "added": "2026-11-16T23:30",
+      "reviewed": false
+    },
+    {
+      "id": "tracks-hover-black",
+      "page": [
+        "/tracks",
+        "/races/*"
+      ],
+      "title": "No black when you point at a section",
+      "switch": null,
+      "noswitch": "the black was a fault you found; there is nothing to switch back to",
+      "look": "Point at any stretch of the track, above all where it climbs or drops (Barber's turns 1 to 4, Iowa's banking): it lights in its own colour with a thin dark edge, never black. Fixed at every venue.",
+      "with": {
+        "venue": "Barber Motorsports Park"
+      },
+      "anchor": ".track3d",
+      "added": "2026-11-16T23:45",
+      "reviewed": false
+    }
+  ]
+}

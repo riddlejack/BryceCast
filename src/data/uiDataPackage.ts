@@ -25,6 +25,82 @@ export type UiCareerMomentKind =
   | 'daytona_24'
   | 'wwtr_mechanical';
 
+export interface UiUnclassifiedRace {
+  sessionId: string;
+  eventId: string | null;
+  eventName: string | null;
+  eventStartDate: string | null;
+  /** The race's own day (YYYY-MM-DD, local) from its official start; eventStartDate is the meeting's first day. */
+  raceDate?: string | null;
+  seriesId: string | null;
+  seriesName: string | null;
+  seasonYear: number | null;
+  trackId: string | null;
+  trackName: string | null;
+  country: string | null;
+  status: string | null;
+  raceNumber?: number | null;
+  startPosition?: number | null;
+  fieldSize?: number | null;
+  lapsCompleted?: number | null;
+  trackType?: string | null;
+}
+
+/** Weather over one race, from its official start to start + its length (`window.basis`
+ *  'session_sheet'), or 09:00-18:00 local on race day ('race_day'). The figures are
+ *  Open-Meteo hourly reanalysis (ERA5), always `source.tier` 'modelled'. Wet or dry comes
+ *  from the official series condition report where one exists (`wetDrySource`
+ *  'series_report'), then an observed call ('observed'), else from the reanalysis rain (wet at 0.5 mm or more; it never says
+ *  mixed). A modelled dry is weak evidence: see raceWeatherSummary.calibration. */
+export interface UiRaceWeather {
+  sessionId: string;
+  window: { start: string; end: string; basis: 'session_sheet' | 'race_day' };
+  sky: 'clear' | 'partly' | 'overcast' | 'rain' | 'storm';
+  wetDry: 'wet' | 'dry' | 'mixed' | null;
+  wetDrySource: 'series_report' | 'observed' | 'reanalysis' | null;
+  rainMm: number | null;
+  cloudPct: number | null;
+  windKph: number | null;
+  gustKph: number | null;
+  /** The direction the wind blows FROM, degrees clockwise from north. */
+  windFromDeg: number | null;
+  tempC: number | null;
+  source: { name: string; tier: 'observed' | 'modelled'; url: string | null };
+  /** The official condition words ("Wet", "Damp"), where the series reported them. */
+  seriesReport: { conditionRaw: string | null; source: string | null; url: string | null } | null;
+  /** Where no series report exists and the reanalysis call was checked: the nearest
+   *  stations' observed reports (NOAA GHCNh) and race reports behind `wetDry`. */
+  observed: { summary: string; evidence: Array<{ kind: 'station' | 'report'; url: string; source?: string; station?: string; distanceKm?: number; path?: string }> } | null;
+  /** What the reanalysis alone calls (wet or dry), kept beside an official or observed call. */
+  modelWetDry: 'wet' | 'dry' | null;
+}
+
+export interface UiRaceWeatherSummary {
+  schemaVersion: string;
+  source: string;
+  grain: string;
+  rules: Record<string, string>;
+  coverage: {
+    races: number;
+    byBasis: Record<string, number>;
+    byWetDrySource: Record<string, number>;
+    bySky: Record<string, number>;
+    skipped: Array<{ sessionId: string; reason: string }>;
+  };
+  calibration: {
+    races: number;
+    agree: number;
+    officialWetOrMixed: number;
+    modelCaughtWetOrMixed: number;
+    officialDry: number;
+    modelCalledDry: number;
+    allDryBaselineAgree: number;
+    skyRainAgree: number;
+    note: string;
+  };
+  sourceRefs: UiSourceRef[];
+}
+
 export interface UiCareerMoment {
   sessionId: string;
   shortLabel: string;
@@ -733,6 +809,8 @@ export interface UiCareerLifeStats {
     unknown: { sessions: number; confidenceClass: 'unknown' };
     floor: { laps: number; miles: number; confidenceClass: 'observed_lower_bound' };
     excludedAggregateSessions: number;
+    /** Sessions measured on a different layout than their event's track (lap speeds say so). */
+    remeasuredLayoutSessions: number;
     metricGrain: 'driver_physical_session';
   };
   travel: {
@@ -808,8 +886,128 @@ export interface UiCareerLifeStats {
     lengthSources: string[];
     coordsSources: string[];
   }>;
+  /* The Career page's figures, from analysis/career-life-stats/output/career_figures.json. */
+  figureClasses: Record<UiCareerFigureClass, string>;
+  span: { firstDay: string; lastDay: string; days: number; weeks: number };
+  figures: UiCareerFigure[];
+  lifeShare: UiCareerLifeShare;
+  weeksGrid: UiCareerWeeksGrid;
+  travelLegs: UiCareerTravelLegs;
+  otherDrivers: UiCareerOtherDrivers;
+  timeBreakdown: UiCareerTimeBreakdown;
   caveats: string[];
   sourceRefs: UiSourceRef[];
+}
+
+/** One row per other driver record in his races (the odometer's dots):
+ *  [name, index into `series` of the first race they shared, its year,
+ *  races shared, '' | 'artifact' (a garbled entry) | 'variant' (a likely
+ *  second spelling)]. Single-seater rivals first, then Daytona only. */
+export interface UiCareerOtherDrivers {
+  how: string;
+  columns: string[];
+  singleSeaterCount: number;
+  series: string[];
+  rows: Array<[string, number, number, number, '' | 'artifact' | 'variant']>;
+}
+
+export interface UiCareerTimePart {
+  display: string;
+  hours: number;
+  count: number;
+}
+
+/** The parts behind the time-in-the-car figures, formatted as their figures are. */
+export interface UiCareerTimeBreakdown {
+  how: string;
+  timedRaces: UiCareerTimePart;
+  untimedRaces: UiCareerTimePart;
+  racesWithoutLaps: number;
+  otherSessions: UiCareerTimePart;
+  raceCount: number;
+}
+
+/** counted: exact from the data. lower_bound: the true figure is at least this
+ *  (display ends in "+"). modelled_range: an estimate built on stated assumptions. */
+export type UiCareerFigureClass = 'counted' | 'lower_bound' | 'modelled_range';
+
+export interface UiCareerFigure {
+  id: string;
+  label: string;
+  class: UiCareerFigureClass;
+  unit: string;
+  /** Single value; null for a modelled range. Hours for time figures, percent for shares. */
+  value: number | null;
+  /** low/base/high for modelled ranges; low/high (base null) for a people range on a counted record total. */
+  range: { low: number; base: number | null; high: number } | null;
+  /** Ready-to-show value, e.g. "7,316", "71 h 46 min+", "886 to 1,591". Whole numbers; "at least" values round down. */
+  display: string;
+  /** "of N": e.g. 98 of 150 races, 177 of 2,699 days. */
+  denominator: { value: number; unit: string } | null;
+  /** Breakdown, e.g. cautions: contact 6, spin 1. */
+  parts: Array<{ label: string; value: number }> | null;
+  /** "career", or a narrower scope such as "INDY NXT only". */
+  scope: string;
+  /** One plain sentence on how the figure was made. */
+  how: string;
+  caveat: string | null;
+}
+
+export interface UiCareerLifeShare {
+  birthDate: string;
+  /** Internal provenance note; not for the page. */
+  birthDateProvenance: string;
+  asOf: string;
+  firstRaceDate: string;
+  lastRaceDate: string;
+  figures: UiCareerFigure[];
+}
+
+export interface UiCareerWeeksGrid {
+  firstWeek: string;
+  lastWeek: string;
+  weekCount: number;
+  raceWeekCount: number;
+  how: string;
+  /** One entry per ISO week, in order; `races` is empty for a week with no race meeting. */
+  weeks: Array<{
+    isoWeek: string;
+    monday: string;
+    races: Array<{
+      eventId: string;
+      seriesId: string;
+      eventName: string;
+      /** Races of this event dated in this week (0 when only its practice fell here). */
+      raceCount: number;
+      bestFinish: number | null;
+    }>;
+  }>;
+}
+
+export interface UiCareerTravelLegEnd {
+  eventId: string;
+  trackName: string;
+  country: string;
+  lat: number;
+  lon: number;
+  /** The event's start date. */
+  date: string;
+}
+
+export interface UiCareerTravelLegs {
+  legCount: number;
+  totalMiles: number;
+  class: 'lower_bound';
+  how: string;
+  legs: Array<{
+    index: number;
+    from: UiCareerTravelLegEnd;
+    to: UiCareerTravelLegEnd;
+    greatCircleMiles: number;
+    /** A rule of thumb (same country and under 750 miles = drive), not how he travelled. */
+    modeProxy: 'drive' | 'flight' | 'same_venue';
+    runningMiles: number;
+  }>;
 }
 
 export interface UiChartSpec {
@@ -1276,10 +1474,18 @@ export interface UiDataPackage {
         modifiedAt: string;
         sha256: string;
       } | null;
+      /** Per series. avgFinishPercentile is (field - place + 1) / field and counts him in
+       *  his own field; avgFieldBeatenPct is the mean share of the OTHER cars he finished
+       *  ahead of, (field - place) / (field - 1), in percent: the "beat N%" figure. */
       seriesSummary: Array<Record<string, string | number | null>>;
       parityBySeries: Record<string, Array<Record<string, string | number | null>>>;
+      /** Per classified race. raceDate is the race's own day (the meeting's eventStartDate can
+       *  be a Friday for a Sunday race); fieldBeatenShare is (field - place) / (field - 1),
+       *  0 to 1, the share of the other cars he beat; finishPercentile counts him. */
       resultConversion: Array<Record<string, string | number | null>>;
       resultConversionSample: Array<Record<string, string | number | null>>;
+      /** Races he entered with no classified finish (DNS, DNF, DSQ), from the A2 miles ledger. */
+      unclassifiedRaces?: UiUnclassifiedRace[];
       moments: UiCareerMoment[];
       headToHead: UiCareerRival[];
       lapPositionMix: UiSeasonLapMix[];
@@ -1289,6 +1495,9 @@ export interface UiDataPackage {
       qualifyingLayer: UiQualifyingLayer;
       cautionAtlas: UiCautionAtlas;
       atlas: UiCareerAtlas;
+      /** Every race of the record, INDY NXT included, keyed by sessionId. */
+      raceWeather: Record<string, UiRaceWeather>;
+      raceWeatherSummary: UiRaceWeatherSummary;
       lifeStats: UiCareerLifeStats;
       caveats: string[];
       sourceRefs: UiSourceRef[];

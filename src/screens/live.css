@@ -1,0 +1,695 @@
+/* ============================================================
+   Live and replay, round 2 (November 14, 2026).
+   The track is the biggest thing on the page; the flag and the lap
+   read large; the section Bryce is in lights amber in a replay.
+   Everything here is scoped under .live-page.
+   ============================================================ */
+
+.live-page .live-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'head'
+    'now'
+    'track'
+    'position'
+    'points'
+    'near';
+  gap: 24px;
+  align-items: start;
+  /* Close to the bar above: the page's section gap is for sections. */
+  margin-top: calc(var(--section-gap) * -0.5);
+}
+
+/* Before the green, the minutes to go come before the circuit on a phone,
+   and the grid follows the circuit. */
+.live-page .live-hero--prestart {
+  grid-template-areas:
+    'head'
+    'now'
+    'position'
+    'track'
+    'near';
+}
+
+@media (min-width: 1000px) {
+  .live-page .live-hero {
+    grid-template-columns: minmax(340px, 4fr) minmax(0, 7fr);
+    grid-template-rows: auto auto auto auto auto 1fr;
+    grid-template-areas:
+      'head track'
+      'now track'
+      'position track'
+      'points track'
+      'near track'
+      '. track';
+    column-gap: clamp(36px, 4vw, 80px);
+    row-gap: 30px;
+  }
+
+  /* Before the green the left column is the countdown and Bryce's slot side
+     by side, then the whole grid, so the first screen is full. */
+  .live-page .live-hero--prestart {
+    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-areas:
+      'head track'
+      'now track'
+      'position track'
+      'near track'
+      '. track';
+    row-gap: 24px;
+  }
+}
+
+/* ---------- the race's name ---------- */
+
+.live-page .live-hero__head {
+  grid-area: head;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+}
+
+.live-page .live-hero__head-text { min-width: 0; }
+
+.live-page .live-hero__title {
+  font-size: clamp(30px, 2.7vw, 48px);
+  max-width: 16ch;
+  margin-top: 8px;
+}
+
+/* ---------- the flag and the lap ---------- */
+
+.live-page .live-hero__now { grid-area: now; min-width: 0; }
+
+.live-now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 26px;
+}
+
+.live-now__flag,
+.live-now__lap {
+  font-size: clamp(26px, 2.2vw, 38px);
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  font-variant-numeric: proportional-nums;
+  white-space: nowrap;
+}
+/* The lap count changes live: tabular, so it doesn't shimmer (round 4). */
+.live-now__lap { font-variant-numeric: tabular-nums; }
+
+.live-now__flag { display: inline-flex; align-items: center; gap: 0.36em; color: var(--ink-secondary); }
+
+.live-now__swatch {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 3px;
+  background: var(--grey-ink3);
+  flex: none;
+}
+
+.live-now__flag--green { color: var(--status-good); }
+.live-now__flag--green .live-now__swatch { background: var(--status-good-dot); }
+.live-now__flag--yellow { color: var(--status-warn); }
+.live-now__flag--yellow .live-now__swatch { background: #f2c230; }
+.live-now__flag--red { color: var(--status-bad); }
+.live-now__flag--red .live-now__swatch { background: var(--status-bad-dot); }
+.live-now__flag--white { color: var(--ink-secondary); }
+.live-now__flag--white .live-now__swatch { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--grey-ink3); }
+.live-now__flag--checkered { color: var(--ink-primary); }
+.live-now__flag--checkered .live-now__swatch {
+  background: conic-gradient(var(--ink) 25%, var(--paper) 0 50%, var(--ink) 0 75%, var(--paper) 0) 0 0 / 50% 50%;
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.live-now__lap { color: var(--ink-primary); }
+.live-now__of { color: var(--ink-muted); }
+
+.live-now__progress {
+  max-width: 440px;
+  height: 3px;
+  margin-top: 16px;
+  overflow: hidden;
+  background: var(--grey-hair);
+}
+
+.live-now__progress > span {
+  display: block;
+  height: 100%;
+  background: var(--ink-primary);
+  transition: width 600ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ---------- Bryce's position and the points ---------- */
+
+.live-page .live-hero__position { grid-area: position; min-width: 0; }
+.live-page .live-hero__position .live-position { min-height: 0; }
+.live-page .live-hero__speed { margin-top: 14px; font-size: 13px; }
+
+.live-page .live-hero__jumbotron {
+  grid-area: points;
+  align-items: flex-start;
+  justify-self: stretch;
+  text-align: left;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
+}
+
+.live-page .live-hero__standing-row { justify-content: flex-start; align-items: baseline; }
+.live-page .live-hero__jumbotron .live-points__provisional { margin-top: 6px; font-size: 12.5px; color: var(--ink-muted); }
+
+/* ---------- the track ---------- */
+
+.live-page .live-hero__track,
+.tracks-replay .live-hero__track {
+  grid-area: track;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.live-track { width: 100%; min-width: 0; }
+.live-track__svg { display: block; overflow: visible; }
+
+.live-track__base {
+  fill: none;
+  stroke: #b9b2aa;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.live-track__pit {
+  fill: none;
+  stroke: var(--grey-line);
+  stroke-width: 2;
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+}
+
+.live-track__section {
+  fill: none;
+  stroke: var(--amber);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.live-track__section--lit { opacity: 1; }
+
+/* The timing loops: hairline gaps across the line where each section ends. */
+.live-track__loop { stroke: var(--paper); stroke-width: 1.5; }
+.live-track__sf { stroke: var(--ink); stroke-width: 3; }
+.live-track__chevron { fill: none; stroke: var(--paper); stroke-linecap: round; stroke-linejoin: round; }
+
+.live-track__label {
+  font-family: var(--font-ui);
+  font-weight: 450;
+  fill: var(--ink-muted);
+}
+
+.live-track__label--lit {
+  font-weight: 620;
+  fill: var(--link);
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+/* The opening caution a replay jumped: on the track for a few seconds after
+   the jump, with the way to watch it instead. */
+.live-skip-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 8px 0 10px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-primary);
+  animation: live-skip-note-in 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.live-skip-note__swatch {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  border-radius: 3px;
+  background: #f2c230;
+  flex: none;
+  align-self: center;
+}
+.live-skip-note--red .live-skip-note__swatch { background: var(--status-bad-dot); }
+.live-skip-note__text { font-weight: 550; }
+.live-skip-note__watch,
+.replay-bar__inline-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .live-skip-note__watch:hover,
+  .replay-bar__inline-btn:hover { color: var(--link-active); }
+}
+@keyframes live-skip-note-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.live-page .live-hero__track-caption,
+.tracks-replay .live-hero__track-caption { margin: 0; max-width: 74ch; line-height: 1.45; }
+
+@media (prefers-reduced-motion: reduce) {
+  .live-track__section,
+  .live-now__progress > span { transition: none; }
+  .live-skip-note { animation: none; }
+}
+
+/* ---------- a replay before the green ---------- */
+
+.live-prestart__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px clamp(28px, 3vw, 56px);
+}
+.live-prestart__countdown { display: flex; flex-direction: column; gap: 4px; }
+.live-prestart__clock { font-variant-numeric: tabular-nums; }
+.live-prestart__slot { display: flex; flex-direction: column; gap: 4px; }
+.live-prestart__slot-row { display: flex; align-items: center; gap: 12px; margin: 6px 0 2px; }
+
+.live-page .live-hero__near { grid-area: near; min-width: 0; }
+
+.live-grid { padding-top: 16px; border-top: 1px solid var(--divider); }
+.live-grid__title { margin: 0 0 4px; font-size: 15px; font-weight: 620; letter-spacing: -0.01em; }
+.live-grid__note { margin: 0; }
+
+.live-grid__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(16px, 2vw, 32px);
+  max-width: 640px;
+  /* Room for the second column's half-row step. */
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+/* Two by two, the second column a half-row back, the way a grid stands. */
+.live-grid__car {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.7em minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 4px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.live-grid__car--even { top: 12px; }
+.live-grid__car--bryce { background: var(--accent-wash); font-weight: 600; }
+.live-grid__slot { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.live-grid__name { display: inline-flex; align-items: center; gap: 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-grid__no { color: var(--ink-muted); font-size: 12px; font-weight: 450; }
+
+/* The No. column only where the column is wide enough to keep surnames whole. */
+@media (max-width: 1399px) and (min-width: 1000px), (max-width: 559px) {
+  .live-grid__no { display: none; }
+  .live-grid__car { grid-template-columns: 1.7em minmax(0, 1fr); }
+}
+
+/* ---------- the cars around Bryce (race hero, left column) ---------- */
+
+.live-around { display: flex; flex-direction: column; gap: 6px; padding-top: 16px; border-top: 1px solid var(--divider); }
+.live-around__list { margin: 0; padding: 0; list-style: none; max-width: 440px; }
+.live-around__car {
+  display: grid;
+  grid-template-columns: 2.6em minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+.live-around__car:last-child { border-bottom: 0; }
+.live-around__car--bryce { background: var(--accent-wash); font-weight: 600; }
+.live-around__pos { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.live-around__car--bryce .live-around__pos { color: var(--ink-primary); }
+.live-around__name { display: inline-flex; align-items: center; gap: 7px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-around__gap { color: var(--ink-secondary); font-size: 13px; white-space: nowrap; }
+
+@media (max-width: 559px) {
+  .live-page .live-hero__head .source-pill { flex: none; }
+}
+
+/* The field: keep the gap figures clear of the one-second battle brackets. */
+.live-page .live-field__row .tower__gap { padding-right: 12px; }
+
+/* The championship ladder: Bryce's own row between his neighbours. */
+.live-page .live-points__neighbor--bryce { background: color-mix(in srgb, var(--amber, #CC7E16) 9%, transparent); }
+.live-page .live-points__neighbor--bryce strong { color: var(--ink, #1E1C1A); }
+
+/* ============================================================
+   Round 6 (November 16): one screen. The track with the cars on
+   it in the middle, the running order on the left, Bryce on the
+   right, one bar above. At a laptop (2000x1200) and the Dell
+   (1920x1080) it fits the window; phones stack.
+   ============================================================ */
+
+.live-desk {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.live-desk .live-hero__head { align-items: flex-end; }
+.live-desk .live-hero__title {
+  font-size: clamp(24px, 1.75vw, 34px);
+  max-width: none;
+  margin-top: 4px;
+}
+.live-desk__head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 18px;
+}
+.live-desk__story { font-size: 13.5px; white-space: nowrap; }
+
+/* The one bar: the flag and the lap, then (in a replay) what this is and the
+   controls; live, the trust state. */
+.live-page .replay-bar--desk,
+.tracks-replay .replay-bar--desk,
+.live-desk__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px 28px;
+  padding: 10px 0;
+  border-block: 1px solid var(--divider);
+}
+.replay-bar__lead { flex: 0 1 auto; min-width: 0; }
+.live-page .replay-bar--desk .replay-bar__id,
+.tracks-replay .replay-bar--desk .replay-bar__id { flex: 1 1 300px; min-width: 0; }
+.live-page .replay-bar--desk .replay-bar__controls,
+.tracks-replay .replay-bar--desk .replay-bar__controls { flex: 0 0 auto; margin-left: auto; }
+.live-desk .live-hero__now,
+.tracks-replay .live-hero__now { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.live-desk .live-now,
+.tracks-replay .live-now { gap: 6px 18px; }
+.live-desk .live-now__flag,
+.live-desk .live-now__lap,
+.tracks-replay .live-now__flag,
+.tracks-replay .live-now__lap { font-size: clamp(19px, 1.35vw, 25px); }
+.live-desk .live-now__progress,
+.tracks-replay .live-now__progress { width: clamp(90px, 9vw, 180px); margin-top: 0; }
+.live-desk__bar--live .live-trust { flex: 1 1 420px; min-height: 0; padding: 0; border-bottom: 0; }
+
+.live-desk__label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 620;
+  letter-spacing: 0.01em;
+  color: var(--ink-secondary);
+}
+
+.live-desk__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'track' 'bryce' 'order';
+  gap: 28px;
+  min-width: 0;
+}
+.live-desk__order { grid-area: order; min-width: 0; display: flex; flex-direction: column; }
+.live-desk__track { grid-area: track; min-width: 0; gap: 8px; }
+.live-desk__bryce { grid-area: bryce; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.live-desk__block { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.live-desk__block + .live-desk__block { padding-top: 14px; border-top: 1px solid var(--divider); }
+.live-desk__model { position: relative; min-width: 0; }
+
+/* ---------- the running order ---------- */
+
+.live-order__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.live-order__cols,
+.live-order__row {
+  display: grid;
+  grid-template-columns: 1.9em 2.3em minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+}
+.live-order__cols {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}
+.live-order__cols > span:last-child { text-align: right; }
+.live-order__list { margin: 0; padding: 0; list-style: none; display: grid; grid-auto-rows: minmax(25px, auto); }
+.live-order__row {
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+  line-height: 1.2;
+  transition: background-color 160ms ease-out;
+}
+.live-order__row--bryce { background: var(--accent-wash); font-weight: 600; }
+.live-order__row.is-focus { box-shadow: inset 3px 0 0 var(--link); background: color-mix(in srgb, var(--link) 7%, var(--paper)); }
+.live-order__row--rank-change { background: color-mix(in srgb, var(--amber) 16%, var(--paper)); }
+.live-order__pos { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.live-order__row--bryce .live-order__pos { color: var(--ink-primary); }
+.live-order__no { color: var(--ink-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.live-order__name { display: inline-flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-order__gap { color: var(--ink-secondary); font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+
+/* ---------- Bryce's column ---------- */
+
+.live-desk .live-position { min-height: 0; }
+.live-me__line { margin: 2px 0 0; font-size: 13.5px; line-height: 1.4; color: var(--ink-secondary); }
+.live-me__line--quiet { font-size: 12.5px; color: var(--ink-muted); }
+.live-me__strong { font-weight: 620; color: var(--ink-primary); }
+.live-ended__row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.live-ended__words { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: 13.5px; color: var(--ink-secondary); }
+.live-ended__ladder { margin: 4px 0 0; padding: 0; list-style: none; }
+.live-ended__rung {
+  display: grid;
+  grid-template-columns: 2.6em minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+}
+.live-ended__rung:last-child { border-bottom: 0; }
+.live-ended__rung--bryce { background: var(--accent-wash); font-weight: 600; }
+.live-ended__pos { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.live-ended__name { display: inline-flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.live-ended__pts { font-variant-numeric: tabular-nums; color: var(--ink-secondary); }
+.live-desk .live-points__provisional { font-size: 12px; color: var(--ink-muted); }
+
+.live-desk .live-around { padding-top: 14px; gap: 4px; }
+.live-desk .live-around__list { max-width: none; }
+.live-desk .live-around__car { padding: 5px 6px; font-size: 13.5px; align-items: center; }
+.live-around__car.is-focus { box-shadow: inset 3px 0 0 var(--link); }
+.live-around__gaps { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.live-around__rate { font-size: 11.5px; color: var(--ink-muted); white-space: nowrap; }
+.live-around__note { margin: 4px 0 0; font-size: 12px; }
+
+/* ---------- the dots and the "how" ---------- */
+
+.live-track { position: relative; }
+.live-track__overlay { position: absolute; inset: 0; pointer-events: none; }
+.live-dots { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.live-dots__loop { stroke: var(--ink); stroke-width: 1.25; stroke-linecap: round; opacity: 0.5; }
+.live-dots__car { pointer-events: auto; cursor: default; }
+.live-dots__hit { fill: transparent; }
+.live-dots__dot { fill: var(--ink); stroke: var(--paper); stroke-width: 1.5; }
+.live-dots__plate { fill: var(--bryce); stroke: var(--ink); stroke-width: 1.25; }
+.live-dots__plate-no { font-family: var(--font-ui); font-size: 11.5px; font-weight: 700; fill: var(--bryce-ink-on); }
+.live-dots__ring { fill: none; stroke: var(--link); stroke-width: 2.25; }
+.live-dots__car.is-focus .live-dots__dot { fill: var(--link); }
+
+.live-dots__tip {
+  position: absolute;
+  z-index: 3;
+  width: max-content;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  background: rgba(253, 252, 250, 0.96);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-primary);
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(30, 28, 26, 0.08);
+}
+.live-dots__tip strong { font-weight: 620; }
+.live-dots__tip-detail { color: var(--ink-muted); font-size: 12px; }
+
+.live-dots-how { font-size: 12.5px; line-height: 1.5; color: var(--ink-secondary); }
+.live-dots-how > summary { cursor: pointer; color: var(--link); font-weight: 560; width: max-content; }
+.live-dots-how > p { margin: 6px 0 0; max-width: 92ch; }
+.live-dots-how__count { color: var(--ink-primary); }
+.live-desk .live-hero__track-caption,
+.tracks-replay .live-hero__track-caption { font-size: 12.5px; max-width: none; }
+.live-desk .track3d__caption { margin-top: 6px; font-size: 12px; }
+
+/* ---------- widths ---------- */
+
+@media (min-width: 1000px) and (max-width: 1279px) {
+  .live-desk__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: 'track track' 'order bryce';
+    column-gap: 36px;
+  }
+}
+
+/* The one screen: the desk is the window, less the nav. */
+@media (min-width: 1280px) and (min-height: 760px) {
+  .live-page.live-page--desk { padding-bottom: 20px; }
+  .live-desk { height: calc(100dvh - var(--nav-height) - 8px - 20px); }
+  .live-desk__grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-columns: minmax(250px, 290px) minmax(0, 1fr) minmax(320px, 360px);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: 'order track bryce';
+    gap: 0 clamp(24px, 2vw, 40px);
+  }
+  .live-desk__order,
+  .live-desk__bryce { min-height: 0; overflow: hidden; }
+  /* Scoped to the desk's grid: the Tracks page's replay (round 8) uses the
+     same track panel at its own aspect ratio, not stretched to a window. */
+  .live-desk__grid .live-desk__track { min-height: 0; display: flex; flex-direction: column; }
+  .live-desk__grid .live-desk__model { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .live-desk__grid .live-desk__model > .track3d { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+  .live-desk__grid .live-desk__model .track3d__stage { flex: 1 1 auto; aspect-ratio: auto; max-height: none; min-height: 0; }
+  .live-desk__grid .live-desk__model > .track3d-wait { flex: 1 1 auto; aspect-ratio: auto !important; max-height: none !important; min-height: 0 !important; }
+  .live-desk__grid .live-desk__model > .live-track { flex: 1 1 auto; min-height: 0; }
+  .live-desk__grid .live-desk__track .live-skip-note { padding: 4px 0 6px; }
+}
+
+@media (max-width: 699px) {
+  .live-desk .live-hero__head { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .live-desk__head-actions { justify-content: flex-start; }
+  .live-desk .live-hero__title { font-size: 26px; }
+  .live-desk__story { white-space: normal; }
+}
+
+/* ---------- round 7: Bryce's marker, the fill, the cars around him ---------- */
+
+.live-marks { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.live-marks__loop { stroke: var(--ink); stroke-width: 1.25; stroke-linecap: round; opacity: 0.45; }
+.live-marks__fill,
+.live-marks__fade,
+.live-marks__trail { fill: none; stroke: var(--amber); stroke-linecap: round; stroke-linejoin: round; }
+.live-marks__fill { opacity: 0.92; }
+.live-marks__trail { opacity: 0.22; }
+.live-marks__car,
+.live-marks__bryce { pointer-events: auto; cursor: default; }
+.live-marks__hit { fill: transparent; }
+.live-marks__dot { fill: var(--ink); stroke: var(--paper); stroke-width: 1.5; }
+.live-marks__no { font-family: var(--font-ui); font-size: 9.5px; font-weight: 700; fill: var(--paper); font-variant-numeric: tabular-nums; }
+.live-marks__car.is-focus .live-marks__dot { fill: var(--link); }
+/* A pile's count beside its one plate (round 9), haloed in paper so it reads over the track. */
+.live-marks__more { font-family: var(--font-ui); font-size: 10px; font-weight: 650; fill: var(--ink-secondary); font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.live-marks__shadow { fill: rgba(30, 28, 26, 0.28); filter: blur(1.6px); }
+.live-marks__stem { stroke: var(--ink); stroke-width: 1.5; }
+.live-marks__foot { fill: var(--ink); }
+.live-marks__plate { fill: var(--bryce); stroke: var(--ink); stroke-width: 1.6; filter: drop-shadow(0 2px 2.5px rgba(30, 28, 26, 0.3)); }
+.live-marks__plate-no { font-family: var(--font-ui); font-size: 17px; font-weight: 760; fill: var(--bryce-ink-on); }
+.live-marks__bryce.is-focus .live-marks__plate { stroke: var(--link); stroke-width: 2; }
+
+.live-marks__tip {
+  position: absolute;
+  z-index: 3;
+  width: max-content;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 10px;
+  background: rgba(253, 252, 250, 0.96);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-primary);
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(30, 28, 26, 0.08);
+}
+.live-marks__tip strong { font-weight: 620; }
+.live-marks__tip-detail { color: var(--ink-muted); font-size: 12px; }
+.live-hero__track-now {
+  margin: 0;
+  color: var(--ink-primary);
+  font-weight: 560;
+  /* One line, always: its height never changes as the section names do. */
+  height: 1.45em;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.live-desk .live-hero__track-now,
+.tracks-replay .live-hero__track-now { font-size: 12.5px; }
+
+/* ---------- round 7: the race bar ---------- */
+
+.race-bar { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.race-bar__head { display: flex; align-items: center; gap: 6px 16px; flex-wrap: wrap; min-height: 26px; }
+.race-bar__readout { font-size: 13px; font-weight: 600; color: var(--ink-primary); font-variant-numeric: tabular-nums; min-width: 13ch; }
+.race-bar__readout.is-pointing { color: var(--link); }
+.race-bar__keys { font-size: 12px; }
+/* Keys mean nothing on a phone or tablet: the hint is for a mouse and keyboard only (round 9). */
+@media (hover: none), (pointer: coarse) { .race-bar__keys { display: none; } }
+.race-bar__skip { margin-left: auto; }
+.race-bar__track { position: relative; min-width: 0; touch-action: none; user-select: none; }
+.race-bar__svg { display: block; cursor: pointer; }
+.race-bar__ground { fill: var(--grey-fill); }
+.race-bar__shade--caution { fill: rgba(242, 194, 48, 0.42); }
+.race-bar__shade--red { fill: rgba(196, 30, 37, 0.28); }
+.race-bar__tick { stroke: var(--ink-faint); stroke-width: 1; }
+.race-bar__axis { stroke: var(--hairline); stroke-width: 1; }
+.race-bar__label { font-size: 11px; fill: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.race-bar__trace { fill: none; stroke: var(--amber); stroke-width: 2; stroke-linejoin: round; }
+.race-bar__hover { stroke: var(--link); stroke-width: 1; stroke-dasharray: 2 2; }
+.race-bar__playhead { stroke: var(--ink); stroke-width: 1.5; }
+.race-bar__knob { fill: var(--ink); stroke: var(--paper); stroke-width: 2; }
+.race-bar[data-race-bar-dragging='true'] .race-bar__svg { cursor: grabbing; }
+
+/* ---------- round 7: one screen from the click ---------- */
+
+.live-desk__order.live-grid { padding-top: 0; border-top: 0; }
+.live-desk__order.live-grid .live-grid__list { padding-bottom: 12px; margin-bottom: 10px; }
+.live-desk__placeholder { display: flex; flex-direction: column; gap: 8px; }
+.live-desk__placeholder-rows { display: flex; flex-direction: column; gap: 8px; }
+.live-desk__placeholder-rows > span { display: block; height: 18px; border-radius: 4px; background: var(--grey-fill); }
+.live-desk--settling .live-desk__order,
+.live-desk--settling .live-desk__bryce { opacity: 0.55; transition: opacity 120ms ease-out; }
+.live-desk__order,
+.live-desk__bryce { transition: opacity 200ms ease-in; }

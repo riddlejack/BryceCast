@@ -34,7 +34,12 @@ export interface SectionLapsPack {
   seasonYear: number | null;
   venueName: string;
   trackType: string | null;
+  /** The race's laps: its official distance (the winner's laps in the
+   *  classification), or his own last lap where no classification gives it. */
   totalLaps: number;
+  /** The last lap of his own section data: short of totalLaps when he was
+   *  lapped or out early. Absent in packs built before November 18, 2026. */
+  bryceLapsCovered?: number;
   tupleOrder: string[];
   /** Which source fed this pack. Absent/`parsed_pdf_aggregate` = the official
    *  Section Results parse (v1, the fallback path). `lake_loop_crossings` = the
@@ -57,6 +62,13 @@ export interface SectionLapsPack {
      *  race — the quiet field distribution behind Bryce's marker in the drawer.
      *  Absent when the source carries no field-time distribution. */
     fieldSeconds?: number[];
+    /** The OTHER cars lap by lap: one row per car (anonymous, Bryce never in
+     *  it), one cell per lap of his race (index lap - 1), each that car's clean
+     *  green-flag time in this section or null. Every scope the race card
+     *  offers compares him with these cars over the same laps
+     *  (fieldReferenceFor). Absent from packs whose source does not carry the
+     *  field lap by lap (the measured Nashville packs, qualifying packs). */
+    otherCarLaps?: Array<Array<number | null>>;
   }>;
   /** Whether this race carries a genuine untimed stretch worth a derived shade
    *  ('genuine_gap') or its racing sections tile the lap ('fully_timed'). */

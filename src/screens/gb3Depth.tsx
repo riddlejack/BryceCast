@@ -10,12 +10,22 @@
  *  deliberately no pace-trace, stint, or sector module here. */
 
 import { useMemo, useState } from 'react';
-import { ChartTipCard, chartFont, focusFade, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { chartFont, focusFade, useMeasuredWidth, PointerOpen, PointerWord } from '../app/charts';
+import { VenueTipCard, type VenueTip } from '../app/venueCard';
 import { SourcePill } from '../app/components';
 import { ordinal } from '../app/format';
 import { Link, useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { useGb3DeepDive, gb3DeepDiveRef, type Gb3DeepDivePack, type Gb3RaceResult, type Gb3TeamContext, type Gb3EventSummary } from '../data/gb3DeepDive';
 import { chapterTint, raceHref } from './careerExplorer';
+import { finishLine, placeNameOf, raceFieldOf, raceTitleOf } from './raceCardFacts';
+import { venueName } from '../app/venueNames';
+import { placeLine } from '../app/raceFacts';
+
+/* The card's series line and clean race name (one grammar across the site's race cards). */
+const gb3Meta = (row: { seasonYear: number }) => ({ meta: `GB3 · ${row.seasonYear}`, tint: chapterTint('GB3 Championship') });
+const gb3Title = (row: { sessionId: string; seasonYear: number; eventName: string; trackName: string; sessionName: string }) =>
+  raceTitleOf(row.sessionId, raceLabel(row));
 
 const GB3_TINT = chapterTint('GB3 Championship');
 
@@ -31,7 +41,7 @@ const chronoKey = <T extends { seasonYear: number; eventName: string; raceNumber
 
 const cleanSessionName = (name: string): string => name.replace(/ Result$/, '').trim();
 const raceLabel = (row: { seasonYear: number; eventName: string; trackName: string; sessionName: string }): string =>
-  `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName} · ${cleanSessionName(row.sessionName)}`;
+  `${row.seasonYear} R${roundOf(row.eventName)} · ${venueName(row.trackName)} · ${cleanSessionName(row.sessionName)}`;
 
 const pctBeaten = (value: number | null): number | null => (value === null ? null : Math.round(value * 100));
 
@@ -57,8 +67,9 @@ const SectionHead = ({ title, badge }: { title: string; badge?: string }) => (
 const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const tap = useTapPreview();
 
   const rows = useMemo(() => [...pack.teamContext].sort((a, b) => chronoKey(a) - chronoKey(b)), [pack]);
   /* Official race status by session, for the two races with no classified
@@ -87,9 +98,10 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const rankPhrase = (row: Gb3TeamContext): string => {
     const rank = row.bryceWithinTeamRank;
     if (rank === null) return 'no classified result';
-    const pos = row.bryceFinishPosition !== null ? `P${row.bryceFinishPosition} · ` : '';
+    const place = placeLine(row.bryceFinishPosition, raceFieldOf(row.sessionId));
+    const pos = place ? `${place} · ` : '';
     if (rank === 1) return `${pos}led the team`;
-    return `${pos}${ordinal(rank)} of ${row.teamRaceDriverCount}`;
+    return `${pos}${ordinal(rank)} of ${row.teamRaceDriverCount} in the team`;
   };
 
   const laneLabels = ['Led the team', '2nd in team', '3rd in team'];
@@ -98,7 +110,7 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="Within the team" />
       <p className="gb3-copy">
-        Where Bryce placed among his own team’s classified cars, race by race — {teams2021} through 2021, {teams2022} through
+        Where Bryce placed among his own team’s classified cars, race by race: {teams2021} through 2021, {teams2022} through
         2022. He led the team’s cars home in {ledCount} of {classified} classified races.
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
@@ -145,8 +157,10 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     stroke="var(--ink-muted)"
                     strokeWidth={1.2}
                     style={{ cursor: 'default' }}
-                    onMouseEnter={() => setTip({ x: cx, y: missY - 8, title: raceLabel(row), detail: statusWord })}
-                    onMouseLeave={() => setTip(null)}
+                    {...tap.target(row.sessionId, {
+                      show: () => setTip({ x: cx, y: missY - 8, under: missY + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, ...gb3Meta(row), title: gb3Title(row), detail: statusWord }),
+                      hide: () => setTip(null)
+                    })}
                   />
                 );
               }
@@ -161,27 +175,28 @@ const WithinTeamStrip = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   fill={led ? 'var(--chapter-gb3)' : 'var(--ink-primary)'}
                   fillOpacity={led || hoveredId === row.sessionId ? 1 : 0.38}
                   style={{ cursor: 'pointer', transition: 'fill-opacity 150ms ease' }}
-                  onMouseEnter={() => {
-                    setHoveredId(row.sessionId);
-                    setTip({ x: cx, y: cy - 8, title: raceLabel(row), detail: rankPhrase(row) });
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredId(null);
-                    setTip(null);
-                  }}
-                  onClick={() => navigate(raceHref(row.sessionId))}
+                  {...tap.target(row.sessionId, {
+                    show: () => {
+                      setHoveredId(row.sessionId);
+                      setTip({ x: cx, y: cy - 8, under: cy + 8, venue: { sessionId: row.sessionId, trackName: row.trackName }, ...gb3Meta(row), title: gb3Title(row), detail: rankPhrase(row), action: 'open the race' });
+                    },
+                    hide: () => {
+                      setHoveredId(null);
+                      setTip(null);
+                    },
+                    open: () => navigate(raceHref(row.sessionId))
+                  })}
                 />
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
-        Amber = races he led the team’s cars home · result order only — where he placed among his own cars, not a read on
+        Coloured = races he led the team’s cars home · result order only: where he placed among his own cars, not a read on
         machinery, setup, or strategy.
-        {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} Click any
-        race to open it.
+        {unclassified > 0 ? ` ${unclassified} of ${rows.length} races have no classified result (shown open).` : ''} <PointerOpen start what="any race" then="to open it" />.
       </p>
     </div>
   );
@@ -193,7 +208,8 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
+  const tap = useTapPreview();
 
   const races = useMemo(
     () =>
@@ -215,14 +231,18 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const y = (position: number) => top + ((position - 1) / (maxPos - 1)) * plotH;
   const gainColor = (row: Gb3RaceResult) => ((row.positionGain ?? 0) > 0 ? 'var(--chapter-gb3)' : 'var(--ink-muted)');
 
-  const tipFor = (row: Gb3RaceResult): ChartTip => {
+  const tipFor = (row: Gb3RaceResult): VenueTip => {
     const gain = row.positionGain ?? 0;
-    const move = gain > 0 ? `+${gain} gained` : gain < 0 ? `${gain} places` : 'held station';
+    const move = gain > 0 ? `${gain} place${gain === 1 ? '' : 's'} gained` : gain < 0 ? `${-gain} place${gain === -1 ? '' : 's'} lost` : 'held station';
     return {
       x: (leftX + rightX) / 2,
       y: (y(row.startPosition ?? 1) + y(row.finishPosition ?? 1)) / 2 - 6,
-      title: raceLabel(row),
-      detail: `P${row.startPosition} → P${row.finishPosition} · ${move}`,
+      over: Math.min(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) - 6,
+      under: Math.max(y(row.startPosition ?? 1), y(row.finishPosition ?? 1)) + 6,
+      venue: { sessionId: row.sessionId, trackName: row.trackName },
+      ...gb3Meta(row),
+      title: gb3Title(row),
+      detail: [finishLine(row.startPosition, row.finishPosition, raceFieldOf(row.sessionId)), move].filter(Boolean).join(' · '),
       action: 'Open the race'
     };
   };
@@ -231,10 +251,10 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="Qualifying to race" badge="2021 · TSL PDFs" />
       <p className="gb3-copy">
-        In 2021, Bryce made up ground off the line in <strong>{gained}</strong> of his <strong>{races.length}</strong> starts —
-        a best of <strong>{bestGain}</strong> places gained in a single race.
+        In 2021, Bryce made up ground off the line in <strong>{gained}</strong> of his <strong>{races.length}</strong> starts,
+        with a best of <strong>{bestGain}</strong> places gained in a single race.
       </p>
-      <div ref={ref} style={{ width: '100%', position: 'relative' }}>
+      <div ref={ref} style={{ width: '100%', maxWidth: 720, position: 'relative' }}>
         {width > 0 ? (
           <svg
             width={width}
@@ -242,13 +262,13 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
             role="img"
             aria-label="Bryce's grid position to finish position, every 2021 GB3 race"
           >
-            <text x={leftX} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
+            <text x={leftX} y={12} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
               Grid
             </text>
-            <text x={rightX} y={16} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
+            <text x={rightX} y={12} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={600}>
               Finish
             </text>
-            <text x={leftX} y={y(1) - 8} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+            <text x={leftX} y={y(1) - 6} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
               P1
             </text>
             {/* column rails */}
@@ -274,26 +294,28 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
                     stroke="transparent"
                     strokeWidth={14}
                     style={{ cursor: 'pointer' }}
-                    onMouseEnter={() => {
-                      setHovered(index);
-                      setTip(tipFor(row));
-                    }}
-                    onMouseLeave={() => {
-                      setHovered(null);
-                      setTip(null);
-                    }}
-                    onClick={() => navigate(raceHref(row.sessionId))}
+                    {...tap.target(row.sessionId, {
+                      show: () => {
+                        setHovered(index);
+                        setTip(tipFor(row));
+                      },
+                      hide: () => {
+                        setHovered(null);
+                        setTip(null);
+                      },
+                      open: () => navigate(raceHref(row.sessionId))
+                    })}
                   />
                 </g>
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
-        Each line is one race, grid to flag · amber marks a race he gained ground · P1 sits at the top. Grid data is unavailable
-        for 2022’s official feed, so 2022 starts aren’t shown. Click a line to open the race.
+        Each line is one race, grid to flag · colour marks a race he gained ground · P1 sits at the top. Grid data is unavailable
+        for 2022’s official feed, so 2022 starts aren’t shown. <PointerOpen start what="a line" then="to open the race" />.
       </p>
     </div>
   );
@@ -302,7 +324,7 @@ const QualifyingToRace = ({ pack }: { pack: Gb3DeepDivePack }) => {
 /* ---------- 3 · The venues: six circuits, two seasons ---------- */
 
 const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
-  const venues = useMemo(() => [...pack.trackProfile].sort((a, b) => b.avgFinishPercentile - a.avgFinishPercentile), [pack]);
+  const venues = useMemo(() => [...pack.trackProfile].sort((a, b) => (b.avgFieldBeatenShare ?? b.avgFinishPercentile) - (a.avgFieldBeatenShare ?? a.avgFinishPercentile)), [pack]);
 
   /* Best classified race per venue → the light race sheet it opens. */
   const bestRaceByVenue = useMemo(() => {
@@ -329,7 +351,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
       <SectionHead title="The venues" />
       <p className="gb3-copy">
         Six circuits across the two seasons, strongest first by the share of the field he beat. Best finish and race count sit
-        beside each — small samples, so percentile carries the comparison.
+        beside each. The samples are small, so percentile carries the comparison.
       </p>
       <div className="tower gb3-venues">
         <div className="tower__row gb3-venues__head" style={{ gridTemplateColumns: venueGrid }}>
@@ -341,7 +363,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
         </div>
         {venues.map((venue) => {
           const best = bestRaceByVenue.get(venue.trackName);
-          const beat = pctBeaten(venue.avgFinishPercentile);
+          const beat = pctBeaten(venue.avgFieldBeatenShare ?? venue.avgFinishPercentile);
           const inner = (
             <>
               <span className="tower__name" style={{ whiteSpace: 'normal' }}>
@@ -349,7 +371,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
                   aria-hidden
                   style={{ width: 7, height: 7, borderRadius: '50%', background: GB3_TINT, opacity: 0.6, flex: 'none' }}
                 />
-                {venue.trackName}
+                {venueName(venue.trackName)}
               </span>
               <span className="tower__gap">{venue.raceRows}</span>
               <span className="tower__gap">P{venue.bestFinish}</span>
@@ -381,7 +403,7 @@ const VenueRows = ({ pack }: { pack: Gb3DeepDivePack }) => {
       </div>
       <p className="gb3-caption">
         Field beat = the average share of the grid finished ahead of, across each venue’s races. Cross-venue comparison mixes
-        2021 and 2022 fields, so read it as texture. Click a venue to open its best race.
+        2021 and 2022 fields, so read it as texture. <PointerWord mouse="Click" touch="Tap" /> a venue to open its best race.
       </p>
     </div>
   );
@@ -413,7 +435,7 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="2021 conditions" badge="2021 · TSL PDFs" />
       <p className="gb3-copy">
-        Across {total} officially logged 2021 sessions — practice, qualifying and races — the track ran dry far more often than
+        Across {total} officially logged 2021 sessions (practice, qualifying and races), the track ran dry far more often than
         not.
       </p>
       <div className="gb3-conditions" role="img" aria-label={`${counts.dry} dry, ${counts.damp} damp, ${counts.wet} wet 2021 sessions`}>
@@ -430,7 +452,7 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
         ))}
       </div>
       <p className="gb3-caption">
-        Lighter to darker reads drier to wetter. Official TSL session labels — context only, never the cause of a result. 2022’s
+        Lighter to darker reads drier to wetter. Official TSL session labels: context only, never the cause of a result. 2022’s
         feed carries no conditions.
       </p>
     </div>
@@ -447,8 +469,9 @@ const ConditionsBar = ({ pack }: { pack: Gb3DeepDivePack }) => {
 const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
-  const [tip, setTip] = useState<ChartTip | null>(null);
+  const [tip, setTip] = useState<VenueTip | null>(null);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const tap = useTapPreview();
 
   const events = useMemo(
     () => [...pack.eventSummary].sort((a, b) => a.seasonYear * 100 + roundOf(a.eventName) - (b.seasonYear * 100 + roundOf(b.eventName))),
@@ -574,7 +597,11 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
             setTip({
               x: cx,
               y: (fy ?? qy ?? panel.yTop) - 8,
-              title: `${row.seasonYear} R${roundOf(row.eventName)} · ${row.trackName}`,
+              over: Math.min(fy ?? Infinity, qy ?? Infinity, fy ?? qy ?? panel.yTop) - PODIUM_R - 4,
+              under: Math.max(fy ?? -Infinity, qy ?? -Infinity, fy ?? qy ?? panel.yTop) + PODIUM_R + 4,
+              venue: { sessionId: race?.sessionId ?? null, trackName: row.trackName },
+              ...gb3Meta(row),
+              title: `Round ${roundOf(row.eventName)} · ${placeNameOf(row.trackName)}`,
               detail: `${q} · ${f} · ${row.raceRows} ${row.raceRows === 1 ? 'race' : 'races'}`,
               action: race ? 'Open the round’s best race' : undefined
             });
@@ -605,9 +632,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
                 height={panel.panelH + 12}
                 fill="transparent"
                 style={{ cursor: race ? 'pointer' : 'default' }}
-                onMouseEnter={showTip}
-                onMouseLeave={clear}
-                onClick={() => race && navigate(raceHref(race.sessionId))}
+                {...tap.target(key, { show: showTip, hide: clear, open: race ? () => navigate(raceHref(race.sessionId)) : null })}
               />
               {/* round label */}
               <text x={cx} y={panel.labelY} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
@@ -624,7 +649,7 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
     <div>
       <SectionHead title="The season, round by round" />
       <p className="gb3-copy">
-        Two campaigns end to end — where he qualified and the best he took from each round. Across the two seasons he reached the
+        Two campaigns end to end: where he qualified and the best he took from each round. Across the two seasons he reached the
         podium in <strong>{podiumRounds}</strong> of <strong>{events.length}</strong> rounds, with his first GB3 win coming at
         Donington in 2022{wins > 1 ? ` (one of ${wins})` : ''}.
       </p>
@@ -655,12 +680,12 @@ const SeasonArc = ({ pack }: { pack: Gb3DeepDivePack }) => {
             {panels.map(renderPanel)}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <VenueTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       <p className="gb3-caption">
-        Open marks = qualifying, filled = the round’s best finish; the amber line follows his best finish through each season, and
-        amber dots mark podium rounds. 2021 qualifying is official TSL grid; 2022 reads the qualifying-session order (no dedicated
-        grid feed), so the two seasons stay side by side, never merged. Click a round to open its best race.
+        Open marks = qualifying, filled = the round’s best finish; the coloured line follows his best finish through each season, and
+        coloured dots mark podium rounds. 2021 qualifying is official TSL grid; 2022 reads the qualifying-session order (no dedicated
+        grid feed), so the two seasons stay side by side, never merged. <PointerOpen start what="a round" then="to open its best race" />.
       </p>
     </div>
   );
@@ -682,19 +707,19 @@ const Gb3SourcePill = ({ pack }: { pack: Gb3DeepDivePack }) => {
         },
         {
           label: '2021 · TSL official PDFs',
-          note: `${r2021?.events ?? 7} events, ${r2021?.bryceRaceRows ?? 20} Bryce races — official classifications, grids, and session conditions.`
+          note: `${r2021?.events ?? 7} events, ${r2021?.bryceRaceRows ?? 20} Bryce races: official classifications, grids, and session conditions.`
         },
         {
           label: '2022 · GB3 official JSON',
-          note: `${r2022?.events ?? 8} events, ${r2022?.bryceRaceRows ?? 24} Bryce races — official classifications and pit counts; no grids or conditions.`
+          note: `${r2022?.events ?? 8} events, ${r2022?.bryceRaceRows ?? 24} Bryce races: official classifications and pit counts; no grids or conditions.`
         }
       ]}
       caveats={[
         'The two seasons come from different sources that cover different fields, so detail stays split by season.',
-        'Every finish travels with the share of the field it beat and its race count — fields ran 16 to 23 cars.',
+        'Every finish travels with the share of the field it beat and its race count. Fields ran 16 to 23 cars.',
         'Grid positions are official for 2021 only; 2022 carries no race starts, so start-to-finish is 2021-only.',
         'Qualifying is the official TSL grid for 2021 and the qualifying-session result order for 2022 (the JSON feed has no dedicated qualifying table); the season arc keeps them side by side, never merged.',
-        'Condition strings are official 2021 session labels — context, never a cause of a result.',
+        'Condition strings are official 2021 session labels: context, never a cause of a result.',
         'Team context is finishing order within Bryce’s own cars, not a read on machinery, setup, or strategy.',
         'GB3’s records hold no lap traces or section timing, so there are no pace-trace charts here.'
       ]}
@@ -722,15 +747,17 @@ export const Gb3DepthLayer = () => {
     <div className="gb3-depth stack">
       <div className="row row--between row--wrap" style={{ alignItems: 'baseline', gap: 8 }}>
         <p className="gb3-copy" style={{ margin: 0, maxWidth: '60ch' }}>
-          Two seasons in British GB3, against deep international fields — the longest chapter of the climb, and its first real
+          Two seasons in British GB3, against deep international fields: the longest chapter of the climb, and its first real
           proving ground. Here is what the official records hold.
         </p>
         <Gb3SourcePill pack={pack} />
       </div>
       <SeasonArc pack={pack} />
       <WithinTeamStrip pack={pack} />
-      <QualifyingToRace pack={pack} />
-      <VenueRows pack={pack} />
+      <div className="depth-pair">
+        <QualifyingToRace pack={pack} />
+        <VenueRows pack={pack} />
+      </div>
       <ConditionsBar pack={pack} />
     </div>
   );

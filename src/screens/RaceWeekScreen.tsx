@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { isKnownVenue, venueName, venueShort as siteVenueShort } from '../app/venueNames';
 import { CloudSun, ExternalLink, MapPin, Route, Tv } from 'lucide-react';
 import { trackOutlineFor } from '../assets/tracks';
 import { Card, Countdown, HeroPanel, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, inkConnector, useMeasuredWidth, PointerOpen, PointerWord, type ChartTip } from '../app/charts';
 import { TrackArt } from '../app/trackArt';
 import { asNumber, asString, formatClock, formatDate, formatGain, formatNumber, formatWind, ordinal, shortVenue, trackTypeLabel } from '../app/format';
 import { restartBaselineSentence, restartThinVenueNote } from '../data/restartBaseline';
 import { FactDelta } from '../app/weatherGlyphs';
 import { currentWindPill, observedAgoLabel, useEventWeather, type EventWeather } from '../app/useEventWeather';
 import { Link, useRouter } from '../app/router';
+import { useTapPreview } from '../app/tapPreview';
 import { useApiJson } from '../app/useApiJson';
 import { normalizedName, useNextSession } from '../app/useNextSession';
 import {
@@ -36,7 +38,7 @@ import { isBryceCastCaptureTier, priorYearReplaysAtVenue, replayProvenance } fro
 import { loadDebriefArchive } from '../data/debriefArchive';
 import { ReplayAffordance, priorYearTitle, useReplayCatalog } from './replayAffordance';
 import { VenueSectionSuite, useVenueSectionData } from './sectionIntelligence';
-import { OffSeasonRaceWeek } from './offseason';
+import { HeatTrack, OffSeasonRaceWeek } from './offseason';
 
 type Row = Record<string, unknown>;
 
@@ -44,16 +46,9 @@ type Row = Record<string, unknown>;
  *  street venues whose official names carry a mid-string sponsor or descriptor
  *  (so shortVenue's trailing-suffix trim can't reach it) are named here the way
  *  the race archive reads them. */
-const venueShortNames: Record<string, string> = {
-  'World Wide Technology Raceway': 'WWTR',
-  'The Milwaukee Mile': 'Milwaukee',
-  'Iowa Speedway': 'Iowa',
-  'Nashville Superspeedway': 'Nashville',
-  'Indianapolis Motor Speedway Road Course': 'Indy Road Course',
-  'WeatherTech Raceway Laguna Seca': 'Laguna Seca'
-};
+const venueShortNames: Record<string, string> = {};
 
-const venueShort = (trackName: string): string => venueShortNames[trackName] ?? shortVenue(trackName);
+const venueShort = (trackName: string): string => (isKnownVenue(trackName) ? siteVenueShort(trackName) : venueShortNames[trackName] ?? shortVenue(trackName));
 
 /** One race's row label: the two-digit season tick + its short venue name. Shared
  *  by the chart's rendered label and the gutter-width measurement so they can
@@ -87,6 +82,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const races = prep.races;
   /* The gutter grows to the longest label so right-anchored names never spill off
      the SVG's left edge. Short oval labels keep their established width (the floor);
@@ -122,7 +118,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
                 textAnchor="middle"
                 fill="var(--ink-muted)"
                 fontFamily={chartFont}
-                fontSize={10.5}
+                fontSize={12}
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
                 P{tick}
@@ -148,20 +144,21 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
               <g
                 key={race.sessionId}
                 style={{ opacity: hovered !== null && !isHovered ? focusFade : 1, transition: 'opacity 150ms ease', cursor: linked ? 'pointer' : 'default' }}
-                onMouseEnter={() => {
-                  setHovered(race.sessionId);
-                  setTip({
-                    x: x(finish),
-                    y: rowTop + 4,
-                    title: rowLabel,
-                    detail: `started P${start} · finished P${finish}${clean ? '' : ` · ${race.officialStatus}`}`,
-                    action: linked ? 'open the race page' : null
-                  });
-                }}
-                onMouseLeave={leave}
-                onClick={() => {
-                  if (linked) navigate(`/races/${encodeURIComponent(race.sessionId)}`);
-                }}
+                {...tap.target(race.sessionId, {
+                  show: () => {
+                    setHovered(race.sessionId);
+                    setTip({
+                      x: x(finish),
+                      y: rowTop + 4,
+                      under: rowTop + rowHeight,
+                      title: rowLabel,
+                      detail: `started P${start} · finished P${finish}${clean ? '' : ` · ${race.officialStatus}`}`,
+                      action: linked ? 'open the race page' : null
+                    });
+                  },
+                  hide: leave,
+                  open: linked ? () => navigate(`/races/${encodeURIComponent(race.sessionId)}`) : null
+                })}
               >
                 <rect x={0} y={rowTop} width={width} height={rowHeight} fill="transparent" />
                 <text
@@ -203,7 +200,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
                     dominantBaseline="middle"
                     fill="var(--ink-primary)"
                     fontFamily={chartFont}
-                    fontSize={11.5}
+                    fontSize={12}
                     fontWeight={640}
                     style={{ fontVariantNumeric: 'tabular-nums' }}
                   >
@@ -217,7 +214,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
                     textAnchor="end"
                     fill="var(--ink-muted)"
                     fontFamily={chartFont}
-                    fontSize={11}
+                    fontSize={12}
                   >
                     {race.officialStatus}
                   </text>
@@ -227,7 +224,7 @@ const ConversionChart = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefI
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -261,7 +258,7 @@ const OvalStory = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep;
     >
       <p style={{ margin: '0 0 4px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '62ch' }}>
         {summary.raceCount} starts. He finished ahead of where he started in {summary.movedForwardCount} of them
-        {summary.nonRunningStatuses.length === 1 ? ' — the exception was a mechanical retirement, not pace' : ''}.
+        {summary.nonRunningStatuses.length === 1 ? '; the exception was a mechanical retirement, not pace' : ''}.
       </p>
       <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
         ○ started · ● finished · gold marks {venueShort(prep.trackName)}
@@ -270,7 +267,7 @@ const OvalStory = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPrep;
       <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
         When the car finished: average finish {formatNumber(summary.cleanAvgFinish)}, average gain {gainText}, top-10 in{' '}
         {summary.cleanTop10Count} of {summary.cleanRaceCount} · mechanical DNF shown dashed, excluded from these averages
-        {anyLinked ? ' · click a race for its full story' : ''}.
+        {anyLinked ? <> · <PointerOpen what="a race" then="for its full story" /></> : ''}.
       </p>
     </Card>
   );
@@ -331,7 +328,7 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
     return (
       <Card title="His restart record here">
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-          His past {trackName} visits had restarts, but his lap-chart line didn't reach them — no restart read to show here yet.
+          His past {venueName(trackName)} visits had restarts, but his lap-chart line didn't reach them, so there is no restart read to show here yet.
         </p>
       </Card>
     );
@@ -343,24 +340,24 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
   const soleBest = counted.some((row) => row.soleBestInField);
   const visits = counted.length;
   const introLead = `${restartCountWord(visits)} visit${visits === 1 ? '' : 's'}, ${restartCountWord(runCounted)} restart${runCounted === 1 ? '' : 's'} here`;
-  const intro = `${introLead.charAt(0).toUpperCase()}${introLead.slice(1)} — ${restartRecordPhrase({ gained, held, counted: runCounted })}`;
+  const intro = `${introLead.charAt(0).toUpperCase()}${introLead.slice(1)}: ${restartRecordPhrase({ gained, held, counted: runCounted })}`;
 
   return (
     <Card
       title="His restart record here"
       action={
         <SourcePill
-          title={`Restarts at ${trackName}`}
+          title={`Restarts at ${venueName(trackName)}`}
           entries={[
             {
               label: 'Restart report · per race',
               path: 'analysis/restart-report/output/tables/restart_by_race.csv',
-              note: `Green-lap movement after each restart at ${trackName}, Bryce against the full field.`
+              note: `Green-lap movement after each restart at ${venueName(trackName)}, Bryce against the full field.`
             },
             {
               label: 'Official caution summaries and lap chart',
               path: 'data/career/career.dataset.json',
-              note: 'Restarts from the official caution summary; movement from the official lap chart — positions only.'
+              note: 'Restarts from the official caution summary; movement from the official lap chart (positions only).'
             }
           ]}
           caveats={report.caveats}
@@ -411,8 +408,8 @@ const RestartPrior = ({ trackName }: { trackName: string }) => {
           );
         })}
       </div>
-      <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        Net running order over the two green laps after each restart, against the full field. Positions, not lap times · click a
+      <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+        Net running order over the two green laps after each restart, against the full field. Positions, not lap times · <PointerWord mouse="click" touch="tap" /> a
         year for its race.
       </p>
     </Card>
@@ -453,8 +450,8 @@ const cautionThirdPhrase = (venue: UiCautionByVenue): string | null => {
   const inThird = (venue[dominant as 'opening' | 'middle' | 'final'] ?? 0) as number;
   if (total === 0 || inThird === 0) return null;
   if (inThird === total) return `Every one fell in the ${thirdWord[dominant]} third.`;
-  if (inThird > total / 2) return `Most fell in the ${thirdWord[dominant]} third — ${restartCountWord(inThird)} of ${restartCountWord(total)}.`;
-  return `The ${thirdWord[dominant]} third has seen the most — ${restartCountWord(inThird)} of ${restartCountWord(total)}.`;
+  if (inThird > total / 2) return `Most fell in the ${thirdWord[dominant]} third (${restartCountWord(inThird)} of ${restartCountWord(total)}).`;
+  return `The ${thirdWord[dominant]} third has seen the most (${restartCountWord(inThird)} of ${restartCountWord(total)}).`;
 };
 
 const cautionCausePhrase = (venue: UiCautionByVenue): string | null => {
@@ -470,7 +467,7 @@ const cautionCausePhrase = (venue: UiCautionByVenue): string | null => {
   // never a verdict (design review).
   const majority = causeMajority(ordered);
   if (majority) {
-    return `Mostly ${majority.category.toLowerCase()} — ${majority.count} of ${total}.`;
+    return `Mostly ${majority.category.toLowerCase()} (${majority.count} of ${total}).`;
   }
   return `${causeFacts(ordered)}.`;
 };
@@ -493,6 +490,7 @@ const CautionStrip = ({
   const { navigate } = useRouter();
   const [active, setActive] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   if (events.length === 0) return null;
 
@@ -539,6 +537,7 @@ const CautionStrip = ({
     setTip({
       x: mark.px,
       y: mark.y - dotR,
+      under: mark.y + dotR + 4,
       title: `${seasonShort} · ${event.category}`.trim(),
       detail: event.totalRaceLaps ? `lap ${event.startLap} of ${event.totalRaceLaps}` : `lap ${event.startLap}`,
       action: debriefIds.has(event.sessionId) ? 'open the race page' : null
@@ -568,7 +567,7 @@ const CautionStrip = ({
               textAnchor="middle"
               fill="var(--ink-muted)"
               fontFamily={chartFont}
-              fontSize={10.5}
+              fontSize={12}
             >
               {band} third
             </text>
@@ -587,11 +586,9 @@ const CautionStrip = ({
                 role={linked ? 'link' : 'img'}
                 aria-label={label}
                 style={{ cursor: linked ? 'pointer' : 'default', outline: 'none' }}
-                onMouseEnter={() => focusMark(mark)}
-                onMouseLeave={clear}
+                {...tap.target(mark.index, { show: () => focusMark(mark), hide: clear, open: linked ? () => openMark(mark) : null })}
                 onFocus={() => focusMark(mark)}
                 onBlur={clear}
-                onClick={() => openMark(mark)}
                 onKeyDown={(keyEvent) => {
                   if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
                     keyEvent.preventDefault();
@@ -623,7 +620,7 @@ const CautionStrip = ({
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       {/* Non-hover event list: year · lap · cause for every caution, reachable
           by keyboard and screen reader with no chart interaction. */}
       <ul aria-label="Every full-course caution here, by year and lap" style={{ listStyle: 'none', margin: '10px 0 0', padding: 0, display: 'grid', gap: 3 }}>
@@ -656,17 +653,17 @@ const CautionPrior = ({ trackName }: { trackName: string }) => {
 
   const sourcePill = (
     <SourcePill
-      title={`Cautions at ${trackName}`}
+      title={`Cautions at ${venueName(trackName)}`}
       entries={[
         {
           label: 'Official caution summaries',
           path: 'data/career/career.dataset.json',
-          note: `Full-course cautions at ${trackName} from the official INDY NXT Results-PDF caution summaries — start/end lap and cause.`
+          note: `Full-course cautions at ${venueName(trackName)} from the official INDY NXT Results-PDF caution summaries: start and end lap, and cause.`
         },
         {
           label: 'Caution atlas · per venue',
           path: 'analysis/caution-atlas/output/tables/caution_by_venue.csv',
-          note: 'Counts per race, thirds of the race, and cause groupings — validated, descriptive counting only.'
+          note: 'Counts per race, thirds of the race, and cause groupings. Validated, descriptive counting only.'
         }
       ]}
       caveats={atlas.caveats}
@@ -681,7 +678,7 @@ const CautionPrior = ({ trackName }: { trackName: string }) => {
     return (
       <Card title="Cautions here" action={sourcePill}>
         <p style={{ margin: 0, fontSize: 13.5, color: 'var(--ink-secondary)' }}>
-          His {restartCountWord(races)} {trackName} race{races === 1 ? '' : 's'} ran clean — no full-course cautions on the books here.
+          His {restartCountWord(races)} {venueName(trackName)} race{races === 1 ? '' : 's'} ran clean, with no full-course cautions on the books here.
         </p>
       </Card>
     );
@@ -707,7 +704,7 @@ const CautionPrior = ({ trackName }: { trackName: string }) => {
       {causeLine ? (
         <p style={{ margin: '10px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{causeLine}</p>
       ) : null}
-      <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         Each mark a full-course caution, placed by the lap it flew · official Results-PDF caution summary
         {durationLaps !== null ? ` · they’ve run about ${fmtCount(durationLaps)} lap${durationLaps === 1 ? '' : 's'} before the green` : ''}.
       </p>
@@ -722,6 +719,7 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const rows = prep.fridaySignal.filter((row) => row.officialStatus === 'running' && row.bestPracticeRank !== null && row.raceFinish !== null);
   if (rows.length < 3) return null;
   const worst = Math.max(...rows.flatMap((row) => [row.bestPracticeRank ?? 1, row.raceFinish ?? 1]));
@@ -756,10 +754,10 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
           {[leftX, rightX].map((columnX) => (
             <line key={columnX} x1={columnX} x2={columnX} y1={top - 6} y2={bottom + 6} stroke="var(--grid-hairline)" />
           ))}
-          <text x={leftX} y={14} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11.5} fontWeight={550}>
+          <text x={leftX} y={14} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12} fontWeight={550}>
             Friday practice
           </text>
-          <text x={rightX} y={14} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11.5} fontWeight={550}>
+          <text x={rightX} y={14} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12} fontWeight={550}>
             Race finish
           </text>
           {[1, Math.round(maxRank / 2), maxRank].map((rank) => (
@@ -771,7 +769,7 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
               dominantBaseline="middle"
               fill="var(--ink-muted)"
               fontFamily={chartFont}
-              fontSize={10.5}
+              fontSize={12}
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               P{rank}
@@ -789,20 +787,22 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
               <g
                 key={row.sessionId}
                 style={{ cursor: linked ? 'pointer' : 'default' }}
-                onMouseEnter={() => {
-                  setHovered(row.sessionId);
-                  setTip({
-                    x: (leftX + rightX) / 2,
-                    y: Math.min(y(practice), y(finish)),
-                    title: rowLabel,
-                    detail: `best practice P${practice} → finished P${finish}`,
-                    action: linked ? 'open the race page' : null
-                  });
-                }}
-                onMouseLeave={leave}
-                onClick={() => {
-                  if (linked) navigate(`/races/${encodeURIComponent(row.sessionId)}`);
-                }}
+                {...tap.target(row.sessionId, {
+                  show: () => {
+                    setHovered(row.sessionId);
+                    setTip({
+                      x: (leftX + rightX) / 2,
+                      y: Math.min(y(practice), y(finish)),
+                      over: Math.min(y(practice), y(finish)) - 6,
+                      under: Math.max(y(practice), y(finish)) + 6,
+                      title: rowLabel,
+                      detail: `best practice P${practice} → finished P${finish}`,
+                      action: linked ? 'open the race page' : null
+                    });
+                  },
+                  hide: leave,
+                  open: linked ? () => navigate(`/races/${encodeURIComponent(row.sessionId)}`) : null
+                })}
               >
                 <line x1={leftX} x2={rightX} y1={y(practice)} y2={y(finish)} stroke="transparent" strokeWidth={14} />
                 <g style={{ opacity: hovered !== null && !isHovered ? 0.12 : focused ? 1 : 0.34, transition: 'opacity 150ms ease' }}>
@@ -825,7 +825,7 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
                       dominantBaseline="middle"
                       fill="var(--ink-primary)"
                       fontFamily={chartFont}
-                      fontSize={11.5}
+                      fontSize={12}
                       fontWeight={620}
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     >
@@ -838,7 +838,7 @@ const FridaySlope = ({ prep, debriefIds }: { prep: UiNextEventPrep; debriefIds: 
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -885,7 +885,7 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
         clean weekends{betterBy ? `, typically finishing ${betterBy} better` : ''}.
         {betterBy || summary.finishBeatBestPractice * 2 > summary.weekendCount
           ? ' If you liked practice, you’ll love the race.'
-          : ' Race day runs deeper than Friday — the whole field sharpens when it counts.'}
+          : ' Race day runs deeper than Friday. The whole field sharpens when it counts.'}
       </p>
       <FridaySlope prep={prep} debriefIds={debriefIds} />
       <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
@@ -900,6 +900,7 @@ const FridaySignal = ({ prep, trackTypeName, debriefIds }: { prep: UiNextEventPr
 const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { available: true }> }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const bryceRank = snapshot.bryce.pointsRankInCapture;
   const nearby = snapshot.entries.filter((entry) => Math.abs(entry.pointsRankInCapture - bryceRank) <= 3);
   const minPoints = Math.min(...nearby.map((entry) => entry.points));
@@ -932,15 +933,18 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                 cy={axisY}
                 r={12}
                 fill="transparent"
-                onMouseEnter={() =>
-                  setTip({
-                    x: pointX,
-                    y: axisY - 8,
-                    title: entry.driverName,
-                    detail: `${entry.points} pts${gapText ? ` · ${gapText}` : ''}`
-                  })
-                }
-                onMouseLeave={() => setTip(null)}
+                {...tap.target(entry.carNo, {
+                  show: () =>
+                    setTip({
+                      x: pointX,
+                      y: axisY - 8,
+                      over: axisY - 12,
+                      under: axisY + 12,
+                      title: entry.driverName,
+                      detail: `${entry.points} pts${gapText ? ` · ${gapText}` : ''}`
+                    }),
+                  hide: () => setTip(null)
+                })}
               />
             );
             return (
@@ -955,7 +959,7 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                       dominantBaseline="central"
                       fill="var(--bryce-ink-on)"
                       fontFamily={chartFont}
-                      fontSize={11}
+                      fontSize={12}
                       fontWeight={700}
                     >
                       9
@@ -966,7 +970,7 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                       textAnchor="middle"
                       fill="var(--ink-primary)"
                       fontFamily={chartFont}
-                      fontSize={11.5}
+                      fontSize={12}
                       fontWeight={640}
                       style={{ fontVariantNumeric: 'tabular-nums' }}
                     >
@@ -983,7 +987,7 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
                         textAnchor={labelAllRivals ? 'middle' : entry.points < snapshot.bryce.points ? 'start' : 'end'}
                         fill="var(--ink-secondary)"
                         fontFamily={chartFont}
-                        fontSize={10.5}
+                        fontSize={12}
                         style={{ fontVariantNumeric: 'tabular-nums' }}
                       >
                         {entry.driverName.split(' ').slice(-1)[0]} {entry.points}
@@ -997,7 +1001,7 @@ const PointsStrip = ({ snapshot }: { snapshot: Extract<UiStandingsSnapshot, { av
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -1049,7 +1053,7 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
     >
       <p style={{ margin: '0 0 2px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '60ch' }}>
         <strong style={{ color: 'var(--ink-primary)' }}>{snapshot.bryce.points} points</strong> with {snapshot.racesRemaining}{' '}
-        races left{nextUp ? ` — ${nextUp.driverName.split(' ').slice(-1)[0]} is ${nextUp.points - snapshot.bryce.points} up the road` : ''}.
+        races left{nextUp ? `. ${nextUp.driverName.split(' ').slice(-1)[0]} is ${nextUp.points - snapshot.bryce.points} up the road` : ''}.
       </p>
       <PointsStrip snapshot={snapshot} />
       <div className="stack" style={{ gap: 0, marginTop: 6 }}>
@@ -1083,7 +1087,7 @@ const PointsPicture = ({ snapshot }: { snapshot: UiStandingsSnapshot }) => {
                 borderRadius: 8,
                 borderBottom: '1px solid var(--grid-hairline)',
                 fontSize: 13,
-                background: hoveredCar === entry.carNo ? 'var(--surface-0)' : 'transparent',
+                background: hoveredCar === entry.carNo ? 'var(--fill-hover)' : 'transparent',
                 transition: 'background 150ms ease'
               }}
             >
@@ -1133,7 +1137,7 @@ const AnalogRaces = ({ event, debriefIds }: { event: UpcomingPrepEvent; debriefI
               className="row row--between"
               style={{ padding: '10px 0', gap: 10, borderBottom: last ? 'none' : '1px solid var(--divider)' }}
             >
-              <span style={{ fontSize: 13.5, fontWeight: linked ? 600 : 450 }}>{label}</span>
+              <span className="link-row__label" style={{ fontSize: 13.5, fontWeight: linked ? 600 : 450 }}>{label}</span>
               <span className="row" style={{ gap: 12, whiteSpace: 'nowrap' }}>
                 <span className="caption caption--secondary">{kind}</span>
                 {linked ? <span style={{ color: 'var(--ink-secondary)', fontSize: 12 }}>debrief →</span> : null}
@@ -1141,7 +1145,7 @@ const AnalogRaces = ({ event, debriefIds }: { event: UpcomingPrepEvent; debriefI
             </div>
           );
           return linked && sessionId ? (
-            <Link key={label + index} to={`/races/${encodeURIComponent(sessionId)}`}>
+            <Link key={label + index} to={`/races/${encodeURIComponent(sessionId)}`} className="link-row">
               {row}
             </Link>
           ) : (
@@ -1208,7 +1212,7 @@ const WeatherWindow = ({
   if (!weather) {
     return (
       <Card className="card--flex" title={header} action={sourcePill}>
-        <Unavailable>Weather is unavailable right now — the near-track feed didn&apos;t answer. It refreshes on the next check.</Unavailable>
+        <Unavailable>Weather is unavailable right now because the near-track feed didn&apos;t answer. It refreshes on the next check.</Unavailable>
       </Card>
     );
   }
@@ -1272,7 +1276,7 @@ const WeatherWindow = ({
                       reading column stays on tidy single lines beside it. */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 13.5, fontWeight: 560 }}>{slot.sessionLabel}</div>
-                    <div style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
+                    <div style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
                       {slot.when}
                       {slot.sky ? ` · ${slot.sky.toLowerCase()}` : ''}
                     </div>
@@ -1287,7 +1291,7 @@ const WeatherWindow = ({
                     {tempDelta !== null && tempDelta !== 0 ? (
                       // Weather is a fact, not a verdict — FactDelta's neutral ink,
                       // never the green/red result colors.
-                      <span className="row" style={{ gap: 4, alignItems: 'baseline', fontSize: 11, color: 'var(--ink-muted)', whiteSpace: 'nowrap' }}>
+                      <span className="row" style={{ gap: 4, alignItems: 'baseline', fontSize: 12, color: 'var(--ink-muted)', whiteSpace: 'nowrap' }}>
                         <FactDelta delta={tempDelta} unit="°" />
                         vs {priorRaceLabel}
                       </span>
@@ -1299,13 +1303,13 @@ const WeatherWindow = ({
           </div>
         ) : (
           <p style={{ margin: '8px 0 0', fontSize: 12.5, color: 'var(--ink-secondary)' }}>
-            The hourly forecast reaches his sessions closer to {formatDate(raceDate, { month: 'long', day: 'numeric' })} — it fills in within a
+            The hourly forecast reaches his sessions closer to {formatDate(raceDate, { month: 'long', day: 'numeric' })}. It fills in within a
             day or two of green.
           </p>
         )}
       </div>
 
-      <p className="card__footnote" style={{ marginTop: 'auto', paddingTop: 12, fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p className="card__footnote" style={{ marginTop: 'auto', paddingTop: 12, fontSize: 12.5, color: 'var(--ink-muted)' }}>
         Near-track weather · NWS · not official series weather.
       </p>
     </Card>
@@ -1343,7 +1347,7 @@ const VisitColumn = ({
       <div className="row row--between" style={{ alignItems: 'baseline' }}>
         <span className="caption" style={{ fontSize: 12.5 }}>{visit.raceLabel}</span>
         {visit.result.fieldSize !== null ? (
-          <span style={{ fontSize: 11, color: 'var(--ink-muted)' }}>{visit.result.fieldSize}-car field</span>
+          <span style={{ fontSize: 12, color: 'var(--ink-muted)' }}>{visit.result.fieldSize}-car field</span>
         ) : null}
       </div>
       <div className="row" style={{ gap: 8, alignItems: 'baseline', marginTop: 4 }}>
@@ -1410,7 +1414,7 @@ const VenueDossierModule = ({
           title="This place, other years"
           entries={[
             { label: 'Official INDY NXT results by venue and year', path: 'data/career/career.dataset.json', note: 'Grid, finish, gain, field size, and official status for every past visit.' },
-            { label: 'Near-track weather (modeled)', path: 'data/career/career.dataset.json', note: 'Open-Meteo hourly archive joined to the race hour. Not official series weather or track temperature.' }
+            { label: 'Race weather (modelled)', path: 'data/career/career.dataset.json', note: 'Open-Meteo hourly archive joined to the race hour. Not official series weather or track temperature.' }
           ]}
           caveats={getVenueDossier().caveats}
         />
@@ -1420,16 +1424,18 @@ const VenueDossierModule = ({
           This weekend's forecast lives in the Weather window, one home per
           timeframe (Jack's review). */}
       <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--ink-secondary)' }}>
-        What the day gave him here before — the result and the weather, year by year.
+        What the day gave him here before: the result and the weather, year by year.
       </p>
       <div className="dossier-grid">
         {venue.visits.map((visit) => (
           <VisitColumn key={visit.sessionId} visit={visit} debriefIds={debriefIds} />
         ))}
       </div>
-      <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
+      <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
         ▲▽ compare each year against the visit before it. A weather delta is a fact about the day, not a verdict on the drive.
-        Conditions are modeled near-track, never official series weather.
+        Air, humidity, wind and sky are the Open-Meteo reanalysis for the race hour at the track, modelled, not the
+        series’ own weather. Whether the track was wet is on each race’s page: from the series report, else a nearby
+        station, else the same reanalysis, and the page says which.
       </p>
     </Card>
   );
@@ -1521,8 +1527,8 @@ const FollowTheWeekend = () => {
           </a>
         ))}
       </div>
-      <p style={{ margin: '10px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        Routes from the official schedule feed — where the broadcast actually lives this weekend.
+      <p style={{ margin: '10px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>
+        Routes from the official schedule feed, showing where the broadcast actually lives this weekend.
       </p>
     </Card>
   );
@@ -1538,19 +1544,17 @@ const LaterThisSeason = ({ events }: { events: UpcomingPrepEvent[] }) => {
         {events.map((event) => {
           const days = daysUntil(event);
           return (
-            <div key={event.eventId} className="row row--between" style={{ padding: '7px 0', borderBottom: '1px solid var(--grid-hairline)' }}>
-              <div>
+            <div key={event.eventId} className="row row--between" style={{ padding: '7px 0', gap: 12, alignItems: 'baseline', borderBottom: '1px solid var(--grid-hairline)' }}>
+              <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 560 }}>{event.eventName}</div>
-                <div style={{ fontSize: 11.5, color: 'var(--ink-muted)' }}>
-                  {event.trackName} · {trackTypeLabel(event.trackType)}
+                <div style={{ fontSize: 12.5, color: 'var(--ink-muted)' }}>
+                  {venueName(event.trackName)} · {trackTypeLabel(event.trackType)}
                 </div>
               </div>
-              <span className="row" style={{ gap: 10 }}>
-                {/* The race's own date, so the day count beside it agrees. */}
-                <span style={{ fontSize: 12.5, color: 'var(--ink-secondary)' }}>
-                  {formatDate(raceDayOf(event), { month: 'short', day: 'numeric' })}
-                </span>
-                {days !== null ? <span className="chip chip--outline tnum">{days}d</span> : null}
+              {/* The race's own date, so the day count beside it agrees. */}
+              <span className="tnum" style={{ fontSize: 12.5, color: 'var(--ink-secondary)', whiteSpace: 'nowrap', textAlign: 'right' }}>
+                {formatDate(raceDayOf(event), { month: 'short', day: 'numeric' })}
+                {days !== null ? <span style={{ color: 'var(--ink-muted)' }}> · {days === 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`}</span> : null}
               </span>
             </div>
           );
@@ -1656,7 +1660,7 @@ export const RaceWeekScreen = () => {
           <p className="screen-head__sub row row--wrap" style={{ gap: 6 }}>
             <span className="row" style={{ gap: 5, whiteSpace: 'nowrap' }}>
               <MapPin size={13} aria-hidden />
-              {primary.trackName}
+              {venueName(primary.trackName)}
             </span>
             · {trackTypeName}
             {asNumber(primary.trackLengthMi) !== null ? <> · {formatNumber(primary.trackLengthMi, 2)} mi</> : null}
@@ -1718,15 +1722,24 @@ export const RaceWeekScreen = () => {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div className="hero-race__art" style={{ width: '100%' }}>
               {outline ? (
-                <TrackArt
-                  outline={outline}
-                  /* The most-recent visit's pace lights the shape quietly (the
-                     compact no-labels mode the race hero uses). When present it
-                     carries the venue read, so the single Turn-note annotation
-                     steps aside; unshaded venues keep the annotation. */
-                  annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
-                  sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
+                /* Round 6: the 3D still of the venue's model, shaded by the
+                   most recent visit's pace as the Tracks page shades it; a
+                   venue with no model keeps the 2D shape below. */
+                <HeatTrack
+                  trackName={outline.name}
                   maxHeight={190}
+                  fallback={
+                    <TrackArt
+                      outline={outline}
+                      /* The most-recent visit's pace lights the shape quietly (the
+                         compact no-labels mode the race hero uses). When present it
+                         carries the venue read, so the single Turn-note annotation
+                         steps aside; unshaded venues keep the annotation. */
+                      annotation={venueSections.heroHeat.length > 0 ? null : sectionNote}
+                      sections={venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null}
+                      maxHeight={190}
+                    />
+                  }
                 />
               ) : null}
             </div>
@@ -1736,7 +1749,7 @@ export const RaceWeekScreen = () => {
               </p>
             ) : null}
           </div>
-          <div className="row" style={{ justifyContent: 'flex-end' }}>
+          <div className="row hero-race__aside">
             {hereBefore.length > 0 ? (
               <HeroBlock label="He’s raced here before">
                 <div className="row row--wrap" style={{ gap: 24, marginTop: 8 }}>
@@ -1809,9 +1822,10 @@ export const RaceWeekScreen = () => {
         />
       </div>
 
-      <AnalogRaces event={primary} debriefIds={debriefIds} />
-
-      <LaterThisSeason events={later} />
+      <div className="grid grid--fit">
+        <AnalogRaces event={primary} debriefIds={debriefIds} />
+        <LaterThisSeason events={later} />
+      </div>
     </div>
   );
 };

@@ -6,15 +6,15 @@
   ],
   "claimStrength": "source_bounded_bryce_only_lap_shape",
   "counts": {
-    "conditionRows": 9,
-    "eventProgressionRows": 7,
-    "lapObservations": 282,
-    "sessionSummaries": 24
+    "conditionRows": 10,
+    "eventProgressionRows": 13,
+    "lapObservations": 433,
+    "sessionSummaries": 39
   },
   "fieldRelativePaceAvailable": false,
-  "generatedAt": "2026-07-20T11:25:41Z",
+  "generatedAt": "2026-11-18T09:47:20Z",
   "ok": true,
   "publicPointPrediction": false,
   "sourceDataset": "data/career/career.dataset.json",
-  "sourceHash": "64c2452b244d1c2ecb1db01df0735b1a0f631db0d4e74397ed7fa3a89b845978"
+  "sourceHash": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc"
 }

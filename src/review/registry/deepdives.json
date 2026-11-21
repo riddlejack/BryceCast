@@ -1,0 +1,19 @@
+{
+  "lane": "deep-dives",
+  "entries": [
+    {
+      "id": "dd-all-old",
+      "page": "/career",
+      "title": "All six archive deep dives rebuilt (explorer, rivals, restarts, qualifying, climbs, rain)",
+      "switch": "deepdive",
+      "values": [
+        { "value": null, "label": "the new sections (default)" },
+        { "value": "old", "label": "the versions live on brycecast.com today, for comparison" }
+      ],
+      "look": "Career → More from the archive: open each of the six. Flip to old to compare against what is live.",
+      "anchor": "#career-archive-title",
+      "added": "2026-11-17T18:00",
+      "reviewed": false
+    }
+  ]
+}

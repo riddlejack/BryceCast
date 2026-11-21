@@ -3,6 +3,28 @@ import react from '@vitejs/plugin-react';
 
 declare const process: { env: Record<string, string | undefined> };
 
+// Where `/api/*` goes. Unset: a locally running `npm run serve:api` (dev only,
+// as before; `vite preview` has no API proxy). Set, e.g.
+// `BRYCECAST_API_PROXY=https://brycecast.com`, it forwards both the dev server
+// and `vite preview` there, so a local build can play the production replay
+// archive. A remote (non-loopback) target is read-only: anything but GET/HEAD
+// is answered 404 locally and never forwarded.
+const apiProxyTarget = process.env.BRYCECAST_API_PROXY;
+const apiProxyIsRemote = (() => {
+  if (!apiProxyTarget) return false;
+  try {
+    return !['127.0.0.1', 'localhost', '[::1]', '::1'].includes(new URL(apiProxyTarget).hostname);
+  } catch {
+    return false;
+  }
+})();
+const apiProxy = {
+  target: apiProxyTarget ?? 'http://127.0.0.1:8787',
+  changeOrigin: true,
+  bypass: (req: { method?: string }) =>
+    apiProxyIsRemote && req.method !== 'GET' && req.method !== 'HEAD' ? false : undefined
+};
+
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -27,11 +49,9 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // dev-only: forward /api to a locally running `npm run serve:api`
-      '/api': {
-        target: process.env.BRYCECAST_API_PROXY ?? 'http://127.0.0.1:8787',
-        changeOrigin: true
-      },
+      // forward /api to a locally running `npm run serve:api`, or to
+      // BRYCECAST_API_PROXY when set (see apiProxy above)
+      '/api': apiProxy,
       '/racecontrol': {
         target: 'https://indycar.blob.core.windows.net',
         changeOrigin: true
@@ -41,5 +61,8 @@ export default defineConfig({
         changeOrigin: true
       }
     }
-  }
+  },
+  // `vite preview` proxies /api only when BRYCECAST_API_PROXY is set, so the
+  // default preview of a build is unchanged.
+  ...(apiProxyTarget ? { preview: { proxy: { '/api': apiProxy } } } : {})
 });

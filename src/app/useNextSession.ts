@@ -11,9 +11,11 @@ export interface NextSessionInfo {
 
 /** Next scheduled INDY NXT session from the live-runner schedule feeds
  *  (/api/next-session). Optional — returns null when the endpoint is absent. */
-export const useNextSession = (): NextSessionInfo | null => {
+export const useNextSession = (enabled = true): NextSessionInfo | null => {
   const [info, setInfo] = useState<NextSessionInfo | null>(null);
   useEffect(() => {
+    // The nav asks only while the feed is waiting on a session (round 9).
+    if (!enabled) return undefined;
     let cancelled = false;
     const load = async () => {
       try {
@@ -38,7 +40,7 @@ export const useNextSession = (): NextSessionInfo | null => {
       cancelled = true;
       clearInterval(timer);
     };
-  }, []);
+  }, [enabled]);
   return info;
 };
 

@@ -1,0 +1,28 @@
+/* How it works (Pipeline): the wide drawing is SVG; the phone chain is this. */
+.pl { width: 100%; }
+
+.pl-tall { display: flex; flex-direction: column; gap: 18px; }
+.pl-tall__sources,
+.pl-tall__chain { list-style: none; margin: 0; padding: 0; }
+.pl-tall__sources { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+.pl-tall__sources li,
+.pl-tall__chain li { display: flex; flex-direction: column; gap: 2px; font-size: 13px; line-height: 1.4; color: var(--ink-secondary); }
+.pl-tall__sources li { border-top: 1px solid var(--grey-line); padding-top: 8px; }
+.pl-tall strong { font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.pl-tall em { font-style: normal; font-size: 12.5px; color: var(--ink-muted); }
+.pl-tall__chain { display: flex; flex-direction: column; }
+.pl-tall__chain li { position: relative; padding: 10px 0 10px 22px; border-left: 1px solid var(--grey-line); margin-left: 6px; }
+.pl-tall__chain li::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 15px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+}
+.pl-tall__chain li.pl-tall__site::before { background: var(--bryce); border-color: var(--bryce); }
+.pl-tall__chain li:last-child { border-left-color: transparent; }
+.pl-tall__foot { margin: 0; font-size: 12.5px; color: var(--ink-muted); }

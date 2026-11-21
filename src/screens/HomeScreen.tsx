@@ -1,499 +1,381 @@
-import { useEffect, useState } from 'react';
-import { ArrowRight, Flag, MapPin, Trophy } from 'lucide-react';
-import { Card, Countdown, HeroPanel, Plate, Reveal, Stat, StatusChip } from '../app/components';
-import { chartFont, useMeasuredWidth } from '../app/charts';
-import { asNumber, asString, formatDate, formatGain, formatNumber, formatPosition, trackTypeLabel } from '../app/format';
-import { currentWindPill, useEventWeather } from '../app/useEventWeather';
-import { Link } from '../app/router';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Play } from 'lucide-react';
+import { asNumber, formatDate, formatGain } from '../app/format';
+import { Link, useRouter } from '../app/router';
 import type { ReadinessStatus } from '../app/useReadiness';
-import { normalizedName, useNextSession } from '../app/useNextSession';
-import { uiDataPackage } from '../data/uiDataPackage';
-import { trackOutlineFor } from '../assets/tracks';
-import { getVenueByTrackName } from '../data/venueDossier';
-import { daysUntil, getNextEvent, getStandingsSnapshot, raceDayOf, type UpcomingPrepEvent } from '../data/upcoming';
-import { chronoCompare, displayRaceLabel, loadLatestSeasonDebriefs, type ArchiveEntry } from '../data/debriefArchive';
-import { TrackArt } from '../app/trackArt';
-import { useVenueSectionData } from './sectionIntelligence';
-import { ReplayAffordance, useReplayCatalog } from './replayAffordance';
-import { isBryceCastCaptureTier, replayProvenance, watchableCaptureForRace } from '../data/replayAvailable';
 import { DataFreshness } from '../app/dataFreshness';
+import { uiDataPackage, type UiCareerFigure } from '../data/uiDataPackage';
+import { daysUntil, getNextEvent, raceDayOf } from '../data/upcoming';
+import { getSeasonIndex } from '../data/seasons';
+import { loadLatestSeasonDebriefs, chronoCompare, type ArchiveEntry } from '../data/debriefArchive';
 import { getSeasonPhase, getSeasonReview, type SeasonReview } from '../data/seasonPhase';
+import { nextSeasonOutlook } from '../data/nextSeason';
+import { loadReplayAvailable, watchableCaptureForRace, type ReplayAvailable } from '../data/replayAvailable';
+import { ReplayAffordance } from './replayAffordance';
 import { SeasonShareButton } from './seasonShareCard';
-import { FeatureDoors, NextSeasonCalendar, SeasonCompleteHero, SeasonStandouts, seasonArcLine } from './offseason';
+import { HomeNow, homeNowState } from './homeNow';
+import { HeroStill, type HeroStillSpec } from './homeHeroStill';
+import { Standouts, shortRaceName } from './homeStandouts';
+import './home.css';
 
-type Row = Record<string, unknown>;
+/* ============================================================
+ * The landing page (round 3 of the site refresh, November 14, 2026).
+ * Built to the approved mock-up (Portfolio/builds/project-brycecast/
+ * site-refresh/mockup/landing.html): the film's 3D still of Laguna Seca
+ * shaded by his pace, one "last time out" line with the replay beside it,
+ * six career figures, the season's standout races drawn large, and plain
+ * links to the rest of the site. Live and in-season states add one "now"
+ * line in the same form (homeNow.tsx). Every figure is read from the UI
+ * data package; nothing on this page is typed in by hand.
+ * ============================================================ */
 
-/* ---------- season status join: officialStatus per race, from the package's
- * season index (the same rows the Races spine reads — no new data path). ---------- */
+/* ---------- the hero still ----------
+ * public/tracks-3d/manifest.json, track "weathertech-raceway-laguna-seca",
+ * alternate "2026-r1": the race the film shows. Its shading is that race's
+ * pace map (full race, median of clean green-flag laps, section by section).
+ * The caption's race facts are read from the season index by sessionId, so
+ * the picture and its words cannot drift apart. The credit line is the
+ * manifest's attribution for the model. */
 
-const seasonStatusBySession: Map<string, string> = (() => {
-  const raceDebrief = uiDataPackage.screens.raceDebrief as unknown as Row;
-  const rows = Array.isArray(raceDebrief.seasonIndex) ? (raceDebrief.seasonIndex as Row[]) : [];
-  const map = new Map<string, string>();
-  for (const row of rows) {
-    const id = asString(row.sessionId);
-    const status = asString(row.officialStatus);
-    if (id && status) map.set(id, status);
-  }
-  return map;
-})();
-
-/** House convention (Races spine): "running" is a clean day; anything else is
- *  a day that ended early. Missing rows stay clean — never claim an early end
- *  without a sourced status. */
-const endedEarly = (sessionId: string): boolean => {
-  const status = seasonStatusBySession.get(sessionId);
-  return status !== undefined && status !== 'running';
+const HERO_STILL = {
+  sessionId: 'session_indy_nxt_2026_6759',
+  src: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1.jpg',
+  src1200: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1@1200.jpg',
+  /* The matching section ID map and its legend (homeHeroStill.tsx). */
+  ids: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1-ids.png',
+  legend: '/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1-ids.json',
+  width: 2400,
+  height: 1350,
+  credit: 'Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others.'
 };
 
-/* ---------- season standing from packaged history ---------- */
+const figureById = (id: string): UiCareerFigure | null =>
+  uiDataPackage.screens.careerLab.lifeStats?.figures?.find((figure) => figure.id === id) ?? null;
 
-const getSeasonStanding = (): { rank: number | null; points: number | null; top10: number | null; bestFinish: number | null } => {
-  const standing = (uiDataPackage.screens.sourceOps.historyStanding ?? {}) as Row;
-  return {
-    rank: asNumber(standing.rank),
-    points: asNumber(standing.points),
-    top10: asNumber(standing.top10),
-    bestFinish: asNumber(standing.bestFinish)
+const HomeHero = ({ review }: { review: SeasonReview | null }) => {
+  const row = useMemo(() => getSeasonIndex().find((candidate) => candidate.sessionId === HERO_STILL.sessionId) ?? null, []);
+  const races = figureById('races');
+  const firstYear = uiDataPackage.screens.careerLab.lifeStats?.span?.firstDay?.slice(0, 4) ?? null;
+  const isSeasonBest =
+    review?.standouts.some((standout) => standout.row.sessionId === HERO_STILL.sessionId && standout.label === 'Season best') ??
+    false;
+  const raceName = row ? `${row.seasonYear ?? ''} ${shortRaceName(row)}`.trim() : null;
+  const heroSpec: HeroStillSpec = {
+    ...HERO_STILL,
+    alt: `A 3D model of WeatherTech Raceway Laguna Seca with the track shaded section by section by Bryce’s pace${raceName ? ` in the ${raceName}` : ''}.`
   };
-};
-
-/* ---------- the hero: the story of now ----------
- * One quiet full-width card. The venue's track outline is the anchor; the
- * headline names the moment; the meta line places it; a countdown holds on race
- * day / race week; one clearly-labeled action leaves for the right page. No stat
- * grids — the numbers live in the cards below and in Career. */
-
-type HeroState = 'live' | 'raceDay' | 'raceWeek' | 'between';
-
-const headlineFor: Record<HeroState, string> = {
-  live: 'Bryce is on track.',
-  raceDay: 'It’s race day.',
-  raceWeek: 'Race week.',
-  between: 'Between race weekends.'
-};
-
-const HomeHero = ({
-  readiness,
-  liveish,
-  nextEvent,
-  days,
-  latest
-}: {
-  readiness: ReadinessStatus;
-  liveish: boolean;
-  nextEvent: UpcomingPrepEvent | null;
-  days: number | null;
-  latest: ArchiveEntry | null;
-}) => {
-  const nextSession = useNextSession();
-  const [, forceTick] = useState(0);
-  useEffect(() => {
-    const timer = setInterval(() => forceTick((value) => value + 1), 60_000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const heroState: HeroState = liveish
-    ? 'live'
-    : days === 0
-    ? 'raceDay'
-    : days !== null && days > 0 && days <= 6
-    ? 'raceWeek'
-    : 'between';
-  const imminent = heroState === 'live' || heroState === 'raceDay' || heroState === 'raceWeek';
-
-  /* The hero centers the venue in play: the next event through race week (or the
-   * one running now); off-season, the place we were last. */
-  const venueEvent = nextEvent;
-  const venueName = venueEvent?.trackName ?? (latest ? asString((latest.pack.track as Row | undefined)?.name) : null);
-  const outline = trackOutlineFor(venueName);
-  /* The venue's section heat lights the hero shape — the same data-bearing
-   * most-recent-visit shading (and the same loaders) the Race Week hero uses,
-   * so the landing page carries the analytical read, not a bare outline
-   * (Jack's review, 2026-07-21). */
-  const venueSections = useVenueSectionData(venueName);
-  const heroHeat = venueSections.heroHeat.length > 0 ? { resolved: venueSections.heroHeat, showLabels: false } : null;
-  /* Same near-track weather hook the Race Week hero and weather window read, so
-   * the "now" wind pill can never disagree between pages (one source of truth).
-   * Only the current reading is needed here — no race-hour sessions. Calm air
-   * reads "now · calm" with no arrow; imminent states only. */
-  const venueRecord = getVenueByTrackName(venueEvent?.trackName ?? null);
-  const { weather } = useEventWeather(
-    imminent ? venueEvent?.eventId ?? null : null,
-    imminent ? venueRecord?.venueId ?? null : null,
-    []
-  );
-  const wind = currentWindPill(weather?.current ?? null, 'now');
-
-  /* A precise session start (from the live-runner schedule) drives the real
-   * countdown; day-precision package data is the fallback. */
-  const sessionMatchesEvent =
-    venueEvent &&
-    nextSession?.startsAt &&
-    normalizedName(nextSession.eventName).includes(normalizedName(venueEvent.eventName).slice(0, 12));
-  const preciseStart = sessionMatchesEvent ? nextSession?.startsAt ?? null : null;
-
-  /* Live "now" figures — his position is the countdown's stand-in when he's out. */
-  const bryce = ((readiness.payload?.bryce as Row)?.bryce as Row) ?? null;
-  const liveRank = bryce ? asNumber(bryce.rank) : null;
-  const liveStart = bryce ? asNumber(bryce.startPosition) : null;
-  const liveGain = liveStart !== null && liveRank !== null ? formatGain(liveStart - liveRank) : null;
-  const heartbeat = ((readiness.payload?.liveTiming as Row)?.heartbeat as Row) ?? {};
-  const lap = asNumber(heartbeat.lap);
-  const totalLaps = asNumber(heartbeat.totalLaps);
-
-  /* Between weekends the action still points ahead (director ruling): the
-   * "Last time out" card directly below already owns the look back. */
-  const action =
-    heroState === 'live' || heroState === 'raceDay'
-      ? { to: '/live', label: 'Open the live companion' }
-      : { to: '/race-week', label: 'Race week HQ' };
-
-  const metaLine = (() => {
-    if (!venueName) return null;
-    const parts: string[] = [venueName];
-    if (heroState === 'between' && venueEvent) parts[0] = `Next race · ${venueName}`;
-    if (heroState === 'between' && !venueEvent && latest) parts[0] = `Last out · ${venueName}`;
-    return parts.join('');
-  })();
-
-  const raceDate = venueEvent
-    ? raceDayOf(venueEvent)
-    : latest
-      ? (asString((latest.pack.raceOrder as Row | undefined)?.sessionStartDate) ??
-        asString((latest.pack as unknown as Row).eventStartDate))
+  const result =
+    row && row.finishPosition !== null
+      ? `P${row.finishPosition}${row.startPosition !== null ? ` from P${row.startPosition} on the grid` : ''}${isSeasonBest ? ', his season best' : ''}`
       : null;
-
   return (
-    <HeroPanel tint={heroState === 'live' ? 'live' : 'bryce'}>
-      <div className="hero-now">
-        <div className="hero-now__head">
-          <h1 className="hero-now__title">{headlineFor[heroState]}</h1>
-          {metaLine ? (
-            <p className="hero-now__meta row row--wrap">
-              <span className="row" style={{ gap: 5, whiteSpace: 'nowrap' }}>
-                <MapPin size={13} aria-hidden />
-                {metaLine}
-              </span>
-              {venueEvent ? <> · {trackTypeLabel(venueEvent.trackType)}</> : null}
-              {raceDate ? <> · {formatDate(raceDate, { weekday: 'long', month: 'long', day: 'numeric' })}</> : null}
-            </p>
-          ) : (
-            <p className="hero-now__meta">The schedule returns here as soon as the next event is published.</p>
-          )}
-        </div>
-
-        <div className="hero-now__art">
-          {outline ? <TrackArt outline={outline} maxHeight={200} wind={imminent ? wind : null} sections={heroHeat} /> : null}
-          {heroHeat && venueSections.mostRecent?.seasonYear ? (
-            <p className="caption caption--secondary" style={{ margin: '8px 0 0', textAlign: 'center' }}>
-              shaded by his {venueSections.mostRecent.seasonYear} pace here
-            </p>
-          ) : null}
-        </div>
-
-        <div className="hero-now__foot">
-          {heroState === 'live' ? (
-            <div className="hero-now__live">
-              <span className="row" style={{ gap: 8 }}>
-                <StatusChip tone="good" label="Live" live />
-                {lap !== null && totalLaps !== null ? (
-                  <span className="caption tnum">Lap {lap}/{totalLaps}</span>
-                ) : null}
-              </span>
-              {liveRank !== null ? (
-                <div className="row" style={{ gap: 12, alignItems: 'baseline', marginTop: 8 }}>
-                  <Plate size="hero" />
-                  <span className="stat__value stat__value--hero">P{liveRank}</span>
-                  {liveGain ? (
-                    <span className={`stat__delta ${liveGain.direction === 'up' ? 'stat__delta--up' : liveGain.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>
-                      {liveGain.text} from P{liveStart}
-                    </span>
-                  ) : null}
-                </div>
-              ) : (
-                <p className="hero-now__meta" style={{ marginTop: 8 }}>Bryce’s session is underway.</p>
-              )}
-            </div>
-          ) : heroState === 'raceDay' || heroState === 'raceWeek' ? (
-            preciseStart ? (
-              <div>
-                <span className="caption">
-                  {heroState === 'raceDay' ? 'Green flag' : 'First session'} ·{' '}
-                  {formatDate(preciseStart, { weekday: 'short', month: 'short', day: 'numeric' })}
-                </span>
-                <div style={{ marginTop: 8 }}>
-                  <Countdown to={preciseStart} />
-                </div>
-              </div>
-            ) : (
-              <div className="row" style={{ gap: 10, alignItems: 'baseline' }}>
-                <span className="figure" style={{ fontSize: 34, lineHeight: 1.05 }}>{days === 0 ? 'Today' : days ?? '—'}</span>
-                <span style={{ fontSize: 14, color: 'var(--ink-secondary)', fontWeight: 500 }}>
-                  {days === 0 ? 'race day' : days === 1 ? 'day to green' : 'days to green'}
-                </span>
-              </div>
-            )
-          ) : venueEvent && days !== null ? (
-            <span className="caption">
-              {days === 1 ? 'The next weekend is a day away.' : `The next weekend is ${days} days away.`}
-            </span>
-          ) : null}
-
-          <Link to={action.to} className="hero-now__action">
-            {action.label} <ArrowRight size={16} aria-hidden />
-          </Link>
-        </div>
-      </div>
-    </HeroPanel>
-  );
-};
-
-/* ---------- last time out (unchanged in spirit — the focused result) ---------- */
-
-const LastTimeOut = ({ latest }: { latest: ArchiveEntry | null }) => {
-  if (!latest) return null;
-  const outcome = latest.pack.outcome as Row;
-  const finish = asNumber(outcome.finishPosition);
-  const start = asNumber(outcome.startPosition);
-  const gain = start !== null && finish !== null ? formatGain(start - finish) : null;
-  const points = asNumber(outcome.points);
-  const standingRank = asNumber(outcome.standingRank);
-  const percentile = asNumber(outcome.finishPercentile);
-  const fieldBeaten = percentile !== null ? Math.round(percentile * 100) : null;
-
-  return (
-    <Link to={`/races/${encodeURIComponent(latest.pack.sessionId)}`}>
-      <Card
-        title={
-          <>
-            <Flag size={15} aria-hidden />
-            Last time out
-          </>
-        }
-        action={<ArrowRight size={15} style={{ color: 'var(--ink-secondary)' }} aria-hidden />}
-      >
-        <span className="caption caption--secondary">{displayRaceLabel(latest.pack)}</span>
-        <div className="row" style={{ alignItems: 'baseline', gap: 12, marginTop: 4 }}>
-          <span className="stat__value stat__value--big">{formatPosition(finish)}</span>
-          {gain ? (
-            <span className={`stat__delta ${gain.direction === 'up' ? 'stat__delta--up' : gain.direction === 'down' ? 'stat__delta--down' : 'stat__delta--flat'}`}>
-              {gain.text} from {formatPosition(start)} start
-            </span>
-          ) : null}
-        </div>
-        <div className="row row--wrap" style={{ gap: 8, marginTop: 12 }}>
-          {points !== null ? <span className="chip chip--outline tnum">+{formatNumber(points, 0)} points</span> : null}
-          {fieldBeaten !== null ? <span className="chip chip--outline tnum">ahead of {fieldBeaten}% of the field</span> : null}
-          {standingRank !== null ? <span className="chip chip--outline tnum">P{formatNumber(standingRank, 0)} in the championship</span> : null}
-        </div>
-        <p style={{ margin: '12px 0 0', fontSize: 12.5, color: 'var(--ink-muted)' }}>Full debrief →</p>
-      </Card>
-    </Link>
-  );
-};
-
-/* ---------- season sparkline: every 2026 finish, one glance ----------
- * House SVG in pixel space (crisp at any width). Ink line, quiet ink dots, one
- * gold dot on the season best — gold means one thing here, keyed in the caption.
- * P1 sits at the top, so an improving run reads as the line rising. The whole
- * spark clicks through to the Career Lab, where the race-by-race detail lives. */
-
-const SeasonSparkline = ({ season }: { season: ArchiveEntry[] }) => {
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const points = season
-    .map((entry) => {
-      const finish = asNumber(entry.pack.outcome.finishPosition);
-      if (finish === null) return null;
-      return { finish, early: endedEarly(entry.pack.sessionId) };
-    })
-    .filter((point): point is { finish: number; early: boolean } => point !== null);
-  if (points.length < 2) return null;
-
-  const height = 68;
-  const padX = 5;
-  const padTop = 11;
-  const padBottom = 9;
-  const finishes = points.map((point) => point.finish);
-  const worst = Math.max(...finishes);
-  const yMin = Math.max(1, Math.min(...finishes) - 1);
-  const yMax = worst + 1;
-  const span = yMax - yMin || 1;
-  const plotW = Math.max(0, width - padX * 2);
-  const plotH = height - padTop - padBottom;
-  const xAt = (index: number) => padX + (points.length === 1 ? plotW / 2 : (plotW * index) / (points.length - 1));
-  const yAt = (finish: number) => padTop + (plotH * (finish - yMin)) / span;
-  const linePath = points.map((point, index) => `${index === 0 ? 'M' : 'L'}${xAt(index).toFixed(1)} ${yAt(point.finish).toFixed(1)}`).join(' ');
-  /* Season best among clean days only — gold never lands on a day that ended early. */
-  const cleanFinishes = points.filter((point) => !point.early).map((point) => point.finish);
-  const best = cleanFinishes.length > 0 ? Math.min(...cleanFinishes) : null;
-  const bestIndex = best !== null ? points.findIndex((point) => !point.early && point.finish === best) : -1;
-
-  return (
-    <Link to="/career" className="season-spark" aria-label={`Every finish this season${best !== null ? `; season best P${best}` : ''}. Open the Career Lab.`}>
-      <div ref={ref} style={{ width: '100%' }}>
-        {width > 0 ? (
-          <svg width={width} height={height} role="img" aria-hidden style={{ display: 'block', overflow: 'visible' }}>
-            <path d={linePath} fill="none" stroke="var(--ink-primary)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
-            {points.map((point, index) => {
-              if (index === bestIndex) return null;
-              /* The house open circle: a day that ended early, never a filled result. */
-              return point.early ? (
-                <circle key={index} cx={xAt(index)} cy={yAt(point.finish)} r={3} fill="var(--surface-1)" stroke="var(--ink-muted)" strokeWidth={1.5} />
-              ) : (
-                <circle key={index} cx={xAt(index)} cy={yAt(point.finish)} r={2.4} fill="var(--ink-primary)" />
-              );
-            })}
-            {bestIndex >= 0 && best !== null ? (
-              <>
-                <circle cx={xAt(bestIndex)} cy={yAt(best)} r={4} fill="var(--bryce)" />
-                <text
-                  x={xAt(bestIndex)}
-                  y={yAt(best) - 8}
-                  textAnchor="middle"
-                  fontFamily={chartFont}
-                  fontSize={11}
-                  fontWeight={600}
-                  fill="var(--ink-primary)"
-                  style={{ fontVariantNumeric: 'tabular-nums' }}
-                >
-                  P{best}
-                </text>
-              </>
-            ) : null}
-          </svg>
-        ) : null}
-      </div>
-    </Link>
-  );
-};
-
-/** The chase, in one sentence: the nearest rival up the road (and how close),
- *  from the same standings snapshot Race Week's points picture reads. Silent
- *  when the snapshot is unavailable — never an empty frame. */
-const chaseLine = (): string | null => {
-  const snapshot = getStandingsSnapshot();
-  if (!snapshot.available) return null;
-  const bryce = snapshot.entries.find((entry) => entry.isBryce);
-  if (!bryce) return null;
-  const ahead = snapshot.entries
-    .filter((entry) => !entry.isBryce && entry.points > bryce.points)
-    .sort((a, b) => a.points - b.points)[0];
-  if (!ahead) return null;
-  const gap = ahead.points - bryce.points;
-  return `${ahead.driverName} is ${gap} point${gap === 1 ? '' : 's'} up the road.`;
-};
-
-const SeasonSoFar = ({ season, complete, arc, review }: { season: ArchiveEntry[]; complete: boolean; arc: string | null; review: SeasonReview | null }) => {
-  const standing = getSeasonStanding();
-  const seasonYear = season[0]?.pack.seasonYear ?? null;
-  const hasEarlyEnd = season.some((entry) => endedEarly(entry.pack.sessionId));
-  /* The chase is a mid-season read; a finished championship has no road left. */
-  const chase = complete ? null : chaseLine();
-  return (
-    <Card
-      title={
+    <HeroStill
+      spec={heroSpec}
+      lead={
         <>
-          <Trophy size={15} aria-hidden />
-          {seasonYear ?? 'The'} season{complete ? ', final' : ' so far'}
+          <h1>Bryce Aron’s racing career, lap by lap.</h1>
+          <p className="home-hero__intro">
+            Live timing on race day, a pace map of every INDY NXT track he has raced, and
+            {races && firstYear ? ` all ${races.display} of his races since ${firstYear}` : ' every race of his career'} in one
+            place.
+          </p>
+          <div className="home-hero__links">
+            {review ? <Link to="/races">The {review.seasonYear} season →</Link> : <Link to="/races">His races →</Link>}
+            <Link to="/career">His career in numbers →</Link>
+          </div>
         </>
       }
-      action={
-        <Link to="/career" className="navlink" style={{ fontSize: 12.5, padding: '0 2px' }}>
-          Career Lab <ArrowRight size={12} aria-hidden />
-        </Link>
-      }
-    >
-      <div className="row" style={{ gap: 28, flexWrap: 'wrap' }}>
-        <Stat label="Standing" value={standing.rank !== null ? `P${standing.rank}` : '—'} />
-        <Stat label="Points" value={standing.points ?? '—'} />
-        <Stat label="Top 10s" value={standing.top10 ?? '—'} />
-        <Stat label="Best finish" value={standing.bestFinish !== null ? `P${standing.bestFinish}` : '—'} />
-      </div>
-      {chase ?? arc ? (
-        <p style={{ margin: '12px 0 0', fontSize: 13, color: 'var(--ink-secondary)' }}>{chase ?? arc}</p>
-      ) : null}
-      {season.length >= 2 ? (
-        <div style={{ marginTop: 18 }}>
-          <span className="caption">
-            Every {seasonYear ?? 'season'} finish · gold marks his season best{hasEarlyEnd ? ' · ○ a day that ended early' : ''}
+      caption={
+        <>
+          <span className="home-hero__cap-line">
+            WeatherTech Raceway Laguna Seca{raceName ? `, ${raceName}` : ''}
+            {result ? `: ${result}` : ''}. Each section shaded by his pace against the field, gold where he was strongest, grey
+            where it was tougher.
           </span>
-          <div style={{ marginTop: 8 }}>
-            <SeasonSparkline season={season} />
-          </div>
-        </div>
-      ) : null}
-      {complete && review ? (
-        <div style={{ marginTop: 'auto', paddingTop: 14 }}>
-          <SeasonShareButton review={review} />
-        </div>
-      ) : null}
-    </Card>
+          <span className="home-hero__credit">The film’s 3D model. {HERO_STILL.credit}</span>
+        </>
+      }
+    />
   );
 };
 
-/* ---------- watch the last race unfold (the time machine, surfaced) ----------
- * The replay is the site's most-loved depth — the landing page now offers it
- * directly for the most recent race, through the exact affordance the race
- * pages use (same provenance drawer, same Live-page playback, no new surface).
- * Renders nothing when replay is off or the race has no watchable capture. */
+/* ---------- last time out: one line, the replay beside it ---------- */
 
-const WatchLastRace = ({ latest }: { latest: ArchiveEntry | null }) => {
-  const catalog = useReplayCatalog();
-  if (!latest || !catalog) return null;
-  const capture = watchableCaptureForRace(catalog, latest.pack.sessionId);
-  if (!capture) return null;
-  const isOwnCapture = isBryceCastCaptureTier(replayProvenance(capture).tier);
+/** The replay catalog with its loading state: 'pending' until the API answers
+ *  (or fails), so the slot can hold the button's place from the first paint. */
+const useReplayCatalogState = (): {
+  done: boolean;
+  catalog: ReplayAvailable | null;
+} => {
+  const [state, setState] = useState<{
+    done: boolean;
+    catalog: ReplayAvailable | null;
+  }>({ done: false, catalog: null });
+  useEffect(() => {
+    let cancelled = false;
+    loadReplayAvailable()
+      .then((catalog) => {
+        if (!cancelled) setState({ done: true, catalog });
+      })
+      .catch(() => {
+        if (!cancelled) setState({ done: true, catalog: null });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return state;
+};
+
+/** The replay button before the catalog has answered: the same disc and title
+ *  in the same place, the meta and source lines held at their height. It
+ *  already works: the Live page resolves a race id to its capture itself. */
+const PendingReplay = ({ sessionId, title }: { sessionId: string; title: string }) => {
+  const { navigate } = useRouter();
+  const key = encodeURIComponent(sessionId);
   return (
-    <section className="race-replay" aria-label="Watch the last race unfold">
-      <ReplayAffordance
-        capture={capture}
-        fromSessionId={latest.pack.sessionId}
-        title={`Watch ${displayRaceLabel(latest.pack)} unfold`}
-        copy={
-          isOwnCapture
-            ? 'Replay the last race from our Race Control timing capture.'
-            : 'Replay the last race from archived timing observations.'
-        }
-      />
+    <div className="race-replay__year home-replay--pending">
+      <button type="button" className="race-replay__year-link" onClick={() => navigate(`/live?replay=${key}&from=${key}`)}>
+        <span className="race-replay__year-play" aria-hidden>
+          <Play size={14} />
+        </span>
+        <span className="race-replay__year-text">
+          <span className="race-replay__year-title">{title}</span>
+          <span className="race-replay__year-meta tnum" aria-hidden>
+            &nbsp;
+          </span>
+        </span>
+      </button>
+      <div className="race-replay__year-prov" aria-hidden>
+        &nbsp;
+      </div>
+    </div>
+  );
+};
+
+const LastTimeOut = ({
+  review,
+  latestPack,
+  complete
+}: {
+  review: SeasonReview;
+  latestPack: ArchiveEntry | null;
+  complete: boolean;
+}) => {
+  const { done: catalogDone, catalog } = useReplayCatalogState();
+  const row = review.rows[review.rows.length - 1];
+  if (!row) return null;
+  const finish = row.finishPosition;
+  const start = row.startPosition;
+  const gain = finish !== null && start !== null ? formatGain(start - finish) : null;
+  /* The share of the other cars he beat, (field − place) ÷ (field − 1), from
+   * the career conversion row; the debrief pack's finishPercentile counts him
+   * in his own field, so it is only the fallback. */
+  const share = (uiDataPackage.screens.careerLab.resultConversion ?? []).find((r) => r.sessionId === row.sessionId)?.fieldBeatenShare;
+  const percentile =
+    typeof share === 'number'
+      ? share
+      : latestPack && latestPack.pack.sessionId === row.sessionId
+        ? asNumber((latestPack.pack.outcome as unknown as Record<string, unknown>).finishPercentile)
+        : null;
+  const fieldBeaten = percentile !== null ? Math.round(percentile * 100) : null;
+  const capture = watchableCaptureForRace(catalog, row.sessionId);
+  const racePath = `/races/${encodeURIComponent(row.sessionId)}`;
+
+  const facts: ReactNode[] = [];
+  if (gain && start !== null) {
+    facts.push(
+      gain.direction === 'flat' ? (
+        <>held P{start} from the grid</>
+      ) : (
+        <>
+          <b className={`home-gain home-gain--${gain.direction}`}>{gain.text}</b> from P{start} on the grid
+        </>
+      )
+    );
+  }
+  if (row.points !== null) facts.push(<b>+{row.points} points</b>);
+  if (fieldBeaten !== null)
+    facts.push(
+      <>
+        ahead of <b>{fieldBeaten}%</b> of the field
+      </>
+    );
+
+  const rank = row.standingRank;
+  const points = row.cumulativePoints;
+  const seasonLine =
+    rank === null ? null : complete ? (
+      <>
+        Finished the {review.seasonYear} season <b>P{rank}</b> in the championship
+        {points !== null ? ` on ${points} points` : ''}
+        {review.closingTop10Run >= 2 ? (
+          <>
+            , with {review.closingTop10Run} straight <span className="home-nowrap">top-10s</span> to close it
+          </>
+        ) : null}
+        .
+      </>
+    ) : (
+      <>
+        <b>P{rank}</b> in the {review.seasonYear} championship
+        {points !== null ? ` on ${points} points` : ''} after {review.races} {review.races === 1 ? 'race' : 'races'}.
+      </>
+    );
+
+  return (
+    <section className="home-line home-last" aria-label="Last time out">
+      <Link to={racePath} className="home-line__head">
+        Last time out · <span className="home-last__race">{shortRaceName(row)}</span>
+      </Link>
+      <Link to={racePath} className="home-line__lead home-last__result">
+        <span className="home-line__big">{finish !== null ? `P${finish}` : '—'}</span>
+      </Link>
+      <div className="home-line__body">
+        <div className="home-line__facts">
+          <p>
+            {facts.map((fact, index) => (
+              <span key={index}>
+                {index > 0 ? ' · ' : ''}
+                {fact}
+              </span>
+            ))}
+          </p>
+          {seasonLine ? <p>{seasonLine}</p> : null}
+          {complete ? (
+            <div className="home-share">
+              <SeasonShareButton review={review} />
+            </div>
+          ) : null}
+        </div>
+        <div className="home-last__replay">
+          {capture ? (
+            <ReplayAffordance capture={capture} fromSessionId={row.sessionId} title="Watch the race replay" variant="compact" />
+          ) : !catalogDone ? (
+            <PendingReplay sessionId={row.sessionId} title="Watch the race replay" />
+          ) : (
+            <Link to={racePath} className="home-textlink">
+              The race, lap by lap →
+            </Link>
+          )}
+        </div>
+      </div>
     </section>
   );
 };
 
-/* ---------- the journey (unchanged closing card) ---------- */
+/* ---------- his career so far: six figures from the ledger ----------
+ * screens.careerLab.lifeStats.figures (analysis/career-life-stats), shown with
+ * the package's own `display` strings. A "+" marks a floor (lower_bound). */
 
-const CareerStrip = () => {
-  const careerLab = uiDataPackage.screens.careerLab as unknown as Row;
-  const rows = Array.isArray(careerLab.seriesSummary) ? (careerLab.seriesSummary as Row[]) : [];
-  /* The canonical career race count is the personally-attributable ledger (146,
-   * every race driven), the same number the Career hero, odometer, and atlas
-   * carry — not the 142-race finishing-result subset the per-series summary
-   * sums. Keeping this teaser on the ledger count avoids a click-through
-   * contradiction (142 here, 146 there). */
-  const lifeStats = (careerLab.lifeStats ?? null) as { personalRaceMileage?: { raceRows?: number } } | null;
-  const atlas = (careerLab.atlas ?? null) as { raceCount?: number } | null;
-  const ledgerRaces = asNumber(lifeStats?.personalRaceMileage?.raceRows) ?? asNumber(atlas?.raceCount) ?? null;
+/** "71 h 47 min+" → numbers large, units small, the floor mark in amber. */
+const FigureValue = ({ display }: { display: string }) => {
+  const tokens = display.match(/\d[\d,]*(?:\.\d+)?|[^\d]+/g) ?? [display];
   return (
-    <Link to="/career">
-      <section className="panel panel--quiet">
-        <div className="row row--between row--wrap" style={{ gap: 14 }}>
-          <div>
-            <span className="kicker">The journey</span>
-            <p style={{ margin: '8px 0 0', fontSize: 14.5, color: 'var(--ink-secondary)', maxWidth: '52ch' }}>
-              Karting to F1600 to INDY NXT — {rows.length || 'seven'} series and {ledgerRaces || 'a career of'} races,
-              with every climb charted in the Career Lab.
-            </p>
-          </div>
-          <span className="row" style={{ gap: 22 }}>
-            <Stat label="Series" value={rows.length || '—'} />
-            <Stat label="Races" value={ledgerRaces ?? '—'} />
-            <ArrowRight size={16} style={{ color: 'var(--ink-secondary)' }} aria-hidden />
-          </span>
-        </div>
-      </section>
-    </Link>
+    <>
+      {tokens.map((token, index) => {
+        if (/^\d/.test(token)) return <span key={index}>{token}</span>;
+        return token.split(/(\+)/).map((part, partIndex) => {
+          const key = `${index}-${partIndex}`;
+          if (!part) return null;
+          if (part === '+')
+            return (
+              <span key={key} className="home-odo__plus">
+                +
+              </span>
+            );
+          if (!part.trim()) return <span key={key}> </span>;
+          return (
+            <span key={key} className="home-odo__unit">
+              {part.trim()}
+            </span>
+          );
+        });
+      })}
+    </>
   );
 };
+
+const CareerSoFar = () => {
+  const careerLab = uiDataPackage.screens.careerLab;
+  const span = careerLab.lifeStats?.span ?? null;
+  const seriesCount = Array.isArray(careerLab.seriesSummary) ? careerLab.seriesSummary.length : null;
+  const races = figureById('races');
+  const laps = figureById('raceLaps');
+  const countries = figureById('countries');
+  const cells: Array<{
+    figure: UiCareerFigure;
+    label: string;
+    sub: string | null;
+  }> = [];
+  const add = (id: string, label: string, sub: string | null = null) => {
+    const figure = figureById(id);
+    if (figure) cells.push({ figure, label, sub });
+  };
+  add('races', 'races');
+  add('raceMiles', 'miles raced', laps ? `${laps.display} laps` : null);
+  add('raceCorners', 'corners taken in races');
+  add('raceTimeAll', 'racing, start to flag');
+  add('venues', countries ? `tracks in ${countries.display} countries` : 'tracks');
+  add('milesBetweenTracks', 'miles between tracks', 'in straight lines, race to race');
+  if (cells.length === 0) return null;
+  const hasFloor = cells.some((cell) => cell.figure.class === 'lower_bound');
+  return (
+    <section className="home-career" aria-labelledby="home-career-title">
+      <h2 id="home-career-title">His career so far</h2>
+      {races && span ? (
+        <p className="home-sub">
+          {races.display} races{seriesCount ? ` in ${seriesCount} series` : ''},{' '}
+          {formatDate(span.firstDay, { month: 'long', year: 'numeric' })} to{' '}
+          {formatDate(span.lastDay, { month: 'long', year: 'numeric' })}.
+        </p>
+      ) : null}
+      <Link to="/career" className="home-odo" aria-label="His career so far: open the career page">
+        {cells.map(({ figure, label, sub }) => (
+          <span key={figure.id} className={`home-odo__cell home-odo__cell--${figure.class}`} data-figure-id={figure.id}>
+            <b>
+              <FigureValue display={figure.display} />
+            </b>
+            <span className="home-odo__label">{label}</span>
+            {sub ? <em>{sub}</em> : null}
+          </span>
+        ))}
+      </Link>
+      <p className="home-note">
+        {hasFloor ? 'A + marks a floor: the true figure is at least this. ' : ''}
+        <Link to="/career">How each figure is worked out →</Link>
+      </p>
+    </section>
+  );
+};
+
+/* ---------- the standout races: homeStandouts.tsx ---------- */
+
+/* ---------- the rest of the site, as plain links ---------- */
+
+const MoreLinks = () => (
+  <section className="home-more" aria-label="More on BryceCast">
+    <Link to="/races" className="home-more__item">
+      <span className="home-more__title">Races →</span>
+      <span>Every INDY NXT race he has run, each with a debrief. Captured races replay second by second.</span>
+    </Link>
+    <Link to="/tracks" className="home-more__item">
+      <span className="home-more__title">Tracks →</span>
+      <span>His pace at each INDY NXT track, section by section, from the official timing loops.</span>
+    </Link>
+    <Link to="/live" className="home-more__item">
+      <span className="home-more__title">Live →</span>
+      <span>Position, gaps and the cars around him while a session runs. Off-season it replays a race.</span>
+    </Link>
+    <Link to="/race-week" className="home-more__item">
+      <span className="home-more__title">Race Week →</span>
+      <span>
+        The next weekend’s schedule, forecast and his record at the track. Off-season, the {nextSeasonOutlook.seasonYear} dates so
+        far.
+      </span>
+    </Link>
+  </section>
+);
 
 /* ---------- screen ---------- */
 
@@ -501,79 +383,47 @@ export const HomeScreen = ({ readiness }: { readiness: ReadinessStatus }) => {
   const state = readiness.payload?.state;
   const liveish = state === 'ready' || state === 'degraded';
 
-  const [season, setSeason] = useState<ArchiveEntry[]>([]);
+  /* The latest race's debrief pack, for the share of the field he beat. */
+  const [latestPack, setLatestPack] = useState<ArchiveEntry | null>(null);
   useEffect(() => {
-    // Home only ever shows the latest season's races — loadLatestSeasonDebriefs
-    // fetches just those packs (via the manifest's own seasonYear field)
-    // instead of loadDebriefArchive's every-season-ever-raced set, which used
-    // to mean ~45 extra requests on first paint for a handful shown here.
+    let cancelled = false;
     loadLatestSeasonDebriefs()
       .then((archive) => {
-        const latestYear = Math.max(...archive.map((entry) => entry.pack.seasonYear));
-        setSeason(
-          archive
-            .filter((entry) => entry.pack.seasonYear === latestYear)
-            .sort((a, b) => chronoCompare(a.pack, b.pack))
-        );
+        if (cancelled || archive.length === 0) return;
+        const sorted = [...archive].sort((a, b) => chronoCompare(a.pack, b.pack));
+        setLatestPack(sorted[sorted.length - 1] ?? null);
       })
-      .catch(() => setSeason([]));
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const latest = season.length > 0 ? season[season.length - 1] : null;
+  const review = getSeasonReview();
   const nextEvent = getNextEvent();
   const days = nextEvent ? daysUntil(nextEvent) : null;
-  /* A finished season is its own state, never "between race weekends": the
-   * landing page turns to face a first-time visitor — what this site is, what's
-   * inside, the year in review and the calendar ahead. A live session always
-   * wins (replays and late sessions still take the hero). */
-  const review = getSeasonReview();
-  const complete = getSeasonPhase() === 'complete' && !liveish && review !== null;
-  const careerLab = uiDataPackage.screens.careerLab as unknown as Row;
-  const seriesRows = Array.isArray(careerLab.seriesSummary) ? (careerLab.seriesSummary as Row[]) : [];
-  const lifeStats = (careerLab.lifeStats ?? null) as { personalRaceMileage?: { raceRows?: number } } | null;
-  const careerRaces = asNumber(lifeStats?.personalRaceMileage?.raceRows);
-  const chapters = seriesRows
-    .map((row) => ({ name: asString(row.seriesName) ?? '', races: asNumber(row.raceRows) ?? 0 }))
-    .filter((chapter) => chapter.name && chapter.races > 0);
+  /* The reviewed season is over when nothing is on the calendar, or when the
+   * next race on it belongs to a later season (a new year's opener announced
+   * before any of its races are in the package). */
+  const nextEventYear = nextEvent ? Number(raceDayOf(nextEvent).slice(0, 4)) : null;
+  const complete =
+    review !== null && (getSeasonPhase() === 'complete' || (nextEventYear !== null && nextEventYear > review.seasonYear));
+  const nowState = homeNowState(liveish, nextEvent, days);
+  const nowOnTop = nowState === 'live' || nowState === 'raceDay';
+  const now = nowState ? <HomeNow state={nowState} readiness={readiness} nextEvent={nextEvent} days={days} /> : null;
 
   return (
-    <div className="page stack">
-      {complete && review ? (
-        <SeasonCompleteHero review={review} />
-      ) : (
-        <HomeHero readiness={readiness} liveish={liveish} nextEvent={nextEvent} days={days} latest={latest} />
-      )}
-      <DataFreshness />
-      <div className="grid grid--2 grid--equal">
-        <Reveal>
-          <LastTimeOut latest={latest} />
-        </Reveal>
-        <Reveal delay={60}>
-          <SeasonSoFar season={season} complete={complete} arc={complete && review ? seasonArcLine(review) : null} review={review} />
-        </Reveal>
+    <div className="page home">
+      {nowOnTop ? now : null}
+      <HomeHero review={review} />
+      {nowOnTop ? null : now}
+      {review ? <LastTimeOut review={review} latestPack={latestPack} complete={complete} /> : null}
+      <CareerSoFar />
+      {review ? <Standouts review={review} complete={complete} heroSessionId={HERO_STILL.sessionId} /> : null}
+      <MoreLinks />
+      <div className="home-fresh">
+        <DataFreshness />
       </div>
-      <Reveal delay={80}>
-        <WatchLastRace latest={latest} />
-      </Reveal>
-      {complete && review ? (
-        <Reveal delay={85}>
-          <SeasonStandouts review={review} />
-        </Reveal>
-      ) : null}
-      {review ? (
-        <Reveal delay={90}>
-          <FeatureDoors review={review} careerRaces={careerRaces} chapters={chapters} />
-        </Reveal>
-      ) : null}
-      {complete ? (
-        <Reveal delay={100}>
-          <NextSeasonCalendar compact />
-        </Reveal>
-      ) : (
-        <Reveal delay={100}>
-          <CareerStrip />
-        </Reveal>
-      )}
     </div>
   );
 };

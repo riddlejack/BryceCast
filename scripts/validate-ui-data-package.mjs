@@ -677,6 +677,11 @@ for (const ref of raceStoryRefs ?? []) {
 
 /* ---------- section-lap packs (Brief H: heat map + drawer traceability) ---------- */
 
+const officialRaceLapsBySession = new Map(
+  (canonicalDataset.results ?? [])
+    .filter((result) => Number(result.finishPosition) === 1 && Number(result.lapsCompleted) > 0)
+    .map((result) => [result.sessionId, Number(result.lapsCompleted)])
+);
 const sectionLapRefs = dataPackage.screens.raceDebrief.sectionLapRefs;
 if (!Array.isArray(sectionLapRefs) || sectionLapRefs.length === 0) {
   fail('raceDebrief.sectionLapRefs must exist (sessions with official per-lap section observations).');
@@ -703,6 +708,17 @@ for (const ref of sectionLapRefs ?? []) {
   }
   if (!Array.isArray(pack.sections) || pack.sections.length === 0) {
     fail(`Section-lap pack ${ref.sessionId} must carry at least one section family.`);
+  }
+  /* totalLaps is the race's official distance (a replay's "Lap N of M"), not
+     the last lap of his section data, which bryceLapsCovered carries. */
+  if (typeof pack.bryceLapsCovered === 'number') {
+    const officialLaps = officialRaceLapsBySession.get(ref.sessionId) ?? null;
+    if (officialLaps !== null && pack.totalLaps !== Math.max(officialLaps, pack.bryceLapsCovered)) {
+      fail(`Section-lap pack ${ref.sessionId} totalLaps ${pack.totalLaps} must be the official race distance (${officialLaps} laps).`);
+    }
+    if (pack.bryceLapsCovered > pack.totalLaps) {
+      fail(`Section-lap pack ${ref.sessionId} bryceLapsCovered exceeds totalLaps.`);
+    }
   }
   const tupleLength = (pack.tupleOrder ?? []).length;
   if (tupleLength < 8) {
@@ -736,6 +752,73 @@ const conversionRows = dataPackage.screens.careerLab.resultConversion ?? [];
 const undatedConversionRows = conversionRows.filter((row) => !row.eventStartDate).length;
 if (conversionRows.length === 0 || undatedConversionRows > 0) {
   fail(`careerLab.resultConversion must carry eventStartDate on every row (${undatedConversionRows} missing of ${conversionRows.length}).`);
+}
+/* The race's own day, not the meeting's first day (SCCA Saturday and Sunday
+ * races were dated the Friday), and the field-beaten share that does not count
+ * him in his own field. */
+const isoDay = /^\d{4}-\d{2}-\d{2}$/;
+const badRaceDateRows = conversionRows.filter((row) => !isoDay.test(String(row.raceDate ?? '')) || String(row.raceDate) < String(row.eventStartDate));
+if (badRaceDateRows.length) {
+  fail(`careerLab.resultConversion must carry a raceDate on or after eventStartDate on every row (${badRaceDateRows.length} bad, e.g. ${badRaceDateRows[0].sessionId}).`);
+}
+const badBeatenRows = conversionRows.filter((row) => {
+  const place = Number(row.finishPosition);
+  const field = Number(row.fieldSize);
+  if (!(field > 1 && place >= 1 && place <= field)) return row.fieldBeatenShare !== null && row.fieldBeatenShare !== undefined;
+  return Math.abs(Number(row.fieldBeatenShare) - (field - place) / (field - 1)) > 0.0001;
+});
+if (badBeatenRows.length) {
+  fail(`careerLab.resultConversion fieldBeatenShare must be (field - place) / (field - 1) (${badBeatenRows.length} bad, e.g. ${badBeatenRows[0].sessionId}).`);
+}
+const badUnclassifiedDates = (dataPackage.screens.careerLab.unclassifiedRaces ?? []).filter((row) => row.raceDate != null && !isoDay.test(String(row.raceDate)));
+if (badUnclassifiedDates.length) fail(`careerLab.unclassifiedRaces raceDate must be YYYY-MM-DD (${badUnclassifiedDates.length} bad).`);
+
+/* ---------- weather for every race ---------- */
+
+{
+  const raceWeather = dataPackage.screens.careerLab.raceWeather ?? {};
+  const raceSessionIds = new Set([
+    ...conversionRows.map((row) => row.sessionId),
+    ...(dataPackage.screens.careerLab.unclassifiedRaces ?? []).map((row) => row.sessionId)
+  ]);
+  const missingWeather = [...raceSessionIds].filter((sessionId) => !raceWeather[sessionId]);
+  if (missingWeather.length) fail(`careerLab.raceWeather must cover every race (${missingWeather.length} missing, e.g. ${missingWeather[0]}).`);
+  const skies = new Set(['clear', 'partly', 'overcast', 'rain', 'storm']);
+  const wetDries = new Set(['wet', 'dry', 'mixed', null]);
+  const wetDrySources = new Set(['series_report', 'observed', 'reanalysis', null]);
+  const isWindowTime = (value) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(String(value ?? ''));
+  for (const [sessionId, row] of Object.entries(raceWeather)) {
+    if (row.sessionId !== sessionId) fail(`careerLab.raceWeather key ${sessionId} carries sessionId ${row.sessionId}.`);
+    if (!raceSessionIds.has(sessionId)) fail(`careerLab.raceWeather ${sessionId} is not a race of the record.`);
+    if (!isWindowTime(row.window?.start) || !isWindowTime(row.window?.end) || row.window.end < row.window.start || !['session_sheet', 'race_day'].includes(row.window.basis)) {
+      fail(`careerLab.raceWeather ${sessionId} has a bad window.`);
+    }
+    if (!skies.has(row.sky) || !wetDries.has(row.wetDry ?? null) || !wetDrySources.has(row.wetDrySource ?? null)) fail(`careerLab.raceWeather ${sessionId} has an unexpected sky or wet/dry value.`);
+    if ((row.wetDry == null) !== (row.wetDrySource == null)) fail(`careerLab.raceWeather ${sessionId} must name a wet/dry source exactly when it has a wet/dry call.`);
+    if (row.wetDrySource === 'reanalysis' && row.wetDry === 'mixed') fail(`careerLab.raceWeather ${sessionId}: the reanalysis never calls a race mixed.`);
+    if (row.wetDrySource === 'series_report' && !row.seriesReport) fail(`careerLab.raceWeather ${sessionId} cites a series report it does not carry.`);
+    if (row.wetDrySource === 'observed' && !(row.observed?.evidence ?? []).some((item) => item.url)) fail(`careerLab.raceWeather ${sessionId} makes an observed call with no cited evidence.`);
+    if (row.source?.tier !== 'modelled' || !/Open-Meteo/.test(row.source?.name ?? '')) fail(`careerLab.raceWeather ${sessionId} must label the reanalysis as modelled Open-Meteo.`);
+    for (const key of ['rainMm', 'cloudPct', 'windKph', 'gustKph', 'tempC']) {
+      if (row[key] !== null && !Number.isFinite(row[key])) fail(`careerLab.raceWeather ${sessionId}.${key} must be a number or null.`);
+    }
+    if (row.rainMm < 0 || row.cloudPct < 0 || row.cloudPct > 100 || row.tempC < -30 || row.tempC > 50 || (row.windFromDeg !== null && (row.windFromDeg < 0 || row.windFromDeg >= 360))) {
+      fail(`careerLab.raceWeather ${sessionId} has an out-of-range value.`);
+    }
+  }
+  /* The official reports decide wet or dry wherever the conversion rows already
+   * join one, so the two blocks never disagree. */
+  const tierClash = conversionRows.filter((row) => {
+    const weather = raceWeather[row.sessionId];
+    if (!weather || !row.wetDry || row.weatherConfidence !== 'official') return false;
+    const official = row.wetDry === 'wet' ? 'wet' : row.wetDry === 'dry' ? 'dry' : 'mixed';
+    return weather.wetDrySource !== 'series_report' || weather.wetDry !== official;
+  });
+  if (tierClash.length) fail(`careerLab.raceWeather ignores the series report on ${tierClash.length} races (e.g. ${tierClash[0].sessionId}).`);
+  const summary = dataPackage.screens.careerLab.raceWeatherSummary;
+  if (!summary || summary.coverage?.races !== Object.keys(raceWeather).length || !summary.calibration || summary.calibration.races < 1) {
+    fail('careerLab.raceWeatherSummary must carry coverage matching raceWeather and the calibration against official reports.');
+  }
 }
 
 /* ---------- career named moments: deterministic semantics + referential integrity ---------- */
@@ -1117,7 +1200,9 @@ for (const [key, expectedPath] of Object.entries({
   careerLifeStatsTravelLegs: 'analysis/career-life-stats/output/tables/travel_legs.csv',
   careerLifeStatsTravelModeBreakdown: 'analysis/career-life-stats/output/tables/travel_mode_breakdown.csv',
   careerLifeStatsFuelEstimate: 'analysis/career-life-stats/output/tables/estimated_fuel_burned.csv',
-  careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv'
+  careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
+  careerLifeStatsFigures: 'analysis/career-life-stats/output/career_figures.json',
+  careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv'
 })) {
   if (sourceInventory[key]?.path !== expectedPath) {
     fail(`sourceInventory.${key} must point to ${expectedPath}.`);
@@ -1139,11 +1224,79 @@ for (const field of [
     fail(`careerLab.lifeStats.${field} must mirror the validated summary.`);
   }
 }
+const careerFiguresSource = JSON.parse(fs.readFileSync(path.join(repoRoot, sourceInventory.careerLifeStatsFigures.path), 'utf8'));
+for (const [field, sourceField] of [
+  ['figureClasses', 'classes'],
+  ['span', 'span'],
+  ['figures', 'figures'],
+  ['lifeShare', 'lifeShare'],
+  ['weeksGrid', 'weeksGrid'],
+  ['travelLegs', 'travelLegs'],
+  ['otherDrivers', 'otherDrivers'],
+  ['timeBreakdown', 'timeBreakdown']
+]) {
+  if (JSON.stringify(lifeStats[field]) !== JSON.stringify(careerFiguresSource[sourceField])) {
+    fail(`careerLab.lifeStats.${field} must mirror the validated career_figures.json.`);
+  }
+}
+{
+  const figureIds = new Set((lifeStats.figures ?? []).map((item) => item.id));
+  for (const id of [
+    'races', 'wins', 'podiums', 'topTens', 'raceLaps', 'raceMiles', 'raceCorners', 'raceTimeTimed', 'raceTimeAll',
+    'sessionHours', 'otherDriverRecords', 'otherDriverRecordsSingleSeater', 'venues', 'countries',
+    'milesBetweenTracks', 'milesBetweenTracksByRoad', 'eventDays', 'sessionDays', 'raceWeeks',
+    'fuelRaces', 'fuelAllSessions', 'indyNxtCautions', 'indyNxtRetirements', 'indyNxtPenalties'
+  ]) {
+    if (!figureIds.has(id)) fail(`careerLab.lifeStats.figures is missing ${id}.`);
+  }
+  for (const item of [...(lifeStats.figures ?? []), ...(lifeStats.lifeShare?.figures ?? [])]) {
+    if (!['counted', 'lower_bound', 'modelled_range'].includes(item.class) || !item.how || !item.display || !item.unit) {
+      fail(`careerLab.lifeStats figure ${item.id ?? '(unnamed)'} needs a class, unit, display and plain how.`);
+    }
+  }
+  if (figureIds.has('tyres') || figureIds.has('tires')) {
+    fail('careerLab.lifeStats.figures must not carry tyres until an honest range exists.');
+  }
+  const byId = Object.fromEntries(lifeStats.figures.map((item) => [item.id, item]));
+  if (byId.races.value !== expectedCareerRaceSessionIds.size || byId.raceMiles.value !== lifeStats.personalRaceMileage.miles) {
+    fail('careerLab.lifeStats race figures must agree with the race ledger.');
+  }
+  if (lifeStats.weeksGrid.weeks.length !== lifeStats.span.weeks) {
+    fail('careerLab.lifeStats.weeksGrid must carry one cell per week of the span.');
+  }
+  if (lifeStats.travelLegs.totalMiles !== lifeStats.travel.greatCircleMinimum.miles) {
+    fail('careerLab.lifeStats.travelLegs must add up to the great-circle minimum.');
+  }
+  if (
+    lifeStats.otherDrivers.rows.length !== byId.otherDriverRecords.value ||
+    lifeStats.otherDrivers.singleSeaterCount !== byId.otherDriverRecordsSingleSeater.value
+  ) {
+    fail('careerLab.lifeStats.otherDrivers must carry one row per counted driver record.');
+  }
+  {
+    const time = lifeStats.timeBreakdown;
+    if (
+      time.timedRaces.hours !== byId.raceTimeTimed.value ||
+      Math.abs(time.timedRaces.hours + time.untimedRaces.hours - byId.raceTimeAll.value) > 0.011 ||
+      time.timedRaces.count + time.untimedRaces.count + time.racesWithoutLaps !== byId.races.value
+    ) {
+      fail('careerLab.lifeStats.timeBreakdown must add up to the time-racing figures.');
+    }
+  }
+}
+// A race whose official sheet lists no laps (a disqualification) stays a race
+// row with unknown mileage; it must not be counted as covered, nor dropped.
+const expectedUnlappedRaceRows = canonicalDataset.results.filter(
+  (row) => row.driverId === 'driver_bryce_aron' && expectedCareerRaceSessionIds.has(row.sessionId) && (row.lapsCompleted === null || row.lapsCompleted === undefined)
+).length;
 if (
   lifeStats.personalRaceMileage.raceRows !== expectedCareerRaceSessionIds.size ||
-  lifeStats.personalRaceMileage.coveredRaceRows !== expectedCareerRaceSessionIds.size
+  lifeStats.personalRaceMileage.coveredRaceRows !== expectedCareerRaceSessionIds.size - expectedUnlappedRaceRows
 ) {
-  fail(`careerLab.lifeStats must cover all ${expectedCareerRaceSessionIds.size} canonical Bryce race results.`);
+  fail(
+    `careerLab.lifeStats must cover all ${expectedCareerRaceSessionIds.size} canonical Bryce race results ` +
+      `(${expectedUnlappedRaceRows} without laps on the sheet stay uncovered).`
+  );
 }
 assertSetEqual(new Set(lifeStats.coveredSessionIds ?? []), expectedCareerRaceSessionIds, 'careerLab.lifeStats covered race sessionIds');
 if (!(lifeStats.personalRaceMileage.laps > 0) || !(lifeStats.personalRaceMileage.miles > 0)) {
@@ -1172,11 +1325,26 @@ for (const dimension of ['season', 'series', 'session_type', 'venue', 'country',
 if (!(lifeStats.travelModeBreakdown ?? []).every((row) => row.travelModeProxy && row.legCount >= 0)) {
   fail('careerLab.lifeStats travelModeBreakdown must be visualization-ready.');
 }
+// Career chapters come from the canonical race rows, not a fixed count.
+const canonicalBryceRaceSeriesSeasons = (() => {
+  const { sessions, events } = canonicalIndexes(canonicalDataset);
+  const seriesSeasons = new Set();
+  const series = new Set();
+  for (const sessionId of expectedCareerRaceSessionIds) {
+    const event = events.get(sessions.get(sessionId)?.eventId);
+    if (!event) continue;
+    seriesSeasons.add(`${event.seriesId}:${event.seasonYear}`);
+    series.add(event.seriesId);
+  }
+  return { seriesSeasons: seriesSeasons.size, series: series.size };
+})();
 for (const [name, rows, low, base, high] of [
   ['fuelEstimateRanges', lifeStats.fuelEstimateRanges, 'estimatedFuelLowLiters', 'estimatedFuelBaseLiters', 'estimatedFuelHighLiters'],
   ['tireEstimateRanges', lifeStats.tireEstimateRanges, 'estimatedUniqueTiresLow', 'estimatedUniqueTiresBase', 'estimatedUniqueTiresHigh']
 ]) {
-  if (!Array.isArray(rows) || rows.length !== 10) fail(`careerLab.lifeStats.${name} must carry ten series/year rows.`);
+  if (!Array.isArray(rows) || rows.length !== canonicalBryceRaceSeriesSeasons.seriesSeasons) {
+    fail(`careerLab.lifeStats.${name} must carry one row per canonical series/year (${canonicalBryceRaceSeriesSeasons.seriesSeasons}).`);
+  }
   for (const row of rows) {
     if (row.confidenceClass !== 'modeled_range' || !(row[low] <= row[base] && row[base] <= row[high]) || !row.sourceUrl?.startsWith('https://')) {
       fail(`careerLab.lifeStats.${name} contains an invalid modeled range.`);
@@ -1209,7 +1377,9 @@ for (const key of [
   'careerLifeStatsTravelLegs',
   'careerLifeStatsTravelModeBreakdown',
   'careerLifeStatsFuelEstimate',
-  'careerLifeStatsTireEstimate'
+  'careerLifeStatsTireEstimate',
+  'careerLifeStatsFigures',
+  'careerLifeStatsDriverVariants'
 ]) {
   if (!lifeStatSourcePaths.has(sourceInventory[key].path)) {
     fail(`careerLab.lifeStats sourceRefs must include ${sourceInventory[key].path}.`);
@@ -1321,8 +1491,8 @@ for (const entry of qualifyingLayer.sourceFamilyMap ?? []) {
   }
 }
 const qualiBySeries = qualifyingLayer.bySeries ?? [];
-if (qualiBySeries.length === 0 || qualiBySeries.length > 7) {
-  fail('careerLab.qualifyingLayer.bySeries must cover at least one and at most the seven canonical chapters.');
+if (qualiBySeries.length === 0 || qualiBySeries.length > canonicalBryceRaceSeriesSeasons.series) {
+  fail(`careerLab.qualifyingLayer.bySeries must cover at least one and at most the ${canonicalBryceRaceSeriesSeasons.series} canonical chapters.`);
 }
 const qualiConversionSum = qualiBySeries.reduce((sum, row) => sum + (row.conversionRaces ?? 0), 0);
 if (qualiConversionSum !== qualiCareer.conversionRaces) {

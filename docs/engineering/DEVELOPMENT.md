@@ -78,6 +78,8 @@ From there the career corpus, semantic layer, pass-placement packs, context pack
 
 What the data release does not unlock, because it depends on the unpublished production archive or on a live operator environment: BryceCast's own Race Control capture replays and the `/api/timing-archive/*` routes (they read `data/live/brycecast.sqlite`), the standings snapshot inside the UI data package, current-conditions weather (it fetches upstream), and the `postrace:*` automation, which expects the operator's local data lake. Never point any command at a live writer database.
 
+To play those capture replays in a local build anyway, set `BRYCECAST_API_PROXY=https://brycecast.com` for `npm run dev` or `npm run preview` (on a port other than 5173/4173, e.g. `--port 4402`, so the client calls the API): Vite then forwards `/api/*` to production, GET and HEAD only, and answers every other method with a local 404.
+
 The optional analytics environment uses Python 3.10 or newer and may download Python packages. It is separate from the Node-only public workflow:
 
 ```bash

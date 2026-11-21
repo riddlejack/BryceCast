@@ -1,0 +1,33 @@
+{
+  "lane": "career-round3-chapters",
+  "entries": [
+    {
+      "id": "r3-chapters",
+      "page": "/career",
+      "title": "The chapters, each with its own picture: what was unique about every season, drawn from the data",
+      "switch": "chapters",
+      "values": [
+        {
+          "value": null,
+          "label": "a form per chapter (default), drawn from what only that season had: SCCA's four circuits from above at one scale; F1600 a podium per weekend drawn as the real 2-1-3 profile in ink, numerals on the faces, the steps he reached filled in colour with his finishes standing on them; RCFFS the Mid-Ohio weekend on its clock; Formula Ford the weather, a column of sky per race with rain as the series reported it; GB3 2021 against 2022 at the same six circuits; the Euroformula route across Europe; FR Oceania his six starting grids, ring where he started, dot where he finished; USF's first oval inside his 2024; the Daytona 24 as a dial with his three spells and the night; INDY NXT a row a season"
+        },
+        {
+          "value": "boxes",
+          "label": "the default, but F1600's podiums as three plain grey steps (the version before proxy review 4)"
+        },
+        {
+          "value": "dots",
+          "label": "the first round-3 pictures for SCCA, F1600, Formula Ford and FR Oceania (field gauges, joined triple-headers, a rain calendar, grid-to-flag dots), which sit on a position axis"
+        },
+        {
+          "value": "old",
+          "label": "the chapters as they were (three stat tiles and one race strip each)"
+        }
+      ],
+      "look": "Career → Chapters. Open each chapter tab in turn and let its picture draw in (SCCA's circuits trace themselves in date order; F1600's podiums draw their outline, then the steps he reached fill and his finishes drop onto them; Formula Ford's rain falls; FR Oceania's dots run from start slot to finish slot). Point at (or tap) any race, column, step or grid: its card, with the track's 3D still; click (or tap again) to open the race. Daytona: the dial starts at the top at the 1:40 pm start, the shaded wedge is the night, his three spells are the thick arcs. USF Pro 2000: a weekend's races step up and down their lane; each one hovers and taps on its own.",
+      "anchor": ".career-chapters",
+      "added": "2026-11-18T09:30",
+      "reviewed": false
+    }
+  ]
+}

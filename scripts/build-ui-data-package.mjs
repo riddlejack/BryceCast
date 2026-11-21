@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { gunzipSync } from 'node:zlib';
 import { execSync, spawnSync } from 'node:child_process';
 
 import { buildPointsProjectionState } from './live-points-state.mjs';
@@ -12,6 +13,10 @@ const outputPath = path.join(repoRoot, 'analysis/ui-data-package/ui-data-package
 // Narrow package lanes can refresh their own deterministic artifacts without
 // rewriting unrelated generated reports whose timestamps otherwise churn.
 const skipUpstreamRefresh = process.env.BRYCECAST_SKIP_UPSTREAM_REFRESH === '1';
+// A narrow refresh that still rewrites the section-lap packs from their
+// committed inputs (the observation tables below), e.g. after the pack shape
+// gains a field. Everything else stays on the narrow path.
+const refreshSectionLaps = process.env.BRYCECAST_REFRESH_SECTION_LAPS === '1';
 // Dry-run the as-of pin guard (Finding C) without regenerating anything, so an
 // operator can confirm a run is safely pinned before spending the full rebuild.
 const eventRollCheckOnly = process.argv.includes('--check-event-roll');
@@ -37,9 +42,11 @@ const sources = {
   prepSessionSignals: 'analysis/indy-nxt-discovery/output/deep_dive/tables/prep_session_signals.csv',
   fieldStrengthByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/field_strength_by_race.csv',
   headToHead: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head.csv',
+  headToHeadRaces: 'analysis/indy-nxt-discovery/output/tables/indy_nxt_head_to_head_races.csv',
   raceLapInflectionPoints: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_lap_inflection_points.csv',
   raceSectionLapObservations: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_observations.csv',
   raceSectionFieldDistribution: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_field_distribution.json',
+  raceSectionLapFieldObservations: 'analysis/indy-nxt-race-lap-section-enhancement/output/race_section_lap_field_observations.csv.gz',
   sectionResultsDeepByRace: 'analysis/indy-nxt-discovery/output/deep_dive/tables/section_results_deep_by_race.csv',
   leaderLapContext: 'analysis/indy-nxt-discovery/output/deep_dive/tables/leader_lap_context.csv',
   careerSeriesSummary: 'analysis/career-parity/output/tables/career_series_result_summary.csv',
@@ -56,6 +63,11 @@ const sources = {
   careerLifeStatsTravelModeBreakdown: 'analysis/career-life-stats/output/tables/travel_mode_breakdown.csv',
   careerLifeStatsFuelEstimate: 'analysis/career-life-stats/output/tables/estimated_fuel_burned.csv',
   careerLifeStatsTireEstimate: 'analysis/career-life-stats/output/tables/estimated_unique_tires.csv',
+  careerLifeStatsFigures: 'analysis/career-life-stats/output/career_figures.json',
+  careerLifeStatsDriverVariants: 'analysis/career-life-stats/data/driver_record_variants.csv',
+  careerRaceWeatherOutput: 'analysis/career-weather/output/race-weather.json',
+  careerRaceWeatherBuilderScript: 'scripts/build-career-race-weather.mjs',
+  careerRaceWeatherObservedCalls: 'analysis/career-weather/data/observed_calls.json',
   careerAtlasOutput: 'analysis/career-atlas/output/atlas.json',
   careerAtlasGlobeTexture: 'analysis/career-atlas/output/world_land_texture.png',
   careerAtlasNaturalEarth: 'analysis/career-atlas/data/ne_110m_land.geojson',
@@ -158,6 +170,7 @@ const parseCsv = (text) => {
 };
 
 const readCsv = (relativePath) => parseCsv(readText(relativePath));
+const readCsvGz = (relativePath) => parseCsv(gunzipSync(fs.readFileSync(path.join(repoRoot, relativePath))).toString('utf8'));
 
 const runContextEventNarrativeLayer = () => {
   const python = analyticsPython();
@@ -1023,7 +1036,7 @@ const buildRaceStoryPacks = ({ raceDebriefPackPairs, canonicalDataset, canonical
             precipitationMm: numberOrNull(weatherObservation.precipitationMm),
             conditionRaw: weatherObservation.ambientConditionRaw ?? null,
             source: weatherObservation.source ?? null,
-            caveat: 'Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather.'
+            caveat: 'Modelled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather.'
           }
         : null,
       /* The weekend arc: practice → qualifying → start → finish. */
@@ -1146,7 +1159,17 @@ const MEASURED_SECTION_PACKS = [
   }
 ];
 
-const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
+const buildSectionLapPacks = ({ raceDebriefPackPairs, canonicalDataset }) => {
+  /* The race's official distance: the winner's laps in the canonical
+     classification. A pack's totalLaps is the race's laps, as a heartbeat's
+     is; bryceLapsCovered is the last lap of his own section data (short of
+     the distance when he was lapped or out early; Indianapolis 2026 Race 1
+     ran 29 laps and he finished on 28). */
+  const raceLapsBySession = new Map();
+  for (const result of canonicalDataset.results ?? []) {
+    const laps = numberOrNull(result.lapsCompleted);
+    if (numberOrNull(result.finishPosition) === 1 && laps !== null && laps > 0) raceLapsBySession.set(result.sessionId, laps);
+  }
   const outputDir = path.join(repoRoot, 'analysis/race-story/output/context-packs');
   fs.mkdirSync(outputDir, { recursive: true });
   const observationRows = readCsv(sources.raceSectionLapObservations);
@@ -1163,6 +1186,29 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
      stretch (Nashville's straights) — never where they tile the lap. */
   const fieldDistribution = readJson(sources.raceSectionFieldDistribution).sessions ?? {};
   const debriefSessionIds = new Set(raceDebriefPackPairs.map(({ pack }) => pack.sessionId));
+  /* The OTHER cars lap by lap (round 4, Jack's Nov 15 review): every scope the
+     card offers (whole race, a third, one lap) compares him with the rest of
+     the field over the same laps, and the field leaves him out. The field
+     table carries every car's clean flag and section time per lap; only his
+     rivals' clean times ship, anonymous, one row per car. */
+  const otherCarLapsBySession = (() => {
+    if (skipUpstreamRefresh && !refreshSectionLaps) return new Map();
+    const bySession = new Map();
+    for (const row of readCsvGz(sources.raceSectionLapFieldObservations)) {
+      if (row.isBryce === 'yes' || row.cleanRaceLapCandidate !== 'yes') continue;
+      if (row.sectionType !== 'track_section' && row.sectionType !== 'derived_remainder') continue;
+      const lap = numberOrNull(row.lapNumber);
+      const seconds = numberOrNull(row.timeSeconds);
+      if (lap === null || seconds === null) continue;
+      if (!bySession.has(row.sessionId)) bySession.set(row.sessionId, new Map());
+      const byFamily = bySession.get(row.sessionId);
+      if (!byFamily.has(row.sectionFamily)) byFamily.set(row.sectionFamily, new Map());
+      const byCar = byFamily.get(row.sectionFamily);
+      if (!byCar.has(row.carRef)) byCar.set(row.carRef, new Map());
+      byCar.get(row.carRef).set(lap, seconds);
+    }
+    return bySession;
+  })();
   const refs = [];
   const cautionCode = { green: 'g', caution: 'c', restart_lap: 'r' };
   for (const [sessionId, rows] of rowsBySession) {
@@ -1172,7 +1218,7 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
     const first = rows[0];
     const venueName = first.trackName;
     const seasonYear = numberOrNull(first.seasonYear);
-    if (skipUpstreamRefresh) {
+    if (skipUpstreamRefresh && !refreshSectionLaps) {
       if (!fs.existsSync(path.join(repoRoot, relativePath))) {
         throw new Error(`Missing existing section-lap pack during narrow package refresh: ${relativePath}`);
       }
@@ -1206,13 +1252,28 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
     /* Field distribution + derived remainder for this race. */
     const distribution = fieldDistribution[sessionId] ?? null;
     const fieldSecondsFor = (family) => distribution?.sections?.[family]?.fieldCarMedians ?? null;
+    const bryceLapsCovered = Math.max(0, ...rows.map((row) => numberOrNull(row.lapNumber) ?? 0));
+    const totalLaps = Math.max(bryceLapsCovered, raceLapsBySession.get(sessionId) ?? 0);
+    /* One row per other car (sorted by its anonymous car index), one cell per
+       lap (index lap - 1) through his own last lap, so every comparison stays
+       over the laps he ran: that car's clean green-flag time in the section,
+       or null. Cars with no clean time in the section are left out. */
+    const otherCarLapsFor = (family) => {
+      const byCar = otherCarLapsBySession.get(sessionId)?.get(family);
+      if (!byCar || byCar.size === 0) return null;
+      return [...byCar.keys()]
+        .sort()
+        .map((carRef) => Array.from({ length: bryceLapsCovered }, (_, index) => byCar.get(carRef).get(index + 1) ?? null));
+    };
     const measuredSections = [...byFamily.entries()].map(([sectionName, laps]) => {
       const fieldSeconds = fieldSecondsFor(sectionName);
+      const otherCarLaps = otherCarLapsFor(sectionName);
       return {
         sectionName,
         kind: 'measured',
         laps: laps.sort(bySort),
-        ...(fieldSeconds ? { fieldSeconds } : {})
+        ...(fieldSeconds ? { fieldSeconds } : {}),
+        ...(otherCarLaps ? { otherCarLaps } : {})
       };
     });
     /* The derived "Untimed remainder" section: Bryce's per-lap lap-time-minus-
@@ -1235,7 +1296,8 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
               sectionName: 'Untimed remainder',
               kind: 'derived_remainder',
               laps: distribution.derivedRemainder.map(derivedRemainderTuple).sort(bySort),
-              ...(fieldSecondsFor('Untimed remainder') ? { fieldSeconds: fieldSecondsFor('Untimed remainder') } : {})
+              ...(fieldSecondsFor('Untimed remainder') ? { fieldSeconds: fieldSecondsFor('Untimed remainder') } : {}),
+              ...(otherCarLapsFor('Untimed remainder') ? { otherCarLaps: otherCarLapsFor('Untimed remainder') } : {})
             }
           ]
         : [];
@@ -1250,7 +1312,8 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
       seasonYear,
       venueName,
       trackType: first.trackType,
-      totalLaps: Math.max(0, ...rows.map((row) => numberOrNull(row.lapNumber) ?? 0)),
+      totalLaps,
+      bryceLapsCovered,
       tupleOrder: SECTION_LAP_TUPLE_ORDER,
       sections: [...measuredSections, ...derivedSections],
       derivedCoverage: distribution?.derivedCoverage ?? null,
@@ -1269,12 +1332,18 @@ const buildSectionLapPacks = ({ raceDebriefPackPairs }) => {
           key: 'raceSectionFieldDistribution',
           path: sources.raceSectionFieldDistribution,
           note: "Full-field per-section time distributions and Bryce's per-lap derived remainder (lap time minus timed sections) with real full-field percentiles."
+        },
+        {
+          key: 'raceSectionLapFieldObservations',
+          path: sources.raceSectionLapFieldObservations,
+          note: "Every car's per-lap section times and clean flags; the other cars' clean times ship as otherCarLaps, anonymous, so each scope compares him with the rest of the field over the same laps."
         }
       ],
       caveats: [
         'Section times come from official timing loops — time-based, not GPS or car position.',
         'Field percentile compares source-visible cars on the same lap; clean flags follow the lap-chart caution context.',
         'The untimed remainder is lap time minus the timed sections — the exact time on stretches with no loops, ranked against the field the same way.',
+        'fieldSeconds is every timed car\'s whole-race median, Bryce included (the source distribution). otherCarLaps leaves him out: the comparisons on screen read the other cars only.',
         'Aggregates should use clean green-flag laps and label their denominators on screen.'
       ]
     };
@@ -1895,7 +1964,7 @@ const buildFrocCampaignStory = ({ canonicalDataset, qualiSessionRows, resultConv
     caveats: [
       "Bryce contested two of the championship's five rounds — Rounds 4 and 5 — so this is six races, a guest campaign rather than a full season.",
       'Every FROC finish and start is official; position change is the plain difference between the two, never a pace claim.',
-      'Qualifying is sourced for both rounds he ran; one Round 5 session set a reverse grid and is labeled as such.',
+      'Qualifying is sourced for both rounds he ran; one Round 5 session set a reverse grid and is labelled as such.',
       "The championship's test sessions have no official exact clock time, so they sit outside this view; the six races are the sourced subject."
     ],
     sourceRefs: [
@@ -1942,13 +2011,13 @@ const buildCareerMilestoneItem = (id, metricById, sourceById) => {
     date = facts.date ?? null;
     year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
     figure = facts.lapTime ? `${facts.lapTime}s` : null;
-    label = `Badger Kart Club — ${facts.className}`;
+    label = `Badger Kart Club, ${facts.className}`;
     detail = `A ${facts.lapTime}-second fast time${facts.configuration ? ` on the ${facts.configuration}` : ''}, entered on the club's ${facts.recordTable ?? 'record'} board.`;
   } else if (metric.metricType === 'karting_track_record') {
     date = facts.date ?? null;
     year = date ? Number(date.slice(0, 4)) : numberOrNull(facts.year);
     figure = facts.lapTime ? `${facts.lapTime}s` : null;
-    label = 'Badger Kart Club — a track record';
+    label = 'Badger Kart Club, a track record';
     detail = `A ${facts.lapTime}-second ${facts.className} track record on the ${facts.configuration} layout.`;
   } else if (metric.metricType === 'karting_championship_milestone') {
     year = numberOrNull(facts.year);
@@ -1963,7 +2032,7 @@ const buildCareerMilestoneItem = (id, metricById, sourceById) => {
     const coWinners = Array.isArray(facts.coWinners) ? facts.coWinners : [];
     const planned = Array.isArray(facts.plannedEventFamilies) ? facts.plannedEventFamilies : [];
     const bookends = planned.length >= 2 ? `, from the ${planned[0]} to the ${planned[1]}` : '';
-    detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''} — the award that funded a UK Formula Ford campaign${bookends}.`;
+    detail = `A ${facts.year} ${facts.award}${coWinners.length ? `, alongside ${coWinners.join(' and ')}` : ''}. The award funded a UK Formula Ford campaign${bookends}.`;
   } else {
     return null;
   }
@@ -2063,6 +2132,8 @@ const buildSmallSeriesStories = ({ canonicalDataset, qualiSessionRows, resultCon
 
 /** The Career Lab climb needs true chronology; conversion rows carry no
  *  dates, so join each session to its canonical event start date. */
+const BRYCE_DRIVER_ID = 'driver_bryce_aron';
+
 const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = []) => {
   const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
   const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
@@ -2071,17 +2142,89 @@ const enrichConversionRows = (rows, canonicalDataset, weatherConditionRows = [])
       .filter((row) => row.sessionId && row.wetDry && row.wetDry !== 'unknown')
       .map((row) => [row.sessionId, { wetDry: row.wetDry, weatherConfidence: row.confidence ?? null }])
   );
+  /* Field size (cars in the race's result) from the same canonical result
+   * row the conversion table read; the climb's field view draws it. */
+  const fieldBySession = new Map(
+    (canonicalDataset.results ?? [])
+      .filter((result) => result.driverId === BRYCE_DRIVER_ID)
+      .map((result) => [result.sessionId, numberOrNull(result.fieldSize)])
+  );
   return rows.map((row) => {
     const session = sessionById.get(row.sessionId);
     const event = session ? eventById.get(session.eventId) : null;
     const weather = weatherBySession.get(row.sessionId) ?? null;
+    const fieldSize = fieldBySession.get(row.sessionId) ?? null;
     return {
       ...row,
       eventStartDate: event?.eventStartDate ?? null,
+      raceDate: sessionDay(session),
+      fieldSize,
+      fieldBeatenShare: fieldBeatenShare(row.finishPosition, fieldSize),
       wetDry: weather?.wetDry ?? null,
       weatherConfidence: weather?.weatherConfidence ?? null
     };
   });
+};
+
+/* The race's own day: the session's actual start, else its scheduled start, else
+ * null (never the meeting's first day, which is eventStartDate). SCCA Saturday and
+ * Sunday races used to read as the Friday because only eventStartDate was carried. */
+const sessionDay = (session) => {
+  const start = session?.actualStart ?? session?.scheduledStart ?? null;
+  return typeof start === 'string' && /^\d{4}-\d{2}-\d{2}/.test(start) ? start.slice(0, 10) : null;
+};
+
+/* The share of the OTHER cars he finished ahead of: (field - place) / (field - 1).
+ * finishPercentile ((field - place + 1) / field) counts Bryce himself, so last of
+ * 7 reads 14%; it stays as the analysis layer's normalised finish, but a reader
+ * claim ("beat N% of the field") must use this share. Null without a field. */
+const fieldBeatenShare = (finishPosition, fieldSize) => {
+  const place = numberOrNull(finishPosition);
+  const field = numberOrNull(fieldSize);
+  if (place === null || field === null || field <= 1 || place < 1 || place > field) return null;
+  return Number(((field - place) / (field - 1)).toFixed(4));
+};
+
+/* The races the conversion table leaves out because they have no classified
+ * finish (a DNF, DNS or DSQ with no finishing position in the source). The
+ * conversion table needs a finishing position for its percentile, so these
+ * stay out of it; the climb draws them as their own mark so the chart counts
+ * every one of the 173 races. Straight from the canonical result rows. */
+const buildUnclassifiedCanonical = (canonicalDataset, conversionRows) => {
+  const covered = new Set(conversionRows.map((row) => row.sessionId));
+  const sessionById = new Map((canonicalDataset.sessions ?? []).map((session) => [session.id, session]));
+  const eventById = new Map((canonicalDataset.events ?? []).map((event) => [event.id, event]));
+  const seriesById = new Map((canonicalDataset.series ?? []).map((series) => [series.id, series]));
+  const trackById = new Map((canonicalDataset.tracks ?? []).map((track) => [track.id, track]));
+  return (canonicalDataset.results ?? [])
+    .filter((result) => result.driverId === BRYCE_DRIVER_ID && !covered.has(result.sessionId))
+    .flatMap((result) => {
+      const session = sessionById.get(result.sessionId);
+      if (!session || session.sessionType !== 'race' || result.finishPosition != null) return [];
+      const event = eventById.get(session.eventId) ?? {};
+      const track = trackById.get(event.trackId) ?? {};
+      return [
+        {
+          sessionId: session.id,
+          seriesId: event.seriesId ?? null,
+          seriesName: seriesById.get(event.seriesId)?.name ?? event.seriesId ?? null,
+          seasonYear: event.seasonYear ?? null,
+          eventName: event.name ?? null,
+          raceLabel: `${event.seasonYear ?? ''} ${event.name ?? ''}`.trim(),
+          trackName: track.canonicalName ?? track.name ?? null,
+          trackType: track.trackType ?? null,
+          eventStartDate: event.eventStartDate ?? null,
+          raceDate: sessionDay(session),
+          raceNumber: numberOrNull(session.raceNumber),
+          startPosition: numberOrNull(result.startPosition ?? result.gridPosition),
+          fieldSize: numberOrNull(result.fieldSize),
+          lapsCompleted: numberOrNull(result.lapsCompleted),
+          status: result.status ?? null,
+          sourceState: 'canonical_result_no_classified_finish'
+        }
+      ];
+    })
+    .sort((left, right) => String(left.eventStartDate).localeCompare(String(right.eventStartDate)) || left.sessionId.localeCompare(right.sessionId));
 };
 
 /* Named climb moments stay source-derived and deterministic: earliest means
@@ -2098,6 +2241,33 @@ const careerMomentKindOrder = [
 const compareCareerMomentChronology = (left, right) =>
   String(left?.eventStartDate ?? '').localeCompare(String(right?.eventStartDate ?? '')) ||
   String(left?.sessionId ?? '').localeCompare(String(right?.sessionId ?? ''));
+
+/** Every ledger race the conversion table leaves out (no classified finish),
+ *  with the event name the weeks grid gives its event and the series name the
+ *  conversion rows give its series. Chronological; nothing is invented: a field
+ *  the ledger lacks stays null. */
+const buildUnclassifiedRaces = ({ ledger, conversion, weeks }) => {
+  const classified = new Set(conversion.map((row) => String(row.sessionId ?? '')));
+  const seriesNames = new Map(conversion.map((row) => [String(row.seriesId ?? ''), String(row.seriesName ?? '')]));
+  const eventNames = new Map();
+  for (const week of weeks) for (const race of week.races ?? []) if (race.eventId) eventNames.set(race.eventId, race.eventName ?? null);
+  return ledger
+    .filter((row) => row.sessionId && !classified.has(String(row.sessionId)))
+    .map((row) => ({
+      sessionId: String(row.sessionId),
+      eventId: row.eventId || null,
+      eventName: eventNames.get(row.eventId) ?? null,
+      eventStartDate: row.eventStartDate || null,
+      seriesId: row.seriesId || null,
+      seriesName: seriesNames.get(String(row.seriesId)) || null,
+      seasonYear: numberOrNull(row.seasonYear),
+      trackId: row.trackId || null,
+      trackName: row.trackName || null,
+      country: row.country || null,
+      status: row.status || null
+    }))
+    .sort((a, b) => String(a.eventStartDate).localeCompare(String(b.eventStartDate)) || a.sessionId.localeCompare(b.sessionId));
+};
 
 const buildCareerMoments = ({ resultConversion, seasonIndex }) => {
   const chronologicalRows = resultConversion
@@ -2164,8 +2334,15 @@ const buildCareerMoments = ({ resultConversion, seasonIndex }) => {
 
 /* Career head-to-head: every rival Bryce has shared an INDY NXT grid with,
  * sorted by races together. notableRaces parse: "label (+15) | label (-10)". */
-const buildCareerHeadToHead = (rows) =>
-  rows
+const buildCareerHeadToHead = (rows, raceRows = []) => {
+  /* One row per (rival, shared race), from head_to_head_races.py, which
+   * refuses to write unless its totals equal the head-to-head table. */
+  const racesByRival = new Map();
+  for (const race of raceRows) {
+    if (!racesByRival.has(race.driverId)) racesByRival.set(race.driverId, []);
+    racesByRival.get(race.driverId).push(race);
+  }
+  return rows
     .map((row) => ({
       driverId: row.driverId ?? null,
       driverName: row.driverName ?? '',
@@ -2182,10 +2359,20 @@ const buildCareerHeadToHead = (rows) =>
         .map((chunk) => {
           const match = chunk.match(/^(.*)\(([+-]\d+)\)$/);
           return match ? { label: match[1].trim(), finishDelta: Number(match[2]) } : { label: chunk, finishDelta: null };
-        })
+        }),
+      sharedRaces: (racesByRival.get(row.driverId) ?? [])
+        .slice()
+        .sort((left, right) => String(left.scheduledStart).localeCompare(String(right.scheduledStart)))
+        .map((race) => ({
+          sessionId: race.sessionId,
+          bryceFinish: numberOrNull(race.bryceFinish),
+          rivalFinish: numberOrNull(race.rivalFinish),
+          sameTeam: race.sameTeam === '1'
+        }))
     }))
     .filter((row) => row.driverName && (row.racesTogether ?? 0) > 0)
     .sort((left, right) => (right.racesTogether ?? 0) - (left.racesTogether ?? 0) || left.driverName.localeCompare(right.driverName));
+};
 
 /* The restart through-line: career, per-season, and per-venue restart movement
  * against the field, plus a per-race spine for the Career Lab and a per-venue
@@ -2390,9 +2577,9 @@ const buildQualifyingLayer = ({ summary, conversionRows, sessionRows }) => {
     caveats: summary.caveats ?? [],
     sourceRefs: [
       sourceRef('qualifyingLayerSummary', 'Validated qualifying-layer coverage, source-family map, and career conversion totals.'),
-      sourceRef('qualifyingLayerBySeriesSeason', 'Per-series/season qualifying and conversion rollup with labeled denominators.'),
+      sourceRef('qualifyingLayerBySeriesSeason', 'Per-series/season qualifying and conversion rollup with labelled denominators.'),
       sourceRef('qualifyingLayerConversion', 'One row per grid-confirmed qualifying-to-flag conversion.'),
-      sourceRef('qualifyingLayerSessions', 'The normalized per-session qualifying inventory with source family and field-size denominator.'),
+      sourceRef('qualifyingLayerSessions', 'The normalised per-session qualifying inventory with source family and field-size denominator.'),
       sourceRef('canonicalDataset', 'Canonical qualifyingResults, qualifying-session results, and race grids.')
     ]
   };
@@ -2639,7 +2826,7 @@ const buildVenueDossier = ({ canonicalDataset, asOfDate }) => {
       sourceType: 'modeled_reanalysis',
       official: false,
       confidence: observation.confidence ?? 'modeled_medium',
-      caveat: 'Modeled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature.'
+      caveat: 'Modelled near-track weather for the race hour (Open-Meteo hourly archive), not official series weather or track temperature.'
     };
   };
 
@@ -2763,12 +2950,12 @@ const buildVenueDossier = ({ canonicalDataset, asOfDate }) => {
     venues,
     venueCount: venues.length,
     caveats: [
-      'Conditions are modeled near-track weather joined to the race hour (Open-Meteo hourly archive) — never official INDY NXT session weather or track temperature.',
+      'Conditions are modelled near-track weather joined to the race hour (Open-Meteo hourly archive) — never official INDY NXT session weather or track temperature.',
       'Deltas compare each visit to Bryce’s previous INDY NXT race at the same venue; a weather delta is a fact about the day, not a verdict on the drive.',
       'This weekend’s forecast and current conditions come from the runtime weather routes, not this static package.'
     ],
     sourceRefs: [
-      sourceRef('canonicalDataset', 'Official INDY NXT results (grid, finish, field size, status) and per-race modeled weather observations, by venue and year.'),
+      sourceRef('canonicalDataset', 'Official INDY NXT results (grid, finish, field size, status) and per-race modelled weather observations, by venue and year.'),
       sourceRef('trackOutlineIndex', 'OpenStreetMap-traced outlines (ODbL) carry the north offset used to draw the wind bearing on real-geo venues; street circuits omit it.'),
       { key: 'api-weather-upcoming', path: '/api/weather/upcoming', note: 'Runtime NWS current conditions + hourly forecast for the race-week venue (near-track, not official).' }
     ]
@@ -3277,7 +3464,12 @@ const buildPackage = () => {
   const careerLifeStatsTravelModeBreakdown = readCsv(sources.careerLifeStatsTravelModeBreakdown);
   const careerLifeStatsFuelEstimate = readCsv(sources.careerLifeStatsFuelEstimate);
   const careerLifeStatsTireEstimate = readCsv(sources.careerLifeStatsTireEstimate);
+  const careerFigures = readJson(sources.careerLifeStatsFigures);
   const careerAtlas = readJson(sources.careerAtlasOutput);
+  /* Weather for every race, one record per race session (scripts/build-career-race-weather.mjs):
+   * Open-Meteo reanalysis over the official session window, modelled; an official
+   * series report decides wet or dry where one exists. */
+  const careerRaceWeather = readJson(sources.careerRaceWeatherOutput);
   const restartReportSummary = readJson(sources.restartReportSummary);
   const restartByRaceRows = readCsv(sources.restartReportByRace);
   const qualifyingLayerSummary = readJson(sources.qualifyingLayerSummary);
@@ -3339,6 +3531,7 @@ const buildPackage = () => {
   const debriefScoreRows = readCsv(sources.raceDebriefScores);
   const prepSignalRows = readCsv(sources.prepSessionSignals);
   const headToHeadRows = readCsv(sources.headToHead);
+  const headToHeadRaceRows = fs.existsSync(path.join(repoRoot, sources.headToHeadRaces)) ? readCsv(sources.headToHeadRaces) : [];
   const weatherConditionRows = readCsv(sources.contextEventWeatherConditions);
   const lapTimelineRows = readCsv(sources.indyNxtLapTimeline);
   const careerConversionEnriched = enrichConversionRows(careerLabPayload.resultConversion ?? [], canonicalDataset, weatherConditionRows);
@@ -3360,7 +3553,7 @@ const buildPackage = () => {
     canonicalDataset,
     canonicalSha256: summarizeArtifact(sources.canonicalDataset).sha256
   });
-  const sectionLapRefs = buildSectionLapPacks({ raceDebriefPackPairs });
+  const sectionLapRefs = buildSectionLapPacks({ raceDebriefPackPairs, canonicalDataset });
   const passMarkRefs = buildPassMarkRefs({ raceDebriefPackPairs });
   const seasonIndex = buildSeasonIndex({ raceDebriefPackPairs, resultsBySession, progressionRows: championshipRows });
   const nextUpcomingVenue = upcomingEvents[0]?.trackName ?? null;
@@ -3604,6 +3797,14 @@ const buildPackage = () => {
           medianFinish: numberOrNull(row.medianFinish),
           avgGain: numberOrNull(row.avgGain),
           avgFinishPercentile: percentOrNull(row.avgFinishPercentile),
+          /* Mean share of the other cars he finished ahead of, in percent: the
+           * figure for "field beaten, on average". avgFinishPercentile counts him. */
+          avgFieldBeatenPct: (() => {
+            const shares = careerConversionEnriched
+              .filter((race) => race.seriesId === row.seriesId && race.fieldBeatenShare !== null)
+              .map((race) => race.fieldBeatenShare);
+            return shares.length ? Math.round((shares.reduce((sum, value) => sum + value, 0) / shares.length) * 1000) / 10 : null;
+          })(),
           top5RatePct: percentOrNull(row.top5Rate),
           top10RatePct: percentOrNull(row.top10Rate),
           issueLikeStatusRatePct: percentOrNull(row.issueLikeStatusRate)
@@ -3615,8 +3816,31 @@ const buildPackage = () => {
         resultConversionRows: careerLabPayload.resultConversionRows,
         resultConversion: careerConversionEnriched,
         resultConversionSample: careerConversionEnriched.slice(0, 25),
+        // The races he entered with no classified finish (DNS, DNF, DSQ), which
+        // the conversion table leaves out: the A2 miles ledger's rows (every
+        // canonical race row; the Races page lists them), each with the grid,
+        // field and laps its canonical result row carries (the climb draws them).
+        unclassifiedRaces: (() => {
+          const canonical = new Map(buildUnclassifiedCanonical(canonicalDataset, careerConversionEnriched).map((row) => [row.sessionId, row]));
+          return buildUnclassifiedRaces({
+            ledger: careerLifeStatsMilesRaced,
+            conversion: careerConversionEnriched,
+            weeks: careerFigures.weeksGrid?.weeks ?? []
+          }).map((row) => {
+            const extra = canonical.get(row.sessionId);
+            return {
+              ...row,
+              raceDate: extra?.raceDate ?? null,
+              raceNumber: extra?.raceNumber ?? null,
+              startPosition: extra?.startPosition ?? null,
+              fieldSize: extra?.fieldSize ?? null,
+              lapsCompleted: extra?.lapsCompleted ?? null,
+              trackType: extra?.trackType ?? null
+            };
+          });
+        })(),
         moments: buildCareerMoments({ resultConversion: careerConversionEnriched, seasonIndex }),
-        headToHead: buildCareerHeadToHead(headToHeadRows),
+        headToHead: buildCareerHeadToHead(headToHeadRows, headToHeadRaceRows),
         lapPositionMix: buildLapPositionMix({ lapTimelineRows, canonicalDataset }),
         seasonCampaigns: buildSeasonCampaigns({
           canonicalDataset,
@@ -3661,6 +3885,38 @@ const buildPackage = () => {
             sourceRef('careerResultConversion', 'Career Lab conversion context; A2 restores four unclassified canonical race rows for atlas counts.'),
             sourceRef('careerAtlasBuilderScript', 'Deterministic career crop, full-world globe texture, projection, clipping, and simplification.'),
             sourceRef('careerAtlasValidatorScript', 'Provenance, globe-texture determinism, coordinate coverage, and lineage gates.')
+          ]
+        },
+        raceWeather: Object.fromEntries((careerRaceWeather.races ?? []).map((row) => [row.sessionId, {
+          sessionId: row.sessionId,
+          window: row.window,
+          sky: row.sky,
+          wetDry: row.wetDry ?? null,
+          wetDrySource: row.wetDrySource ?? null,
+          rainMm: numberOrNull(row.rainMm),
+          cloudPct: numberOrNull(row.cloudPct),
+          windKph: numberOrNull(row.windKph),
+          gustKph: numberOrNull(row.gustKph),
+          windFromDeg: numberOrNull(row.windFromDeg),
+          tempC: numberOrNull(row.tempC),
+          source: row.source,
+          /* The official condition words, where the series reported them. */
+          seriesReport: row.seriesReport ? { conditionRaw: row.seriesReport.conditionRaw ?? null, source: row.seriesReport.source ?? null, url: row.seriesReport.url ?? null } : null,
+          /* Station and race-report evidence behind an observed call. */
+          observed: row.observed ? { summary: row.observed.summary, evidence: row.observed.evidence ?? [] } : null,
+          modelWetDry: row.modelWetDry ?? null
+        }])),
+        raceWeatherSummary: {
+          schemaVersion: careerRaceWeather.schemaVersion,
+          source: careerRaceWeather.source,
+          grain: careerRaceWeather.grain,
+          rules: careerRaceWeather.rules,
+          coverage: careerRaceWeather.coverage,
+          calibration: careerRaceWeather.calibration,
+          sourceRefs: [
+            sourceRef('careerRaceWeatherOutput', 'Per-race weather over the official session window: Open-Meteo reanalysis (modelled) with the official series condition report deciding wet or dry where one exists.'),
+            sourceRef('careerRaceWeatherObservedCalls', 'Observed wet/dry calls (NOAA GHCNh station reports and race reports) for disputed races with no official report.'),
+            sourceRef('careerRaceWeatherBuilderScript', 'Windowing, hourly aggregation, sky and wet/dry rules, and the calibration against official reports.')
           ]
         },
         lifeStats: {
@@ -3714,10 +3970,23 @@ const buildPackage = () => {
             estimatedUniqueTiresHigh: numberOrNull(row.estimatedUniqueTiresHigh)
           })),
           venueSources: careerLifeStats.venueSources ?? [],
+          /* The Career page's figures (each with its class, unit and a plain
+             "how"), the share-of-his-life figures, the weeks grid and the travel
+             legs in date order. Mirrors career_figures.json verbatim. */
+          figureClasses: careerFigures.classes,
+          span: careerFigures.span,
+          figures: careerFigures.figures,
+          lifeShare: careerFigures.lifeShare,
+          weeksGrid: careerFigures.weeksGrid,
+          travelLegs: careerFigures.travelLegs,
+          /* The odometer's hover layers (round 2): a name for each of the other
+             drivers' dots, and the parts behind the time-in-the-car bars. */
+          otherDrivers: careerFigures.otherDrivers,
+          timeBreakdown: careerFigures.timeBreakdown,
           caveats: [
             'Every canonical Bryce race row counts. Daytona uses Bryce’s 142 Al Kamel-derived driver-stint laps, never the shared car’s 780 laps.',
             'The physical-session number is a floor: exact observations and F1600 lower bounds stay separate; FROC and private-test gaps remain unknown.',
-            'Travel is a minimum venue-to-venue displacement. The route adjustment is a modeled range; actual travel is blocked pending seasonBase and returnHomeFrequency.'
+            'Travel is a minimum venue-to-venue displacement. The route adjustment is a modelled range; actual travel is blocked pending seasonBase and returnHomeFrequency.'
           ],
           sourceRefs: [
             sourceRef('careerLifeStatsSummary', 'Validated Career Life Stats totals and method labels.'),
@@ -3729,14 +3998,16 @@ const buildPackage = () => {
             sourceRef('careerLifeStatsMileageBreakdowns', 'Visualization-ready mileage dimensions for future UI work.'),
             sourceRef('careerLifeStatsTravelLegs', 'Chronological travel minimum and route-proxy range by leg.'),
             sourceRef('careerLifeStatsTravelModeBreakdown', 'Visualization-ready travel-mode proxy totals.'),
-            sourceRef('careerLifeStatsFuelEstimate', 'Modeled low/base/high fuel estimates by series and chassis.'),
-            sourceRef('careerLifeStatsTireEstimate', 'Modeled low/base/high unique-tire estimates by series and year.')
+            sourceRef('careerLifeStatsFuelEstimate', 'Modelled low/base/high fuel estimates by series and chassis.'),
+            sourceRef('careerLifeStatsTireEstimate', 'Modelled low/base/high unique-tire estimates by series and year.'),
+            sourceRef('careerLifeStatsFigures', 'Career page figures with class and plain how, share of his life, weeks grid and ordered travel legs.'),
+            sourceRef('careerLifeStatsDriverVariants', 'Driver records that look like one person entered twice, behind the people range.')
           ]
         },
         caveats: [
           'Career analytics must use metric-family parity states; older series do not expose INDY NXT-grade depth.',
           'Result-conversion rows are source-bounded historical context, not a universal driver-strength model.',
-          'Weather joins cover only sessions with a sourced condition report (official series reports or labeled modeled observations); rows without one carry null and are excluded from wet/dry splits.',
+          'Weather joins cover only sessions with a sourced condition report (official series reports or labelled modelled observations); rows without one carry null and are excluded from wet/dry splits.',
           'Head-to-head records cover INDY NXT grids only and count official classified finishes, not lap-by-lap battles.'
         ],
         sourceRefs: [

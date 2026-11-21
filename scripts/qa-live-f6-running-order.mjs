@@ -119,7 +119,7 @@ const inspectRenderedChart = async (page) => {
     corridorLabels,
     moduleText,
     assertions: {
-      exactIntro: intro === "The pack around Bryce — every line a car's running position, gold is Bryce.",
+      exactIntro: intro === "The pack around Bryce. Each line is a car's running position, and gold is Bryce.",
       noBannedModuleCopy: bannedModuleCopy.every((term) => !pageText.includes(term)),
       sevenWholeLanes: Number(data.laneUpper) - Number(data.laneLower) === 6 && Number.isInteger(Number(data.laneLower)) && Number.isInteger(Number(data.laneUpper)),
       fixedGutter130: data.ladderGutterPx === '130',

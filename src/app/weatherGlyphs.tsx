@@ -10,7 +10,7 @@ export const FactDelta = ({ delta, unit = '' }: { delta: number | null | undefin
   return (
     <span
       className="tnum"
-      style={{ fontSize: 11.5, color: 'var(--ink-secondary)', whiteSpace: 'nowrap' }}
+      style={{ fontSize: 'max(12px, 1em)', color: 'var(--ink-secondary)', whiteSpace: 'nowrap' }}
     >
       {delta > 0 ? '▲' : '▽'}
       {Math.abs(delta)}
@@ -52,7 +52,7 @@ export const WindSwing = ({ fromDeg, toDeg }: { fromDeg: number; toDeg: number }
       style={{ display: 'inline-flex', alignItems: 'center', gap: 2, flex: 'none' }}
     >
       <FlowArrow bearingDeg={fromDeg} ink="var(--ink-muted)" />
-      <span aria-hidden style={{ color: 'var(--ink-muted)', fontSize: 10, lineHeight: 1 }}>
+      <span aria-hidden style={{ color: 'var(--ink-muted)', fontSize: 12, lineHeight: 1 }}>
         →
       </span>
       <FlowArrow bearingDeg={toDeg} ink="var(--ink-primary)" />

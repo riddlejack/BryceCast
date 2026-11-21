@@ -19,6 +19,18 @@ import {
   offSeasonDemoStartAt,
   shouldAutoStartOffSeasonDemo
 } from '../src/data/offSeasonDemo.ts';
+import {
+  CAUTION_BEAT_WALL_MS,
+  FORMATION_TARGET_WALL_MS,
+  OPENING_CAUTION_LAPS,
+  SKIM_SPEED,
+  cautionLapSpan,
+  findFormationStart,
+  findOpeningCaution,
+  formationSkimSpeed,
+  phasedClockPosition,
+  replayPhases
+} from '../src/data/replayStart.ts';
 
 // BryceCast per-client replay contract test.
 //
@@ -571,6 +583,172 @@ try {
   assert.equal(hasDeclinedOffSeasonDemo(null), false, 'a missing storage leaves the demo as the default');
 }
 
+// Where the replay clock starts and what it jumps (src/data/replayStart.ts).
+// The archive is faked as a flag timeline; the shapes are the ones read from
+// the production archive on November 15, 2026 (lap = the archive's counter,
+// 0 on the opening lap).
+{
+  const t0 = Date.parse('2026-09-06T16:40:16.000Z');
+  const timeline = (segments) => async (atMs) => {
+    const seconds = (atMs - t0) / 1000;
+    const hit = segments.find(([from, to]) => seconds >= from && seconds < to);
+    return hit ? { flag: hit[2], lap: hit[3] ?? null } : { flag: null, lap: null };
+  };
+  const lastMs = t0 + 3_600_000;
+  assert.equal(OPENING_CAUTION_LAPS, 3);
+
+  // A clean start (Milwaukee 2026, Mid-Ohio 2026 Race 2): one batch of reads,
+  // nothing to jump.
+  let reads = 0;
+  const cleanFlags = timeline([[0, 3600, 'GREEN', 1]]);
+  const clean = await findOpeningCaution({ greenMs: t0, lastMs, flagAt: (at) => { reads += 1; return cleanFlags(at); } });
+  assert.equal(clean, null, 'a start that runs green has no opening caution');
+  assert.ok(reads <= 11, `a clean start costs one batch (${reads} reads)`);
+
+  // Monterey 2026 Race 2: green for ~6 s, yellow (the lap-1 contact at the
+  // line) to the restart at +598 s, counter 0 at the throw and 4 at the restart.
+  const montereyFlags = timeline([[0, 6, 'GREEN', 0], [6, 120, 'YELLOW', 0], [120, 598, 'YELLOW', 2], [598, 3600, 'GREEN', 4]]);
+  let inFlight = 0;
+  let peak = 0;
+  const monterey = await findOpeningCaution({
+    greenMs: t0,
+    lastMs,
+    flagAt: async (atMs) => {
+      inFlight += 1;
+      peak = Math.max(peak, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      inFlight -= 1;
+      return montereyFlags(atMs);
+    }
+  });
+  assert.ok(peak <= 3, `never more than three archive reads at once (${peak})`);
+  assert.ok(monterey, 'Monterey 2026 Race 2 has an opening caution');
+  assert.ok(monterey.thrownMs >= t0 + 6_000 && monterey.thrownMs <= t0 + 8_000, `throw found to ~2 s (${(monterey.thrownMs - t0) / 1000}s)`);
+  assert.ok(monterey.restartMs >= t0 + 598_000 && monterey.restartMs <= t0 + 600_000, `restart found to ~2 s (${(monterey.restartMs - t0) / 1000}s)`);
+  assert.equal(monterey.kind, 'caution');
+  assert.deepEqual(cautionLapSpan(monterey), { from: 1, to: 4 }, 'laps 1 to 4, as the official caution summary says');
+  assert.ok(monterey.requests <= 30, `bounded reads (${monterey.requests})`);
+
+  // Portland 2026: thrown on lap 3 (counter 2), restart on counter 4: official 3-4.
+  const portland = await findOpeningCaution({
+    greenMs: t0,
+    lastMs,
+    flagAt: timeline([[0, 175, 'GREEN', 2], [175, 300, 'YELLOW', 2], [300, 410, 'YELLOW', 3], [410, 3600, 'GREEN', 4]])
+  });
+  assert.deepEqual(portland && cautionLapSpan(portland), { from: 3, to: 4 });
+
+  // A Timing71 feed opens after the green, with no flag for its first seconds
+  // and then the caution already out (Detroit
+  // 2026, official laps 1-7): the throw lap is not in the archive, the end is.
+  const outAtStart = await findOpeningCaution({
+    greenMs: t0,
+    lastMs,
+    flagAt: timeline([[12, 648, 'YELLOW', 1], [648, 3600, 'GREEN', 7]])
+  });
+  assert.equal(outAtStart?.thrownLap, null);
+  assert.equal(outAtStart?.outAtStart, true);
+  assert.equal(monterey.outAtStart, false);
+  // No beat for it: the clock jumps on reaching the first yellow read.
+  const outPhases = replayPhases({ fromMs: t0, greenMs: t0, caution: outAtStart, speed: 4 });
+  assert.equal(outPhases[0].untilMs, outAtStart.thrownMs);
+  assert.equal(phasedClockPosition({ virtualStartMs: t0 + 30_000, elapsedWallMs: 0, speed: 4, phases: outPhases }).atMs, outAtStart.restartMs);
+  assert.deepEqual(outAtStart && cautionLapSpan(outAtStart), { from: null, to: 7 });
+
+  // A caution thrown on lap 4 or later is not the opening one: it plays.
+  const detroit = await findOpeningCaution({
+    greenMs: t0,
+    lastMs,
+    flagAt: timeline([[0, 230, 'GREEN', 2], [230, 600, 'YELLOW', 3], [600, 3600, 'GREEN', 8]])
+  });
+  assert.equal(detroit, null, 'a lap-4 caution (counter 3 at the throw) plays at the chosen speed');
+  assert.equal(
+    await findOpeningCaution({ greenMs: t0, lastMs, flagAt: timeline([[0, 400, 'GREEN', 5], [400, 900, 'YELLOW', 6], [900, 3600, 'GREEN', 9]]) }),
+    null,
+    'an oval caution on lap 7 is a later one'
+  );
+
+  // A red flag at the start is jumped the same way, and named.
+  const red = await findOpeningCaution({
+    greenMs: t0,
+    lastMs,
+    flagAt: timeline([[0, 30, 'GREEN', 0], [30, 90, 'YELLOW', 0], [90, 1500, 'RED', 1], [1500, 1700, 'YELLOW', 1], [1700, 3600, 'GREEN', 3]])
+  });
+  assert.equal(red?.kind, 'red');
+
+  // A caution that never ends inside the archive, an unreadable archive, or
+  // failing reads: nothing to jump, the race plays as it is.
+  assert.equal(await findOpeningCaution({ greenMs: t0, lastMs, flagAt: timeline([[0, 5, 'GREEN', 0], [5, 3600, 'YELLOW', 0]]) }), null);
+  assert.equal(await findOpeningCaution({ greenMs: t0, lastMs, flagAt: timeline([]) }), null);
+  assert.equal(await findOpeningCaution({ greenMs: t0, lastMs, flagAt: async () => { throw new Error('down'); } }), null);
+  // One dropped read in the opening batch does not hide the caution.
+  const flaky = timeline([[0, 93, 'GREEN', 0], [93, 110, 'YELLOW', 0], [110, 440, 'YELLOW', 1], [440, 3600, 'GREEN', 3]]);
+  const dropped = await findOpeningCaution({
+    greenMs: t0,
+    lastMs,
+    flagAt: async (at) => (at === t0 + 120_000 ? { flag: null, lap: null } : flaky(at))
+  });
+  assert.deepEqual(dropped && cautionLapSpan(dropped), { from: 1, to: 3 }, 'Mid-Ohio 2024 with its 120 s read lost');
+
+  // Formation: the last moment before any car registers on the loops.
+  const open = t0 - 611_000;
+  const formation = await findFormationStart({ openMs: open, startMs: t0, movingAt: async (atMs) => atMs >= t0 - 353_000 });
+  assert.ok(formation.atMs <= t0 - 353_000 && formation.atMs >= t0 - 353_000 - 15_000, `formation within 15 s before roll-out (${(formation.atMs - t0) / 1000}s)`);
+  assert.equal(formation.requests, 9, "three passes of three reads");
+  const never = await findFormationStart({ openMs: open, startMs: t0, movingAt: async () => null });
+  assert.ok(never.atMs < t0 && never.atMs >= open, 'with no movement found it stays before the start');
+
+  // The formation skims fast enough to reach the green inside the target.
+  assert.equal(FORMATION_TARGET_WALL_MS, 8_000);
+  assert.equal(formationSkimSpeed(353_000 + 10_000), 64, 'Monterey R2: six minutes of formation at 64×');
+  assert.equal(formationSkimSpeed(100_000), 16);
+  assert.equal(formationSkimSpeed(840_000), 128, 'a whole 14-minute pre-race (no formation found) at 128×');
+  for (const span of [60_000, 200_000, 363_000, 500_000, 840_000]) {
+    assert.ok(span / formationSkimSpeed(span) <= FORMATION_TARGET_WALL_MS + 1e-6, `a ${span / 1000} s formation reaches the green in time`);
+  }
+
+  // The default start with an opening caution: the visitor's speed through
+  // the start, a beat after the throw, then the jump to the restart.
+  const caution = { thrownMs: t0 + 6_000, restartMs: t0 + 598_000 };
+  const start = replayPhases({ fromMs: t0, greenMs: t0, caution, speed: 4 });
+  assert.deepEqual(start, [{ untilMs: t0 + 6_000 + CAUTION_BEAT_WALL_MS * 4, speed: null, kind: 'start', jumpToMs: t0 + 598_000 }]);
+  const at = (phases, wallMs, from = t0, speed = 4) => phasedClockPosition({ virtualStartMs: from, elapsedWallMs: wallMs, speed, phases });
+  assert.equal(at(start, 1_000).atMs, t0 + 4_000, 'the start plays at 4×');
+  assert.equal(at(start, 1_000).jumped, false);
+  const beatEndWall = (6_000 + CAUTION_BEAT_WALL_MS * 4) / 4;
+  assert.ok(beatEndWall <= 5_000, `click to the jump in ${beatEndWall / 1000} s at 4×`);
+  assert.equal(at(start, beatEndWall + 1_000).atMs, t0 + 598_000 + 4_000, 'one wall second after the jump: 4 s past the restart');
+  assert.equal(at(start, beatEndWall + 1_000).jumped, true);
+  // A clock that is already past the beat when the restart is found jumps at once.
+  const late = replayPhases({ fromMs: t0 + 40_000, greenMs: null, caution, speed: 4 });
+  assert.equal(at(late, 0, t0 + 40_000).atMs, t0 + 598_000);
+  assert.equal(at(late, 0, t0 + 40_000).jumped, true);
+  // Past the restart: nothing left to jump.
+  assert.deepEqual(replayPhases({ fromMs: t0 + 700_000, greenMs: t0, caution, speed: 4 }), []);
+
+  // From the formation lap: the skim to the green, the start, the jump.
+  const rollOut = t0 - 363_000;
+  const fromFormation = replayPhases({ fromMs: rollOut, greenMs: t0, caution, speed: 4 });
+  assert.deepEqual(fromFormation.map((phase) => [phase.kind, phase.speed]), [['formation', 64], ['start', null]]);
+  const toGreenWall = 363_000 / 64;
+  assert.ok(toGreenWall < 10_000, `formation to the green in ${(toGreenWall / 1000).toFixed(1)} s`);
+  assert.equal(at(fromFormation, 1_000, rollOut).rate, 64);
+  assert.equal(at(fromFormation, toGreenWall + 1_000, rollOut).rate, 4, 'the visitor’s speed at the green');
+  assert.equal(at(fromFormation, toGreenWall + beatEndWall + 500, rollOut).atMs, t0 + 598_000 + 2_000, 'and the jump after the throw');
+  // A visitor already at 16× skims the formation at 64× and keeps 16× after.
+  assert.deepEqual(replayPhases({ fromMs: rollOut, greenMs: t0, caution: null, speed: 16 }).map((phase) => phase.speed), [64]);
+  assert.deepEqual(replayPhases({ fromMs: t0 - 60_000, greenMs: t0, caution: null, speed: 16 }).map((phase) => phase.speed), [null]);
+
+  // Watching the caution: from the throw at 16× to the restart, then 4×.
+  const watch = replayPhases({ fromMs: t0 + 4_000, greenMs: t0, caution, speed: 4, watchCaution: true });
+  assert.deepEqual(watch, [{ untilMs: t0 + 598_000, speed: SKIM_SPEED, kind: 'caution' }]);
+  const watchWall = (598_000 - 4_000) / SKIM_SPEED;
+  assert.equal(at(watch, watchWall + 1_000, t0 + 4_000).atMs, t0 + 598_000 + 4_000);
+  assert.equal(at(watch, watchWall + 1_000, t0 + 4_000).jumped, false);
+
+  // A plain clock is linear.
+  assert.equal(phasedClockPosition({ virtualStartMs: t0, elapsedWallMs: 10_000, speed: 4, phases: [] }).atMs, t0 + 40_000);
+}
+
 assert.equal(stderr, '', stderr);
 console.log(JSON.stringify({
   ok: true,
@@ -581,5 +759,10 @@ console.log(JSON.stringify({
   lakeFeeds: '2024-racetools+2025-nashville-per-request',
   nashvilleRegression: 'battle-rivals+running-order-accumulates',
   offSeasonDemo: 'default-until-explicitly-declined',
-  offSeasonDemoJoin: 'starts-in-progress-green-flag-fallback'
+  offSeasonDemoJoin: 'starts-in-progress-green-flag-fallback',
+  replayStart: 'race-start+opening-caution-jump+formation-search',
+  formationSkim: 'formation-under-8s-to-green+watch-caution-16x'
 }, null, 2));
+
+// The car dots on the live page's track (round 6): pure join and placement checks.
+await import('./test-live-dots.mjs');

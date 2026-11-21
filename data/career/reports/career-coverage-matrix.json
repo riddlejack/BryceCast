@@ -1,10 +1,10 @@
 {
   "schemaVersion": "bryce-career-coverage-matrix.v1",
-  "generatedAt": "2026-09-19T22:46:06.446Z",
+  "generatedAt": "2026-11-18T09:47:02.822Z",
   "datasetPath": "data/career/career.dataset.json",
   "validation": {
     "ok": true,
-    "checkedAt": "2026-09-19T22:46:04.925Z",
+    "checkedAt": "2026-11-18T09:47:01.183Z",
     "errors": [],
     "warnings": [
       {
@@ -569,10 +569,11 @@
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
       "years": [
+        2019,
         2020
       ],
-      "events": 7,
-      "sessions": 46,
+      "events": 13,
+      "sessions": 72,
       "policyNote": null,
       "canceledOfficialSessionIds": [],
       "openGapIds": [
@@ -587,73 +588,73 @@
           "id": "events_sessions",
           "label": "Events and sessions",
           "status": "complete",
-          "covered": 46,
-          "total": 46,
+          "covered": 72,
+          "total": 72,
           "coverage": 1,
-          "notes": "7 events, 46 sessions."
+          "notes": "13 events, 72 sessions."
         },
         {
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 32,
-          "total": 32,
+          "covered": 50,
+          "total": 50,
           "coverage": 1,
-          "notes": "762 race/heat result rows across 32 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+          "notes": "1160 race/heat result rows across 50 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 14,
-          "total": 14,
+          "covered": 22,
+          "total": 22,
           "coverage": 1,
-          "notes": "14 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+          "notes": "22 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "partial",
-          "covered": 755,
-          "total": 762,
-          "coverage": 0.9908,
-          "notes": "755/762 race/heat rows have gridPosition or startPosition."
+          "covered": 1148,
+          "total": 1160,
+          "coverage": 0.9897,
+          "notes": "1148/1160 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "complete",
-          "covered": 46,
-          "total": 46,
+          "covered": 72,
+          "total": 72,
           "coverage": 1,
-          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "notes": "72/72 physical sessions have clock-time starts; 72/72 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
           "label": "Track metadata",
           "status": "complete",
-          "covered": 5,
-          "total": 5,
+          "covered": 7,
+          "total": 7,
           "coverage": 1,
-          "notes": "5/5 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+          "notes": "7/7 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
         },
         {
           "id": "official_weather_conditions",
           "label": "Official weather/track conditions",
           "status": "complete",
-          "covered": 46,
-          "total": 46,
+          "covered": 72,
+          "total": 72,
           "coverage": 1,
-          "notes": "46/46 sessions have official weather/track-condition observations."
+          "notes": "72/72 sessions have official weather/track-condition observations."
         },
         {
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "partial",
-          "covered": 24,
-          "total": 46,
-          "coverage": 0.5217,
-          "notes": "24 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
+          "covered": 39,
+          "total": 72,
+          "coverage": 0.5417,
+          "notes": "39 sessions have lap samples; Formula Ford rows are Bryce-only labeled lap-analysis samples."
         },
         {
           "id": "indy_section_data",
@@ -669,8 +670,8 @@
           "label": "Penalties/decisions",
           "status": "partial",
           "covered": 4,
-          "total": 46,
-          "coverage": 0.087,
+          "total": 72,
+          "coverage": 0.0556,
           "notes": "4 sessions have official penalty/decision rows."
         },
         {
@@ -678,7 +679,7 @@
           "label": "Incidents/cautions",
           "status": "unavailable",
           "covered": 0,
-          "total": 32,
+          "total": 50,
           "coverage": 0,
           "notes": "0 sessions have official incident/caution rows."
         },
@@ -687,7 +688,7 @@
           "label": "Racecraft summary",
           "status": "unavailable",
           "covered": 0,
-          "total": 32,
+          "total": 50,
           "coverage": 0,
           "notes": "0 race sessions have official most-improved/racecraft summary rows."
         },
@@ -696,16 +697,16 @@
           "label": "Pit-stop counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 762,
+          "total": 1160,
           "coverage": 0,
-          "notes": "0/762 race/heat result rows have pit-stop counts."
+          "notes": "0/1160 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
           "status": "unavailable",
           "covered": 0,
-          "total": 32,
+          "total": 50,
           "coverage": 0,
           "notes": null
         },
@@ -714,7 +715,7 @@
           "label": "Derived benchmarks",
           "status": "blocked",
           "covered": 0,
-          "total": 7,
+          "total": 13,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
         }
@@ -730,8 +731,8 @@
         2021,
         2022
       ],
-      "events": 15,
-      "sessions": 116,
+      "events": 16,
+      "sessions": 121,
       "policyNote": null,
       "canceledOfficialSessionIds": [],
       "openGapIds": [
@@ -747,46 +748,46 @@
           "id": "events_sessions",
           "label": "Events and sessions",
           "status": "complete",
-          "covered": 116,
-          "total": 116,
+          "covered": 121,
+          "total": 121,
           "coverage": 1,
-          "notes": "15 events, 116 sessions."
+          "notes": "16 events, 121 sessions."
         },
         {
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 45,
-          "total": 45,
+          "covered": 48,
+          "total": 48,
           "coverage": 1,
-          "notes": "882 race/heat result rows across 45 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+          "notes": "938 race/heat result rows across 48 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 22,
-          "total": 22,
+          "covered": 24,
+          "total": 24,
           "coverage": 1,
-          "notes": "22 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+          "notes": "24 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "partial",
-          "covered": 369,
-          "total": 882,
-          "coverage": 0.4184,
-          "notes": "369/882 race/heat rows have gridPosition or startPosition."
+          "covered": 425,
+          "total": 938,
+          "coverage": 0.4531,
+          "notes": "425/938 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "complete",
-          "covered": 116,
-          "total": 116,
+          "covered": 121,
+          "total": 121,
           "coverage": 1,
-          "notes": "116/116 physical sessions have clock-time starts; 116/116 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "notes": "121/121 physical sessions have clock-time starts; 121/121 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -801,17 +802,17 @@
           "id": "official_weather_conditions",
           "label": "Official weather/track conditions",
           "status": "partial",
-          "covered": 39,
-          "total": 116,
-          "coverage": 0.3362,
-          "notes": "39/116 sessions have official weather/track-condition observations."
+          "covered": 44,
+          "total": 121,
+          "coverage": 0.3636,
+          "notes": "44/121 sessions have official weather/track-condition observations."
         },
         {
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "unavailable",
           "covered": 0,
-          "total": 116,
+          "total": 121,
           "coverage": 0,
           "notes": "0 sessions have lap samples."
         },
@@ -829,7 +830,7 @@
           "label": "Penalties/decisions",
           "status": "unavailable",
           "covered": 0,
-          "total": 116,
+          "total": 121,
           "coverage": 0,
           "notes": "0 sessions have official penalty/decision rows."
         },
@@ -838,7 +839,7 @@
           "label": "Incidents/cautions",
           "status": "unavailable",
           "covered": 0,
-          "total": 45,
+          "total": 48,
           "coverage": 0,
           "notes": "0 sessions have official incident/caution rows."
         },
@@ -847,7 +848,7 @@
           "label": "Racecraft summary",
           "status": "unavailable",
           "covered": 0,
-          "total": 45,
+          "total": 48,
           "coverage": 0,
           "notes": "0 race sessions have official most-improved/racecraft summary rows."
         },
@@ -856,16 +857,16 @@
           "label": "Pit-stop counts",
           "status": "partial",
           "covered": 513,
-          "total": 882,
-          "coverage": 0.5816,
-          "notes": "513/882 race/heat result rows have pit-stop counts."
+          "total": 938,
+          "coverage": 0.5469,
+          "notes": "513/938 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
           "status": "unavailable",
           "covered": 0,
-          "total": 45,
+          "total": 48,
           "coverage": 0,
           "notes": null
         },
@@ -874,7 +875,7 @@
           "label": "Derived benchmarks",
           "status": "blocked",
           "covered": 0,
-          "total": 15,
+          "total": 16,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
         }
@@ -1189,6 +1190,459 @@
           "status": "blocked",
           "covered": 0,
           "total": 45,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": []
+    },
+    {
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "years": [
+        2019
+      ],
+      "events": 1,
+      "sessions": 1,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [],
+      "sourceFamilyPriorityExclusions": {},
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1 events, 1 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "28 race/heat result rows across 1 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0/28 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0/1 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0/28 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": []
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "years": [
+        2019
+      ],
+      "events": 4,
+      "sessions": 8,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [],
+      "sourceFamilyPriorityExclusions": {},
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "4 events, 8 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "192 race/heat result rows across 8 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 151,
+          "total": 192,
+          "coverage": 0.7865,
+          "notes": "151/192 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "8/8 physical sessions have clock-time starts; 8/8 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "notes": "4/4 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0/8 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 192,
+          "coverage": 0,
+          "notes": "0/192 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 4,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
+        }
+      ],
+      "priorityGaps": []
+    },
+    {
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "years": [
+        2024
+      ],
+      "events": 1,
+      "sessions": 2,
+      "policyNote": null,
+      "canceledOfficialSessionIds": [],
+      "openGapIds": [],
+      "sourceFamilyPriorityExclusions": {},
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "notes": "1 events, 2 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "18 race/heat result rows across 1 result-bearing race/heat sessions; 0 schedule-only future sessions excluded from result completeness."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1 result-bearing qualifying sessions; qualifying classifications may live in results for PDF source families. 0 schedule-only future sessions and 0 official canceled qualifying sessions excluded from result completeness."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18,
+          "coverage": 1,
+          "notes": "18/18 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "notes": "2/2 physical sessions have clock-time starts; 2/2 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 referenced tracks have coordinates, timezone, length, direction, surface, and corner count."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "notes": "0/2 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18,
+          "coverage": 0,
+          "notes": "0/18 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this series. Teammate/field-strength analytics are not production-ready yet."
         }
@@ -1662,18 +2116,18 @@
     {
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
-      "year": 2020,
-      "events": 7,
-      "sessions": 46,
-      "raceSessions": 32,
-      "raceRows": 762,
-      "qualifyingSessions": 14,
-      "exactWindowSessions": 46,
-      "physicalSessions": 46,
-      "raceRowsWithGridOrStart": 755,
+      "year": 2019,
+      "events": 1,
+      "sessions": 12,
+      "raceSessions": 9,
+      "raceRows": 217,
+      "qualifyingSessions": 3,
+      "exactWindowSessions": 12,
+      "physicalSessions": 12,
+      "raceRowsWithGridOrStart": 212,
       "raceRowsWithPitStops": 0,
-      "lapSampleSessions": 24,
-      "weatherSessions": 46,
+      "lapSampleSessions": 2,
+      "weatherSessions": 12,
       "priorityGaps": [
         "lap_samples"
       ],
@@ -1682,73 +2136,229 @@
           "id": "events_sessions",
           "label": "Events and sessions",
           "status": "complete",
-          "covered": 46,
-          "total": 46,
+          "covered": 12,
+          "total": 12,
           "coverage": 1,
-          "notes": "7 events, 46 sessions."
+          "notes": "1 events, 12 sessions."
         },
         {
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 32,
-          "total": 32,
+          "covered": 9,
+          "total": 9,
           "coverage": 1,
-          "notes": "762 race/heat result rows across 32 result-bearing race/heat sessions."
+          "notes": "217 race/heat result rows across 9 result-bearing race/heat sessions."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 14,
-          "total": 14,
+          "covered": 3,
+          "total": 3,
           "coverage": 1,
-          "notes": "14 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+          "notes": "3 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "partial",
-          "covered": 755,
-          "total": 762,
-          "coverage": 0.9908,
-          "notes": "755/762 race/heat rows have gridPosition or startPosition."
+          "covered": 212,
+          "total": 217,
+          "coverage": 0.977,
+          "notes": "212/217 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "complete",
-          "covered": 46,
-          "total": 46,
+          "covered": 12,
+          "total": 12,
           "coverage": 1,
-          "notes": "46/46 physical sessions have clock-time starts; 46/46 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "notes": "12/12 physical sessions have clock-time starts; 12/12 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
           "label": "Track metadata",
           "status": "complete",
-          "covered": 5,
-          "total": 5,
+          "covered": 1,
+          "total": 1,
           "coverage": 1,
-          "notes": "5/5 referenced tracks have complete metadata."
+          "notes": "1/1 referenced tracks have complete metadata."
         },
         {
           "id": "official_weather_conditions",
           "label": "Official weather/track conditions",
           "status": "complete",
-          "covered": 46,
-          "total": 46,
+          "covered": 12,
+          "total": 12,
           "coverage": 1,
-          "notes": "46/46 sessions have official weather/track-condition observations."
+          "notes": "12/12 sessions have official weather/track-condition observations."
         },
         {
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "partial",
-          "covered": 24,
-          "total": 46,
-          "coverage": 0.5217,
-          "notes": "24 sessions have lap samples."
+          "covered": 2,
+          "total": 12,
+          "coverage": 0.1667,
+          "notes": "2 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "blocked",
+          "covered": 0,
+          "total": 12,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 9,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 9,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 217,
+          "coverage": 0,
+          "notes": "0/217 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 9,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this season."
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "events": 12,
+      "sessions": 60,
+      "raceSessions": 41,
+      "raceRows": 943,
+      "qualifyingSessions": 19,
+      "exactWindowSessions": 60,
+      "physicalSessions": 60,
+      "raceRowsWithGridOrStart": 936,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 37,
+      "weatherSessions": 60,
+      "priorityGaps": [
+        "lap_samples"
+      ],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "complete",
+          "covered": 60,
+          "total": 60,
+          "coverage": 1,
+          "notes": "12 events, 60 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "complete",
+          "covered": 41,
+          "total": 41,
+          "coverage": 1,
+          "notes": "943 race/heat result rows across 41 result-bearing race/heat sessions."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "complete",
+          "covered": 19,
+          "total": 19,
+          "coverage": 1,
+          "notes": "19 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "partial",
+          "covered": 936,
+          "total": 943,
+          "coverage": 0.9926,
+          "notes": "936/943 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 60,
+          "total": 60,
+          "coverage": 1,
+          "notes": "60/60 physical sessions have clock-time starts; 60/60 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "complete",
+          "covered": 7,
+          "total": 7,
+          "coverage": 1,
+          "notes": "7/7 referenced tracks have complete metadata."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "complete",
+          "covered": 60,
+          "total": 60,
+          "coverage": 1,
+          "notes": "60/60 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "partial",
+          "covered": 37,
+          "total": 60,
+          "coverage": 0.6167,
+          "notes": "37 sessions have lap samples."
         },
         {
           "id": "indy_section_data",
@@ -1764,8 +2374,8 @@
           "label": "Penalties/decisions",
           "status": "partial",
           "covered": 4,
-          "total": 46,
-          "coverage": 0.087,
+          "total": 60,
+          "coverage": 0.0667,
           "notes": "4 sessions have official penalty/decision rows."
         },
         {
@@ -1773,7 +2383,7 @@
           "label": "Incidents/cautions",
           "status": "unavailable",
           "covered": 0,
-          "total": 32,
+          "total": 41,
           "coverage": 0,
           "notes": "0 sessions have official incident/caution rows."
         },
@@ -1782,7 +2392,7 @@
           "label": "Racecraft summary",
           "status": "unavailable",
           "covered": 0,
-          "total": 32,
+          "total": 41,
           "coverage": 0,
           "notes": "0 race sessions have official most-improved/racecraft summary rows."
         },
@@ -1791,16 +2401,16 @@
           "label": "Pit-stop counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 762,
+          "total": 943,
           "coverage": 0,
-          "notes": "0/762 race/heat result rows have pit-stop counts."
+          "notes": "0/943 race/heat result rows have pit-stop counts."
         },
         {
           "id": "detailed_pit_context",
           "label": "Detailed pit context",
           "status": "unavailable",
           "covered": 0,
-          "total": 32,
+          "total": 41,
           "coverage": 0,
           "notes": null
         },
@@ -1809,7 +2419,7 @@
           "label": "Derived benchmarks",
           "status": "blocked",
           "covered": 0,
-          "total": 7,
+          "total": 12,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this season."
         }
@@ -1819,63 +2429,63 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "year": 2021,
-      "events": 7,
-      "sessions": 39,
-      "raceSessions": 21,
-      "raceRows": 369,
-      "qualifyingSessions": 14,
-      "exactWindowSessions": 39,
-      "physicalSessions": 39,
-      "raceRowsWithGridOrStart": 369,
+      "events": 8,
+      "sessions": 44,
+      "raceSessions": 24,
+      "raceRows": 425,
+      "qualifyingSessions": 16,
+      "exactWindowSessions": 44,
+      "physicalSessions": 44,
+      "raceRowsWithGridOrStart": 425,
       "raceRowsWithPitStops": 0,
       "lapSampleSessions": 0,
-      "weatherSessions": 39,
+      "weatherSessions": 44,
       "priorityGaps": [],
       "categories": [
         {
           "id": "events_sessions",
           "label": "Events and sessions",
           "status": "complete",
-          "covered": 39,
-          "total": 39,
+          "covered": 44,
+          "total": 44,
           "coverage": 1,
-          "notes": "7 events, 39 sessions."
+          "notes": "8 events, 44 sessions."
         },
         {
           "id": "race_results",
           "label": "Race/heat classifications",
           "status": "complete",
-          "covered": 21,
-          "total": 21,
+          "covered": 24,
+          "total": 24,
           "coverage": 1,
-          "notes": "369 race/heat result rows across 21 result-bearing race/heat sessions."
+          "notes": "425 race/heat result rows across 24 result-bearing race/heat sessions."
         },
         {
           "id": "qualifying_classifications",
           "label": "Qualifying classifications",
           "status": "complete",
-          "covered": 14,
-          "total": 14,
+          "covered": 16,
+          "total": 16,
           "coverage": 1,
-          "notes": "14 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+          "notes": "16 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
         },
         {
           "id": "grid_start_positions",
           "label": "Grid/start positions",
           "status": "complete",
-          "covered": 369,
-          "total": 369,
+          "covered": 425,
+          "total": 425,
           "coverage": 1,
-          "notes": "369/369 race/heat rows have gridPosition or startPosition."
+          "notes": "425/425 race/heat rows have gridPosition or startPosition."
         },
         {
           "id": "exact_session_windows",
           "label": "Exact session windows",
           "status": "complete",
-          "covered": 39,
-          "total": 39,
+          "covered": 44,
+          "total": 44,
           "coverage": 1,
-          "notes": "39/39 physical sessions have clock-time starts; 39/39 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+          "notes": "44/44 physical sessions have clock-time starts; 44/44 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
         },
         {
           "id": "track_metadata",
@@ -1890,17 +2500,17 @@
           "id": "official_weather_conditions",
           "label": "Official weather/track conditions",
           "status": "complete",
-          "covered": 39,
-          "total": 39,
+          "covered": 44,
+          "total": 44,
           "coverage": 1,
-          "notes": "39/39 sessions have official weather/track-condition observations."
+          "notes": "44/44 sessions have official weather/track-condition observations."
         },
         {
           "id": "lap_samples",
           "label": "Lap samples",
           "status": "unavailable",
           "covered": 0,
-          "total": 39,
+          "total": 44,
           "coverage": 0,
           "notes": "0 sessions have lap samples."
         },
@@ -1918,7 +2528,7 @@
           "label": "Penalties/decisions",
           "status": "unavailable",
           "covered": 0,
-          "total": 39,
+          "total": 44,
           "coverage": 0,
           "notes": "0 sessions have official penalty/decision rows."
         },
@@ -1927,7 +2537,7 @@
           "label": "Incidents/cautions",
           "status": "unavailable",
           "covered": 0,
-          "total": 21,
+          "total": 24,
           "coverage": 0,
           "notes": "0 sessions have official incident/caution rows."
         },
@@ -1936,7 +2546,7 @@
           "label": "Racecraft summary",
           "status": "unavailable",
           "covered": 0,
-          "total": 21,
+          "total": 24,
           "coverage": 0,
           "notes": "0 race sessions have official most-improved/racecraft summary rows."
         },
@@ -1945,7 +2555,7 @@
           "label": "Pit-stop counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 369,
+          "total": 425,
           "coverage": 0,
           "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
         },
@@ -1954,7 +2564,7 @@
           "label": "Detailed pit context",
           "status": "unavailable",
           "covered": 0,
-          "total": 21,
+          "total": 24,
           "coverage": 0,
           "notes": null
         },
@@ -1963,7 +2573,7 @@
           "label": "Derived benchmarks",
           "status": "blocked",
           "covered": 0,
-          "total": 7,
+          "total": 8,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this season."
         }
@@ -2734,6 +3344,468 @@
           "status": "blocked",
           "covered": 0,
           "total": 17,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this season."
+        }
+      ]
+    },
+    {
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "year": 2019,
+      "events": 1,
+      "sessions": 1,
+      "raceSessions": 1,
+      "raceRows": 28,
+      "qualifyingSessions": 0,
+      "exactWindowSessions": 1,
+      "physicalSessions": 1,
+      "raceRowsWithGridOrStart": 0,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0,
+      "priorityGaps": [],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1 events, 1 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "28 race/heat result rows across 1 result-bearing race/heat sessions."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0/28 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 physical sessions have clock-time starts; 1/1 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 referenced tracks have complete metadata."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0/1 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 28,
+          "coverage": 0,
+          "notes": "0/28 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this season."
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "events": 4,
+      "sessions": 8,
+      "raceSessions": 8,
+      "raceRows": 192,
+      "qualifyingSessions": 0,
+      "exactWindowSessions": 8,
+      "physicalSessions": 8,
+      "raceRowsWithGridOrStart": 151,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0,
+      "priorityGaps": [],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "4 events, 8 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "192 race/heat result rows across 8 result-bearing race/heat sessions."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": "0 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 151,
+          "total": 192,
+          "coverage": 0.7865,
+          "notes": "151/192 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 8,
+          "total": 8,
+          "coverage": 1,
+          "notes": "8/8 physical sessions have clock-time starts; 8/8 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "notes": "4/4 referenced tracks have complete metadata."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0/8 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 192,
+          "coverage": 0,
+          "notes": "0/192 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 8,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 4,
+          "coverage": 0,
+          "notes": "0 non-report derived metrics exist for this season."
+        }
+      ]
+    },
+    {
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "year": 2024,
+      "events": 1,
+      "sessions": 2,
+      "raceSessions": 1,
+      "raceRows": 18,
+      "qualifyingSessions": 1,
+      "exactWindowSessions": 2,
+      "physicalSessions": 2,
+      "raceRowsWithGridOrStart": 18,
+      "raceRowsWithPitStops": 0,
+      "lapSampleSessions": 0,
+      "weatherSessions": 0,
+      "priorityGaps": [],
+      "categories": [
+        {
+          "id": "events_sessions",
+          "label": "Events and sessions",
+          "status": "out_of_scope",
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "notes": "1 events, 2 sessions."
+        },
+        {
+          "id": "race_results",
+          "label": "Race/heat classifications",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "18 race/heat result rows across 1 result-bearing race/heat sessions."
+        },
+        {
+          "id": "qualifying_classifications",
+          "label": "Qualifying classifications",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1 result-bearing qualifying sessions; 0 official canceled qualifying sessions excluded."
+        },
+        {
+          "id": "grid_start_positions",
+          "label": "Grid/start positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18,
+          "coverage": 1,
+          "notes": "18/18 race/heat rows have gridPosition or startPosition."
+        },
+        {
+          "id": "exact_session_windows",
+          "label": "Exact session windows",
+          "status": "complete",
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "notes": "2/2 physical sessions have clock-time starts; 2/2 have at least date-level starts; 0 sessions are source-unavailable exact windows after official source review."
+        },
+        {
+          "id": "track_metadata",
+          "label": "Track metadata",
+          "status": "out_of_scope",
+          "covered": 1,
+          "total": 1,
+          "coverage": 1,
+          "notes": "1/1 referenced tracks have complete metadata."
+        },
+        {
+          "id": "official_weather_conditions",
+          "label": "Official weather/track conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "notes": "0/2 sessions have official weather/track-condition observations."
+        },
+        {
+          "id": "lap_samples",
+          "label": "Lap samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "notes": "0 sessions have lap samples."
+        },
+        {
+          "id": "indy_section_data",
+          "label": "INDY NXT section data",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0,
+          "coverage": null,
+          "notes": null
+        },
+        {
+          "id": "penalties_decisions",
+          "label": "Penalties/decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "notes": "0 sessions have official penalty/decision rows."
+        },
+        {
+          "id": "incidents_cautions",
+          "label": "Incidents/cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 sessions have official incident/caution rows."
+        },
+        {
+          "id": "racecraft_summary",
+          "label": "Racecraft summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": "0 race sessions have official most-improved/racecraft summary rows."
+        },
+        {
+          "id": "pit_stop_counts",
+          "label": "Pit-stop counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18,
+          "coverage": 0,
+          "notes": "0/18 race/heat result rows have pit-stop counts."
+        },
+        {
+          "id": "detailed_pit_context",
+          "label": "Detailed pit context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 1,
+          "coverage": 0,
+          "notes": null
+        },
+        {
+          "id": "derived_benchmarks",
+          "label": "Derived benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1,
           "coverage": 0,
           "notes": "0 non-report derived metrics exist for this season."
         }
@@ -14912,6 +15984,2710 @@
     {
       "seriesId": "series_formula_ford",
       "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_qualifying_race_4_heat_1_sponsord_by_hedtec",
+      "sessionName": "QUALIFYING - RACE 4-HEAT 1 Sponsord by Hedtec",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 22,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 22,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_qualifying_race_5_heat_2_sponsored_by_wiz_wheels",
+      "sessionName": "QUALIFYING - RACE 5-HEAT 2 Sponsored by Wiz Wheels",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 24,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_qualifying_race_6_heat_3_sponsored_by_raceparts",
+      "sessionName": "QUALIFYING - RACE 6-HEAT 3 Sponsored by Raceparts",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_13_semi_final_1_sponsored_by_avon_tyres",
+      "sessionName": "RACE 13 - SEMI FINAL 1 Sponsored by Avon Tyres",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 30,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 30,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 30,
+          "total": 30
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 30
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_14_semi_final_2_sponsored_by_cam_tech",
+      "sessionName": "RACE 14 - SEMI FINAL 2 Sponsored by Cam-Tech",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 28,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 28,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "partial",
+          "covered": 26,
+          "total": 28
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 28
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_17_historic_final_spons_by_wilkins_kennedy",
+      "sessionName": "RACE 17 - HISTORIC FINAL Spons by Wilkins Kennedy",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "partial",
+          "covered": 18,
+          "total": 20
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz",
+      "sessionName": "RACE 19 - LAST CHANCE RACE in recognition of 'Diz",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 21,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 21,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "partial",
+          "covered": 20,
+          "total": 21
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 5,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_21_grand_final_sponsored_by_aimshop_com",
+      "sessionName": "RACE 21 - GRAND FINAL Sponsored by Aimshop.com",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 30,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 30,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 30,
+          "total": 30
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 30
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_4_heat_1_sponsored_by_hedtec",
+      "sessionName": "RACE 4 - HEAT 1 Sponsored by Hedtec",
+      "sessionType": "heat",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 22,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 22,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 22,
+          "total": 22
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 22
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_5_heat_2_sponsored_by_wiz_wheels",
+      "sessionName": "RACE 5 - HEAT 2 Sponsored by Wiz Wheels",
+      "sessionType": "heat",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 24,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 24,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 24,
+          "total": 24
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 24
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_6_heat_3_sponsored_by_raceparts",
+      "sessionName": "RACE 6 - HEAT 3 Sponsored by Raceparts",
+      "sessionType": "heat",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 23,
+          "total": 23
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 23
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2019,
+      "eventId": "event_formula_ford_2019_formula_ford_festival",
+      "eventName": "BRSCC Formula Ford Festival 2019",
+      "sessionId": "session_formula_ford_2019_festival_race_8_heats_last_chance_sponsored_by_cam_tech",
+      "sessionName": "RACE 8 - HEATS LAST CHANCE Sponsored by Cam-Tech",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 19,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 19,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 19,
+          "total": 19
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 19
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_202768",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "sessionId": "session_formula_ford_2020_castle_combe_202768_qualifying_races_2_and_6",
+      "sessionName": "QUALIFYING - RACES 2 & 6",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_202768",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "sessionId": "session_formula_ford_2020_castle_combe_202768_race_2",
+      "sessionName": "RACE 2",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 23,
+          "total": 23
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 23
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_202768",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-07-04",
+      "sessionId": "session_formula_ford_2020_castle_combe_202768_race_6",
+      "sessionName": "RACE 6",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 23,
+          "total": 23
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 6,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 23
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_203168",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "sessionId": "session_formula_ford_2020_castle_combe_203168_qualifying_race_4_and_8",
+      "sessionName": "QUALIFYING - RACE 4 & 8",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 12,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_203168",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "sessionId": "session_formula_ford_2020_castle_combe_203168_race_4",
+      "sessionName": "Race 4",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 22,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 22,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 22,
+          "total": 22
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 22
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_203168",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-01",
+      "sessionId": "session_formula_ford_2020_castle_combe_203168_race_8",
+      "sessionName": "Race 8",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 21,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 21,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 21,
+          "total": 21
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 8,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 21
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_203668",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "sessionId": "session_formula_ford_2020_castle_combe_203668_qualifying_race_3_and_8",
+      "sessionName": "QUALIFYING - RACE 3 & 8",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 23,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 23,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 12,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_203668",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "sessionId": "session_formula_ford_2020_castle_combe_203668_race_3",
+      "sessionName": "RACE 3",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 22,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 22,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 22,
+          "total": 22
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 22
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_castle_combe_203668",
+      "eventName": "Castle Combe Racing Club FF1600 2020 - 2020-08-31",
+      "sessionId": "session_formula_ford_2020_castle_combe_203668_race_8",
+      "sessionName": "RACE 8",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 16,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 16,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 16,
+          "total": 16
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 16
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_champion_brands_203505",
+      "eventName": "Champion of Brands 2020 - Brands Hatch GP (British GT support)",
+      "sessionId": "session_formula_ford_2020_champion_brands_203505_qualifying",
+      "sessionName": "QUALIFYING",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 16,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 16,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_champion_brands_203505",
+      "eventName": "Champion of Brands 2020 - Brands Hatch GP (British GT support)",
+      "sessionId": "session_formula_ford_2020_champion_brands_203505_race_10",
+      "sessionName": "RACE 10",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 14,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 14,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 14,
+          "total": 14
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 10,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 14
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_champion_brands_203851",
+      "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+      "sessionId": "session_formula_ford_2020_champion_brands_203851_qualifying_race_16",
+      "sessionName": "QUALIFYING - RACE 16",
+      "sessionType": "qualifying",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_champion_brands_203851",
+      "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+      "sessionId": "session_formula_ford_2020_champion_brands_203851_race_16",
+      "sessionName": "RACE 16",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 20,
+          "total": 20
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "partial",
+          "covered": 2,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
+      "year": 2020,
+      "eventId": "event_formula_ford_2020_champion_brands_203851",
+      "eventName": "Champion of Brands 2020 - Brands Hatch Indy, September 20",
+      "sessionId": "session_formula_ford_2020_champion_brands_203851_race_20",
+      "sessionName": "RACE 20",
+      "sessionType": "race",
+      "ingestionState": "official",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 19,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 19,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 19,
+          "total": 19
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "partial",
+          "covered": 0,
+          "total": 1
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 19
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_formula_ford",
+      "seriesName": "Formula Ford",
       "year": 2020,
       "eventId": "event_formula_ford_2020_champion_brands",
       "eventName": "Champion of Brands 2020",
@@ -17530,20 +21306,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 28,
+          "covered": 29,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 28,
+          "covered": 29,
           "total": 0
         },
         {
           "id": "grid_start_positions",
           "status": "complete",
-          "covered": 28,
-          "total": 28
+          "covered": 29,
+          "total": 29
         },
         {
           "id": "exact_session_windows",
@@ -17597,7 +21373,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 28
+          "total": 29
         },
         {
           "id": "detailed_pit_context",
@@ -20344,13 +24120,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 17,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "complete",
-          "covered": 32,
+          "covered": 34,
           "total": 1
         },
         {
@@ -20449,13 +24225,13 @@
         {
           "id": "race_results",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 17,
           "total": 0
         },
         {
           "id": "qualifying_classifications",
           "status": "complete",
-          "covered": 32,
+          "covered": 34,
           "total": 1
         },
         {
@@ -20554,20 +24330,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 16,
+          "covered": 17,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 17,
           "total": 0
         },
         {
           "id": "grid_start_positions",
           "status": "complete",
-          "covered": 16,
-          "total": 16
+          "covered": 17,
+          "total": 17
         },
         {
           "id": "exact_session_windows",
@@ -20621,7 +24397,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 16,
+          "total": 17,
           "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
         },
         {
@@ -20659,6 +24435,111 @@
         {
           "id": "race_results",
           "status": "complete",
+          "covered": 17,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 17,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 17,
+          "total": 17
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 17,
+          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
+      "eventId": "event_gb3_2021_r2_silverstone",
+      "eventName": "GB3 2021 Round 2 - Silverstone",
+      "sessionId": "session_gb3_2021_212505_race_3_result",
+      "sessionName": "Race 3 Result",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
           "covered": 16,
           "total": 1
         },
@@ -20727,111 +24608,6 @@
           "status": "unavailable",
           "covered": 0,
           "total": 16,
-          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
-        },
-        {
-          "id": "detailed_pit_context",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "derived_benchmarks",
-          "status": "blocked",
-          "covered": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
-      "seriesId": "series_gb3",
-      "seriesName": "GB3 Championship",
-      "year": 2021,
-      "eventId": "event_gb3_2021_r2_silverstone",
-      "eventName": "GB3 2021 Round 2 - Silverstone",
-      "sessionId": "session_gb3_2021_212505_race_3_result",
-      "sessionName": "Race 3 Result",
-      "sessionType": "race",
-      "ingestionState": "official_pdf",
-      "sourceFamily": null,
-      "categories": [
-        {
-          "id": "events_sessions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "race_results",
-          "status": "complete",
-          "covered": 15,
-          "total": 1
-        },
-        {
-          "id": "qualifying_classifications",
-          "status": "out_of_scope",
-          "covered": 15,
-          "total": 0
-        },
-        {
-          "id": "grid_start_positions",
-          "status": "complete",
-          "covered": 15,
-          "total": 15
-        },
-        {
-          "id": "exact_session_windows",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "track_metadata",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "official_weather_conditions",
-          "status": "complete",
-          "covered": 1,
-          "total": 1
-        },
-        {
-          "id": "lap_samples",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "indy_section_data",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "penalties_decisions",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "incidents_cautions",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "racecraft_summary",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 0
-        },
-        {
-          "id": "pit_stop_counts",
-          "status": "unavailable",
-          "covered": 0,
-          "total": 15,
           "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
         },
         {
@@ -21184,20 +24960,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 16,
+          "covered": 17,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 17,
           "total": 0
         },
         {
           "id": "grid_start_positions",
           "status": "complete",
-          "covered": 16,
-          "total": 16
+          "covered": 17,
+          "total": 17
         },
         {
           "id": "exact_session_windows",
@@ -21251,7 +25027,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 16,
+          "total": 17,
           "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
         },
         {
@@ -22742,8 +26518,533 @@
       "seriesId": "series_gb3",
       "seriesName": "GB3 Championship",
       "year": 2021,
+      "eventId": "event_gb3_2021_r6_silverstone",
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "sessionId": "session_gb3_2021_213252_qualifying",
+      "sessionName": "Qualifying",
+      "sessionType": "qualifying",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 36,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
+      "eventId": "event_gb3_2021_r6_silverstone",
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "sessionId": "session_gb3_2021_213252_qualifying_2nd_fastest",
+      "sessionName": "Qualifying 2nd Fastest",
+      "sessionType": "qualifying",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 36,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0,
+          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
+      "eventId": "event_gb3_2021_r6_silverstone",
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "sessionId": "session_gb3_2021_213252_race_1_result",
+      "sessionName": "Race 1 Result",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 17,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 17,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 17,
+          "total": 17
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 17,
+          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
+      "eventId": "event_gb3_2021_r6_silverstone",
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "sessionId": "session_gb3_2021_213252_race_2_result",
+      "sessionName": "Race 2 Result",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 17,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 17,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 17,
+          "total": 17
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 17,
+          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
+      "eventId": "event_gb3_2021_r6_silverstone",
+      "eventName": "GB3 2021 Round 6 - Silverstone",
+      "sessionId": "session_gb3_2021_213252_race_3_result",
+      "sessionName": "Race 3 Result",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 17,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 17,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "complete",
+          "covered": 17,
+          "total": 17
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "lap_samples",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 17,
+          "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_gb3",
+      "seriesName": "GB3 Championship",
+      "year": 2021,
       "eventId": "event_gb3_2021_r6_oulton_park",
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "sessionId": "session_gb3_2021_213605_qualifying",
       "sessionName": "Qualifying",
       "sessionType": "qualifying",
@@ -22848,7 +27149,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r6_oulton_park",
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "sessionId": "session_gb3_2021_213605_qualifying_2nd_fastest",
       "sessionName": "Qualifying 2nd Fastest",
       "sessionType": "qualifying",
@@ -22953,7 +27254,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r6_oulton_park",
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "sessionId": "session_gb3_2021_213605_race_1_result",
       "sessionName": "Race 1 Result",
       "sessionType": "race",
@@ -22969,20 +27270,20 @@
         {
           "id": "race_results",
           "status": "complete",
-          "covered": 16,
+          "covered": 17,
           "total": 1
         },
         {
           "id": "qualifying_classifications",
           "status": "out_of_scope",
-          "covered": 16,
+          "covered": 17,
           "total": 0
         },
         {
           "id": "grid_start_positions",
           "status": "complete",
-          "covered": 16,
-          "total": 16
+          "covered": 17,
+          "total": 17
         },
         {
           "id": "exact_session_windows",
@@ -23036,7 +27337,7 @@
           "id": "pit_stop_counts",
           "status": "unavailable",
           "covered": 0,
-          "total": 16,
+          "total": 17,
           "notes": "GB3 2021 official TSL classification PDFs do not expose comparable pit-stop count fields."
         },
         {
@@ -23058,7 +27359,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r6_oulton_park",
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "sessionId": "session_gb3_2021_213605_race_2_result",
       "sessionName": "Race 2 Result",
       "sessionType": "race",
@@ -23163,7 +27464,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r6_oulton_park",
-      "eventName": "GB3 2021 Round 6 - Oulton Park",
+      "eventName": "GB3 2021 Round 7 - Oulton Park",
       "sessionId": "session_gb3_2021_213605_race_3_result",
       "sessionName": "Race 3 Result",
       "sessionType": "race",
@@ -23268,7 +27569,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r7_donington_park",
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "sessionId": "session_gb3_2021_214105_qualifying",
       "sessionName": "Qualifying",
       "sessionType": "qualifying",
@@ -23373,7 +27674,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r7_donington_park",
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "sessionId": "session_gb3_2021_214105_qualifying_2nd_fastest",
       "sessionName": "Qualifying 2nd Fastest",
       "sessionType": "qualifying",
@@ -23478,7 +27779,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r7_donington_park",
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "sessionId": "session_gb3_2021_214105_race_1_result",
       "sessionName": "Race 1 Result",
       "sessionType": "race",
@@ -23583,7 +27884,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r7_donington_park",
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "sessionId": "session_gb3_2021_214105_race_2_result",
       "sessionName": "Race 2 Result",
       "sessionType": "race",
@@ -23688,7 +27989,7 @@
       "seriesName": "GB3 Championship",
       "year": 2021,
       "eventId": "event_gb3_2021_r7_donington_park",
-      "eventName": "GB3 2021 Round 7 - Donington Park",
+      "eventName": "GB3 2021 Round 8 - Donington Park",
       "sessionId": "session_gb3_2021_214105_race_3_result",
       "sessionName": "Race 3 Result",
       "sessionType": "race",
@@ -54205,6 +58506,1150 @@
           "total": 1
         }
       ]
+    },
+    {
+      "seriesId": "series_rcffs",
+      "seriesName": "Right Coast Formula F Series",
+      "year": 2019,
+      "eventId": "event_rcffs_2019_mid_ohio",
+      "eventName": "Right Coast Formula F Series 2019 - Race Weekend 2, Mid-Ohio (FRP All Formula Weekend)",
+      "sessionId": "session_rcffs_2019_mid_ohio_race_3",
+      "sessionName": "Race 3 (RCFFS 50th Anniversary feature)",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 28,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 28,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 28
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 28
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "sessionId": "session_scca_super_tour_2019_cota_saturday_race",
+      "sessionName": "Group 7 Saturday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_circuit_of_the_americas",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Circuit of the Americas (Lone Star Region Polar Prix)",
+      "sessionId": "session_scca_super_tour_2019_cota_sunday_race",
+      "sessionName": "Group 7 Sunday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_homestead",
+      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "sessionId": "session_scca_super_tour_2019_homestead_race_1",
+      "sessionName": "Group 7 Race 1",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_homestead",
+      "eventName": "SCCA U.S. Majors Tour 2019 - Homestead-Miami Speedway (Florida Region, Palm Tree Winter Majors)",
+      "sessionId": "session_scca_super_tour_2019_homestead_race_2",
+      "sessionName": "Group 7 Race 2",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 20,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 20,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 20
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_road_atlanta",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "sessionId": "session_scca_super_tour_2019_road_atlanta_saturday_race",
+      "sessionName": "Group 3 Saturday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 32,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 32,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 32,
+          "total": 32
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 32
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_road_atlanta",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Michelin Raceway Road Atlanta (Atlanta Region)",
+      "sessionId": "session_scca_super_tour_2019_road_atlanta_sunday_race",
+      "sessionName": "Group 3 Sunday Race",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 32,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 32,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 31,
+          "total": 32
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 32
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_sebring",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "sessionId": "session_scca_super_tour_2019_sebring_race_1",
+      "sessionName": "Group 7 Race 1",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 26,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 26
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 26
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_scca_super_tour",
+      "seriesName": "SCCA U.S. Majors Tour",
+      "year": 2019,
+      "eventId": "event_scca_super_tour_2019_sebring",
+      "eventName": "Hoosier SCCA Super Tour 2019 - Sebring (Central Florida Region, Winter Vacation)",
+      "sessionId": "session_scca_super_tour_2019_sebring_race_2",
+      "sessionName": "Group 7 Race 2",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 26,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 26,
+          "total": 26
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 26
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "year": 2024,
+      "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+      "eventName": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park",
+      "sessionId": "session_usf_pro_2000_2024_lucas_oil_qualifying",
+      "sessionName": "Qualifying",
+      "sessionType": "qualifying",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "out_of_scope",
+          "covered": 19,
+          "total": 0
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "complete",
+          "covered": 19,
+          "total": 1
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
+    },
+    {
+      "seriesId": "series_usf_pro_2000",
+      "seriesName": "USF Pro 2000 Championship",
+      "year": 2024,
+      "eventId": "event_usf_pro_2000_2024_lucas_oil_freedom_90",
+      "eventName": "USF Pro 2000 2024 - Freedom 90, Lucas Oil Indianapolis Raceway Park",
+      "sessionId": "session_usf_pro_2000_2024_lucas_oil_race",
+      "sessionName": "Freedom 90",
+      "sessionType": "race",
+      "ingestionState": "official_pdf",
+      "sourceFamily": null,
+      "categories": [
+        {
+          "id": "events_sessions",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "race_results",
+          "status": "complete",
+          "covered": 18,
+          "total": 1
+        },
+        {
+          "id": "qualifying_classifications",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 0
+        },
+        {
+          "id": "grid_start_positions",
+          "status": "out_of_scope",
+          "covered": 18,
+          "total": 18
+        },
+        {
+          "id": "exact_session_windows",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "track_metadata",
+          "status": "complete",
+          "covered": 1,
+          "total": 1
+        },
+        {
+          "id": "official_weather_conditions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "lap_samples",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "indy_section_data",
+          "status": "unavailable",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "penalties_decisions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "incidents_cautions",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "racecraft_summary",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "pit_stop_counts",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 18
+        },
+        {
+          "id": "detailed_pit_context",
+          "status": "out_of_scope",
+          "covered": 0,
+          "total": 0
+        },
+        {
+          "id": "derived_benchmarks",
+          "status": "blocked",
+          "covered": 0,
+          "total": 1
+        }
+      ]
     }
   ],
   "globalPriority": [
@@ -54234,11 +59679,6 @@
       "description": "The supplied Euroformula classification PDF URL now serves a 2026 document, so that mutable S3 key is preserved as source-broken evidence. RFEDA 2023 final classifications PDF is the stable official standings source used for Bryce Aron P4 and 238 European F. Open points."
     },
     {
-      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
-      "status": "open",
-      "description": "Formula Ford 2020 official grid/start import is complete for 755 race/heat rows. The remaining 7 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically."
-    },
-    {
       "id": "gap_froc_2024_round_4_date_conflict",
       "status": "open",
       "description": "Toyota Round 4 results page title says 16-18 February 2024, while Toyota 2024 dates announcement places Euromarque Motorsport Park on 9-11 February 2024. Normalized event dates use 9-11 February and preserve the page-title conflict in event raw data."
@@ -54264,19 +59704,29 @@
       "description": "GB3 _rounds.json lists Donington Park Friday session 2 (1248) at 2022-05-27T14:45:00, so the session entity is retained from the official manifest. Row-level results remain unavailable because the official session JSON endpoint returned 404 and a focused source audit found that the rendered official results page did not expose row-level table data without that JSON payload."
     },
     {
-      "id": "gap_remaining_career_rows_after_track_metadata",
-      "status": "open",
-      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
-    },
-    {
       "id": "gap_indy_nxt_qualifying_lap_reports",
       "status": "open",
       "description": "EventsSessionDetails imports race/session result rows, qualifyingResults for official SessionType=Q records, and official terminal-status incident rows for contact/mechanical/dns outcomes. Official Race Lap Chart PDFs import 37,422 official lap-by-lap position samples from 45 completed Race Lap Chart PDFs: 33 charts fully validate against official completed-lap counts and 12 clean partial Race Lap Chart PDFs preserve explicit missing car-lap or official result/chart conflict diagnostics without guessing terminal or conflict laps. Official Event Summary PDFs import race-stat metrics and most-improved racecraft notes. Official Leader Lap Summary PDFs import leader-by-lap timing, margin, and flag-state metrics. Official Top Section Times PDFs import 179 practice, qualifying, and race section-rank timing metrics when official section rows are present. Official Section Results PDFs import 178 practice, qualifying, and race lap-by-lap section metrics; continuation pages are merged by car/lap/section and 2670 source-proven post-limit terminal rows are excluded from completed-lap facts. The remaining true section-results holdout is session_indy_nxt_2024_6325, where the official Section Results PDF URL returns corrupt non-PDF bytes; canceled/no-row reports remain held out rather than treated as missing data. Source-visible rows without canonical API timing rows keep car/name text with null canonical IDs. Official race Results PDFs import penalty/decision summary rows and caution-summary causal incident rows. Detailed pit-lane sequence context is source-unavailable in the current official report family; use official/API pit-stop counts as the production-safe pit metric unless a new official pit-summary source appears."
     },
     {
-      "id": "gap_remaining_career_rows_after_imsa",
+      "id": "gap_career_race_euroformula_2023_mugello_race_1_reported_only",
       "status": "open",
-      "description": "Later source families, karting race-by-race records, media narrative beyond imported Team USA 2020 context and structured Team USA/Badger Kart Club milestone and record facts, non-official ambient weather enrichment, session-window precision, and track metadata for future imported tracks remain open."
+      "description": "Mugello, September 30, 2023, Euroformula Open Round 7 Race 1: reported 5th from 5th by Formula Scout and Speedsport Magazine. The official classification was not found. Counted in no career figure."
+    },
+    {
+      "id": "gap_career_race_euroformula_2023_mugello_race_2_reported_only",
+      "status": "open",
+      "description": "Mugello, October 1, 2023, Euroformula Open Round 7 Race 2 (reverse grid): reported 8th from 2nd, one lap down. The official classification was not found. Counted in no career figure."
+    },
+    {
+      "id": "gap_formula_ford_2020_grid_start_source_asymmetry_holdouts",
+      "status": "open",
+      "description": "Formula Ford 2020 official grid/start import is complete for 1148 race/heat rows. The remaining 12 classified race/heat rows are held out because the official source family exposes reserve-only entries, restart-grid-only positions, or original-grid rows that do not safely match the classified driver/car row. These rows remain explicit holdouts instead of guessed grid/start positions. Lap-analysis imports remain scoped to Bryce-labeled blocks; continuation pages without a repeated Bryce label stay held out until a layout-aware parser can match them deterministically."
+    },
+    {
+      "id": "gap_remaining_career_rows_after_track_metadata",
+      "status": "open",
+      "description": "Broad historical-tail placeholder, not a UI-readiness blocker. Remaining optional or metric-specific work includes pre-2019 karting race-by-race records, early-career Formula Ford appearances outside the imported official books, future imported-track metadata, non-official ambient weather outside current exact-window scope, and future derived benchmark models. Current production caveats are tracked by specific gap IDs."
     }
   ],
   "canceledSessionEvidence": [

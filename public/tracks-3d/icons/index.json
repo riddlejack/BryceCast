@@ -1,0 +1,220 @@
+{
+ "v": 1,
+ "venues": {
+  "weathertech-raceway-laguna-seca": {
+   "row": {
+    "2": "/tracks-3d/icons/weathertech-raceway-laguna-seca-row@2x.webp",
+    "1": "/tracks-3d/icons/weathertech-raceway-laguna-seca-row.webp"
+   },
+   "azim": 327.4,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/weathertech-raceway-laguna-seca-board@2x.webp",
+    "1": "/tracks-3d/icons/weathertech-raceway-laguna-seca-board.webp"
+   }
+  },
+  "road-america": {
+   "row": {
+    "2": "/tracks-3d/icons/road-america-row@2x.webp",
+    "1": "/tracks-3d/icons/road-america-row.webp"
+   },
+   "azim": 256.3,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/road-america-board@2x.webp",
+    "1": "/tracks-3d/icons/road-america-board.webp"
+   }
+  },
+  "streets-of-detroit": {
+   "row": {
+    "2": "/tracks-3d/icons/streets-of-detroit-row@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-detroit-row.webp"
+   },
+   "azim": 29.7,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/streets-of-detroit-board@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-detroit-board.webp"
+   }
+  },
+  "streets-of-st-petersburg": {
+   "row": {
+    "2": "/tracks-3d/icons/streets-of-st-petersburg-row@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-st-petersburg-row.webp"
+   },
+   "azim": 324.2,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/streets-of-st-petersburg-board@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-st-petersburg-board.webp"
+   }
+  },
+  "streets-of-arlington": {
+   "row": {
+    "2": "/tracks-3d/icons/streets-of-arlington-row@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-arlington-row.webp"
+   },
+   "azim": 352.9,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/streets-of-arlington-board@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-arlington-board.webp"
+   }
+  },
+  "barber-motorsports-park": {
+   "row": {
+    "2": "/tracks-3d/icons/barber-motorsports-park-row@2x.webp",
+    "1": "/tracks-3d/icons/barber-motorsports-park-row.webp"
+   },
+   "azim": 38,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/barber-motorsports-park-board@2x.webp",
+    "1": "/tracks-3d/icons/barber-motorsports-park-board.webp"
+   }
+  },
+  "indianapolis-motor-speedway-road-course": {
+   "row": {
+    "2": "/tracks-3d/icons/indianapolis-motor-speedway-road-course-row@2x.webp",
+    "1": "/tracks-3d/icons/indianapolis-motor-speedway-road-course-row.webp"
+   },
+   "azim": 268.2,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/indianapolis-motor-speedway-road-course-board@2x.webp",
+    "1": "/tracks-3d/icons/indianapolis-motor-speedway-road-course-board.webp"
+   }
+  },
+  "mid-ohio-sports-car-course": {
+   "row": {
+    "2": "/tracks-3d/icons/mid-ohio-sports-car-course-row@2x.webp",
+    "1": "/tracks-3d/icons/mid-ohio-sports-car-course-row.webp"
+   },
+   "azim": 240.8,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/mid-ohio-sports-car-course-board@2x.webp",
+    "1": "/tracks-3d/icons/mid-ohio-sports-car-course-board.webp"
+   }
+  },
+  "portland-international-raceway": {
+   "row": {
+    "2": "/tracks-3d/icons/portland-international-raceway-row@2x.webp",
+    "1": "/tracks-3d/icons/portland-international-raceway-row.webp"
+   },
+   "azim": 335.9,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/portland-international-raceway-board@2x.webp",
+    "1": "/tracks-3d/icons/portland-international-raceway-board.webp"
+   }
+  },
+  "iowa-speedway": {
+   "row": {
+    "2": "/tracks-3d/icons/iowa-speedway-row@2x.webp",
+    "1": "/tracks-3d/icons/iowa-speedway-row.webp"
+   },
+   "azim": 312.1,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/iowa-speedway-board@2x.webp",
+    "1": "/tracks-3d/icons/iowa-speedway-board.webp"
+   }
+  },
+  "world-wide-technology-raceway": {
+   "row": {
+    "2": "/tracks-3d/icons/world-wide-technology-raceway-row@2x.webp",
+    "1": "/tracks-3d/icons/world-wide-technology-raceway-row.webp"
+   },
+   "azim": 281.5,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/world-wide-technology-raceway-board@2x.webp",
+    "1": "/tracks-3d/icons/world-wide-technology-raceway-board.webp"
+   }
+  },
+  "the-milwaukee-mile": {
+   "row": {
+    "2": "/tracks-3d/icons/the-milwaukee-mile-row@2x.webp",
+    "1": "/tracks-3d/icons/the-milwaukee-mile-row.webp"
+   },
+   "azim": 271,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/the-milwaukee-mile-board@2x.webp",
+    "1": "/tracks-3d/icons/the-milwaukee-mile-board.webp"
+   }
+  },
+  "nashville-superspeedway": {
+   "row": {
+    "2": "/tracks-3d/icons/nashville-superspeedway-row@2x.webp",
+    "1": "/tracks-3d/icons/nashville-superspeedway-row.webp"
+   },
+   "azim": 257.9,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/nashville-superspeedway-board@2x.webp",
+    "1": "/tracks-3d/icons/nashville-superspeedway-board.webp"
+   }
+  },
+  "indianapolis-motor-speedway": {
+   "row": {
+    "2": "/tracks-3d/icons/indianapolis-motor-speedway-row@2x.webp",
+    "1": "/tracks-3d/icons/indianapolis-motor-speedway-row.webp"
+   },
+   "azim": 90.8,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/indianapolis-motor-speedway-board@2x.webp",
+    "1": "/tracks-3d/icons/indianapolis-motor-speedway-board.webp"
+   }
+  },
+  "phoenix-raceway": {
+   "row": {
+    "2": "/tracks-3d/icons/phoenix-raceway-row@2x.webp",
+    "1": "/tracks-3d/icons/phoenix-raceway-row.webp"
+   },
+   "azim": 19.1,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/phoenix-raceway-board@2x.webp",
+    "1": "/tracks-3d/icons/phoenix-raceway-board.webp"
+   }
+  },
+  "streets-of-long-beach": {
+   "row": {
+    "2": "/tracks-3d/icons/streets-of-long-beach-row@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-long-beach-row.webp"
+   },
+   "azim": 3,
+   "elev": 90,
+   "board": {
+    "2": "/tracks-3d/icons/streets-of-long-beach-board@2x.webp",
+    "1": "/tracks-3d/icons/streets-of-long-beach-board.webp"
+   }
+  }
+ },
+ "generated": "2026-11-16",
+ "by": "Portfolio/builds/project-brycecast/site-refresh/stills-tools/run.sh icons",
+ "look": "the venue's 3D model (public/tracks-3d/models/<slug>.json, drawn by src/three/trackScene.js) from above, turned to the site's line drawing; ground paled toward the paper; the track as an ink ribbon along the model's projected centreline",
+ "boxes": {
+  "row": {
+   "css": [
+    76,
+    42
+   ],
+   "ribbonCssPx": 2.3,
+   "haloCssPx": 10.0,
+   "paleShare": 0.62
+  },
+  "board": {
+   "css": [
+    132,
+    84
+   ],
+   "ribbonCssPx": 2.8,
+   "haloCssPx": 16.0,
+   "paleShare": 0.62
+  }
+ }
+}

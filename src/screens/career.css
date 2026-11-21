@@ -1,0 +1,938 @@
+/* ============================================================
+   Career page (round 2 of the site refresh, November 14, 2026).
+   Everything here is scoped under .career. Paper ground, data drawn
+   large, 1 px rules, no boxes. Tokens come from theme.css.
+   ============================================================ */
+
+.career { --career-gap: clamp(56px, 5.2vw, 112px); }
+.page.stack.career { gap: var(--career-gap); }
+
+/* Charts on this page use the page's face, and no label is under 12 px. */
+.career svg text { font-family: var(--font-ui); }
+.career svg text[font-size="9.5"],
+.career svg text[font-size="10"],
+.career svg text[font-size="10.5"],
+.career svg text[font-size="11"],
+.career svg text[font-size="11.5"] { font-size: 12px; }
+
+/* ---------- head ---------- */
+
+.career-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: clamp(16px, 3vw, 48px);
+}
+.career-head .screen-head__title { margin: 0; }
+.career-head .screen-head__sub { max-width: 66ch; }
+/* Round 6 (Jack, Nov 16, screenshot 6: "too much white space here"): the
+ * odometer is the intro's first section, so it follows the intro at the gap
+ * other pages leave under their heads (about 48 px), not the page's full
+ * section gap (up to 112 px). */
+.page.stack.career > .career-head + * { margin-top: calc(var(--career-gap) * -1 + clamp(32px, 2.6vw, 48px)); }
+
+.career-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.career-section-title {
+  font-size: clamp(24px, 1.9vw, 36px);
+  font-weight: 610;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.career-prose {
+  margin: 0;
+  font-size: clamp(16px, 1.1vw, 19px);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-width: 64ch;
+  text-wrap: pretty;
+}
+
+.career-lede {
+  margin: 0 0 22px;
+  font-size: clamp(16px, 1.1vw, 19px);
+  line-height: 1.45;
+  color: var(--ink-secondary);
+  max-width: 70ch;
+}
+.career-lede__big { color: var(--ink); font-weight: 620; }
+
+.career-button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--grey-fill);
+  border: none;
+  border-radius: 8px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+@media (hover: hover) { .career-button:hover { background: var(--grey-wash); } }
+.career-button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+/* ---------- 1. the odometer (round 4: six groups, each with a drawing) ---------- */
+
+.odo-keyline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 32px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ink);
+}
+.odo-keyline__key { margin: 0; font-size: 15px; line-height: 1.45; color: var(--ink-secondary); max-width: 78ch; }
+
+/* A quiet word with a chevron: how these were counted, what a lit week means. */
+.odo-keyline__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 15px;
+  color: var(--link);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
+}
+@media (hover: hover) { .odo-keyline__toggle:hover { color: var(--link-active); text-decoration-color: var(--amber); } }
+.odo-keyline__toggle:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+.odo-keyline__toggle--open { color: var(--ink); }
+
+.odo-fig__chev {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 150ms ease;
+  flex: none;
+}
+.odo-keyline__toggle--open .odo-fig__chev,
+.odo-fig--open .odo-fig__chev { transform: translateY(1px) rotate(225deg); }
+
+/* The method, one click away, in three short columns. */
+.odo-method {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px clamp(28px, 3vw, 64px);
+  padding: 24px 0 26px;
+  border-bottom: 1px solid var(--grey-hair);
+}
+@media (max-width: 999px) { .odo-method { grid-template-columns: minmax(0, 1fr); } }
+.odo-method__title { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--ink); }
+.odo-method p { margin: 0 0 10px; font-size: 15px; line-height: 1.55; color: var(--ink-secondary); max-width: 62ch; text-wrap: pretty; }
+.odo-method strong { color: var(--ink); font-weight: 560; }
+
+.odo-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(32px, 3.4vw, 72px);
+}
+@media (max-width: 1279px) { .odo-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 759px) { .odo-groups { grid-template-columns: minmax(0, 1fr); } }
+
+/* Every group the same rhythm: title, drawing in a fixed band, figures. */
+.odo-group {
+  container-type: inline-size;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(22px, 2vw, 32px) 0 clamp(28px, 2.6vw, 44px);
+  border-bottom: 1px solid var(--grey-hair);
+}
+.odo-group__title {
+  margin: 0 0 14px;
+  font-size: clamp(17px, 1.15vw, 20px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.odo-group__visual { height: 104px; display: flex; flex-direction: column; justify-content: flex-start; }
+.odo-group__figs {
+  display: grid;
+  gap: 0 clamp(12px, 1.2vw, 24px);
+  align-items: start;
+  margin-top: 18px;
+}
+
+.odo-fig {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px 0 4px;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.odo-fig:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; }
+.odo-group__figs { --fig-size: clamp(28px, 8.2cqi, 54px); }
+.odo-fig__last { white-space: nowrap; }
+/* Every value sits on one baseline band, so labels line up across the row. */
+.odo-fig__value {
+  display: flex;
+  align-items: flex-end;
+  height: calc(var(--fig-size) * 1.14);
+  font-size: var(--fig-size);
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+.odo-fig__value > span { display: flex; align-items: baseline; }
+/* A modelled range carries two numbers; it sits a size down so it fits its column. */
+.odo-fig--modelled_range .odo-fig__value { font-size: calc(var(--fig-size) * 0.8); }
+.odo-fig__label {
+  display: inline;
+  font-size: 15.5px;
+  line-height: 1.3;
+  color: var(--ink-secondary);
+  text-decoration: underline dotted;
+  text-decoration-color: var(--grey-line);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
+}
+.odo-fig__label .odo-fig__chev { color: var(--grey-ink3); margin-left: 9px; }
+@media (hover: hover) {
+  .odo-fig:hover .odo-fig__label { color: var(--ink); text-decoration-color: var(--amber); }
+  .odo-fig:hover .odo-fig__chev { color: var(--amber); }
+}
+.odo-fig--open .odo-fig__label { color: var(--ink); text-decoration: underline solid; text-decoration-color: var(--ink); }
+
+/* Rolling digits: each a wheel, like a car's odometer. */
+.odo-num { display: flex; align-items: baseline; line-height: 1.1em; }
+.odo-sep { display: block; line-height: 1.1em; font-variant-numeric: proportional-nums; }
+.odo-wheel {
+  display: block;
+  height: 1.1em;
+  clip-path: inset(0);
+  /* A soft edge top and bottom, like the window on a car's odometer. */
+  -webkit-mask-image: linear-gradient(transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(transparent, #000 9%, #000 91%, transparent);
+}
+.odo-wheel__strip { display: block; will-change: transform; }
+.odo-wheel__strip > span { display: block; height: 1.1em; line-height: 1.1em; }
+.odo-wheel--rest { color: var(--grey-line); }
+.odo-unit {
+  font-size: max(0.4em, 12px);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-secondary);
+  white-space: pre;
+  line-height: 1.1;
+}
+.odo-plus { color: var(--amber); font-weight: 560; margin-left: 0.02em; }
+.odo-pct { font-size: 0.62em; margin-left: 0.04em; }
+
+/* The open figure's "how", across its group. */
+.odo-how {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--grey-hair);
+}
+.odo-how__class { margin: 0 0 6px; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.odo-how__word { font-size: 15px; font-weight: 600; color: var(--ink); }
+.odo-how__word--lower_bound::after { content: ' +'; color: var(--amber); }
+.odo-how__def { font-size: 14px; color: var(--ink-muted); }
+.odo-how__text { margin: 0; font-size: 15.5px; line-height: 1.5; color: var(--ink); text-wrap: pretty; max-width: 60ch; }
+.odo-how__note { margin: 8px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-secondary); text-wrap: pretty; max-width: 60ch; }
+
+/* ---------- the drawings ---------- */
+
+.odo-visual { position: relative; margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+/* Round 3 colour (Jack: "six distinct color palettes on the odometer, which is
+ * way too much"): one set for all six drawings. Series hues only where a mark
+ * is a series (On track; a lit series among the other drivers); everything
+ * else is ink, one soft ink step for "everything around the racing" (the
+ * travel, the other sessions, the Daytona-only names), a faint step for the
+ * races that ran to the flag, and the site's amber as the one accent, only
+ * for "at least" (the + and the dashed run past a floor). Switch `odocolour`;
+ * `old` (.career-odometer--r2) puts round 2's colours back. */
+.career-odometer {
+  --odo-race: var(--ink);
+  --odo-soft: color-mix(in srgb, var(--ink) 30%, var(--paper));
+  --odo-faint: color-mix(in srgb, var(--ink) 11%, var(--paper));
+  --odo-travel-mark: var(--odo-soft);
+  --odo-place-mark: var(--ink);
+  --odo-out: var(--ink);
+  --odo-finished: var(--odo-faint);
+  --odo-floor: var(--amber);
+}
+.career-odometer--r2 {
+  --odo-soft: color-mix(in srgb, var(--odo-race) 32%, var(--paper));
+  --odo-travel-mark: var(--odo-travel);
+  --odo-out: var(--status-bad);
+  --odo-finished: color-mix(in srgb, var(--chapter-indy) 30%, var(--paper));
+  --odo-floor: var(--grey-ink3);
+}
+/* A tile whose card is open sits above its neighbours (each tile is a size
+ * container, so its own stacking context). */
+.odo-group:has(.vcard, .tap-card, [data-tap-card]) { position: relative; z-index: 6; }
+.odo-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink-secondary);
+}
+.odo-legend i,
+.odo-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: -1px;
+}
+.odo-legend__note { color: var(--ink-muted); }
+.odo-key--ink { background: var(--ink); }
+.odo-key--soft { background: var(--grey-line); }
+.odo-key--hatch { background: repeating-linear-gradient(135deg, var(--ink) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--ink); }
+.odo-key--dot { background: var(--ink); border-radius: 50%; width: 8px; height: 8px; }
+.odo-key--dot-soft { background: var(--grey-line); border-radius: 50%; width: 8px; height: 8px; }
+/* Round 2: his own miles and hours in the INDY NXT gold, travel in its colour,
+ * the INDY NXT races that ended early in the status red. */
+.odo-key--race { background: var(--odo-race); }
+.odo-key--race-hatch { background: repeating-linear-gradient(135deg, var(--odo-race) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--odo-race); }
+.odo-key--race-soft { background: var(--odo-soft); }
+.odo-key--travel { background: var(--odo-travel-mark); }
+.odo-key--out { background: var(--odo-out); }
+.odo-key--out-hatch { background: repeating-linear-gradient(135deg, var(--odo-out) 0 1.5px, transparent 1.5px 4px); box-shadow: inset 0 0 0 1px var(--odo-out); }
+.odo-key--finished { background: var(--odo-finished); }
+.odo-key--dot-daytona { background: var(--odo-soft); border-radius: 50%; width: 8px; height: 8px; }
+.career-odometer--r2 .odo-key--dot-daytona { background: var(--chapter-imsa); opacity: 0.45; }
+
+/* A drawing's key line doubles as its readout: the hovered (or tapped) mark
+ * reads here, in text ink, its swatch beside it. */
+.odo-read { color: var(--ink-secondary); text-wrap: pretty; }
+.odo-read b { color: var(--ink); font-weight: 620; font-variant-numeric: tabular-nums; }
+.odo-read i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+.odo-legend__item { cursor: default; transition: opacity 160ms ease, color 160ms ease; }
+.odo-series--hot .odo-legend__item { opacity: 0.45; }
+.odo-series--hot .odo-legend__item--hot { opacity: 1; color: var(--ink); }
+/* the note line under a key: its own line, which the readout takes over */
+.odo-legend__line { flex-basis: 100%; }
+
+/* Races by series: one bar, a segment per series. */
+.odo-bar { display: flex; gap: 2px; height: 22px; align-items: center; }
+.odo-bar__seg {
+  display: block;
+  min-width: 3px;
+  height: 22px;
+  border-radius: 3px;
+  cursor: default;
+  transition: height 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 160ms ease;
+}
+.odo-series--hot .odo-bar__seg { opacity: 0.32; }
+.odo-series--hot .odo-bar__seg--hot { opacity: 1; height: 36px; box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink); }
+
+/* Bars on one scale, with a dashed run where a figure is only a floor. */
+.odo-scale { position: relative; display: flex; flex-direction: column; gap: 9px; padding-top: 18px; }
+.odo-scale__row { display: grid; grid-template-columns: var(--label-w) minmax(0, 1fr); align-items: center; gap: 10px; }
+.odo-scale__label { font-size: 13px; color: var(--ink-secondary); white-space: nowrap; }
+.odo-scale__track { position: relative; height: 16px; }
+.odo-scale__fill { position: absolute; inset: 0 auto 0 0; display: flex; }
+.odo-scale__part { display: block; height: 100%; cursor: default; transition: opacity 160ms ease, filter 160ms ease; }
+.odo-scale__part--race { background: var(--odo-race); }
+.odo-scale__part--race-hatch {
+  background: repeating-linear-gradient(135deg, var(--odo-race) 0 1.5px, var(--paper) 1.5px 4px);
+  box-shadow: inset 0 0 0 1px var(--odo-race);
+}
+.odo-scale__part--race-soft { background: var(--odo-soft); }
+.odo-scale__part--travel { background: var(--odo-travel-mark); }
+/* Hover: the bar in hand goes bolder, its part (or the whole bar from its
+ * label) stays full, everything else steps back. */
+.odo-scale__fill { transform-origin: left center; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.odo-scale__row--hot .odo-scale__fill { transform: scaleY(1.8); }
+.odo-scale--hot .odo-scale__part { opacity: 0.4; filter: grayscale(1); }
+.odo-scale--hot .odo-scale__part--hot { opacity: 1; filter: none; box-shadow: 0 0 0 1px var(--paper), 0 0 0 2px var(--ink); position: relative; z-index: 1; }
+.odo-scale__label { cursor: default; transition: color 160ms ease; }
+.odo-scale__row--hot .odo-scale__label { color: var(--ink); font-weight: 600; }
+.odo-scale__more {
+  position: absolute;
+  top: 50%;
+  width: 7%;
+  height: 0;
+  border-top: 1.5px dashed var(--odo-floor);
+}
+.odo-scale { --label-w: 7.5em; }
+/* The marks sit on the bars' own scale, which starts after the label column. */
+.odo-scale__mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--label-w) + 10px + (100% - var(--label-w) - 10px) * var(--f));
+  width: 0;
+  border-left: 1px solid var(--grey-ink3);
+}
+.odo-scale__mark-label {
+  position: absolute;
+  top: -1px;
+  right: 5px;
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* Tracks by country: a dot per track. */
+.odo-places { display: flex; flex-wrap: nowrap; gap: 0 14px; align-items: flex-end; }
+.odo-places__country { display: flex; flex-direction: column; gap: 4px; }
+.odo-places__dots { display: flex; flex-wrap: wrap-reverse; gap: 3px; max-width: 128px; }
+.odo-places__dots i {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--odo-place-mark, var(--ink));
+  cursor: default;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), opacity 140ms ease;
+}
+.career-odometer--r2 .odo-places__dots i { background: var(--place, var(--ink)); }
+.odo-places__name { font-size: 13px; color: var(--ink-secondary); white-space: nowrap; cursor: default; }
+.odo-places--hot .odo-places__country { opacity: 0.35; transition: opacity 140ms ease; }
+.odo-places--hot .odo-places__country--hot { opacity: 1; }
+.odo-places__country--hot .odo-places__name { color: var(--ink); font-weight: 600; }
+.odo-places__dots i.odo-places__dot--hot { transform: scale(1.8); box-shadow: 0 0 0 1px var(--paper), 0 0 0 2px var(--ink); }
+
+/* The other drivers: a dot per name. */
+.odo-people svg { display: block; }
+.odo-people svg { cursor: default; touch-action: manipulation; }
+/* Round 3: the fill comes from the drawing (ink, the soft step for the
+ * Daytona-only names, a series hue only for the series in hand). Round 2
+ * (`odocolour=old`): every dot in its series hue, Daytona stepped back. */
+.odo-people__dot { transition: fill 140ms ease, fill-opacity 140ms ease; }
+.career-odometer--r2 .odo-people__dot { fill-opacity: 0.9; }
+.career-odometer--r2 .odo-people__dot--daytona { fill-opacity: 0.4; }
+.career-odometer--r2 .odo-people--focus .odo-people__dot--off { fill-opacity: 0.08; }
+.odo-chips { display: inline-flex; gap: 2px; align-items: center; }
+.odo-chip { display: block; width: 14px; height: 12px; border-radius: 2px; cursor: default; transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1); }
+.odo-chip--on { transform: scale(1.25); box-shadow: 0 0 0 1px var(--paper), 0 0 0 2px var(--ink); }
+@media (pointer: coarse) { .odo-chips { gap: 4px; } .odo-chip { width: 22px; height: 18px; } }
+
+/* INDY NXT races: a square per race, by season. */
+/* The seasons share one row, each as wide as its race count, so a fourth
+ * season still fits (round 2: 45 races no longer fit at a fixed width). */
+.odo-races { display: flex; flex-wrap: nowrap; gap: 6px 12px; }
+.odo-races__year { display: flex; flex-direction: column; gap: 4px; flex: var(--n) 1 0; min-width: 0; }
+.odo-races__cells { display: flex; gap: 2px; }
+.odo-races__cells > .odo-races__cell { flex: 1 1 0; min-width: 3px; max-width: 10px; }
+.odo-races__cell {
+  display: block;
+  width: 8px;
+  height: 22px;
+  border-radius: 2px;
+  background: var(--odo-finished);
+  cursor: pointer;
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), opacity 140ms ease;
+}
+.odo-races__cell--contact { background: var(--odo-out); }
+.odo-races__cell--mechanical {
+  background: repeating-linear-gradient(135deg, var(--odo-out) 0 1.5px, var(--paper) 1.5px 4px);
+  box-shadow: inset 0 0 0 1px var(--odo-out);
+}
+.odo-races--hot .odo-races__cell { opacity: 0.45; }
+.odo-races--hot .odo-races__cell--hot { opacity: 1; transform: scale(1.35, 1.4); box-shadow: 0 0 0 1px var(--paper), 0 0 0 2px var(--ink); }
+.odo-races__label { font-size: 13px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+
+/* Round 9 (Jack on an iPhone: the spacing in these blocks): a label that has to
+ * take two lines splits evenly, never one orphaned word and its chevron; a
+ * label with a `short` form uses it where the column is a phone's half width. */
+.odo-fig__label { text-wrap: balance; }
+.odo-fig__label--short { display: none; }
+
+@media (max-width: 759px) {
+  .odo-group__visual { height: auto; min-height: 0; }
+  .odo-group__figs { --fig-size: clamp(22px, 7cqi, 36px); }
+  .odo-fig__label { font-size: 14px; }
+  .odo-fig__label--full { display: none; }
+  .odo-fig__label--short { display: inline; }
+  .odo-scale { --label-w: 6.6em; }
+  /* the INDY NXT seasons: one row a year, the year first, so the strips line up
+   * instead of wrapping two-and-one */
+  .odo-races { flex-direction: column; flex-wrap: nowrap; gap: 8px; }
+  .odo-races__year { flex-direction: row; align-items: center; gap: 10px; }
+  .odo-races__label { order: -1; flex: none; width: 4ch; }
+  /* a thumb-sized square per race on a phone */
+  .odo-races__year { flex: none; }
+  .odo-races__cells { gap: 3px; flex-wrap: wrap; }
+  .odo-races__cells > .odo-races__cell { flex: none; width: 12px; max-width: none; height: 24px; }
+}
+
+.career-odometer .odometer-live { margin-top: clamp(28px, 2.4vw, 44px); }
+
+/* ---------- 2. his life in weeks ---------- */
+
+.series-key__series { cursor: default; transition: opacity 160ms ease, color 160ms ease; }
+.series-key--focus .series-key__series { opacity: 0.45; }
+.series-key--focus .series-key__series--on { opacity: 1; color: var(--ink); }
+
+.life-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(22px, 2vw, 36px);
+}
+@media (min-width: 1200px) {
+  .life-layout { grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: clamp(36px, 3.4vw, 72px); align-items: start; }
+}
+
+.life-layout__facts { display: flex; flex-direction: column; gap: 22px; }
+@media (min-width: 700px) and (max-width: 1199px) {
+  .life-layout__facts { order: -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 28px; align-items: start; }
+  .life-layout__facts .life-how-toggle,
+  .life-layout__facts .life-how { grid-column: 1 / -1; }
+}
+@media (max-width: 699px) {
+  .life-layout__facts { order: -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
+  .life-layout__facts .life-how-toggle,
+  .life-layout__facts .life-how { grid-column: 1 / -1; }
+}
+.life-fact { display: flex; flex-direction: column; gap: 4px; padding-bottom: 18px; border-bottom: 1px solid var(--grey-hair); }
+.life-fact__value {
+  font-size: clamp(32px, 2.6vw, 52px);
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.life-fact__label { font-size: 15px; line-height: 1.4; color: var(--ink-secondary); text-wrap: pretty; }
+.life-how-toggle { align-self: flex-start; justify-self: start; }
+.life-how p { margin: 0 0 10px; font-size: 14.5px; line-height: 1.55; color: var(--ink-secondary); text-wrap: pretty; }
+
+.life-grid {
+  position: relative;
+  width: 100%;
+  /* Round 3 (switch `lifecolour`): a race week in ink; while a series is lit,
+   * the other race weeks step back to this faint ink. */
+  --life-race: var(--ink);
+  --life-unlit: color-mix(in srgb, var(--ink) 17%, var(--paper));
+}
+.life-grid__race { transition: fill 160ms ease; }
+.life-grid svg { display: block; outline: none; touch-action: manipulation; overflow: visible; }
+.life-grid svg:focus-visible { outline: 2px solid var(--amber); outline-offset: 8px; }
+.life-grid__axis { font-size: 12.5px; fill: var(--ink-muted); }
+.life-grid__year { font-size: 13px; fill: var(--ink-secondary); font-weight: 520; font-variant-numeric: tabular-nums; }
+.life-grid__note { font-size: 13px; fill: var(--ink-secondary); }
+.life-grid__before { fill: var(--grey-hair); }
+.life-grid__birth { fill: var(--grey-ink3); }
+.life-grid__quiet { fill: var(--paper); stroke: var(--grey-line); stroke-width: 1; }
+.life-grid__milestone { fill: var(--grey-hair); stroke: var(--ink); stroke-width: 1.5; }
+.life-grid__firstrace { margin: 14px 0 0; font-size: 14px; color: var(--ink-muted); }
+
+.series-key__before { background: var(--grey-hair); }
+.series-key__milestone { background: var(--grey-hair); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+/* The note beside the week under the pointer. */
+.life-tip {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px 13px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--grey-hair);
+  pointer-events: none;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.life-tip--above { transform: translateY(-100%); }
+.life-tip__date { font-size: 13.5px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.life-tip__age { color: var(--ink-muted); }
+.life-tip__race { display: flex; flex-direction: column; gap: 2px; }
+.life-tip__event { font-weight: 560; }
+.life-tip__event i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  vertical-align: -1px;
+}
+.life-tip__ring { box-shadow: inset 0 0 0 1.5px var(--ink); background: var(--grey-hair); }
+.life-tip__outcome { color: var(--ink-secondary); }
+.life-tip__line { font-weight: 560; }
+.life-tip__muted { color: var(--ink-secondary); }
+
+.series-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--ink-secondary);
+}
+.series-key i {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 7px;
+  vertical-align: -1px;
+}
+.series-key__empty { box-shadow: inset 0 0 0 1px var(--grey-line); }
+.series-key__race { background: var(--ink); }
+/* ink: the series sit on their own line, named, each with a small dot of its
+ * hue; pointing at one lights its weeks. */
+.series-key__light { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 15px; }
+.series-key--ink .series-key__series i { width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+
+
+
+/* ---------- 4. the travel map ---------- */
+
+.career-travel.career-atlas { background: none; }
+.career-travel__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(22px, 2vw, 36px);
+}
+@media (min-width: 1000px) {
+  .career-travel__stage {
+    grid-template-columns: minmax(280px, 4fr) minmax(0, 8fr);
+    gap: clamp(28px, 3vw, 72px);
+    align-items: start;
+  }
+}
+.career-travel__side { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.career-travel__counter { display: flex; flex-direction: column; gap: 4px; }
+.career-travel__miles {
+  font-size: clamp(48px, 5.2vw, 112px);
+  font-weight: 630;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* In this face the tabular feature also widens commas and points, so only
+ * the digits are tabular. */
+.career-travel__miles { font-variant-numeric: normal; }
+.career-travel__miles .fixed-digit { font-variant-numeric: tabular-nums; }
+.career-travel__miles .fixed-plus { color: var(--amber); font-weight: 560; }
+.career-travel__unit { font-size: 16px; color: var(--ink-secondary); }
+.career-travel__leg {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 92px;
+  padding-top: 14px;
+  border-top: 1px solid var(--grey-hair);
+}
+.career-travel__leg-no { font-size: 14px; color: var(--ink-muted); }
+.career-travel__leg-route { font-size: clamp(17px, 1.25vw, 22px); line-height: 1.3; color: var(--ink); text-wrap: balance; }
+.career-travel__leg-miles { font-size: 15px; color: var(--link); }
+.career-travel__how { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink-muted); max-width: 44ch; }
+.career-travel__controls { display: flex; gap: 10px; }
+.career-travel__globe { min-width: 0; }
+.career-travel .career-atlas__map { border-radius: 0; background: none; }
+.career-travel__below { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.career-travel__hint { margin: 0; font-size: 13.5px; color: var(--ink-muted); }
+.career-travel .career-atlas__legend { font-size: 13.5px; }
+.career-travel .career-atlas__tip-action { font-size: 12px; }
+.career-travel .career-atlas__status { margin: 0; font-size: 13px; }
+
+@media (max-width: 999px) {
+  .career-travel__leg { min-height: 0; }
+  .career-travel__how { max-width: 64ch; }
+}
+
+/* ---------- 5. the climb: full width ---------- */
+
+.career > .card { padding-top: 22px; }
+
+/* ---------- 6. the chapters ---------- */
+
+.chapter-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(128px, 1fr);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--grey-hair);
+  padding-top: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.chapter-rail__tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 0 14px 18px 0;
+  margin-bottom: -1px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font: inherit;
+  color: var(--ink-secondary);
+  text-align: left;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.chapter-rail__tab::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--grey-line);
+}
+.chapter-rail__tab:first-child::before { left: 7px; }
+.chapter-rail__tab:last-child::before { right: auto; width: 7px; }
+.chapter-rail__node {
+  position: relative;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--tint);
+  margin-bottom: 12px;
+  transition: background-color 150ms ease;
+}
+.chapter-rail__years { font-size: 13px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.chapter-rail__name { font-size: clamp(17px, 1.25vw, 22px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+.chapter-rail__count { font-size: 13px; color: var(--ink-muted); }
+.chapter-rail__tab--open { color: var(--ink); border-bottom-color: var(--ink); }
+.chapter-rail__tab--open .chapter-rail__node { background: var(--tint); }
+@media (hover: hover) {
+  .chapter-rail__tab:hover { color: var(--ink); }
+}
+.chapter-rail__tab:focus-visible { outline: 2px solid var(--amber); outline-offset: -2px; }
+
+.chapter-open { padding-top: clamp(24px, 2.4vw, 44px); }
+
+/* The open chapter. Its frame comes from the timeline above, so the old
+ * journey line and card padding are off here. */
+.career .chapter-panel { padding: 0; }
+.career .chapter-panel::before { display: none; }
+
+.chapter-panel__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+@media (min-width: 1100px) {
+  .chapter-panel__summary { grid-template-columns: minmax(240px, 4fr) minmax(0, 8fr); gap: clamp(28px, 3vw, 72px); }
+}
+.chapter-panel__head { display: flex; flex-direction: column; gap: 4px; }
+.chapter-panel__years { font-size: 14px; color: var(--ink-muted); }
+.chapter-panel__name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: clamp(30px, 2.8vw, 56px);
+  font-weight: 620;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.chapter-panel__dot { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+.chapter-panel__count { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--ink-secondary); margin-top: 4px; }
+.chapter-panel__full { font-size: 14px; color: var(--ink-muted); }
+.chapter-panel__body { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.chapter-panel__narrative { margin: 0; font-size: clamp(16px, 1.1vw, 19px); line-height: 1.5; color: var(--ink-secondary); max-width: 62ch; }
+.chapter-panel__stats { display: flex; flex-wrap: wrap; gap: 18px clamp(28px, 3vw, 64px); }
+.chapter-panel__stats .stat__value { font-size: clamp(28px, 2.4vw, 44px); }
+.chapter-panel__stats .caption { font-size: 13.5px; }
+/* Round 9 (Jack: "average finish, the field beaten on average and the top-10
+ * rate three across instead of two up top and one below"): on a phone the three
+ * share the row in equal thirds; a label that takes two lines pushes nothing, as
+ * every column sets its number on the same bottom line. */
+@media (max-width: 759px) {
+  .chapter-panel__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 14px; align-items: stretch; }
+  .chapter-panel__stats .stat { justify-content: flex-end; }
+  .chapter-panel__stats .caption { font-size: 13px; line-height: 1.3; text-wrap: balance; }
+  .chapter-panel__stats .stat__value { font-size: 28px; }
+}
+.chapter-panel__strip { max-width: 1100px; }
+.chapter-panel__extra { margin: 0; font-size: 13.5px; }
+.chapter-panel__bridge { margin-top: clamp(28px, 2.4vw, 44px); }
+.chapter-panel__depth {
+  margin-top: clamp(36px, 3.2vw, 64px);
+  padding-top: 22px;
+  border-top: 1px solid var(--grey-hair);
+}
+.chapter-panel__depth-title {
+  margin: 0 0 18px;
+  font-size: clamp(19px, 1.45vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* ---------- phone ---------- */
+
+@media (max-width: 699px) {
+  .career-head { flex-direction: column; align-items: flex-start; }
+  .chapter-rail { grid-auto-columns: minmax(116px, 1fr); }
+}
+
+/* No text under 12 px on this page, including the older modules' chips,
+ * source lines and inline-styled captions. */
+.career .career-atlas__zoom-reset,
+.career .ss-timeline__source,
+.career .chip,
+.career [style*="font-size: 9"],
+.career [style*="font-size: 10"],
+.career [style*="font-size: 11px"],
+.career [style*="font-size: 11.5px"] { font-size: 12px !important; }
+
+/* ---------- controls that answer the hand (fixes round, November 14) ----------
+ * Filter toggles are plain words: secondary ink at rest, ink with the accent
+ * underline under the pointer, and the chosen one in ink with an ink rule. The
+ * filled buttons warm to the accent wash. Non-interactive grey pills become
+ * plain text (site direction: no pill badges on content). */
+
+.career .chip--toggle {
+  background: none;
+  padding: 4px 6px;
+  border-radius: 0;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
+}
+.career .chip--toggle-on { color: var(--ink); text-decoration-color: var(--ink); }
+@media (hover: hover) {
+  .career .chip--toggle:not(.chip--toggle-on):hover { color: var(--ink); text-decoration-color: var(--amber); }
+}
+.career .chip--toggle:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+@media (hover: hover) {
+  .career .career-button:hover { background: var(--accent-wash); color: var(--link-active); }
+  .career .career-atlas__zoom button:hover:not(:disabled) { background: var(--accent-wash); color: var(--link-active); }
+}
+.career .career-atlas__zoom button { transition: background-color 150ms ease, color 150ms ease; }
+.career .career-atlas__zoom button:disabled { color: var(--grey-ink3); }
+
+.career .chip--outline { background: none; padding: 0; border-radius: 0; color: var(--ink-muted); }
+
+/* ---------- the chapters' depth, laid out across the width ---------- */
+
+/* Daytona's roster: the bar starts right after the names, not across the page. */
+.career .imsa-roster__row { grid-template-columns: minmax(220px, 20rem) minmax(0, 1fr) auto; }
+
+@media (min-width: 1100px) {
+  /* Two figures side by side (GB3 and Euroformula: qualifying beside the venues). */
+  .career .depth-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(36px, 3.4vw, 72px);
+    align-items: start;
+  }
+  /* Words beside a figure, on the chapter summary's own columns (Formula Ford). */
+  .career .depth-pair--lead { grid-template-columns: minmax(240px, 4fr) minmax(0, 8fr); }
+  .career .depth-pair--lead > .row { flex-direction: column; align-items: flex-start !important; }
+}
+
+/* Round-by-round rows (F1600, FR Oceania): each row keeps its venue, qualifying
+ * and races together; on a wide screen the rounds run in two columns. */
+.career .ss-event {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12.5rem auto;
+  align-items: baseline;
+  gap: 6px 22px;
+}
+.career .ss-event .ss-races { margin-left: 0; }
+.career .ss-event__quali { text-align: right; }
+@media (min-width: 1400px) {
+  .career .ss-events { columns: 2; column-gap: clamp(48px, 4vw, 88px); }
+  .career .ss-events .ss-event { break-inside: avoid; border-top: 1px solid var(--divider); }
+}
+@media (max-width: 699px) {
+  .career .ss-event { grid-template-columns: minmax(0, 1fr) auto; }
+  .career .ss-event__quali { text-align: left; }
+  .career .ss-event__head { grid-column: 1 / -1; }
+}
+
+/* ---------- 7. more from the archive ---------- */
+
+.archive-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.archive-item { border-bottom: 1px solid var(--grey-hair); }
+.archive-item__toggle {
+  display: grid;
+  grid-template-columns: minmax(200px, 3fr) minmax(0, 7fr) auto;
+  align-items: baseline;
+  gap: 6px clamp(18px, 2.4vw, 48px);
+  width: 100%;
+  padding: 18px 0;
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+}
+.archive-item__title {
+  font-size: clamp(18px, 1.3vw, 23px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+  transition: text-decoration-color 150ms ease;
+}
+.archive-item__blurb { font-size: 15px; line-height: 1.45; color: var(--ink-secondary); }
+.archive-item__action {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-muted);
+  transition: color 150ms ease;
+}
+.archive-item__sign { font-size: 18px; line-height: 1; color: var(--amber); }
+@media (hover: hover) {
+  .archive-item__toggle:hover .archive-item__title { text-decoration-color: var(--amber); }
+  .archive-item__toggle:hover .archive-item__action { color: var(--link); }
+}
+.archive-item__toggle:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.archive-item--open .archive-item__title { text-decoration-color: var(--ink); }
+.archive-item__body { padding: 4px 0 clamp(32px, 3vw, 56px); }
+/* The row above already names the section; the card keeps only its source. */
+.archive-item__body .card { padding: 0; border-top: none; }
+.archive-item__body .card__header { justify-content: flex-end; }
+.archive-item__body .card__header > .card__title { display: none; }
+
+@media (max-width: 699px) {
+  .archive-item__toggle { grid-template-columns: minmax(0, 1fr) auto; }
+  .archive-item__blurb { grid-column: 1 / -1; grid-row: 2; }
+}

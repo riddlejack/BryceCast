@@ -59,7 +59,7 @@ const RaceSoFarCard = ({
     title="The race so far"
     action={
       <SourcePill
-        title="The race so far — running order, building"
+        title="The race so far: the running order as it builds"
         entries={[
           {
             label: 'Accumulated running order · rank-series history',
@@ -76,7 +76,7 @@ const RaceSoFarCard = ({
         ]}
         caveats={[
           'Positions settle at the flag; the official lap chart replaces this record in the debrief.',
-          'Caution shading comes from the live flag record — spans are whole laps, not exact yellow seconds.'
+          'Caution shading comes from the live flag record. Spans are whole laps, not exact yellow seconds.'
         ]}
       />
     }
@@ -84,12 +84,12 @@ const RaceSoFarCard = ({
     {chart ? (
       <>
         <p className="caption caption--secondary" style={{ margin: '0 0 10px' }}>
-          Bryce in ink · the field in light gray · shaded = caution · the newest lap touches the right edge
-          {paused ? ' · paused — holding the last good laps' : ''}
+          Bryce in ink · the field in light grey · shaded = caution · the newest lap touches the right edge
+          {paused ? ' · paused, holding the last good laps' : ''}
         </p>
         <LapChart story={chart} building={{ cautionSpans: chart.cautionSpans }} />
         <p className="tnum" style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--ink-secondary)' }}>
-          Through lap {chart.latestLap} — the running order at every recorded position change.
+          Through lap {chart.latestLap}: the running order at every recorded position change.
         </p>
       </>
     ) : (
@@ -120,7 +120,7 @@ const BattlesSoFarCard = ({ chart }: { chart: BuildingLapChart | null }) => {
               note: `Laps spent within one running-order spot of Bryce, counted over the laps charted so far (this module appears once ${BATTLES_MIN_LAPS} laps exist).`
             }
           ]}
-          caveats={['Counted facts only — the full battle read, with official lap-chart precision, arrives in the debrief.']}
+          caveats={['Counted facts only. The full battle read, with official lap-chart precision, arrives in the debrief.']}
         />
       }
     >
@@ -290,13 +290,13 @@ export const LiveRaceShell = ({
                 label: simulated ? 'Archived Race Control capture · replayed' : 'Race Control live timing · 1-second capture',
                 path: '/api/readiness',
                 note: simulated
-                  ? 'This client is replaying an archived Race Control capture — flag, lap and running position exactly as they happened.'
+                  ? 'This client is replaying an archived Race Control capture: flag, lap and running position exactly as they happened.'
                   : 'Flag, lap and running position straight from the official Race Control feed, polled once a second.'
               }
             ]}
             caveats={[
               'Every number on this page is provisional until the official results land.',
-              'This page fills in as the race runs, and becomes the full debrief — at this same address — once official reports arrive.'
+              'This page fills in as the race runs, and becomes the full debrief, at this same address, once official reports arrive.'
             ]}
           />
         </div>
@@ -315,10 +315,10 @@ export const LiveRaceShell = ({
             </div>
             <span style={{ fontSize: 13, color: 'var(--ink-secondary)', marginTop: 6, maxWidth: '38ch' }}>
               {finished
-                ? 'Finished · unofficial order — provisional until official results land.'
+                ? 'Finished · unofficial order, provisional until official results land.'
                 : preGreen
-                  ? 'The grid forms at the green flag — provisional from the first lap on.'
-                  : 'Provisional — positions settle at the flag.'}
+                  ? 'The grid forms at the green flag. Provisional from the first lap on.'
+                  : 'Provisional. Positions settle at the flag.'}
             </span>
           </div>
           <div className="hero-race__art">
@@ -357,8 +357,8 @@ export const LiveRaceShell = ({
 
       {finished ? <WatchThisRaceUnfold sessionId={sessionId} /> : null}
 
-      <p style={{ margin: 0, fontSize: 11.5, color: 'var(--ink-muted)' }}>
-        Everything on this page comes from {simulated ? 'an archived Race Control capture, replayed second by second' : 'our own live Race Control capture'} — the full debrief takes over here once official results land.
+      <p style={{ margin: 0, fontSize: 12, color: 'var(--ink-muted)' }}>
+        Everything on this page comes from {simulated ? 'an archived Race Control capture, replayed second by second' : 'our own live Race Control capture'}. The full debrief takes over here once official results land.
       </p>
     </div>
   );

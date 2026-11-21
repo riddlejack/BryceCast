@@ -1,0 +1,27 @@
+/* About's opening picture: every race on one line (RaceStrip) and its key. */
+.rs { display: flex; flex-direction: column; gap: 14px; }
+.rs__stage { position: relative; width: 100%; }
+.rs__week { transition: transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.rs__fade { transition: opacity 140ms ease; }
+@media (prefers-reduced-motion: reduce) { .rs__week { transition: none; } }
+
+.rs-key {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 13px;
+  color: var(--ink-secondary);
+}
+.rs-key li { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.rs-key__swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.rs-key__n { color: var(--ink-primary); font-weight: 560; }
+
+.rs-bar { display: flex; height: 22px; gap: 2px; border-radius: 3px; overflow: hidden; }
+.rs-bar__seg { display: block; min-width: 3px; }
+
+@media (max-width: 560px) {
+  .rs-key { gap: 6px 14px; font-size: 12.5px; }
+}

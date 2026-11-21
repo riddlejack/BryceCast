@@ -1,0 +1,19 @@
+{
+  "lane": "final-pass",
+  "entries": [
+    {
+      "id": "fp-before",
+      "page": "/career",
+      "title": "Before the record: the run-up to Sebring, January 12, 2019, then the 173 races",
+      "switch": "ddbefore",
+      "values": [
+        { "value": null, "label": "one scale, 2016 to 2026: the three karting years in proportion to the seven and a half of the record, their labels fanned out along the top; the record one square per race (new, default)" },
+        { "value": "runup", "label": "the run-up: the scale breaks at the flag so the karting years get the stage, labels standing on their marks; the record squeezed into the last third" }
+      ],
+      "look": "Career → More from the archive → Before the record. Watch the line draw through the karting years to the flag at Sebring, then the record fill in; point at (or tap) a lap time or a month of the record. On a phone the run-up reads down the screen and turns into the record at the flag (same in both values). ?deepdive=old shows the list that is live today.",
+      "anchor": "#archive-before",
+      "added": "2026-11-17T21:00",
+      "reviewed": false
+    }
+  ]
+}

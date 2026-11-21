@@ -1,0 +1,499 @@
+{
+ "image": "/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1-ids.png",
+ "width": 2400,
+ "height": 1350,
+ "matches": "/tracks-3d/weathertech-raceway-laguna-seca-pace-2026-r1.jpg (and its @1200 copy, the same picture at half size)",
+ "generated": "2026-11-16",
+ "by": "Portfolio/builds/project-brycecast/site-refresh/stills-tools/run.sh ids (page.js idStill, finish_ids.py)",
+ "how": "The rig renders the same camera as the lit still, with no lighting and no antialiasing: the whole scene into the depth buffer only, then the shaded band alone, each section one flat colour, depth-tested with the band's own offset. A pixel is a section where that section is visible in the still.",
+ "decode": "black (0,0,0) is not track; otherwise k = round((R - 8) / 16) + 16 * round((G - 8) / 16), with B = 128",
+ "race": {
+  "sessionId": "session_indy_nxt_2026_6759",
+  "raceLabel": "2026 Grand Prix of Monterey Race 1 R1"
+ },
+ "notTrack": [
+  0,
+  0,
+  0
+ ],
+ "sections": [
+  {
+   "k": 1,
+   "rgb": [
+    24,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-1-entry",
+   "sectionName": "Turn 1 Entry",
+   "label": "Turn 1 entry",
+   "kind": "measured",
+   "pixels": 2977,
+   "box": [
+    494,
+    906,
+    624,
+    998
+   ],
+   "centroid": [
+    556.2,
+    953.9
+   ],
+   "litColourInside": [
+    214,
+    168,
+    101
+   ],
+   "shadingColour": "rgb(215, 169, 101)"
+  },
+  {
+   "k": 2,
+   "rgb": [
+    40,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-1-exit",
+   "sectionName": "Turn 1 Exit",
+   "label": "Turn 1 exit",
+   "kind": "measured",
+   "pixels": 4285,
+   "box": [
+    608,
+    986,
+    820,
+    1088
+   ],
+   "centroid": [
+    714.2,
+    1037.9
+   ],
+   "litColourInside": [
+    220,
+    157,
+    61
+   ],
+   "shadingColour": "rgb(222, 158, 61)"
+  },
+  {
+   "k": 3,
+   "rgb": [
+    56,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-2",
+   "sectionName": "Turn 2",
+   "label": "Turn 2",
+   "kind": "measured",
+   "pixels": 12958,
+   "box": [
+    759,
+    971,
+    1104,
+    1160
+   ],
+   "centroid": [
+    953.4,
+    1075.7
+   ],
+   "litColourInside": [
+    154,
+    154,
+    159
+   ],
+   "shadingColour": "rgb(155, 155, 160)"
+  },
+  {
+   "k": 4,
+   "rgb": [
+    72,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-3",
+   "sectionName": "Turn 3",
+   "label": "Turn 3",
+   "kind": "measured",
+   "pixels": 7861,
+   "box": [
+    611,
+    728,
+    851,
+    983
+   ],
+   "centroid": [
+    702.9,
+    860.5
+   ],
+   "litColourInside": [
+    168,
+    168,
+    173
+   ],
+   "shadingColour": "rgb(168, 168, 173)"
+  },
+  {
+   "k": 5,
+   "rgb": [
+    88,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-4",
+   "sectionName": "Turn 4",
+   "label": "Turn 4",
+   "kind": "measured",
+   "pixels": 8872,
+   "box": [
+    839,
+    643,
+    1502,
+    777
+   ],
+   "centroid": [
+    1169.4,
+    696.2
+   ],
+   "litColourInside": [
+    180,
+    180,
+    185
+   ],
+   "shadingColour": "rgb(180, 180, 185)"
+  },
+  {
+   "k": 6,
+   "rgb": [
+    104,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-4a",
+   "sectionName": "Turn 4A",
+   "label": "Turn 4A",
+   "kind": "measured",
+   "pixels": 3747,
+   "box": [
+    1490,
+    769,
+    1723,
+    888
+   ],
+   "centroid": [
+    1607.7,
+    828.9
+   ],
+   "litColourInside": [
+    208,
+    181,
+    142
+   ],
+   "shadingColour": "rgb(208, 181, 142)"
+  },
+  {
+   "k": 7,
+   "rgb": [
+    120,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-5",
+   "sectionName": "Turn 5",
+   "label": "Turn 5",
+   "kind": "measured",
+   "pixels": 8761,
+   "box": [
+    1710,
+    788,
+    2076,
+    963
+   ],
+   "centroid": [
+    1940.9,
+    902.7
+   ],
+   "litColourInside": [
+    207,
+    191,
+    171
+   ],
+   "shadingColour": "rgb(204, 188, 169)"
+  },
+  {
+   "k": 8,
+   "rgb": [
+    136,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-5a",
+   "sectionName": "Turn 5A",
+   "label": "Turn 5A",
+   "kind": "measured",
+   "pixels": 4688,
+   "box": [
+    2053,
+    594,
+    2120,
+    791
+   ],
+   "centroid": [
+    2085.4,
+    693.6
+   ],
+   "litColourInside": [
+    215,
+    181,
+    131
+   ],
+   "shadingColour": "rgb(210, 177, 128)"
+  },
+  {
+   "k": 9,
+   "rgb": [
+    152,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-6",
+   "sectionName": "Turn 6",
+   "label": "Turn 6",
+   "kind": "measured",
+   "pixels": 7336,
+   "box": [
+    1713,
+    265,
+    2141,
+    597
+   ],
+   "centroid": [
+    1996.8,
+    432.4
+   ],
+   "litColourInside": [
+    200,
+    191,
+    182
+   ],
+   "shadingColour": "rgb(201, 192, 183)"
+  },
+  {
+   "k": 10,
+   "rgb": [
+    168,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-7",
+   "sectionName": "Turn 7",
+   "label": "Turn 7",
+   "kind": "measured",
+   "pixels": 1820,
+   "box": [
+    1522,
+    193,
+    1719,
+    270
+   ],
+   "centroid": [
+    1622.1,
+    230.6
+   ],
+   "litColourInside": [
+    209,
+    170,
+    113
+   ],
+   "shadingColour": "rgb(213, 173, 115)"
+  },
+  {
+   "k": 11,
+   "rgb": [
+    184,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-7a",
+   "sectionName": "Turn 7A",
+   "label": "Turn 7A",
+   "kind": "measured",
+   "pixels": 933,
+   "box": [
+    1419,
+    158,
+    1527,
+    198
+   ],
+   "centroid": [
+    1473.5,
+    177.7
+   ],
+   "litColourInside": [
+    202,
+    186,
+    168
+   ],
+   "shadingColour": "rgb(204, 188, 169)"
+  },
+  {
+   "k": 12,
+   "rgb": [
+    200,
+    8,
+    128
+   ],
+   "familyId": "wtls-corkscrew",
+   "sectionName": "Corkscrew",
+   "label": "Corkscrew",
+   "kind": "measured",
+   "pixels": 2437,
+   "box": [
+    1117,
+    138,
+    1430,
+    196
+   ],
+   "centroid": [
+    1289.7,
+    169.4
+   ],
+   "litColourInside": [
+    147,
+    147,
+    152
+   ],
+   "shadingColour": "rgb(143, 143, 148)"
+  },
+  {
+   "k": 13,
+   "rgb": [
+    216,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-9",
+   "sectionName": "Turn 9",
+   "label": "Turn 9",
+   "kind": "measured",
+   "pixels": 3128,
+   "box": [
+    849,
+    189,
+    1124,
+    328
+   ],
+   "centroid": [
+    940.6,
+    247.3
+   ],
+   "litColourInside": [
+    212,
+    191,
+    161
+   ],
+   "shadingColour": "rgb(206, 185, 156)"
+  },
+  {
+   "k": 14,
+   "rgb": [
+    232,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-10",
+   "sectionName": "Turn 10",
+   "label": "Turn 10",
+   "kind": "measured",
+   "pixels": 5626,
+   "box": [
+    390,
+    327,
+    865,
+    454
+   ],
+   "centroid": [
+    673.8,
+    424.0
+   ],
+   "litColourInside": [
+    206,
+    190,
+    171
+   ],
+   "shadingColour": "rgb(204, 188, 169)"
+  },
+  {
+   "k": 15,
+   "rgb": [
+    248,
+    8,
+    128
+   ],
+   "familyId": "wtls-turn-11",
+   "sectionName": "Turn 11",
+   "label": "Turn 11",
+   "kind": "measured",
+   "pixels": 2159,
+   "box": [
+    237,
+    441,
+    393,
+    496
+   ],
+   "centroid": [
+    292.6,
+    458.0
+   ],
+   "litColourInside": [
+    95,
+    95,
+    100
+   ],
+   "shadingColour": "rgb(95, 95, 100)"
+  },
+  {
+   "k": 16,
+   "rgb": [
+    8,
+    24,
+    128
+   ],
+   "familyId": "wtls-fs-pi",
+   "sectionName": "FS - PI",
+   "label": "Turn 11 → S/F",
+   "kind": "measured",
+   "pixels": 10506,
+   "box": [
+    251,
+    493,
+    515,
+    914
+   ],
+   "centroid": [
+    364.1,
+    718.0
+   ],
+   "litColourInside": [
+    216,
+    165,
+    88
+   ],
+   "shadingColour": "rgb(217, 165, 88)"
+  }
+ ],
+ "checks": {
+  "pixelsOffLegend": 0,
+  "idTrackPixels": 88094,
+  "litBandPixels": 91371,
+  "iou": 0.9611,
+  "litBandWithin1pxOfIds": 1.0,
+  "idsWithin1pxOfLitBand": 1.0,
+  "litBandWithin2pxOfIds": 1.0,
+  "publishedStillVsFreshRender": {
+   "meanAbsDiff": 1.384,
+   "p99": 13,
+   "max": 82
+  }
+ }
+}

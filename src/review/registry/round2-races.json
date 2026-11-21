@@ -1,0 +1,46 @@
+{
+  "lane": "races",
+  "entries": [
+    {
+      "id": "races-years",
+      "page": "/races",
+      "title": "Every season on the Races page, 2019 to 2026 (175 races): the years before INDY NXT folded under their year's dots, or open",
+      "switch": "racesyears",
+      "values": [
+        {
+          "value": null,
+          "label": "folded (default): each year 2019-2023 shows its dots, one per race coloured by series, and a 'Show the N races' button opens its rows"
+        },
+        {
+          "value": "open",
+          "label": "open: every year's rows listed under its dots, all 175 rows on the page"
+        }
+      ],
+      "look": "Races. Use the year links under the title to jump; point at (or tap) any dot in any season for the track card; open 2019 and click a race; open a DNF/DNS race (2019 Watkins Glen Race 3) to see its own page.",
+      "anchor": "#season-2019",
+      "added": "2026-11-17T23:30",
+      "reviewed": false,
+      "replacedBy": "2023 and earlier behind one disclosure under the INDY NXT seasons: closed by default, opens in place (nothing above it moves), keyboard and touch; a year link or an address ending #season-2019 opens it at that year"
+    },
+    {
+      "id": "races-row-picture",
+      "page": "/races",
+      "title": "The track on each Races row: the 3D still with the lap drawn bold in ink, or round seven's bird's-eye icon",
+      "switch": "racepic",
+      "values": [
+        {
+          "value": null,
+          "label": "bold-line still (default): the venue's 3D still cropped to the track, the lap drawn bold in ink on its centreline, so it reads at row size; a quiet blank tile where no model exists yet"
+        },
+        {
+          "value": "icon",
+          "label": "bird's-eye icon (round seven): the model from straight above with a bold line; the 2D line where no icon exists"
+        }
+      ],
+      "look": "Races → open 2019 (all 30 rows now have a picture) and any INDY NXT season's rows; flip to icon and compare how the track reads at row size.",
+      "anchor": "#season-2019",
+      "added": "2026-11-18T01:30",
+      "reviewed": false
+    }
+  ]
+}

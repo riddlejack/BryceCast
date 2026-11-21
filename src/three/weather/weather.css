@@ -1,0 +1,49 @@
+/* The race hour's weather over a still of the 3D model (StillWeather.tsx).
+ * Laid inside the still's positioned box; it never takes the pointer. */
+.wx-still {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* The sky: the picture's colour drained a little under cloud and rain. The
+ * paper is neutral, so it stays the page's paper. */
+.wx-still__sky {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.wx-still--partly .wx-still__sky { backdrop-filter: saturate(0.9); -webkit-backdrop-filter: saturate(0.9); }
+.wx-still--overcast .wx-still__sky { backdrop-filter: saturate(0.72) contrast(0.97); -webkit-backdrop-filter: saturate(0.72) contrast(0.97); }
+.wx-still--rain .wx-still__sky { backdrop-filter: saturate(0.62) contrast(0.96); -webkit-backdrop-filter: saturate(0.62) contrast(0.96); }
+.wx-still--storm .wx-still__sky { backdrop-filter: saturate(0.55) contrast(0.95); -webkit-backdrop-filter: saturate(0.55) contrast(0.95); }
+
+.wx-still__rain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wx-still__arrow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.wx-still__arrow path {
+  fill: var(--ink, #1e1c1a);
+  stroke: var(--ink, #1e1c1a);
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.82;
+}
+
+/* A hover card's still with weather (venuePeek.tsx CardStill): the card's own
+ * still class sizes this box; the picture fills it. */
+.wx-peek { position: relative; display: block; overflow: hidden; }
+.wx-peek > .wx-peek__img { display: block; width: 100%; height: auto; margin: 0; }

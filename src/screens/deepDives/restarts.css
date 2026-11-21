@@ -1,0 +1,8 @@
+/* The restarts deep dive (November 17, 2026). */
+.ddr-stage { position: relative; width: 100%; }
+.ddr-gold {
+  color: var(--ink);
+  background: linear-gradient(transparent 58%, color-mix(in srgb, var(--bryce) 55%, transparent) 58%);
+  padding: 0 1px;
+}
+

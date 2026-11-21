@@ -18,10 +18,12 @@ import { mkdtempSync, rmSync, writeFileSync, existsSync, readFileSync } from 'no
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
+import { spawnSync } from 'node:child_process';
 
 import {
   PIPELINE_STEPS,
   MANUAL_FOLLOWUPS,
+  analyticsPythonEnv,
   defaultRunStep,
   runPreflight,
   runPostraceRoll
@@ -70,6 +72,59 @@ check('timing archives and coverage are refreshed before history and UI', () => 
   assert.ok(ids.indexOf('timing-coverage') < ids.indexOf('timing-coverage-validate'));
   assert.ok(ids.indexOf('timing-coverage-validate') < ids.indexOf('ingest-history'));
   assert.ok(MANUAL_FOLLOWUPS.some((x) => x.id === 'deploy'));
+});
+
+check('career figures and the globe rebuild after history and before the package', () => {
+  const ids = PIPELINE_STEPS.map((s) => s.id);
+  const order = ['career-import', 'ingest-history', 'career-life-stats', 'career-life-stats-validate', 'career-atlas', 'career-atlas-validate', 'ui-data-package'];
+  for (const id of order) assert.ok(ids.includes(id), `${id} must be in the roll`);
+  for (let i = 1; i < order.length; i += 1) {
+    assert.ok(ids.indexOf(order[i - 1]) < ids.indexOf(order[i]), `${order[i - 1]} must run before ${order[i]}`);
+  }
+  const scripts = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8')).scripts;
+  for (const id of order.slice(2, 6)) {
+    const step = PIPELINE_STEPS.find((s) => s.id === id);
+    assert.ok(scripts[step.npmScript], `package.json must define ${step.npmScript}`);
+  }
+  assert.ok(MANUAL_FOLLOWUPS.some((x) => x.id === 'venue-facts'), 'the missing-track follow-up is surfaced');
+});
+check('the career python steps run on the analytics interpreter, the rest on the inherited env', () => {
+  const pythonSteps = PIPELINE_STEPS.filter((s) => s.analyticsPython).map((s) => s.id);
+  assert.deepEqual(pythonSteps, ['career-life-stats', 'career-life-stats-validate', 'career-atlas', 'career-atlas-validate']);
+  const extra = analyticsPythonEnv({ PATH: '/usr/bin' });
+  if (extra.PATH) assert.ok(extra.PATH.endsWith('/usr/bin'), 'the inherited PATH is kept after the analytics bin');
+});
+check('a failed career-life-stats step stops the roll before the globe and the package', () => {
+  const calls = [];
+  const { ok, report } = runPostraceRoll({
+    env: baseEnv,
+    cwd: repoRoot,
+    now: () => Date.parse('2026-08-08T12:00:00Z'),
+    runStep: ({ step }) => {
+      calls.push(step.id);
+      return step.id === 'career-life-stats' ? { ok: false, exitCode: 1 } : { ok: true, exitCode: 0 };
+    },
+    onLog: silent,
+    reportDir
+  });
+  assert.equal(ok, false);
+  assert.ok(!calls.includes('career-atlas') && !calls.includes('ui-data-package'));
+  assert.equal(report.failedStep.id, 'career-life-stats');
+});
+check('the life-stats builder names a track with no venue_facts row', () => {
+  const probe = spawnSync('python3', ['-c', [
+    'import sys, json',
+    "sys.path.insert(0, 'analysis/career-life-stats/scripts')",
+    'import build_career_life_stats as b',
+    "dataset = {'sessions': [{'id': 's1', 'eventId': 'e1', 'sessionType': 'race'}],",
+    "  'events': [{'id': 'e1', 'trackId': 'track_new_place'}],",
+    "  'tracks': [{'id': 'track_new_place', 'name': 'New Place Raceway'}],",
+    "  'results': [{'sessionId': 's1', 'driverId': b.BRYCE_ID}]}",
+    'b.require_venue_facts(dataset, {})'
+  ].join('\n')], { cwd: repoRoot, encoding: 'utf8' });
+  assert.notEqual(probe.status, 0, 'the build must stop');
+  assert.match(probe.stderr, /New Place Raceway \[track_new_place\]/, 'the message names the track');
+  assert.match(probe.stderr, /venue_facts\.csv/);
 });
 
 // --- Preflight: happy path --------------------------------------------------

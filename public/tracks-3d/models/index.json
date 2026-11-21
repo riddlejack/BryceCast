@@ -1,0 +1,565 @@
+{
+ "venues": {
+  "weathertech-raceway-laguna-seca": {
+   "file": "/tracks-3d/models/weathertech-raceway-laguna-seca.json",
+   "kind": "laguna",
+   "bytes": 944805,
+   "gzipBytes": 229504,
+   "rmsM": 1.2,
+   "worstM": 2,
+   "poster": {
+    "1200": "/tracks-3d/weathertech-raceway-laguna-seca-plain@1200.jpg",
+    "2400": "/tracks-3d/weathertech-raceway-laguna-seca-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others."
+  },
+  "road-america": {
+   "file": "/tracks-3d/models/road-america.json",
+   "kind": "venue",
+   "bytes": 237444,
+   "gzipBytes": 66519,
+   "rmsM": 2.6,
+   "worstM": 3.9,
+   "poster": {
+    "1200": "/tracks-3d/road-america-plain@1200.jpg",
+    "2400": "/tracks-3d/road-america-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others."
+  },
+  "streets-of-detroit": {
+   "file": "/tracks-3d/models/streets-of-detroit.json",
+   "kind": "city",
+   "bytes": 197325,
+   "gzipBytes": 58757,
+   "rmsM": 4.7,
+   "worstM": 10.8,
+   "poster": {
+    "1200": "/tracks-3d/streets-of-detroit-plain@1200.jpg",
+    "2400": "/tracks-3d/streets-of-detroit-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0)."
+  },
+  "streets-of-st-petersburg": {
+   "file": "/tracks-3d/models/streets-of-st-petersburg.json",
+   "kind": "city",
+   "bytes": 139516,
+   "gzipBytes": 42884,
+   "rmsM": 4.4,
+   "worstM": 11.7,
+   "poster": {
+    "1200": "/tracks-3d/streets-of-st-petersburg-plain@1200.jpg",
+    "2400": "/tracks-3d/streets-of-st-petersburg-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0)."
+  },
+  "streets-of-arlington": {
+   "file": "/tracks-3d/models/streets-of-arlington.json",
+   "kind": "city",
+   "bytes": 187431,
+   "gzipBytes": 55005,
+   "rmsM": 22.4,
+   "worstM": 66.6,
+   "poster": {
+    "1200": "/tracks-3d/streets-of-arlington-plain@1200.jpg",
+    "2400": "/tracks-3d/streets-of-arlington-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0)."
+  },
+  "barber-motorsports-park": {
+   "file": "/tracks-3d/models/barber-motorsports-park.json",
+   "kind": "venue",
+   "bytes": 143995,
+   "gzipBytes": 52044,
+   "rmsM": 1.2,
+   "worstM": 2,
+   "poster": {
+    "1200": "/tracks-3d/barber-motorsports-park-plain@1200.jpg",
+    "2400": "/tracks-3d/barber-motorsports-park-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "indianapolis-motor-speedway-road-course": {
+   "file": "/tracks-3d/models/indianapolis-motor-speedway-road-course.json",
+   "kind": "venue",
+   "bytes": 193231,
+   "gzipBytes": 59233,
+   "rmsM": 49.8,
+   "worstM": 146.9,
+   "poster": {
+    "1200": "/tracks-3d/indianapolis-motor-speedway-road-course-plain@1200.jpg",
+    "2400": "/tracks-3d/indianapolis-motor-speedway-road-course-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "mid-ohio-sports-car-course": {
+   "file": "/tracks-3d/models/mid-ohio-sports-car-course.json",
+   "kind": "venue",
+   "bytes": 188553,
+   "gzipBytes": 62977,
+   "rmsM": 1,
+   "worstM": 1.8,
+   "poster": {
+    "1200": "/tracks-3d/mid-ohio-sports-car-course-plain@1200.jpg",
+    "2400": "/tracks-3d/mid-ohio-sports-car-course-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "portland-international-raceway": {
+   "file": "/tracks-3d/models/portland-international-raceway.json",
+   "kind": "venue",
+   "bytes": 161367,
+   "gzipBytes": 55099,
+   "rmsM": 1.1,
+   "worstM": 1.5,
+   "poster": {
+    "1200": "/tracks-3d/portland-international-raceway-plain@1200.jpg",
+    "2400": "/tracks-3d/portland-international-raceway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "iowa-speedway": {
+   "file": "/tracks-3d/models/iowa-speedway.json",
+   "kind": "venue",
+   "bytes": 209172,
+   "gzipBytes": 61225,
+   "rmsM": 0.2,
+   "worstM": 0.5,
+   "poster": {
+    "1200": "/tracks-3d/iowa-speedway-plain@1200.jpg",
+    "2400": "/tracks-3d/iowa-speedway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "world-wide-technology-raceway": {
+   "file": "/tracks-3d/models/world-wide-technology-raceway.json",
+   "kind": "venue",
+   "bytes": 249196,
+   "gzipBytes": 57037,
+   "rmsM": 0.8,
+   "worstM": 1.3,
+   "poster": {
+    "1200": "/tracks-3d/world-wide-technology-raceway-plain@1200.jpg",
+    "2400": "/tracks-3d/world-wide-technology-raceway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "the-milwaukee-mile": {
+   "file": "/tracks-3d/models/the-milwaukee-mile.json",
+   "kind": "venue",
+   "bytes": 257361,
+   "gzipBytes": 72149,
+   "rmsM": 0.6,
+   "worstM": 0.9,
+   "poster": {
+    "1200": "/tracks-3d/the-milwaukee-mile-plain@1200.jpg",
+    "2400": "/tracks-3d/the-milwaukee-mile-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "nashville-superspeedway": {
+   "file": "/tracks-3d/models/nashville-superspeedway.json",
+   "kind": "venue",
+   "bytes": 296874,
+   "gzipBytes": 83985,
+   "rmsM": 0.8,
+   "worstM": 1.1,
+   "poster": {
+    "1200": "/tracks-3d/nashville-superspeedway-plain@1200.jpg",
+    "2400": "/tracks-3d/nashville-superspeedway-plain.jpg"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. Land cover: ESA WorldCover 2021 (CC BY 4.0). Buildings also from Overture Maps Foundation (ODbL 1.0)."
+  },
+  "brands-hatch-indy": {
+   "file": "/tracks-3d/models/brands-hatch-indy.json",
+   "kind": "venue",
+   "bytes": 94371,
+   "gzipBytes": 33497,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/brands-hatch-indy-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "brands-hatch-gp": {
+   "file": "/tracks-3d/models/brands-hatch-gp.json",
+   "kind": "venue",
+   "bytes": 233384,
+   "gzipBytes": 79964,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/brands-hatch-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "silverstone-national": {
+   "file": "/tracks-3d/models/silverstone-national.json",
+   "kind": "venue",
+   "bytes": 142287,
+   "gzipBytes": 44984,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/silverstone-national-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "silverstone-international": {
+   "file": "/tracks-3d/models/silverstone-international.json",
+   "kind": "venue",
+   "bytes": 174504,
+   "gzipBytes": 55343,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/silverstone-international-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "silverstone-gp": {
+   "file": "/tracks-3d/models/silverstone-gp.json",
+   "kind": "venue",
+   "bytes": 311725,
+   "gzipBytes": 96088,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/silverstone-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "oulton-park-international": {
+   "file": "/tracks-3d/models/oulton-park-international.json",
+   "kind": "venue",
+   "bytes": 224159,
+   "gzipBytes": 74295,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/oulton-park-international-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "snetterton-300": {
+   "file": "/tracks-3d/models/snetterton-300.json",
+   "kind": "venue",
+   "bytes": 129675,
+   "gzipBytes": 39242,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/snetterton-300-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "donington-park-gp": {
+   "file": "/tracks-3d/models/donington-park-gp.json",
+   "kind": "venue",
+   "bytes": 168966,
+   "gzipBytes": 56299,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/donington-park-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "spa-francorchamps-gp": {
+   "file": "/tracks-3d/models/spa-francorchamps-gp.json",
+   "kind": "venue",
+   "bytes": 586464,
+   "gzipBytes": 210416,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/spa-francorchamps-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "castle-combe-full": {
+   "file": "/tracks-3d/models/castle-combe-full.json",
+   "kind": "venue",
+   "bytes": 175110,
+   "gzipBytes": 56206,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/castle-combe-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "circuit-of-the-americas-gp": {
+   "file": "/tracks-3d/models/circuit-of-the-americas-gp.json",
+   "kind": "venue",
+   "bytes": 256199,
+   "gzipBytes": 86696,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/circuit-of-the-americas-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "cadwell-park-full": {
+   "file": "/tracks-3d/models/cadwell-park-full.json",
+   "kind": "venue",
+   "bytes": 153613,
+   "gzipBytes": 53350,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/cadwell-park-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from the UK Environment Agency LIDAR (data.gov.uk), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "algarve-gp": {
+   "file": "/tracks-3d/models/algarve-gp.json",
+   "kind": "venue",
+   "bytes": 163619,
+   "gzipBytes": 57942,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/algarve-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "road-atlanta-full": {
+   "file": "/tracks-3d/models/road-atlanta-full.json",
+   "kind": "venue",
+   "bytes": 299263,
+   "gzipBytes": 104143,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/road-atlanta-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0).",
+   "career": true
+  },
+  "watkins-glen-long": {
+   "file": "/tracks-3d/models/watkins-glen-long.json",
+   "kind": "venue",
+   "bytes": 267751,
+   "gzipBytes": 90903,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/watkins-glen-long-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "hungaroring-gp": {
+   "file": "/tracks-3d/models/hungaroring-gp.json",
+   "kind": "venue",
+   "bytes": 241398,
+   "gzipBytes": 86262,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/hungaroring-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "paul-ricard-gp": {
+   "file": "/tracks-3d/models/paul-ricard-gp.json",
+   "kind": "venue",
+   "bytes": 349253,
+   "gzipBytes": 114871,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/paul-ricard-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "vir-full": {
+   "file": "/tracks-3d/models/vir-full.json",
+   "kind": "venue",
+   "bytes": 310409,
+   "gzipBytes": 106234,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/vir-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "red-bull-ring-gp": {
+   "file": "/tracks-3d/models/red-bull-ring-gp.json",
+   "kind": "venue",
+   "bytes": 221789,
+   "gzipBytes": 79091,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/red-bull-ring-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "pittsburgh-full": {
+   "file": "/tracks-3d/models/pittsburgh-full.json",
+   "kind": "venue",
+   "bytes": 212608,
+   "gzipBytes": 73563,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/pittsburgh-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "highlands-full": {
+   "file": "/tracks-3d/models/highlands-full.json",
+   "kind": "venue",
+   "bytes": 131732,
+   "gzipBytes": 42679,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/highlands-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from LINZ (CC BY 4.0), SRTM and others. ESA WorldCover 2021 (CC BY 4.0).",
+   "career": true
+  },
+  "monza-gp": {
+   "file": "/tracks-3d/models/monza-gp.json",
+   "kind": "venue",
+   "bytes": 570083,
+   "gzipBytes": 181313,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/monza-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "summit-point-main": {
+   "file": "/tracks-3d/models/summit-point-main.json",
+   "kind": "venue",
+   "bytes": 187752,
+   "gzipBytes": 63469,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/summit-point-main-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "njmp-thunderbolt": {
+   "file": "/tracks-3d/models/njmp-thunderbolt.json",
+   "kind": "venue",
+   "bytes": 147513,
+   "gzipBytes": 49415,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/njmp-thunderbolt-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "lucas-oil-irp-oval": {
+   "file": "/tracks-3d/models/lucas-oil-irp-oval.json",
+   "kind": "venue",
+   "bytes": 117638,
+   "gzipBytes": 33070,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/lucas-oil-irp-oval-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "euromarque-ruapuna-full": {
+   "file": "/tracks-3d/models/euromarque-ruapuna-full.json",
+   "kind": "venue",
+   "bytes": 98804,
+   "gzipBytes": 30856,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/euromarque-ruapuna-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from LINZ (CC BY 4.0), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "sebring-full": {
+   "file": "/tracks-3d/models/sebring-full.json",
+   "kind": "venue",
+   "bytes": 180451,
+   "gzipBytes": 45765,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/sebring-full-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "daytona-road-course": {
+   "file": "/tracks-3d/models/daytona-road-course.json",
+   "kind": "venue",
+   "bytes": 665214,
+   "gzipBytes": 159425,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/daytona-road-course-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "homestead-miami-road-course": {
+   "file": "/tracks-3d/models/homestead-miami-road-course.json",
+   "kind": "venue",
+   "bytes": 110306,
+   "gzipBytes": 35348,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/homestead-miami-road-course-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from USGS 3DEP and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  },
+  "mugello-gp": {
+   "file": "/tracks-3d/models/mugello-gp.json",
+   "kind": "venue",
+   "bytes": 213556,
+   "gzipBytes": 77199,
+   "rmsM": 0,
+   "worstM": 0,
+   "poster": {
+    "1200": "/tracks-3d/stills/mugello-gp-plain.webp"
+   },
+   "attribution": "Map data © OpenStreetMap contributors (ODbL 1.0). Terrain Tiles: Mapzen / Tilezen, data from EU-DEM (Copernicus, European Union), SRTM and others. ESA WorldCover 2021 (CC BY 4.0). Overture Maps Foundation (ODbL 1.0).",
+   "career": true
+  }
+ },
+ "generated": "2026-11-18",
+ "by": "scripts/build-track-models.mjs"
+}

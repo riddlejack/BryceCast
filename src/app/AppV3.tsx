@@ -4,10 +4,12 @@ import { CalendarClock, Flag, Home, LineChart, Map, Radio } from 'lucide-react';
 import './theme.css';
 import { Link, RouterProvider, matchPath, useRouter } from './router';
 import { idlePrefetchLikelyNextRoutes } from './routePrefetch';
-import { CarMark, Plate } from './components';
+import { CarMark, CarMarkRound6, Plate } from './components';
+import { switchValue } from '../review/switches';
 import { useReadiness } from './useReadiness';
 import { useLiveSessionHistory } from './useLiveSessionHistory';
 import { useReplaySession } from './useReplaySession';
+import { useLiveTabShown } from './liveTab';
 import { HomeScreen } from '../screens/HomeScreen';
 
 /* Every screen except Home is lazy: Home is what a cold visit renders first,
@@ -49,18 +51,21 @@ const isActive = (path: string, to: string) => (to === '/' ? path === '/' : path
 const Shell = ({
   children,
   liveState,
-  demoReplay = false
+  replayActive = false
 }: {
   children: ReactNode;
   liveState: string | undefined;
-  /** The off-season auto-demo (LiveScreen's OffSeasonLive) marks its own
-   *  replay URL with `&demo=offseason`. Its readiness payload reads 'ready'
-   *  just like a real session (a replay mimics live state on purpose), so the
-   *  nav must be told explicitly not to present it as genuinely live. */
-  demoReplay?: boolean;
+  /** Any replay is playing: one the visitor chose (a race page, Home, the
+   *  replay list) or the off-season auto-demo. A replay's readiness payload
+   *  reads 'ready' just like a real session (it mimics live state on
+   *  purpose), so the nav must be told explicitly not to present it as live. */
+  replayActive?: boolean;
 }) => {
   const { route } = useRouter();
-  const liveish = !demoReplay && (liveState === 'ready' || liveState === 'degraded');
+  const liveish = !replayActive && (liveState === 'ready' || liveState === 'degraded');
+  // Live is in the nav only while a session is on (round 9; src/app/liveTab.ts).
+  const liveTab = useLiveTabShown(liveState, replayActive, route.search);
+  const shownItems = liveTab ? navItems : navItems.filter((item) => item.to !== '/live');
   return (
     <>
       <nav className="topnav">
@@ -69,7 +74,7 @@ const Shell = ({
           BryceCast
         </Link>
         <div className="row" style={{ gap: 24, flex: 1 }}>
-          {navItems.slice(1).map((item) => (
+          {shownItems.slice(1).map((item) => (
             <Link key={item.to} to={item.to} className={`navlink${isActive(route.path, item.to) ? ' navlink--active' : ''}`}>
               {item.label}
               {item.to === '/live' && liveish ? <span className="live-dot" style={{ color: 'var(--status-good)' }} aria-hidden /> : null}
@@ -87,7 +92,8 @@ const Shell = ({
       <footer className="footer">
         <div className="footer__inner">
           <span className="row" style={{ gap: 10 }}>
-            <CarMark height={16} />
+            {/* review switch `car`: the new car at 20 px (default), at 16 px, or the round-6 mark */}
+            {switchValue('car') === 'old' ? <CarMarkRound6 height={16} /> : <CarMark height={switchValue('car') === '16' ? 16 : 20} />}
             BryceCast · following Bryce Aron, No. 9, Chip Ganassi Racing · built by a friend, powered by official sources
           </span>
           <span className="row" style={{ gap: 14 }}>
@@ -96,8 +102,8 @@ const Shell = ({
           </span>
         </div>
       </footer>
-      <nav className="tabbar">
-        {navItems.map((item) => {
+      <nav className="tabbar" data-tabs={shownItems.length}>
+        {shownItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(route.path, item.to);
           return (
@@ -137,7 +143,10 @@ const Routes = () => {
   // engage on `/career` too — and a race page URL with replay params renders
   // that race's LIVE shell as it happened (Brief R-c: a replayed race gets a
   // replayed race page). Other surfaces stay on the real feed (no param).
-  const replayCapableRoute = onLive || route.path === '/career' || raceDetail !== null;
+  // The Tracks page plays a race in place (round 8) unless its switch is set
+  // back to the button that goes to /live.
+  const tracksReplay = route.path === '/tracks' && switchValue('trackreplay', route.search) !== 'link';
+  const replayCapableRoute = onLive || route.path === '/career' || tracksReplay || raceDetail !== null;
   const replayKey = replayCapableRoute && !fixtureMode ? route.search.get('replay') : null;
   // The replay clock is created first so readiness can append this client's
   // replay params to its own polls. A restart must clear the live-history chart
@@ -157,10 +166,28 @@ const Routes = () => {
     if (replay.started && !startedRef.current) readiness.refresh();
     startedRef.current = replay.started;
   }, [replay.started, readiness.refresh]);
+  // A replay clock jumps (Restart, the formation lap, the green flag) and the
+  // pre-green readiness cadence is 15 s: fetch the new moment at once, and
+  // poll every second while a replay sits before its green flag, so the
+  // formation laps at 16× and the green itself show when they happen.
+  useEffect(() => {
+    if (replay.clockEpoch > 0) readiness.resync();
+  }, [replay.clockEpoch, readiness.resync]);
+  const replayPreGreen = replay.started && readiness.payload?.state === 'pre_session';
+  useEffect(() => {
+    if (!replayPreGreen) return undefined;
+    const timer = window.setInterval(() => readiness.refresh(), 1_000);
+    return () => window.clearInterval(timer);
+  }, [replayPreGreen, readiness.refresh]);
   const careerRace = matchPath('/career/race/:sessionId', route.path);
-  // See Shell's `demoReplay` doc above — only true for the off-season
-  // auto-demo's own marked replay URL on /live, never a person's own pick.
-  const offSeasonDemoReplay = onLive && replay.engaged && route.search.get('demo') === 'offseason';
+  // The nav's green live dot is for real sessions only. Any replay clears it:
+  // one the visitor chose and the off-season auto-demo alike, and a payload
+  // the server marks as simulated playback. A replay a live session preempted
+  // (endedByLive) is the real feed again, so the dot comes back.
+  const replaySimulated = Boolean(
+    (readiness.payload?.replay as { simulation?: { active?: unknown } } | undefined)?.simulation?.active === true
+  );
+  const replayActive = (replay.engaged && !replay.unavailable && !replay.endedByLive) || replaySimulated;
 
   let screen: ReactNode;
   if (route.path === '/') screen = <HomeScreen readiness={readiness} />;
@@ -180,7 +207,8 @@ const Routes = () => {
       />
     );
   else if (route.path === '/races') screen = <RacesScreen livePayload={readiness.fixtureMode ? null : readiness.payload} />;
-  else if (route.path === '/tracks') screen = <TracksScreen />;
+  else if (route.path === '/tracks')
+    screen = <TracksScreen replay={replay.engaged ? replay : null} payload={readiness.payload} history={liveHistory.active} replaySourceGap={readiness.sourceGap} />;
   else if (careerRace) screen = <CareerRaceScreen sessionId={careerRace.sessionId} />;
   else if (route.path === '/career') screen = <CareerScreen readiness={readiness} />;
   else if (route.path === '/data') screen = <DataScreen />;
@@ -196,7 +224,7 @@ const Routes = () => {
     );
 
   return (
-    <Shell liveState={readiness.payload?.state} demoReplay={offSeasonDemoReplay}>
+    <Shell liveState={readiness.payload?.state} replayActive={replayActive}>
       <Suspense fallback={<RouteFallback />}>{screen}</Suspense>
     </Shell>
   );

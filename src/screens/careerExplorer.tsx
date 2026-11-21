@@ -1,15 +1,20 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Card, SourcePill, Stat, Unavailable } from '../app/components';
-import { ChartTipCard, chartFont, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, type ChartTip } from '../app/charts';
+import { ChartTipCard, chartFont, focusFade, useCoarsePointer, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen, type ChartTip } from '../app/charts';
 import { asNumber, asString, ordinal } from '../app/format';
 import { restartBaselineSentence } from '../data/restartBaseline';
 import { Link, useRouter } from '../app/router';
-import { uiDataPackage, type UiCareerMoment, type UiSeasonCampaign } from '../data/uiDataPackage';
+import { useTapPreview, type TapPreview } from '../app/tapPreview';
+import { uiDataPackage, type UiSeasonCampaign } from '../data/uiDataPackage';
 import { useImsaDaytonaStint } from '../data/imsaDaytonaStint';
+import { beatLine } from '../app/raceFacts';
+import { wetDryCall } from '../app/wetDry';
+import { raceFieldOf, raceTitleOf } from './raceCardFacts';
 
 export interface CareerRow {
   raceLabel: string;
   sessionId: string;
+  seriesId: string;
   seriesName: string;
   seriesShort: string;
   seasonYear: number | null;
@@ -18,77 +23,15 @@ export interface CareerRow {
   start: number | null;
   finish: number;
   gain: number | null;
+  /** Share of the other cars he finished ahead of, (field − place) ÷ (field − 1); a one-car field keeps the stored percentile. */
   percentile: number;
   status: string;
+  /** The race's own day (raceDate), not the meeting's first day. */
   date: string;
+  /** careerLab.raceWeather: the official series report, else an observed call, else the reanalysis. */
   wetDry: string | null;
+  wetDrySource: string | null;
 }
-
-interface ClimbMomentPoint extends UiCareerMoment {
-  cx: number;
-  cy: number;
-}
-
-interface ClimbMomentPlacement extends ClimbMomentPoint {
-  side: 'above' | 'below';
-  labelWidth: number;
-  labelX: number;
-  labelY: number;
-}
-
-const clamp = (value: number, minimum: number, maximum: number) => Math.min(Math.max(value, minimum), maximum);
-
-/** Alternating label lanes carry most of the separation. A forward/backward
- * sweep then nudges same-lane labels just enough to keep a measured-width
- * chart collision-free without detaching leaders from their race dots. */
-const layoutClimbMoments = ({
-  moments,
-  width,
-  height,
-  margin
-}: {
-  moments: ClimbMomentPoint[];
-  width: number;
-  height: number;
-  margin: { top: number; right: number; bottom: number; left: number };
-}): ClimbMomentPlacement[] => {
-  const leftEdge = margin.left;
-  const rightEdge = width - margin.right;
-  const gap = 8;
-  const placements = moments.map((moment, index) => {
-    const side = index % 2 === 0 ? 'below' : 'above';
-    const labelWidth = Math.max(54, Array.from(moment.shortLabel).length * 5.9 + 4);
-    return {
-      ...moment,
-      side,
-      labelWidth,
-      labelX: clamp(moment.cx, leftEdge + labelWidth / 2, rightEdge - labelWidth / 2),
-      labelY:
-        side === 'above'
-          ? Math.max(margin.top - 4, moment.cy - 24)
-          : Math.min(height - margin.bottom - 8, moment.cy + 30)
-    } satisfies ClimbMomentPlacement;
-  });
-
-  for (const side of ['above', 'below'] as const) {
-    const lane = placements.filter((placement) => placement.side === side).sort((left, right) => left.cx - right.cx);
-    let cursor = leftEdge;
-    for (const placement of lane) {
-      const half = placement.labelWidth / 2;
-      placement.labelX = Math.max(placement.labelX, cursor + half);
-      cursor = placement.labelX + half + gap;
-    }
-    cursor = rightEdge;
-    for (let index = lane.length - 1; index >= 0; index -= 1) {
-      const placement = lane[index];
-      const half = placement.labelWidth / 2;
-      placement.labelX = Math.min(placement.labelX, cursor - half);
-      cursor = placement.labelX - half - gap;
-    }
-  }
-
-  return placements;
-};
 
 /** INDY NXT races have full debrief pages; every other race gets the light career sheet. */
 export const raceHref = (sessionId: string): string =>
@@ -101,49 +44,71 @@ const raceNumberOf = (sessionId: string): number | null => {
   return match ? Number(match[1]) : null;
 };
 
+/* Keyed by seriesId, so a series renamed at the source keeps its label and colour.
+ * Callers may pass a series name or id; a name resolves to its id through the
+ * package's own rows. */
+const seriesIdByName = new Map<string, string>(
+  [...(uiDataPackage.screens.careerLab.resultConversion ?? []), ...(uiDataPackage.screens.careerLab.unclassifiedRaces ?? [])]
+    .map((row) => [asString(row.seriesName) ?? '', asString(row.seriesId) ?? ''] as [string, string])
+    .filter(([name, id]) => name && id)
+);
+
+export const seriesIdOf = (nameOrId: string): string => (nameOrId.startsWith('series_') ? nameOrId : seriesIdByName.get(nameOrId) ?? nameOrId);
+
 const seriesShortNames: Record<string, string> = {
-  'F1600 Championship Series': 'F1600',
-  'Formula Ford': 'Formula Ford',
-  'GB3 Championship': 'GB3',
-  'Euroformula Open': 'Euroformula',
-  'Castrol Toyota Formula Regional Oceania Championship': 'FR Oceania',
-  'IMSA WeatherTech SportsCar Championship': 'IMSA',
-  'INDY NXT': 'INDY NXT'
+  series_scca_super_tour: 'SCCA',
+  series_frp_f1600: 'F1600',
+  series_rcffs: 'RCFFS',
+  series_formula_ford: 'Formula Ford',
+  series_gb3: 'GB3',
+  series_euroformula_open: 'Euroformula',
+  series_froc: 'FR Oceania',
+  series_usf_pro_2000: 'USF Pro 2000',
+  series_imsa_weathertech: 'IMSA',
+  series_indy_nxt: 'INDY NXT'
 };
 
-export const seriesShort = (name: string): string => seriesShortNames[name] ?? name;
+export const seriesShort = (nameOrId: string): string => seriesShortNames[seriesIdOf(nameOrId)] ?? nameOrId;
 
-/* Chapter identity color: one quiet tint per era, ink for the current chapter.
- * Values live in theme.css and passed the dataviz six-checks validator. */
+/* Series identity colour: one swatch per series, gold for INDY NXT, the
+ * current chapter (round 2 fix pass). Values live in theme.css ("the road",
+ * with other versions behind the `palette` switch) and pass the dataviz
+ * six-checks validator. The three 2019 Formula F series (SCCA, F1600, RCFFS)
+ * are dark, mid and light steps of one hue: one car class. */
 const chapterTints: Record<string, string> = {
-  'F1600 Championship Series': 'var(--chapter-f1600)',
-  'Formula Ford': 'var(--chapter-ff)',
-  'GB3 Championship': 'var(--chapter-gb3)',
-  'Euroformula Open': 'var(--chapter-euro)',
-  'Castrol Toyota Formula Regional Oceania Championship': 'var(--chapter-fro)',
-  'IMSA WeatherTech SportsCar Championship': 'var(--chapter-imsa)',
-  'INDY NXT': 'var(--ink-primary)'
+  series_scca_super_tour: 'var(--chapter-scca)',
+  series_frp_f1600: 'var(--chapter-f1600)',
+  series_rcffs: 'var(--chapter-rcffs)',
+  series_formula_ford: 'var(--chapter-ff)',
+  series_gb3: 'var(--chapter-gb3)',
+  series_euroformula_open: 'var(--chapter-euro)',
+  series_froc: 'var(--chapter-fro)',
+  series_usf_pro_2000: 'var(--chapter-usf)',
+  series_imsa_weathertech: 'var(--chapter-imsa)',
+  series_indy_nxt: 'var(--chapter-indy)'
 };
 
-export const chapterTint = (seriesName: string): string => chapterTints[seriesName] ?? 'var(--ink-primary)';
+export const chapterTint = (seriesNameOrId: string): string => chapterTints[seriesIdOf(seriesNameOrId)] ?? 'var(--ink-primary)';
 
-const shortToSeriesName = Object.fromEntries(Object.entries(seriesShortNames).map(([full, short]) => [short, full]));
+const shortToSeriesId = Object.fromEntries(Object.entries(seriesShortNames).map(([id, short]) => [short, id]));
 
-export const chapterTintForShort = (shortName: string): string => chapterTint(shortToSeriesName[shortName] ?? shortName);
+export const chapterTintForShort = (shortName: string): string => chapterTint(shortToSeriesId[shortName] ?? shortName);
 
-/** All 141 career races, chronological, straight from the validated package. */
+/** Every classified career race (167), chronological, straight from the validated package. */
 export const useCareerRows = (): CareerRow[] => {
   return useMemo(() => {
     const raw = uiDataPackage.screens.careerLab.resultConversion ?? [];
     return raw
       .map((row): CareerRow | null => {
         const finish = asNumber(row.finishPosition);
-        const percentile = asNumber(row.finishPercentile);
-        const date = asString(row.eventStartDate);
+        const percentile = asNumber(row.fieldBeatenShare) ?? asNumber(row.finishPercentile);
+        const date = asString(row.raceDate) ?? asString(row.eventStartDate);
+        const weather = uiDataPackage.screens.careerLab.raceWeather?.[asString(row.sessionId) ?? ''] ?? null;
         if (finish === null || percentile === null || date === null) return null;
         return {
           raceLabel: (asString(row.raceLabel) ?? '').replace(/^\d{4}\s+/, ''),
           sessionId: asString(row.sessionId) ?? '',
+          seriesId: asString(row.seriesId) ?? '',
           seriesName: asString(row.seriesName) ?? '',
           seriesShort: seriesShort(asString(row.seriesName) ?? ''),
           seasonYear: asNumber(row.seasonYear),
@@ -155,7 +120,8 @@ export const useCareerRows = (): CareerRow[] => {
           percentile,
           status: asString(row.status) ?? 'running',
           date,
-          wetDry: asString(row.wetDry)
+          wetDry: weather ? weather.wetDry : asString(row.wetDry),
+          wetDrySource: weather ? weather.wetDrySource : null
         };
       })
       .filter((row): row is CareerRow => row !== null)
@@ -168,297 +134,31 @@ export const useCareerRows = (): CareerRow[] => {
   }, []);
 };
 
+/** "wet track (observed, NOAA)", "drying track (series report)"; null for a dry or unknown race.
+ *  Read through app/wetDry.ts, the same call the 3D scene, the rain marks and the race pages make. */
+const explorerWetWords = (row: CareerRow): string | null => {
+  const call = wetDryCall(uiDataPackage.screens.careerLab.raceWeather?.[row.sessionId]);
+  if (call) return call.state === 'dry' ? null : `${call.words} (${call.tierWords})`;
+  return row.wetDry && row.wetDry !== 'dry' ? `${row.wetDry === 'wet' ? 'wet track' : 'wet for part of the race'}` : null;
+};
+
 export const tipFor = (row: CareerRow): Omit<ChartTip, 'x' | 'y'> => ({
-  title: row.raceLabel,
+  title: raceTitleOf(row.sessionId, row.raceLabel),
   detail: [
     row.seriesShort,
     row.start !== null ? `P${row.start} → P${row.finish}` : `finished P${row.finish}`,
     row.status !== 'running' ? row.status : null,
-    row.wetDry && row.wetDry !== 'dry' ? `${row.wetDry} track` : null,
-    `beat ${Math.round(row.percentile * 100)}% of the field`
+    explorerWetWords(row),
+    beatLine(row.finish, raceFieldOf(row.sessionId))
   ]
     .filter(Boolean)
     .join(' · '),
   action: 'open the race page'
 });
 
-/* ---------- the climb: every race, one line, seven years ---------- */
+/* ---------- the climb: moved to ./climb (career round 2) ---------- */
 
-export const TheClimb = () => {
-  const rows = useCareerRows();
-  const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const [viewRef, chartSeen] = useInViewOnce<HTMLDivElement>(0.35);
-  const reducedMotion = useReducedMotion();
-  /* Same guard as the rivals swarm: the form line hides itself (dashoffset 1)
-   * until the in-view observer fires. Under reduced motion / a static capture
-   * that observer may never fire, so treat reduced-motion as "already seen" and
-   * draw the full line. */
-  const chartShown = chartSeen || reducedMotion;
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const { navigate } = useRouter();
-  const [hovered, setHovered] = useState<number | null>(null);
-  const [tip, setTip] = useState<ChartTip | null>(null);
-
-  const n = rows.length;
-  const height = 340;
-  const margin = { top: 30, right: 18, bottom: 26, left: 40 };
-  const plotWidth = Math.max(width - margin.left - margin.right, 80);
-  const plotHeight = height - margin.top - margin.bottom;
-  const x = (index: number) => margin.left + (index / Math.max(n - 1, 1)) * plotWidth;
-  const y = (percentile: number) => margin.top + (1 - percentile) * plotHeight;
-  const momentPoints = (uiDataPackage.screens.careerLab.moments ?? []).flatMap((moment) => {
-    const index = rows.findIndex((row) => row.sessionId === moment.sessionId);
-    return index === -1 ? [] : [{ ...moment, cx: x(index), cy: y(rows[index].percentile) }];
-  });
-  const momentPlacements = layoutClimbMoments({ moments: momentPoints, width, height, margin });
-
-  /* Chapter bands: consecutive runs of the same series. */
-  const bands = useMemo(() => {
-    const result: Array<{ series: string; from: number; to: number; years: string }> = [];
-    rows.forEach((row, index) => {
-      const last = result[result.length - 1];
-      if (last && last.series === row.seriesShort) {
-        last.to = index;
-      } else {
-        result.push({ series: row.seriesShort, from: index, to: index, years: '' });
-      }
-    });
-    for (const band of result) {
-      const fromYear = rows[band.from].seasonYear;
-      const toYear = rows[band.to].seasonYear;
-      band.years = fromYear === toYear ? `’${String(fromYear).slice(2)}` : `’${String(fromYear).slice(2)}–’${String(toYear).slice(2)}`;
-    }
-    return result;
-  }, [rows]);
-
-  /* Trajectory: 11-race trimmed mean (middle 60%) — robust to hard days
-   * without the vertical cliffs a rolling median produces. */
-  const trend = useMemo(() => {
-    const window = 11;
-    const half = Math.floor(window / 2);
-    return rows.map((_, index) => {
-      const slice = rows
-        .slice(Math.max(0, index - half), Math.min(n, index + half + 1))
-        .map((row) => row.percentile)
-        .sort((a, b) => a - b);
-      const trim = Math.floor(slice.length * 0.2);
-      const kept = slice.slice(trim, slice.length - trim);
-      return kept.reduce((sum, value) => sum + value, 0) / kept.length;
-    });
-  }, [rows, n]);
-
-  const clearHover = () => {
-    setHovered(null);
-    setTip(null);
-  };
-
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
-    const mouseX = event.clientX - bounds.left;
-    const mouseY = event.clientY - bounds.top;
-    let best: { index: number; distance: number } | null = null;
-    for (let index = 0; index < n; index += 1) {
-      const distance = Math.hypot(x(index) - mouseX, y(rows[index].percentile) - mouseY);
-      if (!best || distance < best.distance) best = { index, distance };
-    }
-    if (!best || best.distance > 28) {
-      clearHover();
-      return;
-    }
-    setHovered(best.index);
-    const row = rows[best.index];
-    setTip({ x: x(best.index), y: y(row.percentile), ...tipFor(row) });
-  };
-
-  if (n < 10) return null;
-
-  const trendPath = trend.map((value, index) => `${index === 0 ? 'M' : 'L'}${x(index)} ${y(value)}`).join(' ');
-
-  return (
-    <Card
-      title="The climb, race by race"
-      action={
-        <SourcePill
-          title="The climb"
-          entries={[
-            {
-              label: 'Career result conversion · all series',
-              path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: `${n} source-backed races with a finishing percentile — the share of the field beaten, which stays honest as field sizes change between series. Named moments use deterministic event-date and finish-position rules; the form line is an eleven-race trimmed mean (middle 60% of the window).`
-            },
-            {
-              label: 'Canonical career results · official status',
-              path: 'data/career/career.dataset.json',
-              note: 'The 2026 season index supplies WWTR’s official Mechanical status; every moment resolves back to a career result-conversion session.'
-            }
-          ]}
-          caveats={uiDataPackage.screens.careerLab.caveats}
-        />
-      }
-    >
-      <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
-        Every race a dot, every chapter its color · rings mark named moments · higher = more of the field beaten · the line
-        follows his running form · ○ a day that ended early · click any dot to open its race
-      </p>
-      <div ref={viewRef}>
-      <div ref={ref} style={{ width: '100%', position: 'relative' }}>
-        {width > 0 ? (
-          <svg
-            ref={svgRef}
-            width={width}
-            height={height}
-            role="img"
-            aria-label={`Finishing percentile across every career race. Named moments: ${momentPoints
-              .map((moment) => moment.shortLabel)
-              .join(', ')}.`}
-            onMouseMove={onMove}
-            onMouseLeave={clearHover}
-            onClick={() => {
-              if (hovered !== null) navigate(raceHref(rows[hovered].sessionId));
-            }}
-            style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
-          >
-            {bands.map((band, index) => {
-              const from = x(band.from) - (band.from > 0 ? (x(band.from) - x(band.from - 1)) / 2 : margin.left * 0.2);
-              const to = x(band.to) + (band.to < n - 1 ? (x(band.to + 1) - x(band.to)) / 2 : 8);
-              const wide = to - from >= 96; // label only when it fits without touching neighbors
-              return (
-                <g key={`${band.series}${band.from}`}>
-                  {index % 2 === 1 ? (
-                    <rect x={from} y={margin.top - 16} width={to - from} height={plotHeight + 22} fill="rgba(0, 0, 0, 0.028)" />
-                  ) : null}
-                  {wide && width >= 640 ? (
-                    <text x={(from + to) / 2} y={margin.top - 20} textAnchor="middle" fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11} fontWeight={550}>
-                      {band.series} {band.years}
-                    </text>
-                  ) : null}
-                </g>
-              );
-            })}
-            {[0, 0.5, 1].map((tick) => (
-              <g key={tick}>
-                <line x1={margin.left} x2={width - margin.right} y1={y(tick)} y2={y(tick)} stroke="var(--grid-hairline)" />
-                <text
-                  x={margin.left - 8}
-                  y={y(tick)}
-                  textAnchor="end"
-                  dominantBaseline="middle"
-                  fill="var(--ink-muted)"
-                  fontFamily={chartFont}
-                  fontSize={10.5}
-                  style={{ fontVariantNumeric: 'tabular-nums' }}
-                >
-                  {Math.round(tick * 100)}%
-                </text>
-              </g>
-            ))}
-            <text x={4} y={margin.top - 20} textAnchor="start" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5}>
-              field beaten
-            </text>
-
-            {rows.map((row, index) => {
-              const clean = row.status === 'running';
-              const tint = chapterTint(row.seriesName);
-              return (
-                <circle
-                  key={row.sessionId + index}
-                  cx={x(index)}
-                  cy={y(row.percentile)}
-                  r={hovered === index ? 5 : 3}
-                  fill={clean ? tint : 'var(--surface-1)'}
-                  fillOpacity={clean ? (hovered === index ? 1 : 0.5) : 1}
-                  stroke={clean ? (hovered === index ? tint : 'none') : tint}
-                  strokeWidth={1.3}
-                  style={{ transition: 'r 120ms ease' }}
-                />
-              );
-            })}
-            {/* The form line draws itself in the first time the chart is seen. */}
-            <path
-              d={trendPath}
-              fill="none"
-              stroke="var(--ink-primary)"
-              strokeWidth={2.2}
-              strokeLinejoin="round"
-              pathLength={1}
-              strokeDasharray={1}
-              strokeDashoffset={chartShown ? 0 : 1}
-              style={{ transition: reducedMotion ? 'none' : 'stroke-dashoffset 1200ms cubic-bezier(0.23, 1, 0.32, 1) 150ms' }}
-            />
-
-            <g className="climb-moments" aria-hidden="true">
-              {momentPlacements.map((moment) => (
-                <g key={`${moment.sessionId}/${moment.kind}`} data-moment-kind={moment.kind} data-session-id={moment.sessionId}>
-                  <circle
-                    className="climb-moment__ring"
-                    cx={moment.cx}
-                    cy={moment.cy}
-                    r={6}
-                    fill="none"
-                    stroke="var(--ink-primary)"
-                    strokeWidth={1.5}
-                    vectorEffect="non-scaling-stroke"
-                  />
-                  {width >= 640 ? (
-                    <g className="climb-moment__annotation">
-                      <line
-                        x1={moment.cx}
-                        y1={moment.cy + (moment.side === 'below' ? 6 : -6)}
-                        x2={moment.labelX}
-                        y2={moment.labelY + (moment.side === 'below' ? -8 : 8)}
-                        stroke="var(--ink-secondary)"
-                        strokeOpacity={0.72}
-                        strokeWidth={1}
-                        strokeLinecap="round"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                      <text
-                        x={moment.labelX}
-                        y={moment.labelY}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fill="var(--ink-secondary)"
-                        stroke="var(--surface-1)"
-                        strokeWidth={3}
-                        strokeLinejoin="round"
-                        paintOrder="stroke"
-                        fontFamily={chartFont}
-                        fontSize={10.5}
-                      >
-                        {moment.shortLabel}
-                      </text>
-                    </g>
-                  ) : null}
-                </g>
-              ))}
-            </g>
-
-            {/* year ticks at each season's first race */}
-            {rows.map((row, index) =>
-              index === 0 || row.seasonYear !== rows[index - 1].seasonYear ? (
-                <text
-                  key={`yr${row.seasonYear}${index}`}
-                  x={x(index)}
-                  y={height - 8}
-                  textAnchor="middle"
-                  fill="var(--ink-muted)"
-                  fontFamily={chartFont}
-                  fontSize={10.5}
-                  style={{ fontVariantNumeric: 'tabular-nums' }}
-                >
-                  {row.seasonYear}
-                </text>
-              ) : null
-            )}
-          </svg>
-        ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
-      </div>
-      </div>
-    </Card>
-  );
-};
+export { TheClimb } from './climb';
 
 /* ---------- chapter strip: one era's races on the percentile scale ---------- */
 
@@ -467,46 +167,57 @@ export const ChapterStrip = ({ seriesName }: { seriesName: string }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
-  const chapterRows = useMemo(() => rows.filter((row) => row.seriesName === seriesName), [rows, seriesName]);
+  const tap = useTapPreview();
+  /* seriesName may be a series id or name; matched on the id. */
+  const chapterRows = useMemo(() => rows.filter((row) => row.seriesId === seriesIdOf(seriesName)), [rows, seriesName]);
   if (chapterRows.length === 0) return null;
 
-  const height = 40;
+  const height = 44;
   const axisY = 22;
-  const x = (percentile: number) => 8 + percentile * (width - 16);
+  // The line runs 8 px in from each edge. Dots are inset by their own radius
+  // (plus stroke) and the percentile is clamped to 0..1, so a race that beat the
+  // whole field (FR Oceania, Highlands R2, P1) sits at the line's end, not past
+  // it, and nothing can be drawn outside the line whatever the data says.
+  const dotRadius = 3.4;
+  const dotInset = 8 + dotRadius + 1;
+  const x = (percentile: number) =>
+    dotInset + Math.min(1, Math.max(0, percentile)) * Math.max(width - 2 * dotInset, 0);
   const sorted = [...chapterRows].sort((a, b) => a.percentile - b.percentile);
   const median = sorted[Math.floor(sorted.length / 2)].percentile;
 
   return (
     <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
-        <svg width={width} height={height} role="img" aria-label={`${seriesName} finishing percentiles`}>
+        <svg width={width} height={height} role="img" aria-label={`${chapterRows[0].seriesName}: share of the field beaten, race by race`}>
           <line x1={8} x2={width - 8} y1={axisY} y2={axisY} stroke="var(--grid-hairline)" strokeWidth={1.5} />
           {chapterRows.map((row, index) => (
             <circle
               key={row.sessionId + index}
               cx={x(row.percentile)}
               cy={axisY}
-              r={3.4}
+              r={dotRadius}
               fill={row.status === 'running' ? chapterTint(row.seriesName) : 'var(--surface-1)'}
               fillOpacity={row.status === 'running' ? 0.5 : 1}
               stroke={row.status === 'running' ? 'none' : chapterTint(row.seriesName)}
               strokeWidth={1.2}
               style={{ cursor: 'pointer' }}
-              onMouseEnter={() => setTip({ x: x(row.percentile), y: axisY - 6, ...tipFor(row) })}
-              onMouseLeave={() => setTip(null)}
-              onClick={() => navigate(raceHref(row.sessionId))}
+              {...tap.target(row.sessionId + index, {
+                show: () => setTip({ x: x(row.percentile), y: axisY - 6, under: axisY + dotRadius + 2, ...tipFor(row) }),
+                hide: () => setTip(null),
+                open: () => navigate(raceHref(row.sessionId))
+              })}
             />
           ))}
           <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
-          <text x={8} y={height - 1} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+          <text x={8} y={height - 1} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             tougher days
           </text>
-          <text x={width - 8} y={height - 1} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>
+          <text x={width - 8} y={height - 1} textAnchor="end" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>
             stronger days
           </text>
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -518,18 +229,13 @@ export const FilterChip = ({ label, active, onClick }: { label: string; active: 
     type="button"
     onClick={onClick}
     aria-pressed={active}
-    className="chip"
-    style={
-      active
-        ? { cursor: 'pointer', background: 'var(--ink-primary)', color: '#fff', borderColor: 'transparent' }
-        : { cursor: 'pointer', color: 'var(--ink-secondary)' }
-    }
+    className={`chip chip--toggle${active ? ' chip--toggle-on' : ''}`}
   >
     {label}
   </button>
 );
 
-/** One labeled row of controls, so each kind of filtering names itself. */
+/** One labelled row of controls, so each kind of filtering names itself. */
 export const ControlRow = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="row" style={{ gap: 10, alignItems: 'flex-start' }}>
     <span className="caption caption--secondary" style={{ width: 62, flex: 'none', paddingTop: 6 }}>
@@ -578,6 +284,7 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const height = 340;
   const margin = { top: 22, right: 18, bottom: 38, left: 44 };
@@ -599,9 +306,9 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -613,11 +320,12 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
     }
     if (!best || best.distance > 24) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const row = rows[best.index];
     setTip({ x: x(row.start ?? 1), y: y(row.finish), ...tipFor(row) });
+    return best.index;
   };
 
   return (
@@ -629,11 +337,7 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
           height={height}
           role="img"
           aria-label="Start position against finish position for every filtered race"
-          onMouseMove={onMove}
-          onMouseLeave={clearHover}
-          onClick={() => {
-            if (hovered !== null) navigate(raceHref(rows[hovered].sessionId));
-          }}
+          {...tap.surface({ find: onMove, clear: clearHover, open: (index) => () => navigate(raceHref(rows[index as number].sessionId)) })}
           style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
         >
           {ticks.map((tick) => (
@@ -700,7 +404,7 @@ const ConversionPlot = ({ rows }: { rows: CareerRow[] }) => {
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -711,6 +415,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const { navigate } = useRouter();
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const groups = useMemo(() => {
     const keyFor = (row: CareerRow) =>
@@ -756,7 +461,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
   return (
     <div ref={ref} style={{ width: '100%', position: 'relative' }}>
       {width > 0 ? (
-        <svg width={width} height={height} role="img" aria-label="Finishing percentile by group">
+        <svg width={width} height={height} role="img" aria-label="Share of the field beaten, by group">
           {[0, 0.5, 1].map((tick) => (
             <g key={tick}>
               <line x1={x(tick)} x2={x(tick)} y1={axisHeight - 4} y2={height - 2} stroke="var(--grid-hairline)" />
@@ -805,9 +510,11 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
                       stroke={row.status === 'running' ? 'none' : tint}
                       strokeWidth={1.2}
                       style={{ cursor: 'pointer' }}
-                      onMouseEnter={() => setTip({ x: x(row.percentile), y: rowY - 6, ...tipFor(row) })}
-                      onMouseLeave={() => setTip(null)}
-                      onClick={() => navigate(raceHref(row.sessionId))}
+                      {...tap.target(`${group.key}-${row.sessionId}-${index}`, {
+                        show: () => setTip({ x: x(row.percentile), y: rowY - 6, under: rowY + 6, ...tipFor(row) }),
+                        hide: () => setTip(null),
+                        open: () => navigate(raceHref(row.sessionId))
+                      })}
                     />
                   );
                 })}
@@ -829,7 +536,7 @@ const GroupedStrips = ({ rows, groupBy }: { rows: CareerRow[]; groupBy: GroupBy 
           })}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -883,7 +590,7 @@ export const CareerExplorer = () => {
             {
               label: 'Career result conversion table',
               path: 'analysis/career-parity/output/tables/career_result_conversion.csv',
-              note: 'Official/source-backed results across all series. Start-position views exclude races without a sourced grid position; condition lanes come from official series reports plus labeled modeled observations.'
+              note: 'Official/source-backed results across all series. Start-position views exclude races without a sourced grid position; condition lanes use each race’s wet/dry call: the series’ own report, else NOAA stations and race reports, else the Open-Meteo reanalysis (labelled modelled).'
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
@@ -930,12 +637,12 @@ export const CareerExplorer = () => {
         withStart.length === 0 ? (
           <Unavailable>
             {seriesWithoutStart.join(' and ')} time cards don’t carry a sourced grid position, so there’s no start → finish view
-            here — the percentile view still holds every race.
+            here. The percentile view still holds every race.
           </Unavailable>
         ) : (
           <>
             <p style={{ margin: '0 0 6px', fontSize: 13, color: 'var(--ink-secondary)' }}>
-              Dots above the line are races where he gained positions —{' '}
+              Dots above the line are races where he gained positions:{' '}
               <strong style={{ color: 'var(--ink-primary)' }}>
                 {gained} of {withStart.length}
               </strong>{' '}
@@ -943,7 +650,7 @@ export const CareerExplorer = () => {
             </p>
             <ConversionPlot rows={withStart} />
             <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
-              {wins > 0 ? 'gold marks a win · ' : ''}○ a day that ended early · click any dot to open its race
+              {wins > 0 ? 'gold marks a win · ' : ''}○ a day that ended early · <PointerOpen what="any dot" then="to open its race" />
               {withoutStart > 0
                 ? ` · ${withoutStart} ${withoutStart === 1 ? 'race' : 'races'} without a sourced grid position (${seriesWithoutStart.join(', ')}) not drawn`
                 : ''}
@@ -964,7 +671,7 @@ export const CareerExplorer = () => {
           </p>
           <GroupedStrips rows={filtered} groupBy={groupBy} />
           <p className="caption caption--secondary" style={{ margin: '6px 0 0' }}>
-            ○ a day that ended early · {coarse ? 'tap any dot to open its race' : 'hover any dot · click any dot to open its race'}
+            ○ a day that ended early · {coarse ? <PointerOpen what="any dot" then="to open its race" /> : 'hover any dot · click any dot to open its race'}
             {groupBy === 'conditions' ? ' · condition lanes cover races with a sourced report' : ''}
           </p>
         </>
@@ -1027,7 +734,7 @@ const recordColor = (share: number): string =>
 
 export const RivalsCard = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
-  const [swarmRef, swarmSeen] = useInViewOnce<HTMLDivElement>(0.3);
+  const [swarmRef] = useInViewOnce<HTMLDivElement>(0.3);
   const reducedMotion = useReducedMotion();
   const coarse = useCoarsePointer();
   /* The dots' entrance animation gates their opacity on the in-view observer.
@@ -1036,8 +743,10 @@ export const RivalsCard = () => {
    * marks at opacity 0 (the audit's empty-plot blocker). Render them fully
    * shown whenever motion is reduced, keeping the animation only for readers
    * who opted into it. */
-  const swarmShown = swarmSeen || reducedMotion;
+  /* No entrance animation on reading pages (site direction): the dots are placed at rest. */
+  const swarmShown = true;
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
   const rivals = uiDataPackage.screens.careerLab.headToHead ?? [];
 
   /* Five shared races is the honest floor — below that a record is a coin flip. */
@@ -1090,6 +799,7 @@ export const RivalsCard = () => {
   const tipForRival = (dot: RivalDot): ChartTip => ({
     x: dot.x,
     y: dot.y - dot.r,
+    under: dot.y + dot.r,
     title: dot.name,
     detail: [
       `Bryce ahead in ${dot.ahead} of ${dot.races} shared races`,
@@ -1122,7 +832,7 @@ export const RivalsCard = () => {
         {mostShared ? (
           <>
             {' '}
-            Nobody more than <strong style={{ color: 'var(--ink-primary)' }}>{mostShared.driverName}</strong> — Bryce ahead in{' '}
+            Nobody more than <strong style={{ color: 'var(--ink-primary)' }}>{mostShared.driverName}</strong>, with Bryce ahead in{' '}
             <strong style={{ color: 'var(--ink-primary)' }}>
               {mostShared.bryceAhead} of {mostShared.racesTogether}
             </strong>
@@ -1165,14 +875,13 @@ export const RivalsCard = () => {
                       ? 'fill-opacity 150ms ease'
                       : `transform 460ms cubic-bezier(0.23, 1, 0.32, 1) ${delay}ms, opacity 340ms ease ${delay}ms, fill-opacity 150ms ease`
                   }}
-                  onMouseEnter={() => setTip(tipForRival(dot))}
-                  onMouseLeave={() => setTip(null)}
+                  {...tap.target(dot.name, { show: () => setTip(tipForRival(dot)), hide: () => setTip(null) })}
                 />
               );
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
       </div>
       <p className="caption caption--secondary" style={{ margin: '4px 0 0' }}>
@@ -1207,7 +916,7 @@ export const RivalsCard = () => {
         })}
       </div>
       <p className="caption caption--secondary" style={{ margin: '8px 0 0' }}>
-        Records read Bryce first — the gold stretch is his share of the record, the notch is even
+        Records read Bryce first: the gold stretch is his share of the record, the notch is even
       </p>
     </Card>
   );
@@ -1219,21 +928,26 @@ const ConditionLane = ({
   label,
   laneRows,
   width,
-  onTip
+  onTip,
+  tap
 }: {
   label: string;
   laneRows: CareerRow[];
   width: number;
   onTip: (tip: ChartTip | null) => void;
+  tap: TapPreview;
 }) => {
   const { navigate } = useRouter();
   const height = 44;
   const axisY = 26;
-  const x = (percentile: number) => 8 + percentile * (width - 16);
+  // Same inset and clamp as the chapter strip, so a P1 sits on the line's end.
+  const dotInset = 8 + 3.4 + 1;
+  const x = (percentile: number) =>
+    dotInset + Math.min(1, Math.max(0, percentile)) * Math.max(width - 2 * dotInset, 0);
   const sorted = [...laneRows].sort((a, b) => a.percentile - b.percentile);
   const median = sorted[Math.floor(sorted.length / 2)].percentile;
   return (
-    <svg width={width} height={height} role="img" aria-label={`${label} finishing percentiles`}>
+    <svg width={width} height={height} role="img" aria-label={`${label}: share of the field beaten, race by race`}>
       <text x={8} y={11} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={11.5} fontWeight={550}>
         {label}
       </text>
@@ -1252,9 +966,11 @@ const ConditionLane = ({
           stroke={row.status === 'running' ? 'none' : 'var(--ink-muted)'}
           strokeWidth={1.2}
           style={{ cursor: 'pointer' }}
-          onMouseEnter={() => onTip({ x: x(row.percentile), y: axisY - 6, ...tipFor(row) })}
-          onMouseLeave={() => onTip(null)}
-          onClick={() => navigate(raceHref(row.sessionId))}
+          {...tap.target(`${label}-${row.sessionId}-${index}`, {
+            show: () => onTip({ x: x(row.percentile), y: axisY - 6, under: axisY + 6, ...tipFor(row) }),
+            hide: () => onTip(null),
+            open: () => navigate(raceHref(row.sessionId))
+          })}
         />
       ))}
       <rect x={x(median) - 1.75} y={axisY - 9} width={3.5} height={18} rx={1.75} fill="var(--ink-primary)" />
@@ -1271,6 +987,7 @@ export const CareerRestarts = () => {
   const { navigate } = useRouter();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const races = useMemo(
     () => (report.byRace ?? []).filter((row) => (row.bryceRestartsCounted ?? 0) > 0),
@@ -1296,9 +1013,9 @@ export const CareerRestarts = () => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -1308,7 +1025,7 @@ export const CareerRestarts = () => {
     }
     if (!best || best.distance > 26) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const row = races[best.index];
@@ -1322,10 +1039,11 @@ export const CareerRestarts = () => {
     setTip({
       x: x(best.index),
       y: y(net),
-      title: `${row.raceLabel}${row.seasonYear ? ` · ${row.seasonYear}` : ''}`,
+      title: `${raceTitleOf(row.sessionId, row.raceLabel)}${row.seasonYear ? ` · ${row.seasonYear}` : ''}`,
       detail: `${restartCount} restart${restartCount === 1 ? '' : 's'} · ${move}${rank}`,
       action: 'open the race'
     });
+    return best.index;
   };
 
   if (n < 4) return null;
@@ -1345,7 +1063,7 @@ export const CareerRestarts = () => {
             {
               label: 'Official caution summaries and lap chart',
               path: 'data/career/career.dataset.json',
-              note: 'Restarts from the official Results-PDF caution summary; movement from the official lap chart — positions only.'
+              note: 'Restarts from the official Results-PDF caution summary; movement from the official lap chart, positions only.'
             }
           ]}
           caveats={report.caveats}
@@ -1381,7 +1099,7 @@ export const CareerRestarts = () => {
       <p className="caption caption--secondary" style={{ margin: '0 0 8px' }}>
         Every race with a restart a dot · higher = more ground made up · the dashed line is the field's typical restart · the
         fuller dots are days he out-restarted the field's typical move
-        {races.some((row) => row.soleBestInField) ? ' · a ring marks a best-in-field day' : ''} · click a dot to open its race
+        {races.some((row) => row.soleBestInField) ? ' · a ring marks a best-in-field day' : ''} · <PointerOpen what="a dot" then="to open its race" />
       </p>
       <div ref={ref} style={{ width: '100%', position: 'relative' }}>
         {width > 0 ? (
@@ -1391,11 +1109,7 @@ export const CareerRestarts = () => {
             height={height}
             role="img"
             aria-label={`Net positions gained on restarts across ${n} INDY NXT races.`}
-            onMouseMove={onMove}
-            onMouseLeave={clearHover}
-            onClick={() => {
-              if (hovered !== null) navigate(raceHref(races[hovered].sessionId));
-            }}
+            {...tap.surface({ find: onMove, clear: clearHover, open: (index) => () => navigate(raceHref(races[index as number].sessionId)) })}
             style={{ cursor: hovered !== null ? 'pointer' : 'default' }}
           >
             {/* A quiet scale so the dots aren't floating: one hairline + label
@@ -1495,7 +1209,7 @@ export const CareerRestarts = () => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
 
       <p style={{ margin: '12px 0 0', fontSize: 11.5, color: 'var(--ink-muted)' }}>
@@ -1519,6 +1233,7 @@ export const QualiConversion = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  const tap = useTapPreview();
 
   const career = layer.career;
   // Series that carry a grid column and so a real conversion, career-ordered.
@@ -1565,9 +1280,9 @@ export const QualiConversion = () => {
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
     const mouseX = event.clientX - bounds.left;
     const mouseY = event.clientY - bounds.top;
     let best: { index: number; distance: number } | null = null;
@@ -1577,7 +1292,7 @@ export const QualiConversion = () => {
     }
     if (!best || best.distance > 22) {
       clearHover();
-      return;
+      return null;
     }
     const row = rows[best.index];
     // Gate on the row's horizontal bar bounds too (plus a small transparent hit
@@ -1588,7 +1303,7 @@ export const QualiConversion = () => {
     const rightBound = centerX + row.finishedAhead * scale + HIT_PAD;
     if (mouseX < leftBound || mouseX > rightBound) {
       clearHover();
-      return;
+      return null;
     }
     setHovered(best.index);
     const start =
@@ -1599,8 +1314,10 @@ export const QualiConversion = () => {
       x: centerX,
       y: rowY(best.index) - 6,
       title: `${row.seriesName}${row.firstSeason ? ` · from ${row.firstSeason}` : ''}`,
-      detail: `${start} · made up ground in ${row.finishedAhead}, held ${row.held}, gave ground ${row.finishedBehind} of ${row.conversionRaces}`
+      detail: `${start} · made up ground in ${row.finishedAhead}, held ${row.held}, gave ground ${row.finishedBehind} of ${row.conversionRaces}`,
+      under: rowY(best.index) + barH
     });
+    return best.index;
   };
 
   if (career.conversionRaces < 4 || n === 0) return null;
@@ -1615,12 +1332,12 @@ export const QualiConversion = () => {
             {
               label: 'Qualifying layer · per series and conversion',
               path: 'analysis/qualifying-layer/output/summary.json',
-              note: `Where Bryce qualified across ${layer.coverage.seriesWithQualifying} series and, where the source carries a grid column, how that grid slot converted to the flag — ${career.conversionRaces} races.`
+              note: `Where Bryce qualified across ${layer.coverage.seriesWithQualifying} series and, where the source carries a grid column, how that grid slot converted to the flag: ${career.conversionRaces} races.`
             },
             {
               label: 'Two qualifying source families, never blended',
               path: 'analysis/qualifying-layer/output/tables/quali_sessions.csv',
-              note: 'The dedicated qualifying sheet where it exists, the qualifying-session result where it does not — one family per session, its field size the denominator.'
+              note: 'The dedicated qualifying sheet where it exists, the qualifying-session result where it does not. One family per session, its field size the denominator.'
             }
           ]}
           caveats={layer.caveats}
@@ -1635,7 +1352,7 @@ export const QualiConversion = () => {
         {exclusionLine}
       </p>
       <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--ink-muted)' }}>
-        Each qualifying result uses one official source&mdash;the qualifying sheet when available, otherwise the session result.
+        Each qualifying result uses one official source: the qualifying sheet when available, otherwise the session result.
       </p>
 
       <div className="grid grid--4" style={{ marginBottom: 18 }}>
@@ -1657,8 +1374,7 @@ export const QualiConversion = () => {
             height={height}
             role="img"
             aria-label={`Qualifying-to-flag conversion by chapter: races finished ahead of the grid slot lean right, races behind lean left.`}
-            onMouseMove={onMove}
-            onMouseLeave={clearHover}
+            {...tap.surface({ find: onMove, clear: clearHover })}
           >
             {/* The grid slot: the vertical anchor every bar diverges from. */}
             <line x1={centerX} x2={centerX} y1={margin.top - 12} y2={height - margin.bottom} stroke="var(--ink-primary)" strokeWidth={1} strokeDasharray="2 3" opacity={0.5} />
@@ -1724,7 +1440,7 @@ export const QualiConversion = () => {
             })}
           </svg>
         ) : null}
-        {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+        {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
       </div>
     </Card>
   );
@@ -1735,6 +1451,8 @@ export const RainDays = () => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const [dryTip, setDryTip] = useState<ChartTip | null>(null);
   const [wetTip, setWetTip] = useState<ChartTip | null>(null);
+  /* One hold across both lanes: a tap on a wet day lets go of a dry one. */
+  const tap = useTapPreview();
 
   const reported = useMemo(() => rows.filter((row) => row.wetDry !== null), [rows]);
   const dry = useMemo(() => reported.filter((row) => row.wetDry === 'dry'), [reported]);
@@ -1759,7 +1477,7 @@ export const RainDays = () => {
             {
               label: 'Per-session condition reports',
               path: 'analysis/context-event-narrative-layer/output/weather_condition_context.csv',
-              note: `Official series weather lines plus labeled modeled observations, joined by session. ${reported.length} of ${rows.length} career races carry a sourced report; the rest stay out of both lanes.`
+              note: `Each race's wet/dry call: the series' own report, else NOAA stations and race reports, else the Open-Meteo reanalysis (labelled modelled). ${reported.length} of ${rows.length} career races carry a sourced report; the rest stay out of both lanes.`
             }
           ]}
           caveats={uiDataPackage.screens.careerLab.caveats}
@@ -1784,18 +1502,18 @@ export const RainDays = () => {
         {width > 0 ? (
           <div className="stack" style={{ gap: 2 }}>
             <div style={{ position: 'relative' }}>
-              <ConditionLane label={`Dry · ${dry.length} races`} laneRows={dry} width={width} onTip={setDryTip} />
-              {dryTip ? <ChartTipCard tip={dryTip} width={width} /> : null}
+              <ConditionLane label={`Dry · ${dry.length} races`} laneRows={dry} width={width} onTip={setDryTip} tap={tap} />
+              {dryTip ? <ChartTipCard tip={dryTip} width={width} tap={tap} /> : null}
             </div>
             <div style={{ position: 'relative' }}>
-              <ConditionLane label={`Wet, damp or drying · ${wet.length} races`} laneRows={wet} width={width} onTip={setWetTip} />
-              {wetTip ? <ChartTipCard tip={wetTip} width={width} /> : null}
+              <ConditionLane label={`Wet, damp or drying · ${wet.length} races`} laneRows={wet} width={width} onTip={setWetTip} tap={tap} />
+              {wetTip ? <ChartTipCard tip={wetTip} width={width} tap={tap} /> : null}
             </div>
           </div>
         ) : null}
       </div>
       <p className="caption caption--secondary" style={{ margin: 'auto 0 0', paddingTop: 10 }}>
-        Ink ticks mark each lane’s median · ○ a day that ended early · click any dot to open its race
+        Ink ticks mark each lane’s median · ○ a day that ended early · <PointerOpen what="any dot" then="to open its race" />
       </p>
     </Card>
   );
@@ -1864,7 +1582,7 @@ export const BestClimbs = () => {
               ▲ {row.gain}
             </span>
             <span className="tower__name" style={{ whiteSpace: 'normal' }}>
-              {row.raceLabel}
+              {raceTitleOf(row.sessionId, row.raceLabel)}
               <span className="tower__team"> {row.seasonYear ?? ''}</span>
             </span>
             <span className="tower__gap">
@@ -1890,7 +1608,7 @@ export const CareerBests = () => {
       <Stat label="Wins" value={wins} />
       <Stat label="Podiums" value={podiums} />
       <Stat label="Top-10s" value={topTens} />
-      <Stat label="Typical day" value={`${ordinal(Math.round([...rows].sort((a, b) => a.percentile - b.percentile)[Math.floor(rows.length / 2)].percentile * 100))} pctile`} />
+      <Stat label="Typical day" value={`${Math.round([...rows].sort((a, b) => a.percentile - b.percentile)[Math.floor(rows.length / 2)].percentile * 100)}% beaten`} />
     </div>
   );
 };
@@ -1906,9 +1624,11 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { navigate } = useRouter();
-  const coarsePointer = useCoarsePointer();
   const [hovered, setHovered] = useState<number | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
+  /* Round 9: the arc read nothing on a phone (its hover was switched off for
+   * touch); now a tap reads a race and a second tap, or the card, opens it. */
+  const tap = useTapPreview();
 
   const races = campaign.races;
   const n = races.length;
@@ -1957,23 +1677,23 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
     };
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
+  const onMove = (event: React.MouseEvent<Element>): number | null => {
     const bounds = svgRef.current?.getBoundingClientRect();
-    if (!bounds || n === 0) return;
+    if (!bounds || n === 0) return null;
     const mouseX = event.clientX - bounds.left;
     if (mouseX < margin.left - 14 || mouseX > width - margin.right + 14) {
       clearHover();
-      return;
+      return null;
     }
     const index = Math.min(n - 1, Math.max(0, Math.round(((mouseX - margin.left) / plotWidth) * (n - 1))));
     setHovered(index);
     setTip(tipFor(index));
+    return index;
   };
 
-  const openHovered = () => {
-    if (hovered === null) return;
-    const race = races[hovered];
-    if (race.hasRacePage) navigate(raceHref(race.sessionId));
+  const opener = (index: number) => {
+    const race = races[index];
+    return race.hasRacePage ? () => navigate(raceHref(race.sessionId)) : null;
   };
 
   return (
@@ -1985,9 +1705,7 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
           height={height}
           role="img"
           aria-label={`${campaign.seriesShort} ${campaign.seasonYear} championship points, race by race`}
-          onMouseMove={coarsePointer ? undefined : onMove}
-          onMouseLeave={clearHover}
-          onClick={openHovered}
+          {...tap.surface({ find: onMove, clear: clearHover, open: (index) => opener(index as number) })}
           style={{ cursor: hovered !== null && races[hovered].hasRacePage ? 'pointer' : 'default', display: 'block' }}
         >
           {/* Baseline + ceiling: the two numbers that bound the climb. */}
@@ -2083,7 +1801,7 @@ const CampaignArc = ({ campaign }: { campaign: UiSeasonCampaign }) => {
           ) : null}
         </svg>
       ) : null}
-      {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+      {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
     </div>
   );
 };
@@ -2187,7 +1905,7 @@ export const TheCampaigns = () => {
       action={<SourcePill title="The campaigns" entries={data.sourceRefs.map((ref) => ({ label: ref.key, path: ref.path, note: ref.note }))} caveats={data.caveats} />}
     >
       <p style={{ margin: '0 0 4px', color: 'var(--ink-secondary)', fontSize: 13.5, maxWidth: '62ch' }}>
-        Every championship campaign in the order it was raced — points banked as they were scored, or the official final
+        Every championship campaign in the order it was raced: points banked as they were scored, or the official final
         standing where the round-by-round points aren&rsquo;t sourced.{' '}
         {hasCurrent ? 'Gold marks where the current season stands right now. ' : ''}Each season keeps its own scale;
         points don&rsquo;t compare across series.

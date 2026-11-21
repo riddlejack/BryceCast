@@ -167,7 +167,7 @@ assert.equal(
   'social media must not be a source-priority lane for the production career analytics dataset'
 );
 assert.equal(careerCoverageMatrix.schemaVersion, 'bryce-career-coverage-matrix.v1', 'coverage matrix report must be generated');
-assert.equal(careerCoverageMatrix.series?.length, 7, 'coverage matrix must cover all seven imported production-scope series');
+assert.equal(careerCoverageMatrix.series?.length, 10, 'coverage matrix must cover all ten imported production-scope series (SCCA Super Tour, RCFFS and USF Pro 2000 added November 2026)');
 // Season rows are built from the dataset, and the INDY NXT lane discovers new
 // seasons from the official feed — so this is a floor, not an equality pin.
 assert.ok(
@@ -612,7 +612,7 @@ const gb32021RaceRows = dataset.results.filter((row) => {
   const session = dataset.sessions.find((candidate) => candidate.id === row.sessionId);
   return session?.sessionType === 'race';
 });
-assert.equal(gb32021RaceRows.length, 369, 'GB3 2021 race result coverage must stay at 369 official TSL rows');
+assert.equal(gb32021RaceRows.length, 425, 'GB3 2021 race result coverage must stay at 425 official TSL rows (369 before the August Silverstone meeting and the status-only DQ rows were imported, November 2026)');
 assert.deepEqual(
   gb32021RaceRows.filter((row) => row.gridPosition === null || row.startPosition === null).map((row) => row.id),
   [],
@@ -1066,6 +1066,7 @@ const assertNationalFf1600BryceResult = ({
   resultId,
   finishPosition,
   startPosition,
+  gridPosition = startPosition,
   bestLapTime,
   sourceId,
   gridSourceId,
@@ -1077,7 +1078,7 @@ const assertNationalFf1600BryceResult = ({
   assert.equal(result?.bestLapTime, bestLapTime, `${label} must preserve official best lap`);
   assert.ok((result?.provenanceRefs ?? []).includes(sourceId), `${label} must cite official classification source evidence`);
   if (startPosition !== null) {
-    assert.equal(result?.gridPosition, startPosition, `${label} must import official grid position`);
+    assert.equal(result?.gridPosition, gridPosition, `${label} must import official grid position`);
     assert.equal(result?.startPosition, startPosition, `${label} must import official start position`);
     assert.ok((result?.provenanceRefs ?? []).includes(gridSourceId), `${label} must cite official grid source evidence`);
   }
@@ -1204,7 +1205,9 @@ assertNationalFf1600BryceResult({
 assertNationalFf1600BryceResult({
   resultId: 'result_formula_ford_2020_champion_brands_race_5_123_driver_bryce_aron',
   finishPosition: 3,
-  startPosition: 5,
+  /* Grid slot 5; car 41 in slot 4 never took the start (absent from the classification), so he started fourth. */
+  gridPosition: 5,
+  startPosition: 4,
   bestLapTime: '50.949',
   sourceId: 'source_formula_ford_2020_champion_brands_race_5_classification',
   gridSourceId: 'source_formula_ford_2020_champion_brands_race_5_grid',
@@ -1236,9 +1239,10 @@ assert.deepEqual(
   [],
   'Formula Ford 2020 importer must clean unreferenced single-letter class-token drivers'
 );
-assert.equal(formulaFordImportReport.bryceLapSamplesImported, 282, 'Formula Ford importer must extract all source-backed Bryce lap-analysis samples');
-assert.equal(formulaFordImportReport.lapSamplesImported, 282, 'Formula Ford lap-sample import must stay scoped to Bryce-owned lap-analysis rows');
-assert.equal(formulaFordImportReport.gridRowsImported, 755, 'Formula Ford importer must include the Colin Lawson exact-name grid fallback row');
+// 282 from the original 2020 books; 433 with the Castle Combe, Champion of Brands and 2019 Festival books (November 2026).
+assert.equal(formulaFordImportReport.bryceLapSamplesImported, 433, 'Formula Ford importer must extract all source-backed Bryce lap-analysis samples');
+assert.equal(formulaFordImportReport.lapSamplesImported, 433, 'Formula Ford lap-sample import must stay scoped to Bryce-owned lap-analysis rows');
+assert.equal(formulaFordImportReport.gridRowsImported, 1148, 'Formula Ford importer must include the Colin Lawson exact-name grid fallback row (755 from the original 2020 books)');
 assert.deepEqual(
   formulaFordImportReport.gridRowsMatchedByDriverName,
   [
@@ -1259,7 +1263,7 @@ assert.deepEqual(
 {
   const formulaFordGridHoldoutGap = dataset.gaps.find((row) => row.id === 'gap_formula_ford_2020_grid_start_source_asymmetry_holdouts');
   assert.equal(formulaFordGridHoldoutGap?.status, 'open', 'Formula Ford grid/start source-asymmetry holdouts must be explicit open gaps');
-  assert.equal(formulaFordGridHoldoutGap?.raw?.resultIds?.length, 7, 'Formula Ford grid/start holdout gap must enumerate the remaining seven held-out result rows');
+  assert.equal(formulaFordGridHoldoutGap?.raw?.resultIds?.length, 12, 'Formula Ford grid/start holdout gap must enumerate the remaining twelve held-out result rows (seven from 2020, five from the 2019 Festival)');
   assert.equal(
     formulaFordGridHoldoutGap?.raw?.resultIds?.includes('result_formula_ford_2020_wht_grand_final_48_driver_benn_tilley'),
     true,
@@ -2631,3 +2635,34 @@ console.log(JSON.stringify({
     euroformula_2023_bryce_race_results_with_grid: euroformulaBryceRaceResults.filter((row) => row.gridPosition !== null && row.startPosition !== null).length
   }
 }, null, 2));
+
+/* 2019 Formula Ford Festival Last Chance Race (proxy review 3): the amended grid prints 30 slots
+ * but 21 cars took the start. Bryce's slot was 25; 15 starters were gridded ahead of him. */
+{
+  const lcr = dataset.results.find((row) => row.id === 'result_formula_ford_2019_festival_race_19_last_chance_race_in_recognition_of_diz_18_driver_bryce_aron');
+  assert.equal(lcr?.gridPosition, 25, '2019 Festival Last Chance Race keeps the official grid slot');
+  assert.equal(lcr?.startPosition, 16, '2019 Festival Last Chance Race start is his place among the 21 starters');
+  assert.equal(lcr?.finishPosition, 11, '2019 Festival Last Chance Race finish');
+  const wht = dataset.results.find((row) => row.id === 'result_formula_ford_2020_wht_grand_final_21_driver_bryce_aron');
+  assert.equal(wht?.startPosition, wht?.gridPosition, 'A restarted race (WHT Grand Final) keeps the original grid slot as the start');
+}
+
+/* Duplicate driver records folded (proxy review 3, November 18): no result or qualifying row
+ * still names a `from` record, and each folded row cites the alias table. */
+{
+  const aliasTable = JSON.parse(await readFile('data/career/identity/driver-aliases.json', 'utf8'));
+  const driverIds = new Set(dataset.drivers.map((row) => row.id));
+  for (const alias of aliasTable.aliases) {
+    assert.ok(!driverIds.has(alias.from), `${alias.from} must be folded into ${alias.to}`);
+    assert.ok(driverIds.has(alias.to), `${alias.to} must remain a driver record`);
+    assert.ok(!dataset.results.some((row) => row.driverId === alias.from), `no result row may still name ${alias.from}`);
+    const moved = dataset.results.filter((row) => row.raw?.identityAlias?.fromDriverId === alias.from);
+    assert.ok(moved.every((row) => row.driverId === alias.to && row.provenanceRefs.includes('source_driver_identity_aliases')), `${alias.from} rows must sit on ${alias.to} and cite the alias table`);
+  }
+  assert.equal(dataset.results.filter((row) => row.driverId === 'driver_tommy_smith' && row.sessionId.startsWith('session_gb3_2022_')).length, 76, 'GB3 2022 car 16 (the "TBC TBC" rows) is Tommy Smith');
+  /* RCFFS 2019 Mid-Ohio: the results sheet's "Michaeol" is the series report's Michael Neylon. */
+  const neylon = dataset.drivers.find((row) => row.id === 'driver_michaeol_neylon');
+  assert.equal(neylon?.displayName, 'Michael Neylon', 'the RCFFS race report spells him Michael Neylon');
+  assert.equal(neylon?.sourceDisplayName, 'Michaeol Neylon', 'the sheet spelling is kept on the record');
+  assert.ok(neylon?.provenanceRefs.includes('source_rcffs_2019_mid_ohio_race_report'), 'the spelling cites the race report');
+}

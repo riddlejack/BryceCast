@@ -1,0 +1,44 @@
+{
+  "lane": "palette",
+  "entries": [
+    {
+      "id": "r2-palette",
+      "page": [
+        "/career",
+        "/about",
+        "/data"
+      ],
+      "title": "One series palette for the whole site: every series its own swatch, INDY NXT gold",
+      "switch": "palette",
+      "values": [
+        {
+          "value": null,
+          "label": "the road (default): SCCA, F1600 and RCFFS (the three 2019 series, one car class) as dark, mid and light violet, then blue, sky, green, sage, plum, rose and INDY NXT gold; every pair raced in the same year passes the colour-blind check. Round 3 spread the three violets further apart and took the odometer's own marks to ink (see the odocolour switch)"
+        },
+        {
+          "value": "atlas",
+          "label": "atlas: the six editorial hues (SCCA, F1600 and RCFFS as blue steps, green, wine, teal, rust, violet), USF Pro 2000 sage, INDY NXT gold"
+        },
+        {
+          "value": "old",
+          "label": "before: the pre-round palette with each series split onto its own swatch, INDY NXT in black"
+        }
+      ],
+      "look": "Career → His life in weeks, the chapters (INDY NXT's dots), the odometer, the travel map; then About and Data. Flip the three and watch the same series keep one colour everywhere. On Life in weeks, point at (or tap) a series in the key to light only its weeks.",
+      "anchor": "#career-life-title",
+      "added": "2026-11-18T01:30",
+      "reviewed": false
+    },
+    {
+      "id": "r2-odometer-hover",
+      "page": "/career",
+      "title": "The odometer: colour and a read on every tile",
+      "switch": null,
+      "noswitch": "new reads on tiles that had none; nothing to switch back to",
+      "look": "Career → the odometer. Point at (or tap) each: a series segment on On track; a bar on Distance (it thickens and reads its miles); a part of Time (timed, untimed, other sessions); any of the 610 dots on Other drivers (the shared card: series and year, name, races together), or a colour chip under them to light one series; a country on Places (its most-raced track pictured, races and years) or a track dot (that track); a cell on When it went wrong (the shared race card: P19 of 21, how it ended; a second tap opens the race).",
+      "anchor": "#career-odometer-title",
+      "added": "2026-11-18T01:30",
+      "reviewed": false
+    }
+  ]
+}

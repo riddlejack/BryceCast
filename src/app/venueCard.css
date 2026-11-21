@@ -1,0 +1,60 @@
+/* The race card, one grammar for every chart (venueCard.tsx, Nov 17 2026).
+ * The Career explorer's mouse card, made the site's: the track's still on
+ * top, a series line, the race, its numbers, the action. */
+
+.vcard {
+  position: absolute;
+  z-index: 6;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(300px, calc(100vw - 16px));
+  overflow: hidden;
+  background: var(--surface-0);
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(30, 28, 26, 0.13);
+  color: var(--ink-secondary);
+  font-size: 12.5px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  white-space: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+.vcard--still { width: min(272px, calc(100vw - 16px)); max-width: none; }
+.vcard--still.vcard--small { width: min(208px, calc(100vw - 16px)); }
+.vcard--outline { max-width: min(320px, calc(100vw - 16px)); }
+
+.vcard__still {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--grey-fill);
+  border-bottom: 1px solid var(--divider);
+}
+
+.vcard__body { display: flex; flex-direction: column; gap: 3px; padding: 9px 12px 10px; }
+.vcard__head { display: flex; align-items: center; gap: 12px; }
+.vcard__words { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.vcard__outline { flex: none; width: 58px; height: 40px; color: var(--ink); opacity: 0.78; }
+
+.vcard__meta { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); }
+.vcard__meta i { flex: none; width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.vcard__title { font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; line-height: 1.3; }
+.vcard__detail { color: var(--ink-secondary); }
+.vcard__note { color: var(--ink-muted); }
+.vcard__flag { color: var(--amber); font-weight: 560; }
+.vcard__list { list-style: none; margin: 3px 0 1px; padding: 0; display: flex; flex-direction: column; gap: 2px; min-width: 196px; }
+.vcard__list li { display: flex; align-items: center; gap: 7px; color: var(--ink-secondary); }
+.vcard__list i { flex: none; width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.vcard__list span { flex: 1 1 auto; min-width: 0; }
+.vcard__list b { flex: none; font-weight: 560; color: var(--ink); padding-left: 10px; }
+.vcard__list .vcard__more { color: var(--ink-muted); }
+.vcard__action { margin-top: 2px; color: var(--link); font-size: 12px; }
+
+/* On a touch screen: a touch more type, and the tap's thumb-sized row. */
+.vcard--touch { font-size: 13px; }
+.vcard--touch .vcard__title { font-size: 14.5px; }
+.vcard--touch .tap-card__open { width: calc(100% + 24px); margin: 8px -12px -10px; border-radius: 0 0 10px 10px; }
+.vcard--touch .tap-card__note,
+.vcard--touch .tap-card__again { margin-top: 2px; }

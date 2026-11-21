@@ -11,7 +11,7 @@
     "miles": 11997.4,
     "toTrackName": "Euromarque Motorsport Park"
   },
-  "generatedAt": "2026-09-19T22:45:37.078Z",
+  "generatedAt": "2026-11-18T07:35:39.711Z",
   "longestLeg": {
     "fromTrackName": "Autodromo Nazionale Monza",
     "miles": 11599.1,
@@ -19,24 +19,24 @@
   },
   "personalRaceMileage": {
     "confidenceClass": "observed_exact",
-    "coveredRaceRows": 150,
-    "laps": 3274,
+    "coveredRaceRows": 174,
+    "laps": 3588,
     "metricGrain": "driver_physical_race",
-    "miles": 7316.4,
-    "raceRows": 150
+    "miles": 7950.5,
+    "raceRows": 175
   },
   "physicalSessionMileage": {
     "exact": {
       "confidenceClass": "observed_exact",
-      "laps": 6355,
-      "miles": 14440.7,
-      "sessions": 325
+      "laps": 6578,
+      "miles": 14592.6,
+      "sessions": 347
     },
-    "excludedAggregateSessions": 33,
+    "excludedAggregateSessions": 44,
     "floor": {
       "confidenceClass": "observed_lower_bound",
-      "laps": 6504,
-      "miles": 14801.2
+      "laps": 6727,
+      "miles": 14953.1
     },
     "lowerBound": {
       "confidenceClass": "observed_lower_bound",
@@ -45,21 +45,22 @@
       "sessions": 14
     },
     "metricGrain": "driver_physical_session",
-    "sessionRows": 365,
+    "remeasuredLayoutSessions": 4,
+    "sessionRows": 389,
     "unknown": {
       "confidenceClass": "unknown",
-      "sessions": 26
+      "sessions": 28
     }
   },
   "resourceModels": {
     "fuel": {
       "confidenceClass": "modeled_range",
-      "rows": 10,
+      "rows": 14,
       "table": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv"
     },
     "tires": {
       "confidenceClass": "modeled_range",
-      "rows": 10,
+      "rows": 14,
       "table": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv"
     }
   },
@@ -68,67 +69,77 @@
     {
       "note": "Canonical source facts at result, qualifying-result, session, event, and venue grain.",
       "path": "data/career/career.dataset.json",
-      "sha256": "d4d96f43d7e734ba26b0bdefe7d2d3e6ec0096e36dc05af4008d5fc7acfe69fd"
+      "sha256": "e4ee9a9e0188f11a5d6cfdfe16e70320195b15156165a11f9943bef9fcfadcfc"
     },
     {
       "note": "Curated track lengths and coordinates with named sources.",
       "path": "analysis/career-life-stats/data/venue_facts.csv",
-      "sha256": "878cf8ba950686b43399cead48f7a66699121404ba6fb9546a4c6f261b5e6f10"
+      "sha256": "309a1b8388f4e0f0b191f2c16dd8a6acae55794a71ac38c0d978cf8d17636bb4"
     },
     {
       "note": "Al Kamel-derived Bryce driver stints used for Daytona attribution.",
       "path": "analysis/imsa-daytona-stint-class-pace/output/bryce_imsa_stint_context.csv",
-      "sha256": "7ce538cd29a01e720cd558fb2770c302f0e42a9ab3c806299da51340f2bcae2e"
+      "sha256": "b3fcc22875f071ffce40eb997936f54e9ccf731adf484247260785d17432ce30"
     },
     {
       "note": "Explicit low/base/high fuel and tire model assumptions with source URLs.",
       "path": "analysis/career-life-stats/data/resource_model_assumptions.csv",
-      "sha256": "5e6f7ecf6d5459788dbccca509ab9791911278647deef848d7a673de97d8cf6f"
+      "sha256": "0ee8ab350677bba03eaee2330af394131cb482e061511ab654468be6a8067631"
     },
     {
       "note": "Source-grain, metric-grain, confidence, travel, and resource-model contracts.",
       "path": "analysis/career-life-stats/RESEARCH.md",
-      "sha256": "ca910b43fc128940a7a97ddf87c6ed2dcb15badf5802fb9a7f14d4819a1a9e98"
+      "sha256": "53ad13df1e2fe44cb5a3236cc6fde93383246030858d38cff2b762b89252a19b"
+    },
+    {
+      "note": "Driver records that look like one person entered twice, for the people range.",
+      "path": "analysis/career-life-stats/data/driver_record_variants.csv",
+      "sha256": "7f42e39717392e744bce5d8afadd6b7c1cb39aaa6f9943630a275f2aea126b09"
+    },
+    {
+      "note": "Career page figures, share of his life, weeks grid and ordered travel legs.",
+      "path": "analysis/career-life-stats/output/career_figures.json",
+      "sha256": "1d9b4d8f5cea6d29cfd1d1ab26a5428e452100e40279efb49749008f7a809dd6"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/miles_raced.csv",
-      "sha256": "32703bc453ba7c45b18e60a36b501eca1b3ecb02c57f22e2fa95422ff591d377"
+      "sha256": "5225d8a649c59ad7fc924525931a58ae1f7f5705467a1b4cca1a5623bff05b0b"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/session_mileage_ledger.csv",
-      "sha256": "b5e7b1cfc261d1f98a90b40c3578136269871f591d00041c3db0810b5df1111e"
+      "sha256": "928d783c49d6e851a98fce680f476afe88b5f3fc8e1a13815f1a5a6480577ce6"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/excluded_aggregate_sessions.csv",
-      "sha256": "13049202665754c6d6ea81e16cd48c709c8990bb6f404f75983359681abb1661"
+      "sha256": "64f17c4bd77f69036936608f42138e7963e4188d6f57de4d1590a11a40ed8fc3"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_legs.csv",
-      "sha256": "49cc4efc737f4d8d1184e104cce07dbad3c6b18a4363b6edbe2eb82b1604d9ad"
+      "sha256": "07be60815269f25257825ff78f33d18d11e5f3db34fc28c0cdb5eb5850a23c12"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/mileage_breakdowns.csv",
-      "sha256": "16562e1d8f3f12885994875b4ca89d337555df69dc8708eee7cdcca2d17c2bfa"
+      "sha256": "cf95a5c0a06ef0c9811a7d862b8a3b3352f6ee2c553e40e189ec48293fe33b4b"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/travel_mode_breakdown.csv",
-      "sha256": "d095efc134abddd7d349d44adb759469397a8ead20bdc4bd0c00ab9b5cc7221e"
+      "sha256": "e2df688a51cc619e11167412e51ed9a1d859b272f7c62e674938fd7b01198b9c"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_fuel_burned.csv",
-      "sha256": "23615045c13a54db3e5386a34a1593d879330f81514f1082a80aa1137b031eb5"
+      "sha256": "641ab8254865a8ec9e2738e1699a1b7fe8c7c46f5241232deffdd203dd9a2e99"
     },
     {
       "note": "Deterministic generated career life-stats artifact.",
       "path": "analysis/career-life-stats/output/tables/estimated_unique_tires.csv",
-      "sha256": "38b48896ef3904f3dd9c3369bafcb70ed4bdc42824fcd97f8c0daa2eddb67459"
+      "sha256": "a6cb631adedfb8e6c6c6afccd342de7d8aa1c0c20eddc86a6cf00ed0de13171b"
     }
   ],
   "travel": {
@@ -142,17 +153,17 @@
     "greatCircleMinimum": {
       "confidenceClass": "observed_exact",
       "label": "minimum venue-to-venue displacement between consecutive race events",
-      "miles": 60561.1
+      "miles": 63366.4
     },
     "routeAdjustedMinimum": {
       "assumptions": {
         "driveProxy": "same-country and <=750 great-circle miles; factor 1.12/1.18/1.28",
         "flightProxy": "all other non-zero legs; factor 1.03/1.08/1.15"
       },
-      "baseMiles": 66842.2,
+      "baseMiles": 69951.8,
       "confidenceClass": "modeled_range",
-      "highMiles": 71512.1,
-      "lowMiles": 63670.6
+      "highMiles": 74841.7,
+      "lowMiles": 66631.9
     }
   },
   "venueSources": [
@@ -221,6 +232,18 @@
     },
     {
       "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Castle_Combe_Circuit"
+      ],
+      "lengthSources": [
+        "TSL/CCRC official 2020 FF1600 result sheets (Circuit Length = 1.8500 miles) | https://www.tsl-timing.com/file/?f=CCRC/2020/202768cf6.pdf"
+      ],
+      "trackIds": [
+        "track_castle_combe"
+      ],
+      "trackName": "Castle Combe Circuit"
+    },
+    {
+      "coordsSources": [
         "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Circuit_Paul_Ricard"
       ],
       "lengthSources": [
@@ -245,6 +268,18 @@
         "track_spa_gp"
       ],
       "trackName": "Circuit de Spa-Francorchamps"
+    },
+    {
+      "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Circuit_of_the_Americas"
+      ],
+      "lengthSources": [
+        "Circuit of the Americas official about page | https://circuitoftheamericas.com/about/"
+      ],
+      "trackIds": [
+        "track_circuit_of_the_americas"
+      ],
+      "trackName": "Circuit of the Americas"
     },
     {
       "coordsSources": [
@@ -320,6 +355,18 @@
     },
     {
       "coordsSources": [
+        "Wikipedia circuit infobox | https://en.wikipedia.org/wiki/Homestead%E2%80%93Miami_Speedway"
+      ],
+      "lengthSources": [
+        "Official SCCA 2019 Palm Tree Winter Majors results (Homestead-Miami Speedway 2.300 miles) | https://www.scca.com/wp-content/uploads/2026/06/2019_0105_M_Homestead_Results.pdf"
+      ],
+      "trackIds": [
+        "track_homestead_miami_speedway_road_course"
+      ],
+      "trackName": "Homestead-Miami Speedway"
+    },
+    {
+      "coordsSources": [
         "Hungaroring official site | https://hungaroring.hu/"
       ],
       "lengthSources": [
@@ -353,6 +400,18 @@
         "track_iowa_speedway"
       ],
       "trackName": "Iowa Speedway"
+    },
+    {
+      "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Lucas_Oil_Indianapolis_Raceway_Park"
+      ],
+      "lengthSources": [
+        "USF Pro 2000 official 2024 race classification (0.686 miles) | https://www.usfpro2000.com/docs/default-source/results/lor-usf-pro-2000-race---official.pdf"
+      ],
+      "trackIds": [
+        "track_lucas_oil_indianapolis_raceway_park"
+      ],
+      "trackName": "Lucas Oil Indianapolis Raceway Park"
     },
     {
       "coordsSources": [
@@ -461,6 +520,18 @@
         "track_road_america"
       ],
       "trackName": "Road America"
+    },
+    {
+      "coordsSources": [
+        "Wikipedia circuit profile | https://en.wikipedia.org/wiki/Sebring_International_Raceway"
+      ],
+      "lengthSources": [
+        "Wikipedia circuit profile (official site refused automated requests; SCCA sheets print 3.74) | https://en.wikipedia.org/wiki/Sebring_International_Raceway"
+      ],
+      "trackIds": [
+        "track_sebring_international_raceway"
+      ],
+      "trackName": "Sebring International Raceway"
     },
     {
       "coordsSources": [
@@ -574,5 +645,5 @@
       "trackName": "World Wide Technology Raceway"
     }
   ],
-  "venues": 34
+  "venues": 39
 }

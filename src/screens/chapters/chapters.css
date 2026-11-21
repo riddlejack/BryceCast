@@ -1,0 +1,61 @@
+/* The chapters' signature visuals (Career round 3). Ink, paper and the
+ * chapter's own colour; hairlines and the site's small dots. */
+
+.chs { margin: 0; min-width: 0; }
+.chs__stage { position: relative; width: 100%; }
+.chs__stage svg { display: block; overflow: visible; }
+.chs__foot { margin: 10px 0 0; font-size: 13px; line-height: 1.45; color: var(--ink-muted); max-width: 70ch; }
+
+.chs-podiums__numeral { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chs-axis { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 12px; fill: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.chs-label { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 13px; fill: var(--ink); font-weight: 520; }
+.chs-note { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 12px; fill: var(--ink-secondary); }
+.chs-place { fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.chs-car { fill: var(--ink); fill-opacity: 0.2; }
+.chs-hair { stroke: var(--ink); stroke-opacity: 0.16; stroke-width: 1; fill: none; }
+.chs-band { fill: var(--ink); fill-opacity: 0.045; }
+
+@media (max-width: 520px) {
+  .chs-label { font-size: 12px; }
+}
+
+/* An inline legend swatch: the site's small dot before a series name. */
+.chs-key { white-space: nowrap; }
+.chs-key::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--key); margin: 0 5px 1px 2px; vertical-align: middle; }
+
+/* Euroformula: the route map and its round list. */
+.chs-land { fill: var(--ink); fill-opacity: 0.06; }
+.chs-euro__layout { display: flex; align-items: center; gap: clamp(20px, 3vw, 48px); flex-wrap: wrap; }
+.chs-euro__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; min-width: 240px; flex: 1 1 240px; max-width: 360px; }
+.chs-euro__row { display: grid; grid-template-columns: 22px 1fr auto; align-items: baseline; gap: 10px; padding: 7px 4px; border-bottom: 1px solid var(--divider); font-size: 14px; cursor: pointer; transition: background-color 160ms ease; }
+.chs-euro__row:first-child { border-top: 1px solid var(--divider); }
+.chs-euro__row--hot { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.chs-euro__row--gap { cursor: default; }
+.chs-euro__n { color: var(--ink-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.chs-euro__name { color: var(--ink); }
+.chs-euro__res { display: inline-flex; gap: 10px; font-variant-numeric: tabular-nums; color: var(--ink-secondary); font-size: 13px; }
+.chs-euro__win { color: var(--ink); font-weight: 650; }
+.chs-euro__none { color: var(--ink-muted); font-size: 12px; }
+@media (max-width: 640px) {
+  .chs-euro__list { max-width: none; width: 100%; }
+}
+
+/* Daytona: the 24-hour dial and his three spells. */
+.chs-day__layout { display: flex; align-items: center; gap: clamp(20px, 3vw, 56px); flex-wrap: wrap; }
+.chs-day__big { font-family: 'Schibsted Grotesk', -apple-system, system-ui, sans-serif; font-size: 34px; font-weight: 600; fill: var(--ink); font-variant-numeric: tabular-nums; }
+.chs-day__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; flex: 1 1 220px; max-width: 340px; min-width: 220px; }
+.chs-day__row { display: grid; grid-template-columns: 1fr auto; grid-template-areas: 'when laps' 'time time'; gap: 2px 12px; padding: 9px 4px; border-bottom: 1px solid var(--divider); cursor: pointer; transition: background-color 160ms ease; }
+.chs-day__row:first-child { border-top: 1px solid var(--divider); }
+.chs-day__row--hot { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.chs-day__when { grid-area: when; font-size: 14px; color: var(--ink); }
+.chs-day__time { grid-area: time; font-size: 13px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+.chs-day__laps { grid-area: laps; font-size: 13px; color: var(--ink-secondary); font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) {
+  .chs-day__layout { justify-content: center; }
+  .chs-day__list { max-width: none; width: 100%; }
+}
+
+/* Daytona: hold the dial's room while the stint pack loads. */
+.chs-day__wait {
+  min-height: 400px;
+}

@@ -1,4 +1,5 @@
 import { seedBroadcastRoute, seedBryceProfile, seedSnapshot, sourceUrls } from './seed';
+import { venueName } from '../app/venueNames';
 import { loadApiJson } from './api';
 import type { BroadcastNetwork, BroadcastSessionRoute, DriverProfile, RaceHeartbeat, RaceSnapshot, SourceProbe, SourceState, TimingRow } from './types';
 
@@ -434,7 +435,7 @@ export const buildAlerts = (snapshot: RaceSnapshot) => {
     {
       tone: 'cyan',
       title: `Lap ${heartbeat.lapNumber} of ${heartbeat.totalLaps}`,
-      detail: `${heartbeat.currentFlag} at ${heartbeat.trackName}.`,
+      detail: `${heartbeat.currentFlag} at ${venueName(heartbeat.trackName)}.`,
       stamp: now
     },
     {

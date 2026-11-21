@@ -1,0 +1,195 @@
+/* /career/race/:id — the light race sheet (final pass, November 17, 2026).
+ * The deep dives' frame (dd__figure, dd__num, dd__lede from deepDives.css)
+ * carries the headline; this file lays out the head, the stage and the way on. */
+
+.crs {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 3vw, 48px);
+}
+
+/* ---------- head ---------- */
+
+.crs-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px 24px;
+  margin: clamp(16px, 3vw, 40px) 0 0;
+}
+.crs-head__kicker { gap: 8px; }
+.crs-head__swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tint, var(--ink));
+  flex: none;
+}
+.crs .crs-head__title { max-width: 26ch; }
+.crs .crs-head__sub {
+  margin: 12px 0 0;
+  color: var(--ink-secondary);
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.45;
+}
+
+/* ---------- stage: the words, the field, the chapter ---------- */
+
+.crs-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 36px;
+  padding-top: clamp(22px, 2.2vw, 34px);
+  border-top: 1px solid var(--grey-hair);
+}
+.crs--column .crs-stage {
+  grid-template-columns: minmax(280px, 1fr) minmax(300px, 0.8fr) minmax(0, 2.3fr);
+  column-gap: clamp(28px, 3vw, 64px);
+  align-items: start;
+}
+
+.crs--column.crs--nofield .crs-stage { grid-template-columns: minmax(280px, 1fr) minmax(0, 3.1fr); }
+.crs .crs-words__note { margin: 10px 0 0; font-size: 13px; color: var(--ink-muted); max-width: 34ch; }
+
+.crs-words { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+.crs .crs-words__lede { margin: 16px 0 0; max-width: 34ch; }
+
+.crs-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 8px 18px;
+  margin: 22px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--grey-hair);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.crs-facts__row { display: contents; }
+.crs-facts dt { color: var(--ink-muted); }
+.crs-facts dd { margin: 0; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+
+.crs-panel { margin: 0; min-width: 0; position: relative; }
+.crs-panel__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.crs-panel__count { font-size: 13.5px; font-weight: 450; color: var(--ink-muted); }
+.crs-panel__axis { margin: -6px 0 6px; font-size: 12.5px; color: var(--ink-muted); }
+.crs .crs-panel__foot { margin: 8px 0 0; font-size: 13px; color: var(--ink-muted); }
+
+.crs-field { width: 100%; }
+.crs-field svg, .crs-chart svg { display: block; overflow: visible; }
+.crs-chart { position: relative; width: 100%; }
+
+.crs-track { margin: 24px 0 0; min-width: 0; }
+.crs--row .crs-track { margin: 0; max-width: 640px; }
+.crs-track figcaption { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; color: var(--ink-muted); }
+
+/* ---------- the way on ---------- */
+
+.crs-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px 32px;
+  padding-top: 22px;
+  border-top: 1px solid var(--grey-hair);
+}
+.crs-nav__link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  min-width: 0;
+}
+.crs-nav__link--next { align-items: flex-end; text-align: right; }
+.crs-nav__when {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.crs-nav__title { font-size: 17px; font-weight: 560; color: var(--link); }
+.crs-nav__link:hover .crs-nav__title { color: var(--link-active); text-decoration: underline; text-underline-offset: 3px; }
+
+.crs-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-size: 15px;
+  color: var(--link);
+  text-decoration: none;
+}
+.crs-back:hover { color: var(--link-active); text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 720px) {
+  .crs-head { flex-direction: column; align-items: flex-start; }
+  .crs-stage { gap: 30px; }
+  .crs .crs-words__lede { max-width: none; }
+  .crs-nav { grid-template-columns: minmax(0, 1fr); }
+  .crs-nav__link--next { align-items: flex-start; text-align: left; }
+  .crs-nav__title { font-size: 16px; }
+}
+
+/* ?racesheet=row on a wide screen: the words beside the facts, so neither leaves half the row empty. */
+@media (min-width: 900px) {
+  .crs--row .crs-words {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(28px, 3vw, 64px);
+    align-items: end;
+  }
+  .crs--row .crs-words > :not(.crs-facts) { grid-column: 1; }
+  .crs--row .crs-facts { grid-column: 2; grid-row: 1 / span 3; align-self: end; margin: 0; padding: 0; border: 0; }
+}
+
+/* ---------- career round 2 (Nov 17): the track in 3D ---------- */
+
+/* The interactive model, full width under the race, where the venue has one. */
+.crs-model {
+  padding-top: clamp(22px, 2.2vw, 34px);
+  border-top: 1px solid var(--grey-hair);
+  min-width: 0;
+}
+.crs .crs-model__title {
+  margin: 0 0 14px;
+  font-size: clamp(18px, 1.4vw, 22px);
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+.crs-model .track3d__stage { max-height: min(72vh, 780px); }
+
+/* A race with no classified finish: the words, then the track beside them. */
+.crs--unclassified .dd__num { letter-spacing: 0.01em; }
+@media (min-width: 900px) {
+  .crs-stage--unclassified { grid-template-columns: minmax(280px, 1fr) minmax(0, 1.5fr); column-gap: clamp(28px, 3vw, 64px); align-items: start; }
+  .crs-stage--unclassified .crs-track { margin: 0; }
+}
+
+/* The weekend's races, on a page with no result of its own. */
+.crs-weekend { margin: 0; min-width: 0; }
+.crs-weekend__list { list-style: none; margin: 10px 0 0; padding: 0; border-top: 1px solid var(--grey-hair); }
+.crs-weekend__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 16px;
+  align-items: center;
+  gap: 14px;
+  min-height: 48px;
+  border-bottom: 1px solid var(--grey-hair);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 16px;
+}
+a.crs-weekend__row:hover .crs-weekend__title { text-decoration: underline; text-underline-offset: 3px; }
+.crs-weekend__row--here { color: var(--ink); font-weight: 620; }
+.crs-weekend__result { font-variant-numeric: tabular-nums; color: var(--ink-secondary); }
+.crs-weekend__row--here .crs-weekend__result { color: var(--ink); }
+.crs-weekend__result--none { letter-spacing: 0.02em; }
+.crs-weekend__row svg { color: var(--ink-muted); }

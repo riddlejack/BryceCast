@@ -1,3 +1,4 @@
+import { isKnownVenue, venueShort } from './venueNames';
 /** Null-safe formatting utilities. Missing values stay visibly unavailable —
  *  never coerced to zero, per the live data contract. */
 
@@ -110,6 +111,7 @@ export const formatCountdown = (msRemaining: number): string => {
 export const shortVenue = (value: unknown): string => {
   const text = asString(value);
   if (!text) return '—';
+  if (isKnownVenue(text)) return venueShort(text);
   return text.replace(/\s+(Sports Car Course|Motorsports Park|International Raceway|International Race Complex|Superspeedway|Raceway|Circuit|Mile)$/i, '');
 };
 

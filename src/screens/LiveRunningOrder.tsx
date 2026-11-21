@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ChartTipCard, chartFont, useMeasuredWidth, type ChartTip } from '../app/charts';
 import { Unavailable } from '../app/components';
+import { useTapPreview, type TapKey } from '../app/tapPreview';
 import type { LiveHistorySample, LiveSessionHistory } from '../data/liveHistoryModel';
 import { sessionOrderWording, type SessionOrderWording } from '../data/liveSessionModel';
 import {
@@ -207,6 +208,8 @@ export const LiveRunningOrder = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tip, setTip] = useState<ChartTip | null>(null);
   const [focusedId, setFocusedId] = useState<string | null>(null);
+  /* Round 9: on a phone the first tap reads a line, a crossing or a ladder row, as hover does; a tap elsewhere lets go. */
+  const tap = useTapPreview();
   const reducedMotion = useReducedMotion();
   const series = useMemo(() => fullFieldRunningOrderSeries(history), [history]);
   const latestSample = history?.samples.at(-1) ?? null;
@@ -296,29 +299,30 @@ export const LiveRunningOrder = ({
     setTip(null);
   };
 
-  const onMove = (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!svgRef.current || !history || !timeDomain) return;
+  const onMove = (event: React.MouseEvent<Element>): TapKey | null => {
+    if (!svgRef.current || !history || !timeDomain) return null;
     const bounds = svgRef.current.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
     const cursorY = event.clientY - bounds.top;
     if (cursorX < margin.left || cursorX > plotRight || cursorY < margin.top || cursorY > margin.top + plotHeight) {
       clearFocus();
-      return;
+      return null;
     }
     const hit = nearestRunningOrderSegment(renderedPixelSegments, cursorX, cursorY);
     if (!hit) {
       clearFocus();
-      return;
+      return null;
     }
     const cursorTime = timeDomain.startMs + ((cursorX - margin.left) / plotWidth) * (timeDomain.endMs - timeDomain.startMs);
     const sampleIndex = sampleIndexAtOrBefore(history, cursorTime);
     const nextTip = tipFor(hit.driverId, sampleIndex, hit.x, hit.y);
     if (!nextTip) {
       clearFocus();
-      return;
+      return null;
     }
     setFocusedId(hit.driverId);
     setTip(nextTip);
+    return `${hit.driverId}@${sampleIndex}`;
   };
 
   return (
@@ -356,8 +360,7 @@ export const LiveRunningOrder = ({
             data-focused-driver-id={focusedId ?? ''}
             data-visible-driver-ids={ladder.map((entry) => entry.id).join(',')}
             data-lapped-upstream-count={lappedUpstream.length}
-            onMouseMove={onMove}
-            onMouseLeave={clearFocus}
+            {...tap.surface({ find: onMove, clear: clearFocus })}
           >
             <defs>
               <clipPath id={clipId}><rect x={margin.left} y={margin.top} width={plotWidth} height={plotHeight} /></clipPath>
@@ -375,7 +378,7 @@ export const LiveRunningOrder = ({
               {Array.from({ length: RUNNING_ORDER_LANE_COUNT }, (_, index) => targetDomain.lower + index).map((rank) => (
                 <g key={rank}>
                   <line x1={margin.left} x2={plotRight} y1={y(rank)} y2={y(rank)} stroke="var(--grid-hairline)" />
-                  <text x={margin.left - 8} y={y(rank)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10.5} style={{ fontVariantNumeric: 'tabular-nums' }}>P{rank}</text>
+                  <text x={margin.left - 8} y={y(rank)} textAnchor="end" dominantBaseline="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12} style={{ fontVariantNumeric: 'tabular-nums' }}>P{rank}</text>
                 </g>
               ))}
               </g>
@@ -433,7 +436,9 @@ export const LiveRunningOrder = ({
                     x: x(crossing.checkedAtMs),
                     y: y(crossing.rank),
                     title: crossing.direction === 'ahead_of' ? `ahead of ${crossing.rivalName}` : `behind ${crossing.rivalName}`,
-                    detail: crossing.lap === null ? null : `lap ${crossing.lap}`
+                    detail: crossing.lap === null ? null : `lap ${crossing.lap}`,
+                    over: y(crossing.rank) - 5,
+                    under: y(crossing.rank) + 5
                   } satisfies ChartTip;
                   return <circle
                     key={crossing.id}
@@ -449,8 +454,8 @@ export const LiveRunningOrder = ({
                     strokeWidth={2}
                     tabIndex={0}
                     aria-label={`${crossingTip.title}${crossing.lap === null ? '' : `, lap ${crossing.lap}`}`}
-                    onMouseMove={(event) => { event.stopPropagation(); setFocusedId(latestSample.bryceId); setTip(crossingTip); }}
-                    onMouseLeave={clearFocus}
+                    {...tap.target(`crossing-${crossing.id}`, { show: () => { setFocusedId(latestSample.bryceId); setTip(crossingTip); }, hide: clearFocus })}
+                    onMouseMove={(event) => event.stopPropagation()}
                     onFocus={() => { setFocusedId(latestSample.bryceId); setTip(crossingTip); }}
                     onBlur={clearFocus}
                   />;
@@ -485,14 +490,13 @@ export const LiveRunningOrder = ({
                   aria-label={`${entry.bryce ? 'Bryce Aron, car 9' : entry.name}, P${entry.rank}, ${ariaGap}${roleWord ? `, ${roleWord}` : ''}`}
                   onFocus={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
                   onBlur={clearFocus}
-                  onMouseEnter={() => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }}
-                  onMouseLeave={clearFocus}
+                  {...tap.target(`row-${entry.id}`, { show: () => { setFocusedId(entry.id); if (currentTip) setTip(currentTip); }, hide: clearFocus })}
                 >
                   <circle data-ladder-dot cx={plotRight + 9} cy={rowY} r={4.5} fill={color} stroke="var(--surface-1)" strokeWidth={1.5} />
                   {entry.bryce ? (
                     <g transform={`translate(${plotRight + 18} ${rowY})`}>
                       <rect x={0} y={-9} width={30} height={18} rx={4} fill="var(--bryce)" />
-                      <text x={15} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={10.5} fontWeight={750}>№9</text>
+                      <text x={15} y={0.5} textAnchor="middle" dominantBaseline="middle" fill="#1d1d1f" fontFamily={chartFont} fontSize={12} fontWeight={750}>№9</text>
                     </g>
                   ) : (
                     <g transform={`translate(${plotRight + 14} ${rowY})`}>
@@ -512,9 +516,9 @@ export const LiveRunningOrder = ({
                   )}
                   {!entry.bryce ? (
                     <g transform={`translate(${plotRight + 35} ${rowY})`}>
-                      <text y={role ? -9 : -4} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={9.5} fontWeight={role ? 650 : 540}>{entry.name}</text>
-                      <text y={role ? 1.5 : 7} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={8.5}>{gap}</text>
-                      {role ? <text y={12} fill={color} fontFamily={chartFont} fontSize={8.2} fontWeight={650}>{roleWord}</text> : null}
+                      <text y={role ? -12 : -5} fill="var(--ink-secondary)" fontFamily={chartFont} fontSize={12} fontWeight={role ? 650 : 540}>{entry.name}</text>
+                      <text y={role ? 2 : 9} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{gap}</text>
+                      {role ? <text y={16} fill={color} fontFamily={chartFont} fontSize={12} fontWeight={650}>{roleWord}</text> : null}
                     </g>
                   ) : null}
                 </g>;
@@ -522,12 +526,12 @@ export const LiveRunningOrder = ({
               </g>
             </g>
             {xTicks.map((tick, index) => (
-              <text key={tick} x={x(tick)} y={height - 8} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={10}>{relativeTimeLabel(tick - timeDomain.endMs)}</text>
+              <text key={tick} x={x(tick)} y={height - 8} textAnchor={index === 0 ? 'start' : index === xTicks.length - 1 ? 'end' : 'middle'} fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>{relativeTimeLabel(tick - timeDomain.endMs)}</text>
             ))}
             {lapBoundaries.map((boundary) => (
               <g key={`${boundary.lap}-${boundary.checkedAtMs}`}>
                 <line x1={x(boundary.checkedAtMs)} x2={x(boundary.checkedAtMs)} y1={margin.top} y2={margin.top + 7} stroke="var(--axis-baseline)" />
-                <text x={x(boundary.checkedAtMs)} y={margin.top - 7} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={9.5}>L{boundary.lap}</text>
+                <text x={x(boundary.checkedAtMs)} y={margin.top - 7} textAnchor="middle" fill="var(--ink-muted)" fontFamily={chartFont} fontSize={12}>L{boundary.lap}</text>
               </g>
             ))}
           </svg>
@@ -543,7 +547,7 @@ export const LiveRunningOrder = ({
           <div className="sr-only" aria-label={`Current ${orderLabel} near Bryce`}>
             {ladder.map((entry) => <span key={entry.id}>{entry.bryce ? 'Bryce Aron, car 9' : entry.name}: P{entry.rank}, {entry.bryce ? 'Bryce' : orderGapWords(latestSample, entry.id, wording.currency)}. </span>)}
           </div>
-          {tip ? <ChartTipCard tip={tip} width={width} /> : null}
+          {tip ? <ChartTipCard tip={tip} width={width} tap={tap} /> : null}
         </>
       ) : (
         <Unavailable>{wording.emptyState}</Unavailable>

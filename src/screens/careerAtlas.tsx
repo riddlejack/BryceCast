@@ -7,15 +7,23 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 // decoded by the browser's native image pipeline and cached for a year
 // (immutable, see scripts/api-server.mjs) independent of app code.
 import worldLandTextureUrl from '../../analysis/career-atlas/output/world_land_texture.png?url';
-import { Card, SourcePill, Unavailable } from '../app/components';
-import { focusFade, useMeasuredWidth } from '../app/charts';
+import { SourcePill, Unavailable } from '../app/components';
+import { focusFade, useInViewOnce, useMeasuredWidth, useReducedMotion, PointerOpen } from '../app/charts';
 import { useRouter } from '../app/router';
+import { TAP_CARD, useTapPreview } from '../app/tapPreview';
+import { VenueTipCard, type VenueTip } from '../app/venueCard';
+import { useVenuePreload } from '../app/venuePeek';
+import { placeNameOf } from './raceCardFacts';
+import { venueName } from '../app/venueNames';
 import {
   uiDataPackage,
   type UiCareerAtlasSeriesSpan,
-  type UiCareerAtlasVenue
+  type UiCareerAtlasVenue,
+  type UiCareerTravelLegs
 } from '../data/uiDataPackage';
 import { chapterTint, ControlRow, FilterChip } from './careerExplorer';
+import { switchValue } from '../review/switches';
+import './legMode.css';
 
 const formatCount = new Intl.NumberFormat('en-US');
 const DEG_TO_RAD = Math.PI / 180;
@@ -24,16 +32,189 @@ const SPHERE_RADIUS_RATIO = 0.46;
 const ZOOM_STEP = 1.55;
 
 const chapterOrder = [
+  'series_scca_super_tour',
   'series_frp_f1600',
+  'series_rcffs',
   'series_formula_ford',
   'series_gb3',
   'series_euroformula_open',
   'series_froc',
+  'series_usf_pro_2000',
   'series_imsa_weathertech',
   'series_indy_nxt'
 ];
 
+/** Series in career order, for keys and legends across the Career page. */
+export const seriesOrder = chapterOrder;
+
+/* One name and colour per series, read from the atlas's series spans. */
+const seriesMeta = (() => {
+  const meta = new Map<string, { name: string; short: string; tint: string }>();
+  for (const venue of uiDataPackage.screens.careerLab.atlas?.venues ?? []) {
+    for (const span of venue.seriesSpans) {
+      if (!meta.has(span.seriesId)) {
+        meta.set(span.seriesId, { name: span.seriesName, short: span.seriesShort, tint: chapterTint(span.seriesName) });
+      }
+    }
+  }
+  return meta;
+})();
+
+export const seriesMetaById = (seriesId: string): { name: string; short: string; tint: string } =>
+  seriesMeta.get(seriesId) ?? { name: seriesId, short: seriesId.replace(/^series_/, ''), tint: 'var(--ink-primary)' };
+
 const regionOrder = ['North America', 'Europe', 'Oceania'] as const;
+
+/* ---------- the travel legs: geometry and timing ---------- */
+
+type Vec3 = { x: number; y: number; z: number };
+type TravelLeg = UiCareerTravelLegs['legs'][number];
+
+const toVec = (lat: number, lon: number): Vec3 => {
+  const la = lat * DEG_TO_RAD;
+  const lo = lon * DEG_TO_RAD;
+  return { x: Math.cos(la) * Math.cos(lo), y: Math.cos(la) * Math.sin(lo), z: Math.sin(la) };
+};
+
+const toLatLon = (v: Vec3): { lat: number; lon: number } => ({
+  lat: Math.atan2(v.z, Math.hypot(v.x, v.y)) * RAD_TO_DEG,
+  lon: Math.atan2(v.y, v.x) * RAD_TO_DEG
+});
+
+/** A point along the great circle from a to b, t in 0..1. */
+const slerp = (a: Vec3, b: Vec3, t: number): Vec3 => {
+  const dot = Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z));
+  const omega = Math.acos(dot);
+  if (omega < 1e-6) return a;
+  const sinOmega = Math.sin(omega);
+  const wa = Math.sin((1 - t) * omega) / sinOmega;
+  const wb = Math.sin(t * omega) / sinOmega;
+  return { x: a.x * wa + b.x * wb, y: a.y * wa + b.y * wb, z: a.z * wa + b.z * wb };
+};
+
+/** Projects a point (lat, lon) lifted `lift` globe radii above the surface. */
+const projectPoint = (lat: number, lon: number, lift: number, view: GlobeView, width: number, height: number) => {
+  const latitude = lat * DEG_TO_RAD;
+  const longitudeDelta = wrapLongitude(lon - view.longitude) * DEG_TO_RAD;
+  const centerLatitude = view.latitude * DEG_TO_RAD;
+  const cosLatitude = Math.cos(latitude);
+  const depth = Math.sin(centerLatitude) * Math.sin(latitude) + Math.cos(centerLatitude) * cosLatitude * Math.cos(longitudeDelta);
+  const radius = height * SPHERE_RADIUS_RATIO * view.zoom;
+  /* Only the near side of the globe is drawn (the visible hemisphere, like a
+   * 90° clip angle). A lifted arc near the edge would project past the disc and
+   * stop in mid-air, so the lift is capped where the point nears the horizon:
+   * the line comes down onto the globe's rim and goes round the back there. */
+  const visible = depth > 0;
+  const rimLift = visible ? 1 / Math.sqrt(Math.max(1e-6, 1 - depth * depth)) - 1 : 0;
+  const r = radius * (1 + Math.min(lift, rimLift));
+  const dx = r * cosLatitude * Math.sin(longitudeDelta);
+  const dy = -r * (Math.cos(centerLatitude) * Math.sin(latitude) - Math.sin(centerLatitude) * cosLatitude * Math.cos(longitudeDelta));
+  return { x: width / 2 + dx, y: height / 2 + dy, visible };
+};
+
+/* Flights arc, drives stay on the ground (round 2, intersections; switch
+ * `legmode`: arc (default) | off). With arcs on, a leg the rule of thumb calls a
+ * drive (same country, under 750 miles) is drawn flat on the globe and a flight
+ * lifts off it, with its ground track left as a faint dashed shadow. Off, every
+ * leg lifts a little by its length, as before. */
+type LegMode = 'arc' | 'off';
+const maxLift = (leg: TravelLeg, angle: number, mode: LegMode): number =>
+  mode === 'off' ? Math.min(0.24, angle * 0.2) : leg.modeProxy === 'flight' ? Math.min(0.24, 0.04 + angle * 0.24) : 0;
+
+/** SVG path for part of a leg (fractions t0..t1), broken where it passes behind the globe.
+ *  `ground` draws the leg flat on the surface (a flight's shadow). */
+const legPath = (
+  leg: TravelLeg,
+  t0: number,
+  t1: number,
+  view: GlobeView,
+  width: number,
+  height: number,
+  mode: LegMode = 'off',
+  ground = false
+): string => {
+  if (leg.greatCircleMiles <= 0 || t1 <= t0) return '';
+  const a = toVec(leg.from.lat, leg.from.lon);
+  const b = toVec(leg.to.lat, leg.to.lon);
+  const angle = Math.acos(Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z)));
+  const lift = ground ? 0 : maxLift(leg, angle, mode);
+  const steps = Math.max(6, Math.min(72, Math.ceil((angle * RAD_TO_DEG * (t1 - t0)) / 1.2)));
+  let d = '';
+  let pen = false;
+  for (let step = 0; step <= steps; step += 1) {
+    const t = t0 + ((t1 - t0) * step) / steps;
+    const { lat, lon } = toLatLon(slerp(a, b, t));
+    const point = projectPoint(lat, lon, lift * Math.sin(Math.PI * t), view, width, height);
+    if (!point.visible) {
+      pen = false;
+      continue;
+    }
+    d += `${pen ? 'L' : 'M'}${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+    pen = true;
+  }
+  return d;
+};
+
+const legHead = (leg: TravelLeg, t: number): { lat: number; lon: number } =>
+  leg.greatCircleMiles <= 0
+    ? { lat: leg.to.lat, lon: leg.to.lon }
+    : toLatLon(slerp(toVec(leg.from.lat, leg.from.lon), toVec(leg.to.lat, leg.to.lon), t));
+
+const legLift = (leg: TravelLeg, t: number, mode: LegMode = 'off'): number => {
+  if (leg.greatCircleMiles <= 0) return 0;
+  const a = toVec(leg.from.lat, leg.from.lon);
+  const b = toVec(leg.to.lat, leg.to.lon);
+  const angle = Math.acos(Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z)));
+  return maxLift(leg, angle, mode) * Math.sin(Math.PI * t);
+};
+
+/* Each leg takes time by its length (square root, so an ocean crossing is not
+ * forty times a short drive); the whole journey plays in about 13 seconds. */
+const LEAD_MS = 700;
+const legDuration = (miles: number): number => (miles <= 0 ? 70 : 48 + 5.2 * Math.sqrt(miles));
+
+/** The point the globe turns to while a leg draws: the leg's middle, so both
+ *  of its ends sit on the visible side. */
+const legCentre = (leg: TravelLeg): { lat: number; lon: number } => legHead(leg, 0.5);
+
+/** Degrees between two points on the globe. */
+const arcDegrees = (a: { lat: number; lon: number }, b: { lat: number; lon: number }): number => {
+  const va = toVec(a.lat, a.lon);
+  const vb = toVec(b.lat, b.lon);
+  return Math.acos(Math.max(-1, Math.min(1, va.x * vb.x + va.y * vb.y + va.z * vb.z))) * RAD_TO_DEG;
+};
+
+/* Before a leg that needs the globe to turn a long way (Monza to New Zealand,
+ * New Zealand to St. Petersburg), the pen waits while the globe turns, so the
+ * leg draws on the near side instead of round the back. */
+const turnDuration = (degrees: number): number => (degrees < 24 ? 0 : Math.min(1000, degrees * 8));
+
+type JourneyTimeline = { turns: number[]; starts: number[]; total: number };
+
+/** Which leg the clock is on, and how far along it the pen is (0 while the globe turns). */
+const legAt = (
+  timeline: JourneyTimeline,
+  legs: TravelLeg[],
+  elapsed: number
+): { index: number; t: number } => {
+  let index = 0;
+  while (index + 1 < legs.length && timeline.turns[index + 1] <= elapsed) index += 1;
+  const leg = legs[index];
+  if (!leg || elapsed < LEAD_MS) return { index, t: 0 };
+  return { index, t: Math.max(0, Math.min(1, (elapsed - timeline.starts[index]) / legDuration(leg.greatCircleMiles))) };
+};
+
+const monthYearShort = (iso: string): string =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const nearestVenueId = (venues: UiCareerAtlasVenue[], lat: number, lon: number): string | null => {
+  let best: { id: string; distance: number } | null = null;
+  for (const venue of venues) {
+    const distance = Math.hypot(venue.lat - lat, wrapLongitude(venue.lon - lon));
+    if (!best || distance < best.distance) best = { id: venue.venueId, distance };
+  }
+  return best && best.distance < 0.05 ? best.id : null;
+};
 
 type AtlasRegion = (typeof regionOrder)[number];
 type GlobeView = { zoom: number; longitude: number; latitude: number };
@@ -370,16 +551,6 @@ const yearSpan = (first: number, last: number): string => {
 const chapterLine = (chapter: UiCareerAtlasSeriesSpan): string =>
   `${chapter.seriesShort} ${yearSpan(chapter.firstYear, chapter.lastYear)}`;
 
-const venueDetail = (view: VenueView): string =>
-  [
-    `${formatCount.format(view.raceCount)} ${view.raceCount === 1 ? 'race' : 'races'}`,
-    chapterLine(view.chapter),
-    view.bestFinish === null ? null : `best P${view.bestFinish}`,
-    view.venue.country
-  ]
-    .filter(Boolean)
-    .join(' · ');
-
 const venueAccessibleLabel = (view: VenueView, seriesFiltered: boolean): string => {
   const series = seriesFiltered
     ? `${view.chapter.seriesShort} ${yearSpan(view.chapter.firstYear, view.chapter.lastYear)}`
@@ -389,7 +560,7 @@ const venueAccessibleLabel = (view: VenueView, seriesFiltered: boolean): string 
             `${span.seriesShort} ${yearSpan(span.firstYear, span.lastYear)}, ${span.raceCount} ${span.raceCount === 1 ? 'race' : 'races'}`
         )
         .join('; ');
-  return `${view.venue.trackName}, ${view.venue.country}. ${view.raceCount} ${view.raceCount === 1 ? 'race' : 'races'} in this filter. ${series}.${
+  return `${venueName(view.venue.trackName)}, ${view.venue.country}. ${view.raceCount} ${view.raceCount === 1 ? 'race' : 'races'} in this filter. ${series}.${
     view.bestFinish === null ? '' : ` Best sourced finish P${view.bestFinish}.`
   } Open the latest applicable race here.`;
 };
@@ -463,32 +634,63 @@ const projectVenue = (
   };
 };
 
-const AtlasTipCard = ({ view, x, y, width }: { view: VenueView; x: number; y: number; width: number }) => {
-  const cardWidth = Math.min(330, Math.max(width - 16, 190));
-  const left = Math.min(Math.max(x, cardWidth / 2 + 4), Math.max(width - cardWidth / 2 - 4, cardWidth / 2 + 4));
-  const below = y < 84;
-  return (
-    <div
-      className="career-atlas__tip"
-      role="status"
-      aria-live="polite"
-      style={{
-        left,
-        top: y,
-        width: cardWidth,
-        transform: below ? 'translate(-50%, 12px)' : 'translate(-50%, calc(-100% - 12px))'
-      }}
-    >
-      <strong>{view.venue.trackName}</strong>
-      <span>{venueDetail(view)}</span>
-      <span className="career-atlas__tip-action">open the latest applicable race</span>
-    </div>
-  );
+/* The travel map's card for one track (round 2): the track's 3D still where
+ * it is modelled (the plain model: a dot is the venue, not one race), the
+ * country, the track, the series he raced there and his best day. */
+const venueTip = (view: VenueView, point: ProjectedVenue, seriesFiltered: boolean): VenueTip => ({
+  x: point.x,
+  y: point.y - point.radius - 3,
+  over: point.y - point.radius - 3,
+  under: point.y + point.radius + 3,
+  venue: { sessionId: view.latestRace.sessionId, trackName: view.venue.trackName, trackId: view.venue.trackIds[0] ?? null, plain: true },
+  meta: view.venue.country,
+  tint: chapterTint(view.chapter.seriesName),
+  title: placeNameOf(view.venue.trackName),
+  detail: (seriesFiltered ? [view.chapter] : view.venue.seriesSpans).map(chapterLine).join(' · '),
+  note: [`${formatCount.format(view.raceCount)} ${view.raceCount === 1 ? 'race' : 'races'}`, view.bestFinish === null ? null : `best P${view.bestFinish}`]
+    .filter(Boolean)
+    .join(' · '),
+  action: 'open his latest race here'
+});
+
+/* A tip measured in the map's own pixels, moved into its parent's. */
+const offsetTip = (tip: VenueTip, map: HTMLElement | null): VenueTip => {
+  const dx = map?.offsetLeft ?? 0;
+  const dy = map?.offsetTop ?? 0;
+  return { ...tip, x: tip.x + dx, y: tip.y + dy, over: (tip.over ?? tip.y) + dy, under: (tip.under ?? tip.y) + dy };
 };
+
+/* The travel map. The globe draws each leg of the career, one race meeting's
+ * track to the next, in date order, while a counter adds up the miles. It plays
+ * once on a clock when it comes into view (never tied to the scroll), then the
+ * globe is free to spin. With reduced motion it shows the finished journey. */
+const wholeMiles = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+
+/* Digits on a fixed width so a running counter does not jitter; commas and
+ * points keep their own narrow width, and the "+" is the accent. */
+const FixedDigits = ({ text }: { text: string }) => (
+  <>
+    {[...text].map((char, index) =>
+      char >= '0' && char <= '9' ? (
+        <span key={index} className="fixed-digit">
+          {char}
+        </span>
+      ) : (
+        <span key={index} className={char === '+' ? 'fixed-plus' : 'fixed-sep'}>
+          {char}
+        </span>
+      )
+    )}
+  </>
+);
 
 export const CareerAtlas = () => {
   const atlas = uiDataPackage.screens.careerLab.atlas;
+  const travel = uiDataPackage.screens.careerLab.lifeStats?.travelLegs ?? null;
+  const legs = travel?.legs ?? [];
   const [ref, width] = useMeasuredWidth<HTMLDivElement>();
+  const [stageRef, stageSeen] = useInViewOnce<HTMLDivElement>(0.35);
+  const reducedMotion = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const rendererRef = useRef<GlobeRenderer | null>(null);
@@ -498,15 +700,26 @@ export const CareerAtlas = () => {
   const { navigate } = useRouter();
   const minZoom = atlas.globe.zoom.min;
   const maxZoom = atlas.globe.zoom.max;
+  /* The resting view turns the globe a little north and west of the atlas's
+   * own default (20° N, 35° W), so every track in North America and Europe
+   * sits on the visible face. */
   const defaultView = useMemo<GlobeView>(
     () => ({
       zoom: minZoom,
-      longitude: atlas.globe.defaultCenter.longitude,
-      latitude: atlas.globe.defaultCenter.latitude
+      longitude: -46,
+      latitude: 32
     }),
-    [atlas.globe.defaultCenter.latitude, atlas.globe.defaultCenter.longitude, minZoom]
+    [maxZoom, minZoom]
   );
   const [activeVenueId, setActiveVenueId] = useState<string | null>(null);
+  /* Round 9: on a phone the first tap on a track reads it (the ring and the
+   * card), the second tap or the card's button opens its latest race. */
+  const tap = useTapPreview();
+  /* The first time a pointer (or a finger) comes onto the globe, warm the
+   * stills of the tracks in the filter, so a card never waits on a picture. */
+  const preloadStills = useVenuePreload(() =>
+    filteredViews.map((view) => ({ sessionId: view.latestRace.sessionId, trackName: view.venue.trackName, trackId: view.venue.trackIds[0] ?? null, plain: true }))
+  );
   const [seriesFilter, setSeriesFilter] = useState<string | null>(null);
   const [regionFilter, setRegionFilter] = useState<AtlasRegion | null>(null);
   const [globeView, setGlobeView] = useState<GlobeView>(defaultView);
@@ -514,13 +727,141 @@ export const CareerAtlas = () => {
   const [textureReady, setTextureReady] = useState(false);
   const [renderError, setRenderError] = useState<string | null>(null);
 
+  /* ---- the journey's clock ---- */
+  const timeline = useMemo<JourneyTimeline>(() => {
+    const turns: number[] = [];
+    const starts: number[] = [];
+    let total = LEAD_MS;
+    let previousCentre: { lat: number; lon: number } | null = null;
+    for (const leg of legs) {
+      turns.push(total);
+      const centre = leg.greatCircleMiles > 0 ? legCentre(leg) : { lat: leg.to.lat, lon: leg.to.lon };
+      if (previousCentre) total += turnDuration(arcDegrees(previousCentre, centre));
+      previousCentre = centre;
+      starts.push(total);
+      total += legDuration(leg.greatCircleMiles);
+    }
+    return { turns, starts, total };
+  }, [legs]);
+  const legVenues = useMemo(
+    () =>
+      legs.map((leg) => ({
+        from: nearestVenueId(atlas.venues, leg.from.lat, leg.from.lon),
+        to: nearestVenueId(atlas.venues, leg.to.lat, leg.to.lon)
+      })),
+    [atlas.venues, legs]
+  );
+  const [playhead, setPlayhead] = useState<number>(() => (reducedMotion ? Number.POSITIVE_INFINITY : 0));
+  const [run, setRun] = useState(0);
+  const [skipped, setSkipped] = useState(false);
+  const followRef = useRef(true);
+  const zoomTargetRef = useRef(1.6);
+
+  useEffect(() => {
+    if (reducedMotion) setPlayhead(Number.POSITIVE_INFINITY);
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (reducedMotion || skipped || legs.length === 0) return undefined;
+    if (!stageSeen && run === 0) return undefined;
+    followRef.current = true;
+    let frame = 0;
+    const start = performance.now();
+    let last = start;
+    let settled = false;
+    const tick = (now: number) => {
+      const dt = Math.min(64, now - last);
+      last = now;
+      const elapsed = now - start;
+      const playing = elapsed < timeline.total;
+      setPlayhead(playing ? elapsed : Number.POSITIVE_INFINITY);
+      if (followRef.current) {
+        let target: GlobeView;
+        if (playing) {
+          const { index } = legAt(timeline, legs, elapsed);
+          const leg = legs[index];
+          /* The globe turns to the leg's middle, so the whole leg, start to
+           * end, draws on the visible side. */
+          const aim =
+            elapsed < LEAD_MS
+              ? { lat: leg.from.lat, lon: leg.from.lon }
+              : leg.greatCircleMiles > 0
+                ? legCentre(leg)
+                : { lat: leg.to.lat, lon: leg.to.lon };
+          if (leg.greatCircleMiles > 0) zoomTargetRef.current = Math.max(1, Math.min(2.3, Math.sqrt(1700 / Math.max(leg.greatCircleMiles, 180))));
+          /* Short legs sit a little low in the frame; an ocean crossing is centred
+           * exactly, since its ends are already near the rim. */
+          const long = leg.greatCircleMiles > 3000;
+          target = {
+            latitude: clampLatitude(long ? aim.lat : aim.lat * 0.85 + 8),
+            longitude: aim.lon,
+            zoom: zoomTargetRef.current
+          };
+        } else {
+          target = defaultView;
+        }
+        const centre = 1 - Math.exp(-dt / 300);
+        const zoomEase = 1 - Math.exp(-dt / 760);
+        setGlobeView((current) => {
+          const next = {
+            longitude: wrapLongitude(current.longitude + wrapLongitude(target.longitude - current.longitude) * centre),
+            latitude: clampLatitude(current.latitude + (target.latitude - current.latitude) * centre),
+            zoom: current.zoom + (target.zoom - current.zoom) * zoomEase
+          };
+          if (!playing) {
+            settled =
+              Math.abs(wrapLongitude(target.longitude - next.longitude)) < 0.05 &&
+              Math.abs(target.latitude - next.latitude) < 0.05 &&
+              Math.abs(target.zoom - next.zoom) < 0.002;
+            if (settled) return target;
+          }
+          return next;
+        });
+      } else if (!playing) {
+        settled = true;
+      }
+      if (playing || !settled) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [defaultView, legs, reducedMotion, run, skipped, stageSeen, timeline]);
+
+  const finished = !Number.isFinite(playhead);
+  let currentIndex = legs.length - 1;
+  let currentT = 1;
+  if (!finished) {
+    const at = legAt(timeline, legs, playhead);
+    currentIndex = at.index;
+    currentT = at.t;
+  }
+  const started = finished || playhead >= LEAD_MS;
+  const currentLeg = legs[currentIndex] ?? null;
+  const milesSoFar = !currentLeg
+    ? 0
+    : finished
+      ? travel?.totalMiles ?? 0
+      : !started
+        ? 0
+        : currentLeg.runningMiles - currentLeg.greatCircleMiles + currentLeg.greatCircleMiles * currentT;
+  const visitedVenues = useMemo(() => {
+    const visited = new Set<string>();
+    if (legs.length === 0) return null;
+    if (legVenues[0]?.from) visited.add(legVenues[0].from);
+    const doneThrough = finished ? legs.length : currentIndex + (currentT >= 1 ? 1 : 0);
+    for (let index = 0; index < doneThrough; index += 1) {
+      const id = legVenues[index]?.to;
+      if (id) visited.add(id);
+    }
+    return visited;
+  }, [currentIndex, currentT, finished, legVenues, legs.length]);
+
   const coordinateSourceEntries = useMemo(
     () =>
       atlas.venues.flatMap((venue) =>
         venue.coordinateSources.map((source, index) => {
           const named = splitNamedSource(source);
           return {
-            label: `${venue.trackName} · coordinates${venue.coordinateSources.length > 1 ? ` ${index + 1}` : ''}`,
+            label: `${venueName(venue.trackName)} · coordinates${venue.coordinateSources.length > 1 ? ` ${index + 1}` : ''}`,
             path: named.url,
             note: named.name
           };
@@ -555,7 +896,7 @@ export const CareerAtlas = () => {
 
   const filteredViews = viewsFor(seriesFilter, regionFilter);
   const filteredRaceCount = filteredViews.reduce((sum, view) => sum + view.raceCount, 0);
-  const height = Math.max(240, Math.min(540, width * 0.58));
+  const height = Math.round(Math.max(320, Math.min(780, width * 0.8)));
   const projectedViews = filteredViews.map((view) => projectVenue(view, globeView, width, height));
   const onScreenViews = projectedViews.filter((point) => point.onScreen);
   const activePoint = onScreenViews.find((point) => point.view.venue.venueId === activeVenueId) ?? null;
@@ -597,9 +938,10 @@ export const CareerAtlas = () => {
 
   if (!atlas || atlas.venues.length === 0 || atlas.globe.projection !== 'orthographic') {
     return (
-      <Card title="The map">
+      <section className="career-travel">
+        <h2 className="career-section-title">The travel map</h2>
         <Unavailable>The career atlas is unavailable until its sourced venue and globe artifacts are rebuilt.</Unavailable>
-      </Card>
+      </section>
     );
   }
 
@@ -609,8 +951,13 @@ export const CareerAtlas = () => {
     latitude: clampLatitude(candidate.latitude)
   });
 
+  const takeControl = () => {
+    followRef.current = false;
+  };
+
   const applyFilters = (nextSeries: string | null, nextRegion: AtlasRegion | null) => {
     const nextViews = viewsFor(nextSeries, nextRegion);
+    takeControl();
     setSeriesFilter(nextSeries);
     setRegionFilter(nextRegion);
     setActiveVenueId(null);
@@ -618,18 +965,24 @@ export const CareerAtlas = () => {
   };
 
   const zoomBy = (factor: number) => {
+    takeControl();
     setActiveVenueId(null);
     setGlobeView((current) => clampView({ ...current, zoom: current.zoom * factor }));
   };
 
+  /* The wheel scrolls the page. Only a pinch (which arrives as a wheel event
+   * with ctrlKey) or a held Cmd/Ctrl zooms the globe, so a big globe never
+   * traps the page's scroll. */
   wheelZoomRef.current = (event) => {
+    if (!event.ctrlKey && !event.metaKey) return;
     event.preventDefault();
     event.stopPropagation();
-    zoomBy(event.deltaY < 0 ? 1.18 : 1 / 1.18);
+    zoomBy(event.deltaY < 0 ? 1.12 : 1 / 1.12);
   };
 
   const rotateByPixels = (x: number, y: number) => {
     const degreesPerPixel = RAD_TO_DEG / Math.max(height * SPHERE_RADIUS_RATIO * globeView.zoom, 1);
+    takeControl();
     setActiveVenueId(null);
     setGlobeView((current) =>
       clampView({
@@ -641,8 +994,23 @@ export const CareerAtlas = () => {
   };
 
   const resetView = () => {
+    takeControl();
     setActiveVenueId(null);
     setGlobeView(fitGlobeToViews(filteredViews, defaultView, minZoom, maxZoom, atlas.venueCount));
+  };
+
+  const replay = () => {
+    setActiveVenueId(null);
+    setSkipped(false);
+    setPlayhead(0);
+    setRun((value) => value + 1);
+  };
+
+  const skipToEnd = () => {
+    setSkipped(true);
+    setPlayhead(Number.POSITIVE_INFINITY);
+    followRef.current = false;
+    setGlobeView(defaultView);
   };
 
   const nearestVenue = (clientX: number, clientY: number, maxDistance: number): VenueView | null => {
@@ -658,17 +1026,72 @@ export const CareerAtlas = () => {
     return nearest && nearest.distance <= maxDistance ? nearest.view : null;
   };
 
-  const visibleChapters = [...new Map(filteredViews.map((view) => [view.chapter.seriesId, view.chapter])).values()].sort(
-    (left, right) => chapterOrder.indexOf(left.seriesId) - chapterOrder.indexOf(right.seriesId)
+  /* Round 3 (proxy review 5): the key names every series raced at the tracks in
+   * view, not only the series a dot wears. A dot wears the series he raced most
+   * there, so RCFFS (one race, at Mid-Ohio, where INDY NXT leads) had been left
+   * out though the filter offers it. */
+  const visibleChapters = [
+    ...new Map(
+      filteredViews
+        .flatMap((view) => (seriesFilter === null ? view.venue.seriesSpans : [view.chapter]))
+        .map((span) => [span.seriesId, span])
+    ).values()
+  ].sort((left, right) => chapterOrder.indexOf(left.seriesId) - chapterOrder.indexOf(right.seriesId));
+
+  /* ---- the legs drawn so far ---- */
+  const doneCount = finished ? legs.length : started ? currentIndex : 0;
+  const legMode: LegMode = switchValue('legmode') === 'off' ? 'off' : 'arc';
+  const doneLegs = legs.slice(0, doneCount);
+  const donePath =
+    width > 0
+      ? doneLegs
+          .filter((leg) => legMode === 'off' || leg.modeProxy !== 'flight')
+          .map((leg) => legPath(leg, 0, 1, globeView, width, height, legMode))
+          .join('')
+      : '';
+  /* Arcs on: flights drawn apart, so their lift and their ground shadow read as one thing. */
+  const flightPath =
+    width > 0 && legMode === 'arc'
+      ? doneLegs
+          .filter((leg) => leg.modeProxy === 'flight')
+          .map((leg) => legPath(leg, 0, 1, globeView, width, height, legMode))
+          .join('')
+      : '';
+  const flightShadow =
+    width > 0 && legMode === 'arc'
+      ? [...doneLegs.filter((leg) => leg.modeProxy === 'flight'), ...(currentLeg?.modeProxy === 'flight' && started && !finished ? [currentLeg] : [])]
+          .map((leg) => legPath(leg, 0, leg === currentLeg && !finished ? currentT : 1, globeView, width, height, legMode, true))
+          .join('')
+      : '';
+  const livePath =
+    !finished && started && currentLeg && width > 0 ? legPath(currentLeg, 0, currentT, globeView, width, height, legMode) : '';
+  const headPoint =
+    !finished && started && currentLeg && width > 0
+      ? (() => {
+          const head = legHead(currentLeg, currentT);
+          return projectPoint(head.lat, head.lon, legLift(currentLeg, currentT, legMode), globeView, width, height);
+        })()
+      : null;
+  const filtering = seriesFilter !== null || regionFilter !== null;
+  const modeCounts = legs.reduce(
+    (acc, leg) => {
+      acc[leg.modeProxy] += 1;
+      return acc;
+    },
+    { drive: 0, flight: 0, same_venue: 0 } as Record<TravelLeg['modeProxy'], number>
   );
+  const milesFigure = uiDataPackage.screens.careerLab.lifeStats?.figures.find((figure) => figure.id === 'milesBetweenTracks') ?? null;
+  /* "same country and under 750 miles", read from the package's own method line. */
+  const driveRule = travel?.how.match(/\(([^)]*?)\s+counts as a drive\)/)?.[1] ?? null;
 
   return (
-    <Card
-      title="The map"
-      className="career-atlas"
-      action={
+    <section className="career-travel career-atlas" aria-labelledby="career-travel-title">
+      <div className="career-section-head">
+        <h2 id="career-travel-title" className="career-section-title">
+          The travel map
+        </h2>
         <SourcePill
-          title="The career atlas"
+          title="The travel map"
           entries={[
             {
               label: 'Natural Earth 1:110m land polygons',
@@ -683,261 +1106,358 @@ export const CareerAtlas = () => {
             ...atlas.sourceRefs.map((source) => ({ label: source.key, path: source.path, note: source.note })),
             ...coordinateSourceEntries
           ]}
-          caveats={atlas.caveats}
+          caveats={[...(travel ? [travel.how] : []), ...(milesFigure?.caveat ? [milesFigure.caveat] : []), ...atlas.caveats]}
         />
-      }
-    >
-      <p className="career-atlas__intro">
-        {formatCount.format(atlas.venueCount)} venues, {formatCount.format(atlas.raceCount)} races. Filter the career, then spin and zoom the full globe.
-      </p>
-      <div className="career-atlas__filters">
-        <ControlRow label="Series">
-          <FilterChip label="All" active={seriesFilter === null} onClick={() => applyFilters(null, regionFilter)} />
-          {seriesOptions.map((series) => (
-            <FilterChip
-              key={series.seriesId}
-              label={series.seriesShort}
-              active={seriesFilter === series.seriesId}
-              onClick={() => applyFilters(seriesFilter === series.seriesId ? null : series.seriesId, regionFilter)}
-            />
-          ))}
-        </ControlRow>
-        <ControlRow label="Region">
-          <FilterChip label="All" active={regionFilter === null} onClick={() => applyFilters(seriesFilter, null)} />
-          {regionOrder.map((region) => (
-            <FilterChip
-              key={region}
-              label={region}
-              active={regionFilter === region}
-              onClick={() => applyFilters(seriesFilter, regionFilter === region ? null : region)}
-            />
-          ))}
-        </ControlRow>
       </div>
-      <p className="career-atlas__status" aria-live="polite">
-        <strong>{filteredViews.length}</strong> {filteredViews.length === 1 ? 'venue' : 'venues'} · <strong>{filteredRaceCount}</strong>{' '}
-        {filteredRaceCount === 1 ? 'race' : 'races'} in the filter · <strong>{onScreenViews.length}</strong> on screen
-      </p>
-      <div
-        ref={ref}
-        className="career-atlas__map career-atlas__map--globe"
-        style={{ height }}
-        data-atlas-zoom={globeView.zoom.toFixed(2)}
-        data-atlas-longitude={globeView.longitude.toFixed(2)}
-        data-atlas-latitude={globeView.latitude.toFixed(2)}
-        data-atlas-ready={textureReady ? 'true' : 'false'}
-      >
-        <canvas ref={canvasRef} className="career-atlas__globe-canvas" aria-hidden="true" />
-        {width > 0 ? (
-          <svg
-            ref={svgRef}
-            width={width}
-            height={height}
-            role="group"
-            aria-roledescription="interactive globe"
-            tabIndex={0}
-            aria-label={`Career venue globe with ${filteredViews.length} sourced venues and ${filteredRaceCount} races in the current filter; ${onScreenViews.length} venues are on screen. Drag to spin. Use the controls or mouse wheel to zoom.`}
-            onPointerMove={(event) => {
-              const drag = dragRef.current;
-              if (drag && drag.pointerId === event.pointerId) {
-                const dx = event.clientX - drag.startClientX;
-                const dy = event.clientY - drag.startClientY;
-                if (!drag.moved && Math.hypot(dx, dy) > 4) drag.moved = true;
-                if (drag.moved) {
-                  const degreesPerPixel = RAD_TO_DEG / Math.max(height * SPHERE_RADIUS_RATIO * drag.startView.zoom, 1);
+      <div ref={stageRef} className="career-travel__stage">
+        <div className="career-travel__side">
+          <div className="career-travel__counter" aria-live="off">
+            <span className="career-travel__miles" aria-label={`${milesFigure?.display ?? ''} miles between tracks`}>
+              <FixedDigits
+                text={finished ? milesFigure?.display ?? `${wholeMiles.format(travel?.totalMiles ?? 0)}+` : wholeMiles.format(Math.floor(milesSoFar))}
+              />
+            </span>
+            <span className="career-travel__unit">miles between tracks</span>
+          </div>
+          {travel ? (
+            finished ? (
+              <div className="career-travel__leg">
+                <span className="career-travel__leg-no">
+                  {formatCount.format(travel.legCount)} legs, {formatCount.format(atlas.venueCount)} tracks
+                </span>
+                <span className="career-travel__leg-route">
+                  {legMode === 'arc'
+                    ? `${modeCounts.drive} short enough to drive, drawn on the ground; ${modeCounts.flight} longer, drawn in the air; ${modeCounts.same_venue} back at the same track`
+                    : `${modeCounts.drive} short enough to drive, ${modeCounts.flight} longer, ${modeCounts.same_venue} back at the same track`}
+                </span>
+              </div>
+            ) : currentLeg ? (
+              <div className="career-travel__leg">
+                <span className="career-travel__leg-no">
+                  Leg {currentLeg.index} of {travel.legCount} · {monthYearShort(currentLeg.to.date)}
+                </span>
+                <span className="career-travel__leg-route">
+                  {currentLeg.greatCircleMiles <= 0
+                    ? `${venueName(currentLeg.to.trackName)}, again`
+                    : `${venueName(currentLeg.from.trackName)} to ${venueName(currentLeg.to.trackName)}`}
+                </span>
+                <span className="career-travel__leg-miles">
+                  {currentLeg.greatCircleMiles <= 0
+                    ? 'same track'
+                    : `${wholeMiles.format(currentLeg.greatCircleMiles)} miles${
+                        legMode === 'arc' ? (currentLeg.modeProxy === 'flight' ? ' · a flight' : ' · a drive') : ''
+                      }`}
+                </span>
+              </div>
+            ) : null
+          ) : null}
+          {/* Round 3 (proxy review 2: a wall of text on a phone): two short
+           * sentences here; the package's full method and caveat stay in Sources. */}
+          <p className="career-travel__how">
+            Straight lines from track to track, in date order: the least anyone could travel between his races, not his real trips.
+            {legMode === 'arc' && driveRule ? ` ${driveRule.charAt(0).toUpperCase()}${driveRule.slice(1)} counts as a drive.` : ''}
+          </p>
+          {!reducedMotion && travel ? (
+            <div className="career-travel__controls">
+              {finished ? (
+                <button type="button" className="career-button" onClick={replay}>
+                  Play the journey again
+                </button>
+              ) : (
+                <button type="button" className="career-button" onClick={skipToEnd}>
+                  Skip to the end
+                </button>
+              )}
+            </div>
+          ) : null}
+        </div>
+        {/* The card sits outside the map, which clips the globe: a track near
+         * the map's top edge still gets its whole card, still and all. */}
+        <div className="career-travel__globe" style={{ position: 'relative' }}>
+          {activeView && activePoint ? (
+            <VenueTipCard
+              tip={offsetTip(venueTip(activeView, activePoint, seriesFilter !== null), ref.current)}
+              width={width}
+              tap={tap}
+            />
+          ) : null}
+          <div
+            ref={ref}
+            className="career-atlas__map career-atlas__map--globe"
+            style={{ height }}
+            data-atlas-zoom={globeView.zoom.toFixed(2)}
+            data-atlas-longitude={globeView.longitude.toFixed(2)}
+            data-atlas-latitude={globeView.latitude.toFixed(2)}
+            data-atlas-ready={textureReady ? 'true' : 'false'}
+            data-travel-finished={finished ? 'true' : 'false'}
+            data-travel-leg={finished ? legs.length : currentIndex + 1}
+          >
+            <canvas ref={canvasRef} className="career-atlas__globe-canvas" aria-hidden="true" />
+            {width > 0 ? (
+              <svg
+                ref={svgRef}
+                width={width}
+                height={height}
+                role="group"
+                aria-roledescription="interactive globe"
+                tabIndex={0}
+                aria-label={`Globe with the ${travel?.legCount ?? 0} legs between his race meetings drawn in order, and ${filteredViews.length} tracks. Drag to spin. Use the zoom buttons, or the plus and minus keys, to zoom.`}
+                onPointerEnter={preloadStills}
+                onPointerMove={(event) => {
+                  const drag = dragRef.current;
+                  if (drag && drag.pointerId === event.pointerId) {
+                    const dx = event.clientX - drag.startClientX;
+                    const dy = event.clientY - drag.startClientY;
+                    if (!drag.moved && Math.hypot(dx, dy) > 4) {
+                      drag.moved = true;
+                      /* A spin lets go of a track a tap was reading. */
+                      if (tap.armed !== null) tap.dismiss();
+                    }
+                    if (drag.moved) {
+                      const degreesPerPixel = RAD_TO_DEG / Math.max(height * SPHERE_RADIUS_RATIO * drag.startView.zoom, 1);
+                      takeControl();
+                      setActiveVenueId(null);
+                      setGlobeView(
+                        clampView({
+                          ...drag.startView,
+                          longitude: drag.startView.longitude - dx * degreesPerPixel,
+                          latitude: drag.startView.latitude + dy * degreesPerPixel
+                        })
+                      );
+                    }
+                    return;
+                  }
+                  if (event.pointerType !== 'touch') {
+                    setActiveVenueId(nearestVenue(event.clientX, event.clientY, 30)?.venue.venueId ?? null);
+                  }
+                }}
+                onPointerDown={(event) => {
+                  if (event.button !== 0) return;
+                  tap.press(event);
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                  dragRef.current = {
+                    pointerId: event.pointerId,
+                    startClientX: event.clientX,
+                    startClientY: event.clientY,
+                    startView: globeView,
+                    moved: false
+                  };
+                  setIsDragging(true);
+                  if (event.pointerType === 'touch') {
+                    setActiveVenueId(nearestVenue(event.clientX, event.clientY, 38)?.venue.venueId ?? null);
+                  }
+                }}
+                onPointerUp={(event) => {
+                  const drag = dragRef.current;
+                  if (drag?.pointerId === event.pointerId && drag.moved) {
+                    ignoreClickRef.current = true;
+                    window.setTimeout(() => {
+                      ignoreClickRef.current = false;
+                    }, 0);
+                  } else if (event.pointerType === 'touch') {
+                    const view = nearestVenue(event.clientX, event.clientY, 38);
+                    /* A track read by a tap holds still: the globe stops following the journey. */
+                    if (view) takeControl();
+                    setActiveVenueId(view?.venue.venueId ?? null);
+                    tap.settle(
+                      event,
+                      view?.venue.venueId ?? null,
+                      () => setActiveVenueId(null),
+                      view ? () => navigate(view.latestRace.raceHref) : null
+                    );
+                  }
+                  if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+                  dragRef.current = null;
+                  setIsDragging(false);
+                }}
+                onPointerCancel={() => {
+                  dragRef.current = null;
+                  setIsDragging(false);
                   setActiveVenueId(null);
-                  setGlobeView(
-                    clampView({
-                      ...drag.startView,
-                      longitude: drag.startView.longitude - dx * degreesPerPixel,
-                      latitude: drag.startView.latitude + dy * degreesPerPixel
-                    })
-                  );
-                }
-                return;
-              }
-              if (event.pointerType !== 'touch') {
-                setActiveVenueId(nearestVenue(event.clientX, event.clientY, 30)?.venue.venueId ?? null);
-              }
-            }}
-            onPointerDown={(event) => {
-              if (event.button !== 0) return;
-              event.currentTarget.setPointerCapture(event.pointerId);
-              dragRef.current = {
-                pointerId: event.pointerId,
-                startClientX: event.clientX,
-                startClientY: event.clientY,
-                startView: globeView,
-                moved: false
-              };
-              setIsDragging(true);
-              if (event.pointerType === 'touch') {
-                setActiveVenueId(nearestVenue(event.clientX, event.clientY, 38)?.venue.venueId ?? null);
-              }
-            }}
-            onPointerUp={(event) => {
-              const drag = dragRef.current;
-              if (drag?.pointerId === event.pointerId && drag.moved) {
-                ignoreClickRef.current = true;
-                window.setTimeout(() => {
-                  ignoreClickRef.current = false;
-                }, 0);
-              }
-              if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-              dragRef.current = null;
-              setIsDragging(false);
-            }}
-            onPointerCancel={() => {
-              dragRef.current = null;
-              setIsDragging(false);
-              setActiveVenueId(null);
-            }}
-            onPointerLeave={() => {
-              if (!dragRef.current) setActiveVenueId(null);
-            }}
-            onClick={(event) => {
-              if (ignoreClickRef.current) {
-                ignoreClickRef.current = false;
-                return;
-              }
-              const view = nearestVenue(event.clientX, event.clientY, 38);
-              if (view) navigate(view.latestRace.raceHref);
-            }}
-            onKeyDown={(event) => {
-              if (event.currentTarget !== event.target) return;
-              if (event.key === '+' || event.key === '=') {
-                event.preventDefault();
-                zoomBy(ZOOM_STEP);
-              } else if (event.key === '-') {
-                event.preventDefault();
-                zoomBy(1 / ZOOM_STEP);
-              } else if (event.key === '0' || event.key === 'Escape') {
-                event.preventDefault();
-                resetView();
-              } else if (event.key.startsWith('Arrow')) {
-                event.preventDefault();
-                rotateByPixels(
-                  event.key === 'ArrowLeft' ? 42 : event.key === 'ArrowRight' ? -42 : 0,
-                  event.key === 'ArrowUp' ? 42 : event.key === 'ArrowDown' ? -42 : 0
-                );
-              }
-            }}
-            style={{ cursor: isDragging ? 'grabbing' : activeView ? 'pointer' : 'grab', touchAction: 'none' }}
-          >
-            <circle
-              cx={width / 2}
-              cy={height / 2}
-              r={height * SPHERE_RADIUS_RATIO * globeView.zoom}
-              fill="none"
-              stroke="var(--divider)"
-              strokeWidth={1}
-              aria-hidden="true"
-            />
-            {onScreenViews.map((point) => {
-              const view = point.view;
-              const active = view.venue.venueId === activeVenueId;
-              return (
-                <g key={view.venue.venueId}>
-                  {active ? (
-                    <circle
-                      cx={point.x}
-                      cy={point.y}
-                      r={point.radius + 3}
-                      fill="none"
-                      stroke="var(--ink-primary)"
-                      strokeWidth={1}
-                      pointerEvents="none"
-                    />
+                }}
+                onPointerLeave={(event) => {
+                  /* A finger leaves as it lifts: the track it tapped stays read. */
+                  if (event.pointerType === 'touch') return;
+                  if (!dragRef.current) setActiveVenueId(null);
+                }}
+                onClick={(event) => {
+                  if (ignoreClickRef.current) {
+                    ignoreClickRef.current = false;
+                    return;
+                  }
+                  tap.click(event, () => {
+                    const view = nearestVenue(event.clientX, event.clientY, 38);
+                    if (view) navigate(view.latestRace.raceHref);
+                  });
+                }}
+                onKeyDown={(event) => {
+                  if (event.currentTarget !== event.target) return;
+                  if (event.key === '+' || event.key === '=') {
+                    event.preventDefault();
+                    zoomBy(ZOOM_STEP);
+                  } else if (event.key === '-') {
+                    event.preventDefault();
+                    zoomBy(1 / ZOOM_STEP);
+                  } else if (event.key === '0' || event.key === 'Escape') {
+                    event.preventDefault();
+                    resetView();
+                  } else if (event.key.startsWith('Arrow')) {
+                    event.preventDefault();
+                    rotateByPixels(
+                      event.key === 'ArrowLeft' ? 42 : event.key === 'ArrowRight' ? -42 : 0,
+                      event.key === 'ArrowUp' ? 42 : event.key === 'ArrowDown' ? -42 : 0
+                    );
+                  }
+                }}
+                style={{ cursor: isDragging ? 'grabbing' : activeView ? 'pointer' : 'grab', touchAction: 'none' }}
+              >
+                <circle
+                  cx={width / 2}
+                  cy={height / 2}
+                  r={height * SPHERE_RADIUS_RATIO * globeView.zoom}
+                  fill="none"
+                  stroke="var(--divider)"
+                  strokeWidth={1}
+                  aria-hidden="true"
+                />
+                <g aria-hidden="true" pointerEvents="none" opacity={filtering ? 0.35 : 1}>
+                  {flightShadow ? <path className="leg-mode__shadow" d={flightShadow} /> : null}
+                  {donePath ? (
+                    <path d={donePath} fill="none" stroke="var(--ink)" strokeOpacity={0.42} strokeWidth={1.25} strokeLinecap="round" strokeLinejoin="round" />
                   ) : null}
-                  <circle
-                    data-atlas-venue={view.venue.venueId}
-                    data-race-href={view.latestRace.raceHref}
-                    data-track-name={view.venue.trackName}
-                    data-series-id={view.chapter.seriesId}
-                    data-region={view.venue.region}
-                    cx={point.x}
-                    cy={point.y}
-                    r={point.radius}
-                    fill={chapterTint(view.chapter.seriesName)}
-                    fillOpacity={activeVenueId === null || active ? (active ? 1 : 0.7) : focusFade}
-                    stroke="var(--surface-0)"
-                    strokeWidth={1.5}
-                    role="link"
-                    tabIndex={0}
-                    aria-label={venueAccessibleLabel(view, seriesFilter !== null)}
-                    onFocus={() => setActiveVenueId(view.venue.venueId)}
-                    onBlur={() => setActiveVenueId(null)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        navigate(view.latestRace.raceHref);
-                      }
-                    }}
-                    className="career-atlas__venue"
-                  >
-                    <title>{venueAccessibleLabel(view, seriesFilter !== null)}</title>
-                  </circle>
+                  {flightPath ? <path className="leg-mode__flight" d={flightPath} /> : null}
+                  {livePath ? (
+                    <path d={livePath} fill="none" stroke="var(--amber)" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
+                  ) : null}
                 </g>
-              );
-            })}
-          </svg>
-        ) : null}
-        {renderError ? (
-          <div className="career-atlas__empty">
-            <Unavailable>
-              {renderError}{' '}
-              {filteredViews.length > 0
-                ? 'The series and region filters remain available.'
-                : 'No venues match this series and region combination; the filters remain available.'}
-            </Unavailable>
+                {onScreenViews.map((point) => {
+                  const view = point.view;
+                  const active = view.venue.venueId === activeVenueId;
+                  const reached = visitedVenues === null || visitedVenues.has(view.venue.venueId);
+                  return (
+                    <g key={view.venue.venueId}>
+                      {active ? (
+                        <circle
+                          cx={point.x}
+                          cy={point.y}
+                          r={point.radius + 3}
+                          fill="none"
+                          stroke="var(--ink-primary)"
+                          strokeWidth={1}
+                          pointerEvents="none"
+                        />
+                      ) : null}
+                      <circle
+                        data-atlas-venue={view.venue.venueId}
+                        data-race-href={view.latestRace.raceHref}
+                        data-track-name={view.venue.trackName}
+                        data-series-id={view.chapter.seriesId}
+                        data-region={view.venue.region}
+                        cx={point.x}
+                        cy={point.y}
+                        r={point.radius}
+                        fill={chapterTint(view.chapter.seriesName)}
+                        fillOpacity={!reached ? 0.12 : activeVenueId === null || active ? (active ? 1 : 0.85) : focusFade}
+                        stroke="var(--surface-0)"
+                        strokeWidth={1.5}
+                        role="link"
+                        tabIndex={0}
+                        aria-label={venueAccessibleLabel(view, seriesFilter !== null)}
+                        onFocus={() => setActiveVenueId(view.venue.venueId)}
+                        onBlur={(event) => {
+                          /* A tap on the card's "Open his latest race here" moves focus to it: keep the card for that click. */
+                          if (event.relatedTarget instanceof Element && event.relatedTarget.closest(`[${TAP_CARD}]`)) return;
+                          setActiveVenueId(null);
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            navigate(view.latestRace.raceHref);
+                          }
+                        }}
+                        className="career-atlas__venue"
+                      >
+                        <title>{venueAccessibleLabel(view, seriesFilter !== null)}</title>
+                      </circle>
+                    </g>
+                  );
+                })}
+                {headPoint && headPoint.visible ? (
+                  <circle cx={headPoint.x} cy={headPoint.y} r={4.5} fill="var(--amber)" stroke="var(--paper)" strokeWidth={1.5} aria-hidden="true" pointerEvents="none" />
+                ) : null}
+              </svg>
+            ) : null}
+            {renderError ? (
+              <div className="career-atlas__empty">
+                <Unavailable>
+                  {renderError}{' '}
+                  {filteredViews.length > 0
+                    ? 'The series and region filters remain available.'
+                    : 'No venues match this series and region combination; the filters remain available.'}
+                </Unavailable>
+              </div>
+            ) : filteredViews.length === 0 ? (
+              <div className="career-atlas__empty">
+                <Unavailable>No venues match this series and region combination.</Unavailable>
+              </div>
+            ) : null}
+            <div className="career-atlas__zoom" role="group" aria-label="Globe zoom controls">
+              <button type="button" aria-label="Zoom in" title="Zoom in" disabled={globeView.zoom >= maxZoom} onClick={() => zoomBy(ZOOM_STEP)}>
+                +
+              </button>
+              <button type="button" aria-label="Zoom out" title="Zoom out" disabled={globeView.zoom <= minZoom} onClick={() => zoomBy(1 / ZOOM_STEP)}>
+                −
+              </button>
+              <button type="button" className="career-atlas__zoom-reset" onClick={resetView}>
+                Reset
+              </button>
+            </div>
           </div>
-        ) : filteredViews.length === 0 ? (
-          <div className="career-atlas__empty">
-            <Unavailable>No venues match this series and region combination.</Unavailable>
+          <div className="career-travel__below">
+            <div className="career-atlas__legend" aria-label="Career chapter colors">
+              {visibleChapters.map((chapter) => (
+                <span key={chapter.seriesId}>
+                  <i aria-hidden style={{ background: chapterTint(chapter.seriesName) }} />
+                  {chapter.seriesShort}
+                </span>
+              ))}
+            </div>
+            <p className="career-travel__hint">
+              Each track a dot, sized by its races and coloured by {seriesFilter === null ? 'the series he raced most there' : 'series'}. Drag to spin, pinch to zoom, <PointerOpen what="a track" then="to open its latest race" />.
+            </p>
+            <div className="career-atlas__filters">
+              <ControlRow label="Series">
+                <FilterChip label="All" active={seriesFilter === null} onClick={() => applyFilters(null, regionFilter)} />
+                {seriesOptions.map((series) => (
+                  <FilterChip
+                    key={series.seriesId}
+                    label={series.seriesShort}
+                    active={seriesFilter === series.seriesId}
+                    onClick={() => applyFilters(seriesFilter === series.seriesId ? null : series.seriesId, regionFilter)}
+                  />
+                ))}
+              </ControlRow>
+              <ControlRow label="Region">
+                <FilterChip label="All" active={regionFilter === null} onClick={() => applyFilters(seriesFilter, null)} />
+                {regionOrder.map((region) => (
+                  <FilterChip
+                    key={region}
+                    label={region}
+                    active={regionFilter === region}
+                    onClick={() => applyFilters(seriesFilter, regionFilter === region ? null : region)}
+                  />
+                ))}
+              </ControlRow>
+            </div>
+            <p className="career-atlas__status" aria-live="polite">
+              <strong>{filteredViews.length}</strong> {filteredViews.length === 1 ? 'track' : 'tracks'} · <strong>{filteredRaceCount}</strong>{' '}
+              {filteredRaceCount === 1 ? 'race' : 'races'} in the filter · <strong>{onScreenViews.length}</strong> on screen
+            </p>
           </div>
-        ) : null}
-        {activeView && activePoint ? (
-          <AtlasTipCard view={activeView} x={activePoint.x} y={activePoint.y} width={width} />
-        ) : null}
-        <div className="career-atlas__map-hint" aria-hidden>
-          drag to spin · scroll to zoom
-        </div>
-        <div className="career-atlas__zoom" role="group" aria-label="Globe zoom controls">
-          <button
-            type="button"
-            aria-label="Zoom in"
-            title="Zoom in"
-            disabled={globeView.zoom >= maxZoom}
-            onClick={() => zoomBy(ZOOM_STEP)}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            aria-label="Zoom out"
-            title="Zoom out"
-            disabled={globeView.zoom <= minZoom}
-            onClick={() => zoomBy(1 / ZOOM_STEP)}
-          >
-            −
-          </button>
-          <button type="button" className="career-atlas__zoom-reset" onClick={resetView}>
-            Reset
-          </button>
         </div>
       </div>
-      <div className="career-atlas__legend" aria-label="Career chapter colors">
-        {visibleChapters.map((chapter) => (
-          <span key={chapter.seriesId}>
-            <i aria-hidden style={{ background: chapterTint(chapter.seriesName) }} />
-            {chapter.seriesShort}
-          </span>
-        ))}
-      </div>
-      <p className="caption caption--secondary career-atlas__caption">
-        Every venue a dot · sized by races in filter · colored by chapter · click to open the latest applicable race
-      </p>
-    </Card>
+    </section>
   );
 };
+

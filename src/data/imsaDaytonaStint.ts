@@ -57,6 +57,19 @@ export interface ImsaCar85Result {
   status: string | null;
 }
 
+/** One unbroken run of one driver in car 85, in lap order. Elapsed seconds are
+ *  the running sum of car 85's own time-card lap times from the start of lap 1
+ *  (pit and caution laps included), not wall-clock timestamps. */
+export interface ImsaCar85Spell {
+  driverName: string;
+  driverId: string;
+  startLap: number;
+  endLap: number;
+  laps: number;
+  startElapsedSeconds: number;
+  endElapsedSeconds: number;
+}
+
 export interface ImsaDaytonaStintPack {
   id: string;
   generatedAt: string;
@@ -67,6 +80,8 @@ export interface ImsaDaytonaStintPack {
   car85Result: ImsaCar85Result;
   bryceStintContext: ImsaStint[];
   car85CodriverPace: ImsaCoDriver[];
+  /** Absent in packs built before November 18, 2026. */
+  car85Spells?: ImsaCar85Spell[];
 }
 
 /** Inventory-backed integrity ref. Null when the package predates the module. */

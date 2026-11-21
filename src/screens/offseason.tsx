@@ -1,28 +1,32 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { venueName } from '../app/venueNames';
 import { ArrowRight, CalendarDays, LineChart, Map as MapIcon, PlayCircle, Radio } from 'lucide-react';
 import { Card, Countdown, HeroPanel, ScreenHead, SourcePill, Unavailable } from '../app/components';
 import { formatDate, formatPosition } from '../app/format';
 import { Link } from '../app/router';
-import { TrackArt } from '../app/trackArt';
+import { TrackArt, TrackIcon } from '../app/trackArt';
+import { TrackStill } from '../app/trackStill';
 import { trackOutlineFor } from '../assets/tracks';
-import { displayRaceLabelText } from '../data/debriefArchive';
 import { nextSeasonOutlook } from '../data/nextSeason';
 import { bestFinishAt, getSeasonReview, racesAt, type SeasonReview, type SeasonStandout, type SeasonVenue } from '../data/seasonPhase';
-import { resolveHeatSections, sectionObservationsFromLaps } from '../data/sectionObservations';
 import { getUpcomingEvents, raceDayOf } from '../data/upcoming';
-import { useVenueSectionData } from './sectionIntelligence';
+import { raceStillSectionsFor, useVenueSectionData } from './sectionIntelligence';
+import { labelledRaceTitle } from './careerRaceNames';
 
 /** /tracks deep links use the canonical (outline) venue name. */
 const tracksHref = (trackName: string | null): string =>
   `/tracks?venue=${encodeURIComponent(trackOutlineFor(trackName)?.name ?? trackName ?? '')}`;
 
-const shortRaceLabel = (raceLabel: string): string =>
-  displayRaceLabelText(raceLabel)
-    .replace(/^\d{4}\s+/, '')
-    .replace(/^INDY NXT by Firestone at (the )?/i, '')
-    .replace(/\s+R[12]$/, '');
+/** The site's one race name (careerRaceNames): "Grand Prix of Monterey · Race 2", or the plain event. */
+const shortRaceLabel = (row: { raceLabel: string; sessionId: string; trackName: string | null }): string =>
+  labelledRaceTitle({ raceLabel: row.raceLabel, sessionId: row.sessionId, trackName: row.trackName });
 
-/* ---------- a venue outline, letterboxed (no measurement needed) ---------- */
+/* ---------- a venue mark: the 3D model from above ----------
+ * Round 7 (Jack's review of Nov 16): the board's marks are the venues' 3D
+ * models seen from straight above, the track a bold ink ribbon (TrackIcon in
+ * app/trackArt.tsx), at the board's size (132 x 84) or the Races list's
+ * (76 x 42) for a smaller mark. A venue with no model keeps the line drawing;
+ * ?icons=line shows the line drawings for comparison. */
 
 export const VenueShape = ({
   trackName,
@@ -36,9 +40,7 @@ export const VenueShape = ({
   muted?: boolean;
 }) => {
   const outline = trackOutlineFor(trackName);
-  return (
-    <span style={{ width, height, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
-      {outline ? (
+  const line = outline ? (
         <svg viewBox={outline.viewBox} width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden>
           <path
             d={outline.mainPath}
@@ -50,7 +52,13 @@ export const VenueShape = ({
             strokeLinecap="round"
           />
         </svg>
-      ) : null}
+      ) : null;
+  return (
+    <span
+      className={`venue-shape${muted ? ' venue-shape--muted' : ''}`}
+      style={{ width, height, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}
+    >
+      <TrackIcon slug={outline?.slug} box={width >= 100 ? 'board' : 'row'} muted={muted} fallback={line} />
     </span>
   );
 };
@@ -61,31 +69,62 @@ export const VenueShape = ({
  * recent visit that carries clean-lap comparisons. Falls back to the plain
  * outline while packs load or where a venue has no anchored sections. */
 
-export const HeatTrack = ({ trackName, sessionId, maxHeight = 120 }: { trackName: string | null; sessionId?: string; maxHeight?: number }) => {
+export const HeatTrack = ({
+  trackName,
+  sessionId,
+  maxHeight = 120,
+  interactive = true,
+  fallback
+}: {
+  trackName: string | null;
+  sessionId?: string;
+  maxHeight?: number;
+  /** Point at a section to read it (off where the card itself is the link). */
+  interactive?: boolean;
+  /** Drawn instead where the venue has no 3D model (default: the 2D drawing,
+   *  shaded the same way). */
+  fallback?: ReactNode;
+}) => {
   const outline = trackOutlineFor(trackName);
   const canonical = outline?.name ?? trackName;
   const sections = useVenueSectionData(canonical);
-  const resolved = useMemo(() => {
-    if (sessionId && sections.anchors) {
-      const visit = sections.visits.find((pack) => pack.sessionId === sessionId);
-      if (visit) {
-        /* That visit's own anchors — a measured pack never joins PDF names. */
-        const visitAnchors = sections.anchorsBySession.get(visit.sessionId) ?? sections.anchors;
-        const own = resolveHeatSections(visitAnchors, sectionObservationsFromLaps(visit));
-        if (own.length > 0) return own;
-      }
+  /* The race named, else the most recent visit with clean-lap comparisons;
+   * shaded as the Tracks page's model shades it (round 6: the 3D still of the
+   * model where the venue has one, the 2D drawing shaded the same way where
+   * it does not). */
+  const shaded = useMemo(() => {
+    if (!sections.anchors || !outline) return null;
+    const named = sessionId ? sections.visits.find((pack) => pack.sessionId === sessionId) ?? null : null;
+    for (const visit of [named, sections.mostRecent]) {
+      if (!visit) continue;
+      /* That visit's own anchors: a measured pack never joins PDF names. */
+      const visitAnchors = sections.anchorsBySession.get(visit.sessionId) ?? sections.anchors;
+      const own = raceStillSectionsFor(visit, visitAnchors, outline);
+      if (own.heat.length > 0) return { sessionId: visit.sessionId, ...own };
     }
-    return sections.heroHeat;
-  }, [sessionId, sections.anchors, sections.anchorsBySession, sections.visits, sections.heroHeat]);
+    return null;
+  }, [sessionId, outline, sections.anchors, sections.anchorsBySession, sections.visits, sections.mostRecent]);
   if (!outline) return null;
   return (
-    <div className="heat-track" style={{ width: '100%' }}>
-      <TrackArt
-        outline={outline}
-        maxHeight={maxHeight}
-        wind={null}
-        showCornerLabels={false}
-        sections={resolved.length > 0 ? { resolved, showLabels: false } : null}
+    <div className="heat-track" style={{ width: '100%', maxWidth: Math.round((maxHeight * 1200) / 676), margin: '0 auto' }}>
+      <TrackStill
+        slug={outline.slug}
+        sessionId={shaded?.sessionId ?? null}
+        sections={shaded?.sections ?? []}
+        interactive={interactive && maxHeight >= 120}
+        alt={`${venueName(outline.name)}: the 3D track${shaded ? ', shaded section by section by his pace' : ''}.`}
+        sizes={`${Math.round((maxHeight * 1200) / 676)}px`}
+        fallback={
+          fallback ?? (
+            <TrackArt
+              outline={outline}
+              maxHeight={maxHeight}
+              wind={null}
+              showCornerLabels={false}
+              sections={shaded ? { resolved: shaded.heat, showLabels: false } : null}
+            />
+          )
+        }
       />
     </div>
   );
@@ -97,17 +136,11 @@ export const HeatTrack = ({ trackName, sessionId, maxHeight = 120 }: { trackName
  * shows the site's signature read — a pace map — across the whole year instead
  * of holding on the last place we happened to race. Reduced motion holds still. */
 
-const ShowcaseSlide = ({ trackName, active }: { trackName: string; active: boolean }) => {
-  const outline = trackOutlineFor(trackName);
-  const sections = useVenueSectionData(trackName);
-  const heat = sections.heroHeat.length > 0 ? { resolved: sections.heroHeat, showLabels: false } : null;
-  if (!outline) return null;
-  return (
-    <div className={`showcase__slide${active ? ' showcase__slide--active' : ''}`} aria-hidden={!active}>
-      <TrackArt outline={outline} maxHeight={210} wind={null} sections={heat} />
-    </div>
-  );
-};
+const ShowcaseSlide = ({ trackName, active }: { trackName: string; active: boolean }) => (
+  <div className={`showcase__slide${active ? ' showcase__slide--active' : ''}`} aria-hidden={!active}>
+    <HeatTrack trackName={trackName} maxHeight={210} interactive={false} />
+  </div>
+);
 
 export const TrackShowcase = ({ venues, seasonYear }: { venues: SeasonVenue[]; seasonYear: number }) => {
   const slides = useMemo(() => venues.filter((venue) => trackOutlineFor(venue.trackName)).slice(0, 8), [venues]);
@@ -156,7 +189,7 @@ export const TrackShowcase = ({ venues, seasonYear }: { venues: SeasonVenue[]; s
               type="button"
               role="tab"
               aria-selected={slideIndex === index}
-              aria-label={venue.trackName}
+              aria-label={venueName(venue.trackName)}
               className={`showcase__dot${slideIndex === index ? ' showcase__dot--active' : ''}`}
               onClick={() => {
                 setIndex(slideIndex);
@@ -180,7 +213,7 @@ export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
         <h1 className="hero-now__title" style={{ marginTop: 6 }}>Bryce Aron’s racing career, lap by lap.</h1>
         <p className="hero-now__meta" style={{ maxWidth: '46ch', lineHeight: 1.45 }}>
           Live timing on race day. A pace map of every track, built from timing loops instead of GPS. And a career
-          charted across seven series, from F1600 to the doorstep of INDYCAR.
+          charted across ten series, from Formula F to the doorstep of INDYCAR.
         </p>
       </div>
 
@@ -197,7 +230,7 @@ export const SeasonCompleteHero = ({ review }: { review: SeasonReview }) => (
             The {review.seasonYear} season in review <ArrowRight size={16} aria-hidden />
           </Link>
           <Link to="/career" className="hero-now__action">
-            Career Lab <ArrowRight size={16} aria-hidden />
+            Career <ArrowRight size={16} aria-hidden />
           </Link>
         </div>
       </div>
@@ -257,7 +290,7 @@ export const FeatureDoors = ({
           visual={
             <span className="door__tracks">
               {heatVenues.map((venue) => (
-                <HeatTrack key={venue.trackName} trackName={venue.trackName} maxHeight={64} />
+                <HeatTrack key={venue.trackName} trackName={venue.trackName} maxHeight={64} interactive={false} />
               ))}
             </span>
           }
@@ -275,7 +308,7 @@ export const FeatureDoors = ({
               {latestRaces.map((row) => (
                 <span key={row.sessionId} className="door__list-row">
                   <PlayCircle size={13} aria-hidden />
-                  <span>{shortRaceLabel(row.raceLabel)}</span>
+                  <span>{shortRaceLabel(row)}</span>
                   <span className="tnum">{formatPosition(row.finishPosition)}</span>
                 </span>
               ))}
@@ -306,7 +339,7 @@ export const FeatureDoors = ({
             ) : undefined
           }
         >
-          {careerRaces ?? 'Every'} races across {chapters.length || 'seven'} series, each placed by the share of the
+          {careerRaces ?? 'Every'} races across {chapters.length || 'ten'} series, each placed by the share of the
           field he beat, with weather and rivals alongside.
         </Door>
         <Door
@@ -382,7 +415,7 @@ export const NextSeasonCalendar = ({ compact = false }: { compact?: boolean }) =
       {pending ? (
         <p style={{ margin: '0 0 12px', fontSize: 13.5, color: 'var(--ink-secondary)', maxWidth: '64ch' }}>
           INDY NXT’s own {outlook.seasonYear} calendar isn’t out yet. INDYCAR has announced its first eight race
-          weekends — INDY NXT shares most of them, and its own rounds take over this list once they’re published.
+          weekends. INDY NXT shares most of them, and its own rounds take over this list once they’re published.
         </p>
       ) : null}
       <div className="tower">
@@ -429,13 +462,13 @@ const StandoutCard = ({ standout }: { standout: SeasonStandout }) => {
     <Link to={`/races/${encodeURIComponent(row.sessionId)}`} className="standout">
       <span className="standout__label">{label}</span>
       <span className="standout__art">
-        <HeatTrack trackName={row.trackName} sessionId={row.sessionId} maxHeight={150} />
+        <HeatTrack trackName={row.trackName} sessionId={row.sessionId} maxHeight={150} interactive={false} />
       </span>
       <span className="row" style={{ gap: 10, alignItems: 'baseline' }}>
         <span className="stat__value stat__value--big">{formatPosition(row.finishPosition)}</span>
         {row.startPosition !== null ? <span className="caption">from {formatPosition(row.startPosition)} on the grid</span> : null}
       </span>
-      <span className="standout__name">{shortRaceLabel(row.raceLabel)}</span>
+      <span className="standout__name">{shortRaceLabel(row)}</span>
       <span className="caption caption--secondary">
         {formatDate(row.raceDate ?? row.eventStartDate, { month: 'long', day: 'numeric' })} · shaded by his pace that day · full debrief →
       </span>
@@ -541,7 +574,7 @@ export const OffSeasonRaceWeek = () => {
       <ScreenHead
         kicker="Race week · off-season"
         title={`The road to ${outlook.seasonYear}.`}
-        sub={`Race week is where the next weekend gets prepared. With ${review ? review.seasonYear : 'the season'} complete, it turns to the calendar ahead — every ${outlook.seasonYear} date announced so far, and what he has already done at each place.`}
+        sub={`Race week is where the next weekend gets prepared. With ${review ? review.seasonYear : 'the season'} complete, it turns to the calendar ahead: every ${outlook.seasonYear} date announced so far, and what he has already done at each place.`}
       />
 
       <HeroPanel tint="bryce" className="hero--wash">
@@ -554,8 +587,10 @@ export const OffSeasonRaceWeek = () => {
               SERIES opener. INDY NXT’s own {outlook.seasonYear} calendar is still to come.
             </p>
           </div>
-          <div className="hero-now__art">
-            <HeatTrack trackName={opener.trackName} maxHeight={190} />
+          {/* Round 7 (Jack: "too small for Streets of St. Petersburg"): the still fills
+              its column (up to 760 x 428), centred on the words beside it. */}
+          <div className="hero-now__art hero-now__art--fill">
+            <HeatTrack trackName={opener.trackName} maxHeight={430} />
             {racesAt(opener.trackName).length > 0 ? (
               <p className="caption caption--secondary" style={{ margin: '8px 0 0', textAlign: 'center' }}>
                 shaded by his most recent pace here
