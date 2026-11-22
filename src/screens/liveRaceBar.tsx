@@ -3,6 +3,7 @@ import type { ReplaySession } from '../app/useReplaySession';
 import { periodAt, type ReplayTimeline } from '../data/replayTimeline';
 import { lapPositionAt, timeAtLapPosition, type RaceClockModel } from './liveMarker';
 import type { VirtualNow } from './liveTrack';
+import { readingWords, type BryceMove, type BryceMoves } from '../data/overtakeModel';
 
 /* ============================================================
    The race bar (round 7): the whole race under the replay's
@@ -152,6 +153,10 @@ export const useReplayNow = (axis: LapAxis | null, timeline: ReplayTimeline | nu
 };
 
 const HEIGHT = 58;
+/** Pointing this close to a change in his place reads it; clicking it starts
+ *  this long before it. */
+const MARK_REACH_PX = 7;
+const MARK_LEAD_MS = 6_000;
 const TRACE_TOP = 6;
 const TRACE_BOTTOM = 34;
 const TICK_Y = 38;
@@ -165,6 +170,7 @@ export const RaceBar = ({
   virtualNow,
   now,
   place,
+  moves = null,
   onSeek
 }: {
   replay: ReplaySession;
@@ -178,6 +184,9 @@ export const RaceBar = ({
    *  own readout of now uses it, so the two can never disagree; the trace and
    *  a pointed-at moment read the race timeline. */
   place?: number | null;
+  /** His place changes (round 10): each pass a small mark on his trace, and
+   *  pointing at any change says what it was. */
+  moves?: BryceMoves | null;
   /** Commit a jump to this moment. */
   onSeek: (atMs: number) => void;
 }) => {
@@ -238,8 +247,26 @@ export const RaceBar = ({
       lastY = y;
     }
     if (lastY !== null) trace += ` H${xOf(axis.total).toFixed(1)}`;
-    return { ticks, shades, trace, field };
-  }, [width, axis, timeline, xOf]);
+    // One mark per reading and direction: up for passes he made, down for
+    // passes on him, at the place he held after it.
+    const said = (moves?.moves ?? []).filter((move) => move.cause !== 'unconfirmed' && move.cause !== 'pending');
+    const readings = new Map<number, BryceMove[]>();
+    for (const move of said) readings.set(move.atMs, [...(readings.get(move.atMs) ?? []), move]);
+    const marks: Array<{ key: string; kind: 'made' | 'lost'; x: number; y: number; atMs: number }> = [];
+    const points: Array<{ x: number; atMs: number; words: string }> = [];
+    for (const [atMs, reading] of readings) {
+      const pos = axis.posAt(atMs);
+      if (pos === null || atMs < axis.startMs) continue;
+      const x = xOf(pos);
+      const words = readingWords(reading, { glyph: false });
+      if (words) points.push({ x, atMs, words: words.text });
+      for (const kind of ['made', 'lost'] as const) {
+        const passes = reading.filter((move) => move.cause === 'pass' && move.kind === kind);
+        if (passes.length > 0) marks.push({ key: `${atMs}-${kind}`, kind, x, y: yOf(passes[0].place), atMs });
+      }
+    }
+    return { ticks, shades, trace, field, marks, points };
+  }, [width, axis, timeline, xOf, moves]);
 
   // The playhead and the trace's reveal move every frame, off React.
   const headRef = useRef<SVGGElement | null>(null);
@@ -278,10 +305,14 @@ export const RaceBar = ({
   };
   const onPointerUp = (event: React.PointerEvent<SVGSVGElement>) => {
     if (dragRef.current === null) return;
-    const pos = posOfX(pointerX(event));
+    const x = pointerX(event);
+    const pos = posOfX(x);
     setDragPos(null);
     setHoverPos(null);
-    const atMs = axis.timeAt(pos);
+    // A click on a change in his place starts a few seconds before it, so it
+    // plays out; anywhere else jumps to the moment under the pointer.
+    const near = nearPoint(x);
+    const atMs = near ? Math.max(axis.startMs, near.atMs - MARK_LEAD_MS) : axis.timeAt(pos);
     if (atMs !== null) onSeek(atMs);
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
@@ -292,9 +323,16 @@ export const RaceBar = ({
   // "Skip the caution": under a caution whose restart the timeline knows.
   const skipTo = period && period.toMs !== null && nowMs !== null && nowMs < period.toMs - 1_000 ? period.toMs : null;
   const readPos = dragPos ?? hoverPos;
+  // Pointing within a few pixels of a change in his place: what it was.
+  const nearPoint = (x: number) =>
+    drawing?.points.reduce<{ x: number; atMs: number; words: string } | null>(
+      (best, point) => (Math.abs(point.x - x) <= MARK_REACH_PX && (!best || Math.abs(point.x - x) < Math.abs(best.x - x)) ? point : best),
+      null
+    ) ?? null;
+  const pointed = readPos !== null ? nearPoint(xOf(readPos)) : null;
   const readout =
     readPos !== null
-      ? readoutAt(timeline, axis, readPos)
+      ? [readoutAt(timeline, axis, pointed ? axis.posAt(pointed.atMs) ?? readPos : readPos), pointed?.words].filter(Boolean).join(' · ')
       : now?.beforeGreen
         ? 'Formation lap · before the green'
         : now
@@ -369,6 +407,19 @@ export const RaceBar = ({
             ))}
             <line x1={PAD_X} x2={PAD_X + inner} y1={TICK_Y + 1} y2={TICK_Y + 1} className="race-bar__axis" />
             {drawing.trace ? <path d={drawing.trace} className="race-bar__trace" clipPath="url(#race-bar-played)" /> : null}
+            <g clipPath="url(#race-bar-played)" data-race-bar-passes={drawing.marks.length}>
+              {drawing.marks.map((mark) => (
+                <path
+                  key={mark.key}
+                  d={
+                    mark.kind === 'made'
+                      ? `M${mark.x.toFixed(1)} ${Math.max(0.5, mark.y - 9).toFixed(1)} l4.2 6.4 h-8.4 Z`
+                      : `M${mark.x.toFixed(1)} ${(mark.y + 9).toFixed(1)} l4.2 -6.4 h-8.4 Z`
+                  }
+                  className={`race-bar__pass race-bar__pass--${mark.kind}`}
+                />
+              ))}
+            </g>
             {hoverPos !== null && dragPos === null ? (
               <line x1={xOf(hoverPos)} x2={xOf(hoverPos)} y1={TRACE_TOP - 3} y2={TICK_Y + 1} className="race-bar__hover" />
             ) : null}

@@ -14,6 +14,7 @@ import { useCoarsePointer } from '../app/charts';
 import { TrackModelSlot } from '../three/TrackModelSlot';
 import type { TrackModelSection, TrackOverlayView } from '../three/TrackModel3D';
 import { LiveTrack, TrackMarks, type CarLabel, type MarkerReadout, type ReplayRace } from './liveTrack';
+import type { BryceMove } from '../data/overtakeModel';
 import { sectionDisplayName } from './liveSectionLight';
 import type { FieldCar, FieldMode } from './liveField';
 
@@ -211,7 +212,9 @@ export const TrackPanel = ({
   trail = false,
   bryceLabel = null,
   highlightId = null,
-  onHoverCar
+  onHoverCar,
+  moves,
+  frameMs
 }: {
   identity: RaceIdentity;
   replay: ReplaySession | null;
@@ -223,6 +226,10 @@ export const TrackPanel = ({
   bryceLabel?: CarLabel | null;
   highlightId?: string | null;
   onHoverCar?: (id: string | null) => void;
+  /** His place changes: a pass shows by his plate as the clock reaches it. */
+  moves?: BryceMove[];
+  /** The time of the frame the page shows; a pass waits for it. */
+  frameMs?: number;
 }) => {
   const virtualNow = useVirtualNow(replay);
   const coarse = useCoarsePointer();
@@ -258,6 +265,8 @@ export const TrackPanel = ({
           highlightId={highlightId}
           onHoverCar={onHoverCar}
           onReadout={setReadout}
+          moves={moves}
+          frameMs={frameMs}
         />
       )
     : undefined;
