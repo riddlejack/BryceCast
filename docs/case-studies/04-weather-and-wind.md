@@ -22,6 +22,8 @@ The [live weather service](../../scripts/live-weather-service.mjs) fetches near-
 
 Direction formatting uses a 16-point compass in [format.ts](../../src/app/format.ts). The compact wind glyph rotates the meteorological **from** bearing by `+180°` to show travel direction. The track overlay applies `bearing + 180° + northOffsetDeg`, so the arrow is oriented against true north on that specific outline. See [weatherGlyphs.tsx](../../src/app/weatherGlyphs.tsx) and [trackArt.tsx](../../src/app/trackArt.tsx). A visit-to-visit swing appears only after at least 22.5°, one compass point. Calm conditions suppress the directional arrow and north marker.
 
+Each OpenStreetMap outline's `northOffsetDeg` is checked against its own cached OSM geometry by [test-track-orientation.mjs](../../scripts/test-track-orientation.mjs), part of `npm run test:publication`. The check fits the SVG vertices to the OSM nodes independently of the outline builder. It was added in November 2026, after World Wide Technology Raceway turned up carrying 104.66° left over from an older trace instead of 281.56°. So, from the July 2026 retrace until the fix, any wind arrow drawn on that outline pointed almost exactly backwards.
+
 ## Evidence
 
 The historical report, generated 2026-07-19 with a 2026-07-18 archive cutoff, joined **115 of 115 eligible exact-window sessions**: 40 race, 51 practice, and 24 qualifying sessions. It skipped **78 date-only sessions** and **20 future sessions**.
