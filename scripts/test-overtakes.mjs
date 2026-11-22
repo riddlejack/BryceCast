@@ -146,7 +146,8 @@ const B = (extra = {}) => ['9', 'Aron', extra];
   assert.deepEqual(result.passes.map((move) => move.rivalName), ['Rowe']);
 }
 
-// 7. A recording without Race Control's count: the order alone, carefully.
+// 7. A recording without Race Control's count (call 2): no swap is a pass,
+//    not even a clean one-place swap that holds.
 {
   const none = { passes: null, passed: null, pitStops: null };
   const frames = [
@@ -156,11 +157,9 @@ const B = (extra = {}) => ['9', 'Aron', extra];
   ];
   const result = bryceMovesOf(frames, Number.POSITIVE_INFINITY);
   assert.equal(result.counted, false);
-  assert.equal(result.passes.length, 1);
-  assert.equal(result.passes[0].basis, 'order');
-  // A swap the next reading undoes is not a pass.
-  const flicker = bryceMovesOf([frames[0], frames[1], reading(180, 'GREEN', [['20', 'Nannini', none], B(none), ['14', 'de Tullio', none]])], Number.POSITIVE_INFINITY);
-  assert.equal(flicker.moves.find((move) => move.kind === 'made')?.cause, 'unconfirmed');
+  assert.equal(result.passes.length, 0);
+  assert.equal(result.moves.find((move) => move.kind === 'made')?.cause, 'unconfirmed');
+  assert.equal(latestMoveWords(result.moves, 180_000, 3), null);
 }
 
 // 8. Before the green nothing is a move; the tally reads Race Control's count.

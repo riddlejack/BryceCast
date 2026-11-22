@@ -148,7 +148,7 @@ const sourceEntries = {
     {
       label: 'Overtakes · Race Control’s pass count',
       path: '/api/readiness + /api/history/rank-series → rows[].passes / passed / pitStops',
-      note: 'When Bryce and another car swap places between one reading and the next, that is an overtake only if Race Control’s own pass count agrees: his passes (or passed) count rises within a minute, and the other car’s opposite count names it. A swap under a yellow or red flag, with a car that pits within two and a half minutes, with a car that stopped, or with three or more cars in one reading (a spin or contact) is never a pass; the line under his place says what it was instead. A replay knows the whole race and counts the passes it names; live shows Race Control’s running count. Replays recorded before July 2026 carry no pass count: there a swap of one or two places that the next reading keeps is a pass.'
+      note: 'When Bryce and another car swap places between one reading and the next, that is an overtake only if Race Control’s own pass count agrees: his passes (or passed) count rises within a minute, and the other car’s opposite count names it. A swap under a yellow or red flag, with a car that pits within two and a half minutes, with a car that stopped, or with three or more cars in one reading (a spin or contact) is never a pass; the line under his place says what it was instead. A replay knows the whole race and counts the passes it names; live shows Race Control’s running count. Replays recorded before July 2026 (2024, 2025 and early 2026) carry no pass count, and the order alone cannot tell a pass from a pit cycle, so they show no passes.'
     },
     {
       label: 'Lap average speed · official timing',

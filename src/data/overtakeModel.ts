@@ -35,10 +35,15 @@
  *    counter rises within a minute of the swap (or at the next reading, the
  *    replay's breakpoints being sparse), one rise per pass; the car whose
  *    opposite counter rose with it is named first. Without the count (the
- *    lake-sourced replays before July 2026, which carry only the order at the
- *    line), a swap of one or two places that holds is a pass.
+ *    lake-sourced replays of 2024, 2025 and early 2026, which carry only the
+ *    order at the line) nothing is a pass: the order alone cannot tell a pass
+ *    from a pit cycle or a flicker. Those replays show no passes until the
+ *    real-pass filter (`classify()` in
+ *    analysis/track-position/lib/pass-placement.mjs) is applied to them
+ *    (Jack's call 2, November 17 2026).
  *  - `pending`: live, not yet confirmed and still inside the window.
- *  - `unconfirmed`: none of the above (a flicker of the live order).
+ *  - `unconfirmed`: none of the above (a flicker of the live order, or any
+ *    swap in a recording without the count).
  *
  * Pure: frames in, moves out, so it runs unchanged in node tests and on both
  * the replay's whole-race timeline and the live page's history.
@@ -85,9 +90,9 @@ export interface BryceMove {
   cause: MoveCause;
   /** For a pit move, whose stop it was. */
   pitted?: 'rival' | 'bryce';
-  /** How a pass is known: Race Control's pass count agreed, or (a recording
-   *  without that count) the order alone. */
-  basis?: 'race-control' | 'order';
+  /** How a pass is known: Race Control's pass count agreed. (A recording
+   *  without that count names no passes.) */
+  basis?: 'race-control';
 }
 
 export interface BryceMoves {
@@ -291,22 +296,9 @@ export const bryceMovesOf = (frames: PassFrame[], asOfMs = frames.at(-1)?.atMs ?
         }
       }
     }
-  } else {
-    // The order alone: a swap of a place or two that the next reading keeps.
-    for (const candidate of candidates) {
-      if (!open(candidate)) continue;
-      if (candidate.rivalJump > 2 || candidate.bryceJump > 3) continue;
-      const next = ordered[candidate.index + 1];
-      if (next) {
-        const rival = carIn(next, candidate.rivalId);
-        const bryce = bryceOf(next);
-        const holds = rival?.rank != null && bryce?.rank != null && (candidate.kind === 'made' ? rival.rank > bryce.rank : rival.rank < bryce.rank);
-        if (!holds) continue;
-      }
-      candidate.cause = 'pass';
-      candidate.basis = 'order';
-    }
   }
+  // Without Race Control's count no swap is called a pass (call 2): the
+  // order alone is not evidence of an overtake. Swaps stay `unconfirmed`.
 
   // Live: too new to have been confirmed yet.
   for (const candidate of candidates) {
